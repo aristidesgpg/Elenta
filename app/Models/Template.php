@@ -10,6 +10,8 @@ class Template extends Model
     use SoftDeletes;
     use UsesUuid;
 
+    public const FORMATS = ['SELF_DIRECTED', 'IN_PERSON', 'VIRTUAL_ATTENDANCE'];
+
     protected $guarded = [];
 
     public function owner() {

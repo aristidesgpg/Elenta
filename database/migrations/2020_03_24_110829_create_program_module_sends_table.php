@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ProgramModuleSend;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,8 +19,8 @@ class CreateProgramModuleSendsTable extends Migration
             $table->uuid('program_module_id');
             $table->uuid('learner_profile_id');
 
-            $table->enum('reason', ['MANUAL', 'TRIGGER', 'REMINDER']);
-            $table->enum('channel', ['EMAIL', 'SLACK']);
+            $table->enum('reason', ProgramModuleSend::REASONS);
+            $table->enum('channel', ProgramModuleSend::CHANNELS);
             $table->string('subject');
             $table->text('message');
 
@@ -28,7 +29,7 @@ class CreateProgramModuleSendsTable extends Migration
             $table->timestamp('click_timestamp');
             $table->timestamp('response_timestamp');
 
-            $table->text('response_feedback');
+            $table->text('response_feedback')->nullable();
             $table->unsignedSmallInteger('response_rating');
             $table->jsonb('response_data');
 

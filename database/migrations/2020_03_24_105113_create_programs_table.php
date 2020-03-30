@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Template;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +21,7 @@ class CreateProgramsTable extends Migration
             $table->uuid('template_id');
 
             $table->string('title');
-            $table->string('format');
+            $table->enum('format', Template::FORMATS);
             $table->integer('max_learners')->nullable();
             $table->timestamp('start_timestamp')->nullable();
             $table->boolean('can_share')->default(true);

@@ -3,9 +3,6 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\Models\LearnerProfile;
-use App\Models\Program;
-use App\Models\ProgramLearner;
-use App\Models\Template;
 use App\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
@@ -21,12 +18,12 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(ProgramLearner::class, function (Faker $faker) {
-    $program_ids = Program::pluck('id')->toArray();
-    $learner_profile_ids = LearnerProfile::pluck('id')->toArray();
-
+$factory->define(LearnerProfile::class, function (Faker $faker) {
+    $user_ids = User::pluck('id')->toArray();
     return [
-        'program_id' => $faker->randomElement($program_ids),
-        'learner_profile_id' => $faker->randomElement($learner_profile_ids)
+        'user_id' => $faker->randomElement($user_ids),
+        'picture_url' => $faker->imageUrl(),
+        'role' => $faker->words(3),
+        'tenure' => $faker->words(2)
     ];
 });

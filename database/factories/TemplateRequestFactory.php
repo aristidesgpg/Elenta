@@ -22,11 +22,14 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(ProgramLearner::class, function (Faker $faker) {
-    $program_ids = Program::pluck('id')->toArray();
+    $template_ids = Template::pluck('id')->toArray();
     $learner_profile_ids = LearnerProfile::pluck('id')->toArray();
 
     return [
-        'program_id' => $faker->randomElement($program_ids),
-        'learner_profile_id' => $faker->randomElement($learner_profile_ids)
+        'template_id' => $faker->randomElement($template_ids),
+        'learner_profile_id' => $faker->randomElement($learner_profile_ids),
+        'email' => $faker->companyEmail, // TODO: Email only if learner null
+        'organization' => $faker->company,
+        'comment' => $faker->sentences(2),
     ];
 });

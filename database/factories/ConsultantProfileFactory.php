@@ -2,10 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Models\LearnerProfile;
-use App\Models\Program;
-use App\Models\ProgramLearner;
-use App\Models\Template;
+use App\Models\ConsultantProfile;
 use App\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
@@ -21,12 +18,12 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(ProgramLearner::class, function (Faker $faker) {
-    $program_ids = Program::pluck('id')->toArray();
-    $learner_profile_ids = LearnerProfile::pluck('id')->toArray();
-
+$factory->define(ConsultantProfile::class, function (Faker $faker) {
+    $user_ids = User::pluck('id')->toArray();
     return [
-        'program_id' => $faker->randomElement($program_ids),
-        'learner_profile_id' => $faker->randomElement($learner_profile_ids)
+        'user_id' => $faker->randomElement($user_ids),
+        'picture_url' => $faker->imageUrl(),
+        'title' => $faker->words(5),
+        'bio' => $faker->sentences(5)
     ];
 });

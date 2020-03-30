@@ -2,6 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Models\ConsultantProfile;
 use App\Models\Template;
 use App\Models\User;
 use Faker\Generator as Faker;
@@ -19,11 +20,12 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(Template::class, function (Faker $faker) {
-    $user_ids = User::pluck('id')->toArray();
+    $consultant_profile_ids = ConsultantProfile::pluck('id')->toArray();
     return [
-        'user_id' => $faker->randomElement($user_ids),
+        'consultant_profile_id' => $faker->randomElement($consultant_profile_ids),
         'title' => "Template {$faker->numberBetween(0, 999)}",
         'can_request' => $faker->boolean(),
-        'is_public' => $faker->boolean()
+        'is_public' => $faker->boolean(),
+        'dynamic_fields' => '' // TODO: Get sample JSON
     ];
 });

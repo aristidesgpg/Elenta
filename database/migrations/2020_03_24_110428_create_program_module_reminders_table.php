@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ProgramModuleReminder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,10 +18,10 @@ class CreateProgramModuleRemindersTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('program_module_id');
 
-            $table->enum('type', ['MANUAL', 'AUTOMATED']);
+            $table->enum('type', ProgramModuleReminder::TYPES);
             $table->string('subject');
             $table->text('message');
-            $table->integer('frequency')->default(36);
+            $table->integer('frequency')->default(72);
             $table->integer('max_reminders')->default(3);
 
             $table->timestamps();

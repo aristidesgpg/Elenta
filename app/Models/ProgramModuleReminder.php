@@ -12,6 +12,8 @@ class ProgramModuleReminder extends Model
 
     protected $guarded = [];
 
+    public const TYPES = ['MANUAL', 'AUTOMATED'];
+
     public function programModule() {
         return $this->belongsTo(ProgramModule::class);
     }

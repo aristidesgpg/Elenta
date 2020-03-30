@@ -2,6 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Models\ConsultantProfile;
 use App\Models\Program;
 use App\Models\Template;
 use App\Models\User;
@@ -20,21 +21,23 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(Program::class, function (Faker $faker) {
-    $user_ids = User::pluck('id')->toArray();
+    $consultant_profile_ids = ConsultantProfile::pluck('id')->toArray();
     $template_ids = Template::pluck('id')->toArray();
 
-    $format = $faker->randomElement(['SELF_DIRECTED', 'IN_PERSON', 'VIRTUAL_ATTENDANCE']);
+    $format = $faker->randomElement(Template::FORMATS);
     $format_params = [];
     if ($format != 'SELF_DIRECTED') {
         $format_params['max_learners'] = $faker->numberBetween(5, 50);
         $format_params['start_timestamp'] = $faker->dateTimeThisMonth();
     }
     return array_merge([
-        'user_id' => $faker->randomElement($user_ids),
+        'consultant_profile_ids' => $faker->randomElement($consultant_profile_ids),
         'template_id' => $faker->randomElement($template_ids),
         'title' => "Program {$faker->numberBetween(0, 999)}",
         'can_share' => $faker->boolean(),
         'is_public' => $faker->boolean(),
-        'format' => $format
+        'format' => $format,
+        'dynamic_fields' => '',
+        'dynamic_fields_data' => '', //TODO: Sample JSON data
     ], $format_params);
 });

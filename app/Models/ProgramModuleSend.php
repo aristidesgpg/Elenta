@@ -12,6 +12,10 @@ class ProgramModuleSend extends Model
 
     protected $guarded = [];
 
+    public const REASONS = ['MANUAL', 'TRIGGER', 'REMINDER'];
+    public const CHANNELS = ['EMAIL', 'SLACK'];
+
+
     public function programModule() {
         return $this->belongsTo(ProgramModule::class);
     }

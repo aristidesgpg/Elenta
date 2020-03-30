@@ -4,6 +4,7 @@
 
 use App\Models\LearnerProfile;
 use App\Models\Program;
+use App\Models\ProgramInvite;
 use App\Models\ProgramLearner;
 use App\Models\Template;
 use App\Models\User;
@@ -21,12 +22,14 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(ProgramLearner::class, function (Faker $faker) {
+$factory->define(ProgramInvite::class, function (Faker $faker) {
     $program_ids = Program::pluck('id')->toArray();
     $learner_profile_ids = LearnerProfile::pluck('id')->toArray();
 
     return [
         'program_id' => $faker->randomElement($program_ids),
-        'learner_profile_id' => $faker->randomElement($learner_profile_ids)
+        'learner_profile_id' => $faker->randomElement($learner_profile_ids),
+        'email' => $faker->companyEmail, // TODO: Email only if learner null
+        'message' => $faker->sentences(2),
     ];
 });
