@@ -26,6 +26,6 @@ $factory->define(Template::class, function (Faker $faker) {
         'title' => "Template {$faker->numberBetween(0, 999)}",
         'can_request' => $faker->boolean(),
         'is_public' => $faker->boolean(),
-        'dynamic_fields' => '' // TODO: Get sample JSON
+        'dynamic_fields' => '{}' // TODO: Get sample JSON
     ];
 });

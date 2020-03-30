@@ -6,6 +6,7 @@ use App\Models\LearnerProfile;
 use App\Models\Program;
 use App\Models\ProgramLearner;
 use App\Models\Template;
+use App\Models\TemplateRequest;
 use App\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
@@ -21,7 +22,7 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(ProgramLearner::class, function (Faker $faker) {
+$factory->define(TemplateRequest::class, function (Faker $faker) {
     $template_ids = Template::pluck('id')->toArray();
     $learner_profile_ids = LearnerProfile::pluck('id')->toArray();
 
@@ -30,6 +31,6 @@ $factory->define(ProgramLearner::class, function (Faker $faker) {
         'learner_profile_id' => $faker->randomElement($learner_profile_ids),
         'email' => $faker->companyEmail, // TODO: Email only if learner null
         'organization' => $faker->company,
-        'comment' => $faker->sentences(2),
+        'comment' => $faker->sentences(2, true),
     ];
 });

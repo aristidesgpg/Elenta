@@ -31,13 +31,13 @@ $factory->define(Program::class, function (Faker $faker) {
         $format_params['start_timestamp'] = $faker->dateTimeThisMonth();
     }
     return array_merge([
-        'consultant_profile_ids' => $faker->randomElement($consultant_profile_ids),
+        'consultant_profile_id' => $faker->randomElement($consultant_profile_ids),
         'template_id' => $faker->randomElement($template_ids),
         'title' => "Program {$faker->numberBetween(0, 999)}",
         'can_share' => $faker->boolean(),
         'is_public' => $faker->boolean(),
         'format' => $format,
-        'dynamic_fields' => '',
-        'dynamic_fields_data' => '', //TODO: Sample JSON data
+        'dynamic_fields' => '{}',
+        'dynamic_fields_data' => '{}', //TODO: Sample JSON data
     ], $format_params);
 });

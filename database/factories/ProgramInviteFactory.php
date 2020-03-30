@@ -30,6 +30,6 @@ $factory->define(ProgramInvite::class, function (Faker $faker) {
         'program_id' => $faker->randomElement($program_ids),
         'learner_profile_id' => $faker->randomElement($learner_profile_ids),
         'email' => $faker->companyEmail, // TODO: Email only if learner null
-        'message' => $faker->sentences(2),
+        'message' => $faker->sentences(2, true),
     ];
 });

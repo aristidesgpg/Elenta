@@ -26,8 +26,6 @@ class CreateProgramModulesTable extends Migration
 
             $table->foreign('program_id')->references('id')->on('programs');
             $table->foreign('module_id')->references('id')->on('modules');
-
-            $table->unique(['program_id', 'module_id', 'order']);
         });
     }
 

@@ -25,7 +25,7 @@ $factory->define(Module::class, function (Faker $faker) {
         'title' => "Module {$faker->numberBetween(0, 999)}",
         'description' => $faker->paragraph(5),
         'is_public' => $faker->boolean(),
-        'content' => '', // TODO
-        'conditions' => '', // TODO
+        'content' => '{}', // TODO
+        'conditions' => '{}', // TODO
     ];
 });

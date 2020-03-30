@@ -26,8 +26,6 @@ class CreateTemplateModulesTable extends Migration
 
             $table->foreign('template_id')->references('id')->on('templates');
             $table->foreign('module_id')->references('id')->on('modules');
-
-            $table->unique(['template_id', 'module_id', 'order']);
         });
     }
 

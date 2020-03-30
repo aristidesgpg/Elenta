@@ -28,7 +28,7 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(ProgramModuleReminder::class, function (Faker $faker) {
+$factory->define(ProgramModuleSend::class, function (Faker $faker) {
     $learner_profile_ids = LearnerProfile::pluck('id')->toArray();
     $program_module_ids = ProgramModule::pluck('id')->toArray();
 
@@ -43,9 +43,9 @@ $factory->define(ProgramModuleReminder::class, function (Faker $faker) {
         'learner_profile_id' => $faker->randomElement($learner_profile_ids),
         'reason' => $faker->randomElement(ProgramModuleSend::REASONS),
         'channel' => $faker->randomElement(ProgramModuleSend::CHANNELS),
-        'subject' => $faker->words(4),
-        'message' => $faker->sentences(3),
-        'response_feedback' => rand(0,10) > 8 ? $faker->sentences(3) : null,
+        'subject' => $faker->words(4, true),
+        'message' => $faker->sentences(3, true),
+        'response_feedback' => rand(0,10) > 8 ? $faker->sentences(3, true) : null,
         'response_rating' => $faker->numberBetween(0,1),
         'response_data' => '{}' // TODO
     ], $ts);

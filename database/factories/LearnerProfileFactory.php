@@ -23,7 +23,7 @@ $factory->define(LearnerProfile::class, function (Faker $faker) {
     return [
         'user_id' => $faker->randomElement($user_ids),
         'picture_url' => $faker->imageUrl(),
-        'role' => $faker->words(3),
-        'tenure' => $faker->words(2)
+        'role' => $faker->words(3, true),
+        'tenure' => $faker->words(2, true)
     ];
 });

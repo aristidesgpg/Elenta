@@ -23,7 +23,7 @@ $factory->define(ConsultantProfile::class, function (Faker $faker) {
     return [
         'user_id' => $faker->randomElement($user_ids),
         'picture_url' => $faker->imageUrl(),
-        'title' => $faker->words(5),
-        'bio' => $faker->sentences(5)
+        'title' => $faker->words(5, true),
+        'bio' => $faker->sentences(5, true)
     ];
 });
