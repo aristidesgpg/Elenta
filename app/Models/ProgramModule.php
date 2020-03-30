@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ModuleSend extends Model
+class ProgramModule extends Model
 {
     use SoftDeletes;
     use UsesUuid;
 
     protected $guarded = [];
 
-    public function module() {
-        return $this->belongsTo(Module::class);
+    public function program() {
+        return $this->belongsTo(Program::class);
     }
 
-    public function recipients() {
-        return $this->hasOne(User::class);
+    public function module() {
+        return $this->belongsTo(Module::class);
     }
 }

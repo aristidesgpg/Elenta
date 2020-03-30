@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModuleRemindersTable extends Migration
+class CreateProgramModulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,21 @@ class CreateModuleRemindersTable extends Migration
      */
     public function up()
     {
-        Schema::create('module_reminders', function (Blueprint $table) {
+        Schema::create('program_modules', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('module_id');
+            $table->uuid('program_id')->nullable();
+            $table->uuid('module_id')->nullable();
 
-            $table->enum('type', ['MANUAL', 'AUTOMATED']);
-            $table->string('subject');
-            $table->text('message');
-            $table->integer('frequency')->default(36);
-            $table->integer('max_reminders')->default(3);
+            $table->string('folder')->nullable();
+            $table->integer('order');
 
             $table->timestamps();
             $table->softDeletes();
 
+            $table->foreign('program_id')->references('id')->on('programs');
             $table->foreign('module_id')->references('id')->on('modules');
+
+            $table->unique(['program_id', 'module_id', 'order']);
         });
     }
 
@@ -37,6 +38,6 @@ class CreateModuleRemindersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('module_reminders');
+        Schema::dropIfExists('program_modules');
     }
 }

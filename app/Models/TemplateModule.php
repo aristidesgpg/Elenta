@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ModuleTrigger extends Model
+class TemplateModule extends Model
 {
     use SoftDeletes;
     use UsesUuid;
@@ -14,5 +14,9 @@ class ModuleTrigger extends Model
 
     public function module() {
         return $this->belongsTo(Module::class);
+    }
+
+    public function template() {
+        return $this->belongsTo(Template::class);
     }
 }

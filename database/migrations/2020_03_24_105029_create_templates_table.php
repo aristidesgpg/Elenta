@@ -15,7 +15,7 @@ class CreateTemplatesTable extends Migration
     {
         Schema::create('templates', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id');
+            $table->uuid('consultant_profile_id');
 
             $table->string('title');
             $table->boolean('can_request')->default(true);
@@ -25,7 +25,7 @@ class CreateTemplatesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('consultant_profile_id')->references('id')->on('consultant_profiles');
         });
     }
 

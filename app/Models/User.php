@@ -14,8 +14,8 @@ class User extends Authenticatable
     use HasApiTokens;
     use Notifiable;
     use SoftDeletes;
-    use UsesUuid;
     use Billable;
+    use UsesUuid;
 
     protected $fillable = [
         'name', 'email', 'password',
@@ -29,23 +29,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function authoredTemplates() {
-        return $this->hasMany(Template::class);
+    public function learnerProfile() {
+        return $this->hasMany(LearnerProfile::class);
     }
 
-    public function authoredPrograms() {
-        return $this->hasMany(Program::class);
-    }
-
-    public function enrolledPrograms() {
-        return $this->hasManyThrough(Program::class, ProgramLearner::class);
-    }
-
-    public function enrolledModules() {
-        return $this->hasManyThrough(Module::class, ModuleSend::class);
-    }
-
-    public function templateRequests() {
-        return $this->hasMany(TemplateRequest::class);
+    public function consultantProfile() {
+        return $this->hasMany(ConsultantProfile::class);
     }
 }

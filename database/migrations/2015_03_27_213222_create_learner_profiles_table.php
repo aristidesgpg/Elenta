@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProgramLearnersTable extends Migration
+class CreateLearnerProfilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,18 @@ class CreateProgramLearnersTable extends Migration
      */
     public function up()
     {
-        Schema::create('program_learners', function (Blueprint $table) {
+        Schema::create('learner_profiles', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('program_id');
-            $table->uuid('learner_profile_id');
+            $table->uuid('user_id');
+
+            $table->string('picture_url')->nullable();
+            $table->string('role')->nullable();
+            $table->text('tenure')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('program_id')->references('id')->on('programs');
-            $table->foreign('learner_profile_id')->references('id')->on('learner_profiles');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -33,6 +35,6 @@ class CreateProgramLearnersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('program_learners');
+        Schema::dropIfExists('learner_profiles');
     }
 }

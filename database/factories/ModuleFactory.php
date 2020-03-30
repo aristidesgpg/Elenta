@@ -2,6 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Models\Module;
+use App\Models\Program;
 use App\Models\Template;
 use App\Models\User;
 use Faker\Generator as Faker;
@@ -18,12 +20,17 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(Template::class, function (Faker $faker) {
-    $user_ids = User::pluck('id')->toArray();
+$factory->define(Module::class, function (Faker $faker) {
+    $template_ids = Template::pluck('id')->toArray();
+    $program_ids = Program::pluck('id')->toArray();
+
     return [
-        'user_id' => $faker->randomElement($user_ids),
-        'title' => "Template {$faker->numberBetween(0, 999)}",
-        'can_request' => $faker->boolean(),
-        'is_public' => $faker->boolean()
+        'template_id' => $faker->randomElement($template_ids),
+        'program_id' => $faker->randomElement($program_ids),
+        'title' => "Module {$faker->numberBetween(0, 999)}",
+        'description' => $faker->paragraph(5),
+        'is_public' => $faker->boolean(),
+        'folder' => "Folder {$faker->numberBetween(1, 4)}",
+        'order' => 0,
     ];
 });

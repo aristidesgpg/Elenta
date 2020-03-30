@@ -13,11 +13,11 @@ class Template extends Model
     protected $guarded = [];
 
     public function owner() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(ConsultantProfile::class);
     }
 
     public function modules() {
-        return $this->hasMany(Module::class);
+        return $this->hasManyThrough(Module::class, TemplateModule::class);
     }
 
     public function requests() {

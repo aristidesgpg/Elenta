@@ -16,7 +16,7 @@ class TemplateRequest extends Model
         return $this->belongsTo(Template::class);
     }
 
-    public function requester() {
-        return $this->belongsTo(User::class);
+    public function learner() {
+        return $this->belongsTo(LearnerProfile::class);
     }
 }

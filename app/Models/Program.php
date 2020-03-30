@@ -13,7 +13,7 @@ class Program extends Model
     protected $guarded = [];
 
     public function owner() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(ConsultantProfile::class);
     }
 
     public function template() {
@@ -21,11 +21,11 @@ class Program extends Model
     }
 
     public function modules() {
-        return $this->hasMany(Module::class);
+        return $this->hasManyThrough(Module::class, ProgramModule::class);
     }
 
     public function learners() {
-        return $this->hasManyThrough(User::class, ProgramLearner::class);
+        return $this->hasManyThrough(LearnerProfile::class, ProgramLearner::class);
     }
 
     public function invites() {

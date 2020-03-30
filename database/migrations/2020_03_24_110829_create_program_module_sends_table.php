@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModuleSendsTable extends Migration
+class CreateProgramModuleSendsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateModuleSendsTable extends Migration
      */
     public function up()
     {
-        Schema::create('module_sends', function (Blueprint $table) {
+        Schema::create('program_module_sends', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('module_id');
-            $table->uuid('user_id');
+            $table->uuid('program_module_id');
+            $table->uuid('learner_profile_id');
 
             $table->enum('reason', ['MANUAL', 'TRIGGER', 'REMINDER']);
             $table->enum('channel', ['EMAIL', 'SLACK']);
@@ -35,8 +35,8 @@ class CreateModuleSendsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('module_id')->references('id')->on('modules');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('program_module_id')->references('id')->on('program_modules');
+            $table->foreign('learner_profile_id')->references('id')->on('learner_profiles');
         });
     }
 
@@ -47,6 +47,6 @@ class CreateModuleSendsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('module_sends');
+        Schema::dropIfExists('program_module_sends');
     }
 }

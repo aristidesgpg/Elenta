@@ -1,0 +1,40 @@
+<?php
+
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+use App\Models\Program;
+use App\Models\Template;
+use App\Models\User;
+use Faker\Generator as Faker;
+use Illuminate\Support\Str;
+
+/*
+|--------------------------------------------------------------------------
+| Model Factories
+|--------------------------------------------------------------------------
+|
+| This directory should contain each of the model factory definitions for
+| your application. Factories provide a convenient way to generate new
+| model instances for testing / seeding your application's database.
+|
+*/
+
+$factory->define(Program::class, function (Faker $faker) {
+    $user_ids = User::pluck('id')->toArray();
+    $template_ids = Template::pluck('id')->toArray();
+
+    $format = $faker->randomElement(['SELF_DIRECTED', 'IN_PERSON', 'VIRTUAL_ATTENDANCE']);
+    $format_params = [];
+    if ($format != 'SELF_DIRECTED') {
+        $format_params['max_learners'] = $faker->numberBetween(5, 50);
+        $format_params['start_timestamp'] = $faker->dateTimeThisMonth();
+    }
+    return array_merge([
+        'user_id' => $faker->randomElement($user_ids),
+        'template_id' => $faker->randomElement($template_ids),
+        'title' => "Program {$faker->numberBetween(0, 999)}",
+        'can_share' => $faker->boolean(),
+        'is_public' => $faker->boolean(),
+        'format' => $format
+    ], $format_params);
+});

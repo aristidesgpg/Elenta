@@ -15,4 +15,8 @@ class ProgramInvite extends Model
     public function program() {
         return $this->belongsTo(Program::class);
     }
+
+    public function learner() {
+        return $this->belongsTo(LearnerProfile::class);
+    }
 }

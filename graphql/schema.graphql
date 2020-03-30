@@ -13,6 +13,102 @@ type User {
     id: ID!
     name: String!
     email: String!
+    picture_url: String
+    email_verified_at: DateTime
+    consultant_title: String
+    consultant_bio: String
+    card_brand: String
     created_at: DateTime!
     updated_at: DateTime!
+    deleted_at: DateTime!
 }
+
+type Query {
+    template(id: ID @eq): Template @find
+}
+
+type Template {
+    id: ID!
+    owner: User!
+    title: String!
+    can_request: Boolean!
+    is_public: Boolean!
+    dynamic_fields: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+
+    modules: [Module]
+    requests: [TemplateRequest]
+    programs: [Program]
+}
+
+
+type TemplateRequest {
+    id: ID!
+    template: Template!
+    requester: User!
+    organization: String
+    comment: String
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
+type Program {
+    id: ID!
+    owner: User!
+    template: Template!
+    title: String!
+    format: String!
+    max_learners: Int
+    start_timestamp: DateTime
+    can_share: Boolean
+    is_public: Boolean
+    dynamic_fields: String
+    dynamic_fields_data: String
+    created_at: DateTime
+    deleted_at: DateTime!
+
+    modules: [Module]
+    learners: [User]
+    invites: [ProgramInvite]
+}
+
+type ProgramLearner {
+    id: ID!
+    program: Program!
+    learner: User!
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
+type ProgramInvite {
+    id: ID!
+    program: Program!
+    email: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
+type Module {
+    id: ID!
+    template: Template
+    program: Program
+    title: String!
+    description: String
+}
+
+#type ProgramModuleReminder {
+#
+#}
+#
+#type ProgramModuleTrigger {
+#
+#}
+#
+#type ProgramModuleSend {
+#
+#}

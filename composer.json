@@ -23,6 +23,7 @@
         "pusher/pusher-php-server": "^4.1"
     },
     "require-dev": {
+        "beyondcode/laravel-er-diagram-generator": "^1.4",
         "facade/ignition": "^2.0",
         "fzaninotto/faker": "^1.9.1",
         "haydenpierce/class-finder": "^0.4.0",

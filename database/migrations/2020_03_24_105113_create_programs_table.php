@@ -16,7 +16,7 @@ class CreateProgramsTable extends Migration
         Schema::create('programs', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->uuid('user_id');
+            $table->uuid('consultant_profile_id');
             $table->uuid('template_id');
 
             $table->string('title');
@@ -31,7 +31,7 @@ class CreateProgramsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('consultant_profile_id')->references('id')->on('consultant_profiles');
             $table->foreign('template_id')->references('id')->on('templates');
         });
     }
