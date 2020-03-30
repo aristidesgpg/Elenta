@@ -18,7 +18,7 @@ class CreateTemplateRequestsTable extends Migration
             $table->uuid('template_id');
             $table->uuid('learner_profile_id')->nullable();
 
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('organization')->nullable();
             $table->text('comment')->nullable();
 

@@ -30,10 +30,10 @@ class User extends Authenticatable
     ];
 
     public function learnerProfile() {
-        return $this->hasMany(LearnerProfile::class);
+        return $this->hasOne(LearnerProfile::class);
     }
 
     public function consultantProfile() {
-        return $this->hasMany(ConsultantProfile::class);
+        return $this->hasOne(ConsultantProfile::class);
     }
 }

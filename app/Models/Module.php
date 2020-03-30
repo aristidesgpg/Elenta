@@ -19,16 +19,4 @@ class Module extends Model
     public function templates() {
         return $this->hasManyThrough(Template::class, TemplateModule::class);
     }
-
-    public function reminders() {
-        return $this->hasManyThrough(ProgramModuleReminder::class, ProgramModule::class);
-    }
-
-    public function triggers() {
-        return $this->hasManyThrough(ProgramModuleTrigger::class, ProgramModule::class);
-    }
-
-    public function sends() {
-        return $this->hasManyThrough(ProgramModuleSend::class, ProgramModule::class);
-    }
 }

@@ -15,7 +15,7 @@ class CreateConsultantProfilesTable extends Migration
     {
         Schema::create('consultant_profiles', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id');
+            $table->uuid('user_id')->unique();
 
             $table->string('picture_url')->nullable();
             $table->string('title')->nullable();

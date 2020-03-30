@@ -20,6 +20,10 @@ class Program extends Model
         return $this->belongsTo(Template::class);
     }
 
+    public function programModules() {
+        return $this->hasMany(ProgramModule::class);
+    }
+
     public function modules() {
         return $this->hasManyThrough(Module::class, ProgramModule::class);
     }

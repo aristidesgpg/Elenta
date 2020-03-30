@@ -19,4 +19,16 @@ class ProgramModule extends Model
     public function module() {
         return $this->belongsTo(Module::class);
     }
+
+    public function reminders() {
+        return $this->hasMany(ProgramModuleReminder::class);
+    }
+
+    public function triggers() {
+        return $this->hasMany(ProgramModuleTrigger::class);
+    }
+
+    public function sends() {
+        return $this->hasMany(ProgramModuleSend::class);
+    }
 }

@@ -19,7 +19,7 @@ class CreateProgramModulesTable extends Migration
             $table->uuid('module_id')->nullable();
 
             $table->string('folder')->nullable();
-            $table->integer('order');
+            $table->integer('order')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
