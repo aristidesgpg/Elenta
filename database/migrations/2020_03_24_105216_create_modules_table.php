@@ -15,6 +15,7 @@ class CreateModulesTable extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('consultant_profile_id');
 
             $table->string('title');
             $table->text('description');
@@ -24,6 +25,8 @@ class CreateModulesTable extends Migration
 
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('consultant_profile_id')->references('id')->on('consultant_profiles');
         });
     }
 

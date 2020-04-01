@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\LearnerProfile;
+use App\Models\Program;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -30,9 +31,11 @@ class LearnerProfilePolicy
      */
     public function view(User $user, LearnerProfile $learnerProfile)
     {
-        return $user->id == $learnerProfile->user_id;
-        // TODO: Allow instructor to see profile
-
+        return $user->id == $learnerProfile->user_id ||
+            // Program owners can view enrolled student profiles
+            $learnerProfile->programs()->with('owner')->get()
+                ->pluck('owner.user_id')
+                ->contains($user->id);
     }
 
     /**

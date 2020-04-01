@@ -2,7 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\LearnerProfile;
 use App\Models\Module;
+use App\Models\Program;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -18,7 +20,7 @@ class ModulePolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return false;
     }
 
     /**
@@ -30,7 +32,18 @@ class ModulePolicy
      */
     public function view(User $user, Module $module)
     {
-        //
+        return $module->is_public
+            // If you own a program or template with the module
+            || $module->programs()->with('owner')->get()
+                    ->pluck('owner.user_id')
+                    ->contains($user->id)
+            || $module->templates()->with('owner')->get()
+                ->pluck('owner.user_id')
+                ->contains($user->id)
+            // If you're enrolled in a program with the module
+            || $module->programs()->with('learners')->get()->map(function (Program $p) {
+                return $p->learners->pluck('user_id');
+            })->flatten()->contains($user->id);
     }
 
     /**
@@ -41,7 +54,7 @@ class ModulePolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -53,7 +66,7 @@ class ModulePolicy
      */
     public function update(User $user, Module $module)
     {
-        //
+        return $user->id == $module->owner->user_id;
     }
 
     /**
@@ -65,7 +78,7 @@ class ModulePolicy
      */
     public function delete(User $user, Module $module)
     {
-        //
+        return $user->id == $module->owner->user_id;
     }
 
     /**
@@ -77,7 +90,7 @@ class ModulePolicy
      */
     public function restore(User $user, Module $module)
     {
-        //
+        return $user->id == $module->owner->user_id;
     }
 
     /**
@@ -89,6 +102,6 @@ class ModulePolicy
      */
     public function forceDelete(User $user, Module $module)
     {
-        //
+        return $user->id == $module->owner->user_id;
     }
 }

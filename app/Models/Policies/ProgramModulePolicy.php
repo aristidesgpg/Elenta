@@ -18,7 +18,7 @@ class ProgramModulePolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return false;
     }
 
     /**
@@ -30,7 +30,8 @@ class ProgramModulePolicy
      */
     public function view(User $user, ProgramModule $programModule)
     {
-        //
+        return $user->id == $programModule->program->owner->user_id
+            || $programModule->program->learners->pluck('user_id')->contains($user->id);
     }
 
     /**
@@ -41,7 +42,7 @@ class ProgramModulePolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -53,7 +54,7 @@ class ProgramModulePolicy
      */
     public function update(User $user, ProgramModule $programModule)
     {
-        //
+        return $user->id == $programModule->program->owner->user_id;
     }
 
     /**
@@ -65,7 +66,7 @@ class ProgramModulePolicy
      */
     public function delete(User $user, ProgramModule $programModule)
     {
-        //
+        return $user->id == $programModule->program->owner->user_id;
     }
 
     /**
@@ -77,7 +78,7 @@ class ProgramModulePolicy
      */
     public function restore(User $user, ProgramModule $programModule)
     {
-        //
+        return $user->id == $programModule->program->owner->user_id;
     }
 
     /**
@@ -89,6 +90,6 @@ class ProgramModulePolicy
      */
     public function forceDelete(User $user, ProgramModule $programModule)
     {
-        //
+        return $user->id == $programModule->program->owner->user_id;
     }
 }

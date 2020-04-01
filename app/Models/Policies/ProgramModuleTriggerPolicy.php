@@ -8,21 +8,22 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ProgramModuleTriggerPolicy
 {
+
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any program module triggers.
+     * Determine whether the user can view any program module reminders.
      *
      * @param  User  $user
      * @return mixed
      */
     public function viewAny(User $user)
     {
-        //
+        return false;
     }
 
     /**
-     * Determine whether the user can view the program module trigger.
+     * Determine whether the user can view the program module reminder.
      *
      * @param  User  $user
      * @param  ProgramModuleTrigger  $programModuleTrigger
@@ -30,22 +31,22 @@ class ProgramModuleTriggerPolicy
      */
     public function view(User $user, ProgramModuleTrigger $programModuleTrigger)
     {
-        //
+        return $user->id == $programModuleTrigger->programModule->program->owner->user_id;
     }
 
     /**
-     * Determine whether the user can create program module triggers.
+     * Determine whether the user can create program module reminders.
      *
      * @param  User  $user
      * @return mixed
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
-     * Determine whether the user can update the program module trigger.
+     * Determine whether the user can update the program module reminder.
      *
      * @param  User  $user
      * @param  ProgramModuleTrigger  $programModuleTrigger
@@ -53,11 +54,11 @@ class ProgramModuleTriggerPolicy
      */
     public function update(User $user, ProgramModuleTrigger $programModuleTrigger)
     {
-        //
+        return $user->id == $programModuleTrigger->programModule->program->owner->user_id;
     }
 
     /**
-     * Determine whether the user can delete the program module trigger.
+     * Determine whether the user can delete the program module reminder.
      *
      * @param  User  $user
      * @param  ProgramModuleTrigger  $programModuleTrigger
@@ -65,11 +66,11 @@ class ProgramModuleTriggerPolicy
      */
     public function delete(User $user, ProgramModuleTrigger $programModuleTrigger)
     {
-        //
+        return $user->id == $programModuleTrigger->programModule->program->owner->user_id;
     }
 
     /**
-     * Determine whether the user can restore the program module trigger.
+     * Determine whether the user can restore the program module reminder.
      *
      * @param  User  $user
      * @param  ProgramModuleTrigger  $programModuleTrigger
@@ -77,11 +78,11 @@ class ProgramModuleTriggerPolicy
      */
     public function restore(User $user, ProgramModuleTrigger $programModuleTrigger)
     {
-        //
+        return $user->id == $programModuleTrigger->programModule->program->owner->user_id;
     }
 
     /**
-     * Determine whether the user can permanently delete the program module trigger.
+     * Determine whether the user can permanently delete the program module reminder.
      *
      * @param  User  $user
      * @param  ProgramModuleTrigger  $programModuleTrigger
@@ -89,6 +90,6 @@ class ProgramModuleTriggerPolicy
      */
     public function forceDelete(User $user, ProgramModuleTrigger $programModuleTrigger)
     {
-        //
+        return $user->id == $programModuleTrigger->programModule->program->owner->user_id;
     }
 }

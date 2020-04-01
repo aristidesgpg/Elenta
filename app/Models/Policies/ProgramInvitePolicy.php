@@ -18,7 +18,7 @@ class ProgramInvitePolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return false;
     }
 
     /**
@@ -30,7 +30,8 @@ class ProgramInvitePolicy
      */
     public function view(User $user, ProgramInvite $programInvite)
     {
-        //
+        return $user->id == $programInvite->learner->user_id ||
+            $user->id == $programInvite->program->owner->user_id;
     }
 
     /**
@@ -41,7 +42,7 @@ class ProgramInvitePolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -53,7 +54,7 @@ class ProgramInvitePolicy
      */
     public function update(User $user, ProgramInvite $programInvite)
     {
-        //
+        return false;
     }
 
     /**
@@ -65,7 +66,7 @@ class ProgramInvitePolicy
      */
     public function delete(User $user, ProgramInvite $programInvite)
     {
-        //
+        return false;
     }
 
     /**
@@ -77,7 +78,7 @@ class ProgramInvitePolicy
      */
     public function restore(User $user, ProgramInvite $programInvite)
     {
-        //
+        return false;
     }
 
     /**
@@ -89,6 +90,6 @@ class ProgramInvitePolicy
      */
     public function forceDelete(User $user, ProgramInvite $programInvite)
     {
-        //
+        return false;
     }
 }

@@ -32,13 +32,13 @@ class DatabaseSeeder extends Seeder
         factory(Template::class, 10)->create();
         factory(Program::class, 20)->create();
         factory(Module::class, 50)->create();
-        factory(TemplateModule::class, 25)->create();
-        factory(ProgramModule::class, 25)->create();
-        factory(ProgramModuleTrigger::class, 25)->create();
-        factory(ProgramModuleReminder::class, 25)->create();
-        factory(ProgramModuleSend::class, 25)->create();
-        factory(ProgramLearner::class, 10)->create();
-        factory(TemplateRequest::class, 100)->create();
-        factory(ProgramInvite::class, 100)->create();
+        factory(TemplateModule::class, 100)->create();
+        factory(ProgramModule::class, 100)->create();
+        factory(ProgramModuleTrigger::class, 100)->create();
+        factory(ProgramModuleReminder::class, 100)->create();
+        factory(ProgramModuleSend::class, 100)->create();
+        factory(ProgramLearner::class, 50)->create();
+        factory(TemplateRequest::class, 200)->create();
+        factory(ProgramInvite::class, 200)->create();
     }
 }

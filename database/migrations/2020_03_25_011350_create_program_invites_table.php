@@ -16,6 +16,7 @@ class CreateProgramInvitesTable extends Migration
         Schema::create('program_invites', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('program_id');
+            $table->uuid('user_id');
             $table->uuid('learner_profile_id')->nullable();
 
             $table->string('email');
@@ -26,6 +27,7 @@ class CreateProgramInvitesTable extends Migration
 
             $table->foreign('program_id')->references('id')->on('programs');
             $table->foreign('learner_profile_id')->references('id')->on('learner_profiles');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

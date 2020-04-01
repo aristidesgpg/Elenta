@@ -18,7 +18,7 @@ class ProgramModuleReminderPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return false;
     }
 
     /**
@@ -30,7 +30,7 @@ class ProgramModuleReminderPolicy
      */
     public function view(User $user, ProgramModuleReminder $programModuleReminder)
     {
-        //
+        return $user->id == $programModuleReminder->programModule->program->owner->user_id;
     }
 
     /**
@@ -41,7 +41,7 @@ class ProgramModuleReminderPolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -53,7 +53,7 @@ class ProgramModuleReminderPolicy
      */
     public function update(User $user, ProgramModuleReminder $programModuleReminder)
     {
-        //
+        return $user->id == $programModuleReminder->programModule->program->owner->user_id;
     }
 
     /**
@@ -65,7 +65,7 @@ class ProgramModuleReminderPolicy
      */
     public function delete(User $user, ProgramModuleReminder $programModuleReminder)
     {
-        //
+        return $user->id == $programModuleReminder->programModule->program->owner->user_id;
     }
 
     /**
@@ -77,7 +77,7 @@ class ProgramModuleReminderPolicy
      */
     public function restore(User $user, ProgramModuleReminder $programModuleReminder)
     {
-        //
+        return $user->id == $programModuleReminder->programModule->program->owner->user_id;
     }
 
     /**
@@ -89,6 +89,6 @@ class ProgramModuleReminderPolicy
      */
     public function forceDelete(User $user, ProgramModuleReminder $programModuleReminder)
     {
-        //
+        return $user->id == $programModuleReminder->programModule->program->owner->user_id;
     }
 }

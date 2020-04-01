@@ -18,7 +18,7 @@ class TemplateRequestPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return false;
     }
 
     /**
@@ -30,7 +30,8 @@ class TemplateRequestPolicy
      */
     public function view(User $user, TemplateRequest $templateRequest)
     {
-        //
+        return $user->id == $templateRequest->learner->user_id
+            || $user->id == $templateRequest->template->owner->user_id;
     }
 
     /**
@@ -41,7 +42,7 @@ class TemplateRequestPolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -53,7 +54,7 @@ class TemplateRequestPolicy
      */
     public function update(User $user, TemplateRequest $templateRequest)
     {
-        //
+        return false;
     }
 
     /**
@@ -65,7 +66,7 @@ class TemplateRequestPolicy
      */
     public function delete(User $user, TemplateRequest $templateRequest)
     {
-        //
+        return false;
     }
 
     /**
@@ -77,7 +78,7 @@ class TemplateRequestPolicy
      */
     public function restore(User $user, TemplateRequest $templateRequest)
     {
-        //
+        return false;
     }
 
     /**
@@ -89,6 +90,6 @@ class TemplateRequestPolicy
      */
     public function forceDelete(User $user, TemplateRequest $templateRequest)
     {
-        //
+        return false;
     }
 }

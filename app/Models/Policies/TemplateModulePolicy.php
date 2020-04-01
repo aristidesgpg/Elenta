@@ -9,7 +9,6 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class TemplateModulePolicy
 {
     use HandlesAuthorization;
-
     /**
      * Determine whether the user can view any template modules.
      *
@@ -18,7 +17,7 @@ class TemplateModulePolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return false;
     }
 
     /**
@@ -30,7 +29,7 @@ class TemplateModulePolicy
      */
     public function view(User $user, TemplateModule $templateModule)
     {
-        //
+        return $user->id == $templateModule->template->owner->user_id;
     }
 
     /**
@@ -41,7 +40,7 @@ class TemplateModulePolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -53,7 +52,7 @@ class TemplateModulePolicy
      */
     public function update(User $user, TemplateModule $templateModule)
     {
-        //
+        return $user->id == $templateModule->template->owner->user_id;
     }
 
     /**
@@ -65,7 +64,7 @@ class TemplateModulePolicy
      */
     public function delete(User $user, TemplateModule $templateModule)
     {
-        //
+        return $user->id == $templateModule->template->owner->user_id;
     }
 
     /**
@@ -77,7 +76,7 @@ class TemplateModulePolicy
      */
     public function restore(User $user, TemplateModule $templateModule)
     {
-        //
+        return $user->id == $templateModule->template->owner->user_id;
     }
 
     /**
@@ -89,6 +88,6 @@ class TemplateModulePolicy
      */
     public function forceDelete(User $user, TemplateModule $templateModule)
     {
-        //
+        return $user->id == $templateModule->template->owner->user_id;
     }
 }

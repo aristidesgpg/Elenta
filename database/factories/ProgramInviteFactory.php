@@ -24,9 +24,11 @@ use Illuminate\Support\Str;
 
 $factory->define(ProgramInvite::class, function (Faker $faker) {
     $program_ids = Program::pluck('id')->toArray();
+    $user_ids = User::pluck('id')->toArray();
     $learner_profile_ids = LearnerProfile::pluck('id')->toArray();
 
     return [
+        'user_id' => $faker->randomElement($user_ids),
         'program_id' => $faker->randomElement($program_ids),
         'learner_profile_id' => $faker->randomElement($learner_profile_ids),
         'email' => $faker->companyEmail, // TODO: Email only if learner null

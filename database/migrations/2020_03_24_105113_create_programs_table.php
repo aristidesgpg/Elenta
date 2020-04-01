@@ -24,7 +24,7 @@ class CreateProgramsTable extends Migration
             $table->enum('format', Template::FORMATS);
             $table->integer('max_learners')->nullable();
             $table->timestamp('start_timestamp')->nullable();
-            $table->boolean('can_share')->default(true);
+            $table->boolean('can_invite')->default(true);
             $table->boolean('is_public')->default(false);
             $table->jsonb('dynamic_fields')->nullable();
             $table->jsonb('dynamic_fields_data')->nullable();

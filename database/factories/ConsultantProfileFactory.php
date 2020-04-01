@@ -21,7 +21,7 @@ use Illuminate\Support\Str;
 $factory->define(ConsultantProfile::class, function (Faker $faker) {
     $user_ids = User::pluck('id')->toArray();
     return [
-        'user_id' => $faker->randomElement($user_ids),
+        'user_id' => $faker->unique()->randomElement($user_ids),
         'picture_url' => $faker->imageUrl(),
         'title' => $faker->words(5, true),
         'bio' => $faker->sentences(5, true)

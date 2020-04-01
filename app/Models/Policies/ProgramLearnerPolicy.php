@@ -18,7 +18,7 @@ class ProgramLearnerPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return false;
     }
 
     /**
@@ -30,7 +30,8 @@ class ProgramLearnerPolicy
      */
     public function view(User $user, ProgramLearner $programLearner)
     {
-        //
+        return $user->id == $programLearner->learner->user_id
+            || $programLearner->program()->with('owner')->pluck('id')->contains($user->id);
     }
 
     /**
@@ -41,7 +42,7 @@ class ProgramLearnerPolicy
      */
     public function create(User $user)
     {
-        //
+        return isset($user->learnerProfile);
     }
 
     /**
@@ -53,7 +54,8 @@ class ProgramLearnerPolicy
      */
     public function update(User $user, ProgramLearner $programLearner)
     {
-        //
+        return $user->id == $programLearner->learner->user_id
+            || $programLearner->program()->with('owner')->pluck('id')->contains($user->id);
     }
 
     /**
@@ -65,7 +67,8 @@ class ProgramLearnerPolicy
      */
     public function delete(User $user, ProgramLearner $programLearner)
     {
-        //
+        return $user->id == $programLearner->learner->user_id
+            || $programLearner->program()->with('owner')->pluck('id')->contains($user->id);
     }
 
     /**
@@ -77,7 +80,8 @@ class ProgramLearnerPolicy
      */
     public function restore(User $user, ProgramLearner $programLearner)
     {
-        //
+        return $user->id == $programLearner->learner->user_id
+            || $programLearner->program()->with('owner')->pluck('id')->contains($user->id);
     }
 
     /**
@@ -89,6 +93,7 @@ class ProgramLearnerPolicy
      */
     public function forceDelete(User $user, ProgramLearner $programLearner)
     {
-        //
+        return $user->id == $programLearner->learner->user_id
+            || $programLearner->program()->with('owner')->pluck('id')->contains($user->id);
     }
 }

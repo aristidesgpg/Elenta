@@ -34,7 +34,7 @@ $factory->define(Program::class, function (Faker $faker) {
         'consultant_profile_id' => $faker->randomElement($consultant_profile_ids),
         'template_id' => $faker->randomElement($template_ids),
         'title' => "Program {$faker->numberBetween(0, 999)}",
-        'can_share' => $faker->boolean(),
+        'can_invite' => $faker->boolean(),
         'is_public' => $faker->boolean(),
         'format' => $format,
         'dynamic_fields' => '{}',

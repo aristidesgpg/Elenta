@@ -2,6 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Models\ConsultantProfile;
 use App\Models\Module;
 use App\Models\Program;
 use App\Models\Template;
@@ -21,7 +22,9 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(Module::class, function (Faker $faker) {
+    $consultant_profile_ids = ConsultantProfile::pluck('id')->toArray();
     return [
+        'consultant_profile_id' => $faker->randomElement($consultant_profile_ids),
         'title' => "Module {$faker->numberBetween(0, 999)}",
         'description' => $faker->paragraph(5),
         'is_public' => $faker->boolean(),
