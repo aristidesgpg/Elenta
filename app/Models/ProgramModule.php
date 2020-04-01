@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -49,23 +51,23 @@ class ProgramModule extends Model
 
     protected $guarded = [];
 
-    public function program() {
+    public function program(): BelongsTo {
         return $this->belongsTo(Program::class);
     }
 
-    public function module() {
+    public function module(): BelongsTo {
         return $this->belongsTo(Module::class);
     }
 
-    public function reminders() {
+    public function reminders(): HasMany {
         return $this->hasMany(ProgramModuleReminder::class);
     }
 
-    public function triggers() {
+    public function triggers(): HasMany {
         return $this->hasMany(ProgramModuleTrigger::class);
     }
 
-    public function sends() {
+    public function sends(): HasMany {
         return $this->hasMany(ProgramModuleSend::class);
     }
 }

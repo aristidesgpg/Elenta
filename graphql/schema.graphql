@@ -5,8 +5,7 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 type Query {
-    users: [User!]! @paginate(defaultCount: 10)
-    user(id: ID @eq): User @find
+    me: User @auth
 }
 
 type User {
@@ -16,12 +15,16 @@ type User {
     email: String!
     email_verified_at: DateTime
 
+    card_brand: String
+    card_last_four: String
+    trial_ends_at: DateTime
+
     created_at: DateTime!
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    learnerProfile: LearnerProfile
-    consultantProfile: ConsultantProfile
+    learnerProfile: [LearnerProfile]
+    consultantProfile: [ConsultantProfile]
 }
 
 type LearnerProfile {
@@ -35,6 +38,9 @@ type LearnerProfile {
     created_at: DateTime!
     updated_at: DateTime!
     deleted_at: DateTime!
+
+    programs: [Program]
+    programModules: [ProgramModule]
 }
 
 type ConsultantProfile {
@@ -48,6 +54,9 @@ type ConsultantProfile {
     created_at: DateTime!
     updated_at: DateTime!
     deleted_at: DateTime!
+
+    programs: [Program]
+    templates: [Template]
 }
 
 type Template {
@@ -76,6 +85,19 @@ type TemplateRequest {
     email: String
     organization: String
     comment: String
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
+type TemplateModule {
+    id: ID!
+    template: Template
+    module: Module
+
+    folder: String
+    order: Int!
 
     created_at: DateTime!
     updated_at: DateTime!
@@ -130,7 +152,7 @@ type ProgramModuleReminder {
     type: String!
     subject: String!
     message: String!
-    frequent: Int!
+    frequency: Int!
     max_reminders: Int!
 
     created_at: DateTime!
@@ -161,6 +183,12 @@ type ProgramModuleSend {
     channel: String!
     subject: String!
     message: String!
+
+    send_timestamp: DateTime!
+    open_timestamp: DateTime!
+    click_timestamp: DateTime!
+    response_timestamp: DateTime!
+
     response_feedback: String
     response_rating: Int!
     response_data: String!
@@ -173,7 +201,8 @@ type ProgramModuleSend {
 type ProgramInvite {
     id: ID!
     program: Program!
-    learner: LearnerProfile!
+    creator: User!
+    learner: LearnerProfile
 
     email: String!
     message: String!
@@ -183,8 +212,19 @@ type ProgramInvite {
     deleted_at: DateTime!
 }
 
+type ProgramLearner {
+    id: ID!
+    program: Program!
+    learner: LearnerProfile!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
 type Module {
     id: ID!
+    owner: User!
 
     title: String!
     description: String!

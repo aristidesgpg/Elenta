@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -49,7 +50,7 @@ class ProgramModuleReminder extends Model
 
     public const TYPES = ['MANUAL', 'AUTOMATED'];
 
-    public function programModule() {
+    public function programModule(): BelongsTo {
         return $this->belongsTo(ProgramModule::class);
     }
 }

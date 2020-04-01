@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -27,7 +28,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Module $module
  * @property-read \App\Models\ProgramModule $programModule
- * @property-read \App\Models\LearnerProfile $recipients
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramModuleSend newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramModuleSend newQuery()
@@ -54,6 +54,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ProgramModuleSend withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ProgramModuleSend withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \App\Models\LearnerProfile $learner
  */
 class ProgramModuleSend extends Model
 {
@@ -66,11 +67,11 @@ class ProgramModuleSend extends Model
     public const CHANNELS = ['EMAIL', 'SLACK'];
 
 
-    public function programModule() {
+    public function programModule(): BelongsTo {
         return $this->belongsTo(ProgramModule::class);
     }
 
-    public function learner() {
+    public function learner(): BelongsTo {
         return $this->belongsTo(LearnerProfile::class, 'learner_profile_id');
     }
 }

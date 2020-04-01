@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -39,11 +40,11 @@ class ProgramLearner extends Model
 
     protected $guarded = [];
 
-    public function program() {
+    public function program(): BelongsTo {
         return $this->belongsTo(Program::class);
     }
 
-    public function learner() {
+    public function learner(): BelongsTo {
         return $this->belongsTo(LearnerProfile::class, 'learner_profile_id');
     }
 }

@@ -20,6 +20,7 @@ class CreateConsultantProfilesTable extends Migration
             $table->string('picture_url')->nullable();
             $table->string('title')->nullable();
             $table->text('bio')->nullable();
+            $table->boolean('is_public')->default(false);
 
             $table->timestamps();
             $table->softDeletes();

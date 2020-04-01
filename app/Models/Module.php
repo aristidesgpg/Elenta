@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -39,6 +41,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Module withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Module withoutTrashed()
  * @mixin \Eloquent
+ * @property string $consultant_profile_id
+ * @property-read \App\Models\ConsultantProfile $owner
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Module whereConsultantProfileId($value)
  */
 class Module extends Model
 {
@@ -47,15 +52,15 @@ class Module extends Model
 
     protected $guarded = [];
 
-    public function owner() {
+    public function owner(): BelongsTo {
         return $this->belongsTo(ConsultantProfile::class, 'consultant_profile_id');
     }
 
-    public function programs() {
+    public function programs(): BelongsToMany {
         return $this->belongsToMany(Program::class, 'program_modules');
     }
 
-    public function templates() {
+    public function templates(): BelongsToMany {
         return $this->belongsToMany(Template::class, TemplateModule::class);
     }
 }

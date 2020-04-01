@@ -24,6 +24,7 @@ $factory->define(ConsultantProfile::class, function (Faker $faker) {
         'user_id' => $faker->unique()->randomElement($user_ids),
         'picture_url' => $faker->imageUrl(),
         'title' => $faker->words(5, true),
-        'bio' => $faker->sentences(5, true)
+        'bio' => $faker->sentences(5, true),
+        'is_public' => $faker->boolean()
     ];
 });

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -43,11 +44,11 @@ class TemplateModule extends Model
 
     protected $guarded = [];
 
-    public function module() {
+    public function module(): BelongsTo {
         return $this->belongsTo(Module::class);
     }
 
-    public function template() {
+    public function template(): BelongsTo {
         return $this->belongsTo(Template::class);
     }
 }

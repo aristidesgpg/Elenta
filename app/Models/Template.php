@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -52,19 +55,19 @@ class Template extends Model
 
     protected $guarded = [];
 
-    public function owner() {
+    public function owner(): BelongsTo {
         return $this->belongsTo(ConsultantProfile::class, 'consultant_profile_id');
     }
 
-    public function modules() {
+    public function modules(): BelongsToMany {
         return $this->belongsToMany(Module::class, 'template_modules');
     }
 
-    public function requests() {
+    public function requests(): HasMany {
         return $this->hasMany(TemplateRequest::class);
     }
 
-    public function programs() {
+    public function programs(): HasMany {
         return $this->hasMany(Program::class);
     }
 }

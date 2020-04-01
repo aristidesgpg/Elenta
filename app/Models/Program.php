@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -55,6 +58,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Program withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Program withoutTrashed()
  * @mixin \Eloquent
+ * @property bool $can_invite
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Program whereCanInvite($value)
  */
 class Program extends Model
 {
@@ -63,27 +68,27 @@ class Program extends Model
 
     protected $guarded = [];
 
-    public function owner() {
+    public function owner(): BelongsTo {
         return $this->belongsTo(ConsultantProfile::class, 'consultant_profile_id');
     }
 
-    public function template() {
+    public function template(): BelongsTo {
         return $this->belongsTo(Template::class);
     }
 
-    public function programModules() {
+    public function programModules(): HasMany {
         return $this->hasMany(ProgramModule::class);
     }
 
-    public function modules() {
+    public function modules(): BelongsToMany {
         return $this->belongsToMany(Module::class, 'program_modules');
     }
 
-    public function learners() {
+    public function learners(): BelongsToMany {
         return $this->belongsToMany(LearnerProfile::class, 'program_learners');
     }
 
-    public function invites() {
+    public function invites(): HasMany {
         return $this->hasMany(ProgramInvite::class);
     }
 }

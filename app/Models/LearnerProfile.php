@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -38,6 +40,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\LearnerProfile withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\LearnerProfile withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProgramModule[] $programModules
+ * @property-read int|null $program_modules_count
  */
 class LearnerProfile extends Model
 {
@@ -46,15 +50,15 @@ class LearnerProfile extends Model
 
     protected $guarded = [];
 
-    public function user() {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
 
-    public function programs() {
+    public function programs(): BelongsToMany {
         return $this->belongsToMany(Program::class, 'program_learners');
     }
 
-    public function programModules() {
+    public function programModules(): BelongsToMany {
         return $this->belongsToMany(ProgramModule::class, 'program_module_sends');
     }
 }

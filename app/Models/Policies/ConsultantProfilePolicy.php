@@ -30,7 +30,7 @@ class ConsultantProfilePolicy
      */
     public function view(User $user, ConsultantProfile $consultantProfile)
     {
-        return true;
+        return $consultantProfile->is_public;
     }
 
     /**

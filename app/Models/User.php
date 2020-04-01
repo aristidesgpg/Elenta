@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -55,6 +56,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ConsultantProfile[] $consultant
+ * @property-read int|null $consultant_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\LearnerProfile[] $learner
+ * @property-read int|null $learner_count
  */
 class User extends Authenticatable
 {
@@ -76,11 +81,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function learner() {
+    public function learner(): HasMany {
         return $this->hasMany(LearnerProfile::class);
     }
 
-    public function consultant() {
+    public function consultant(): HasMany {
         return $this->hasMany(ConsultantProfile::class);
     }
 }

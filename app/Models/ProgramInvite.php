@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -35,6 +36,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ProgramInvite withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ProgramInvite withoutTrashed()
  * @mixin \Eloquent
+ * @property string $user_id
+ * @property-read \App\Models\User $creator
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramInvite whereUserId($value)
  */
 class ProgramInvite extends Model
 {
@@ -43,15 +47,15 @@ class ProgramInvite extends Model
 
     protected $guarded = [];
 
-    public function program() {
+    public function program(): BelongsTo {
         return $this->belongsTo(Program::class);
     }
 
-    public function learner() {
+    public function learner(): BelongsTo {
         return $this->belongsTo(LearnerProfile::class, 'learner_profile_id');
     }
 
-    public function creator() {
+    public function creator(): BelongsTo {
         return $this->belongsTo(User::class, 'user_id');
     }
 }

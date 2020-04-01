@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -46,15 +48,15 @@ class ConsultantProfile extends Model
 
     protected $guarded = [];
 
-    public function user() {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
 
-    public function templates() {
+    public function templates(): HasMany {
         return $this->hasMany(Template::class);
     }
 
-    public function programs() {
+    public function programs(): HasMany {
         return $this->hasMany(Program::class);
     }
 }
