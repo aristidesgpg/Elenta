@@ -1,0 +1,73 @@
+extend type Mutation {
+    createTemplate(input: CreateTemplateInput @spread): Template! @create
+    updateTemplate(input: UpdateTemplateInput @spread): Template! @update
+}
+
+input CreateTemplateInput {
+    owner: CreateUserBelongsTo!
+
+    title: String!
+    can_request: Boolean!
+    is_public: Boolean!
+    dynamic_fields: String
+
+    modules: CreateModulesBelongsToMany
+}
+
+input CreateUserBelongsTo {
+    connect: ID!
+}
+
+input CreateModulesBelongsToMany {
+    connect: [ConnectTemplateModule!]
+}
+
+input UpdateTemplateInput {
+    title: String
+    can_request: Boolean
+    is_public: Boolean
+    dynamic_fields: String
+
+    modules: UpdateModulesBelongsToMany
+}
+
+input UpdateModulesBelongsToMany {
+    sync: [ConnectTemplateModule!]
+}
+
+input ConnectTemplateModule {
+    id: ID!
+    folder: String
+    order: Int
+}
+
+type Template {
+    id: ID!
+    owner: ConsultantProfile!
+
+    title: String!
+    can_request: Boolean!
+    is_public: Boolean!
+    dynamic_fields: String
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+
+    templateModules: [TemplateModule]
+    modules: [Module]
+    requests: [TemplateRequest]
+    programs: [Program]
+}
+
+type TemplateModule {
+    id: ID!
+    module: Module
+
+    folder: String
+    order: Int!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}

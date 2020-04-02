@@ -1,0 +1,89 @@
+type Program {
+    id: ID!
+    owner: ConsultantProfile!
+    template: Template!
+
+    title: String!
+    format: String!
+    max_learners: Int
+    start_timestamp: DateTime
+    can_share: Boolean
+    is_public: Boolean
+    dynamic_fields: String
+    dynamic_fields_data: String
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+
+    programModules: [ProgramModule]
+    modules: [Module]
+    learners: [User]
+    invites: [ProgramInvite]
+}
+
+type ProgramModule {
+    id: ID!
+    program: Program
+    module: Module
+
+    folder: String
+    order: Int
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+
+    reminders: [ModuleReminder]
+    triggers: [ModuleTrigger]
+    sends: [ProgramModuleSend]
+}
+
+
+type ProgramModuleSend {
+    id: ID!
+    programModule: ProgramModule
+    learner: LearnerProfile
+
+    reason: String!
+    channel: String!
+    subject: String!
+    message: String!
+
+    send_timestamp: DateTime!
+    open_timestamp: DateTime!
+    click_timestamp: DateTime!
+    response_timestamp: DateTime!
+
+    response_feedback: String
+    response_rating: Int!
+    response_data: String!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
+type ProgramInvite {
+    id: ID!
+    program: Program!
+    creator: User!
+    learner: LearnerProfile
+
+    email: String!
+    message: String!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
+type ProgramLearner {
+    id: ID!
+    program: Program!
+    learner: LearnerProfile!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}

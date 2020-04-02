@@ -59,6 +59,10 @@ class Template extends Model
         return $this->belongsTo(ConsultantProfile::class, 'consultant_profile_id');
     }
 
+    public function templateModules(): HasMany {
+        return $this->hasMany(TemplateModule::class);
+    }
+
     public function modules(): BelongsToMany {
         return $this->belongsToMany(Module::class, 'template_modules');
     }

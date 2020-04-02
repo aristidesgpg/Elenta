@@ -1,0 +1,69 @@
+extend type Mutation {
+    createModule(input: CreateModuleInput @spread): Module! @create
+    updateModule(input: UpdateModuleInput @spread): Module! @update
+    deleteModule(id: ID!): Module @delete
+}
+
+input CreateModuleInput {
+    owner: CreateModuleBelongsToUser!
+
+    title: String!
+    description: String!
+    is_public: Boolean!
+    content: String
+    conditions: String
+
+    reminders: CreateModuleHasManyReminders
+    triggers: CreateModuleHasManyTriggers
+}
+
+input CreateModuleBelongsToUser {
+    connect: ID!
+}
+
+input CreateModuleHasManyReminders {
+    create: [CreateModuleReminderInput!]
+}
+
+input CreateModuleHasManyTriggers {
+    create: [CreateModuleTriggerInput!]
+}
+
+input UpdateModuleInput {
+    title: String
+    description: String!
+    is_public: Boolean!
+    content: String
+    conditions: String
+
+    reminders: UpdateModuleHasManyReminders
+    triggers: UpdateModuleHasManyTriggers
+}
+
+input UpdateModuleHasManyReminders {
+    update: [UpdateModuleReminderInput!]
+}
+
+input UpdateModuleHasManyTriggers {
+    update: [UpdateModuleTriggerInput!]
+}
+
+type Module {
+    id: ID!
+    owner: User!
+
+    title: String!
+    description: String!
+    is_public: Boolean!
+    content: String
+    conditions: String
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+
+    templates: [Template]
+    programs: [Program]
+    reminders: [ModuleReminder]
+    triggers: [ModuleTrigger]
+}
