@@ -32,7 +32,20 @@ mix.webpackConfig({
 	          babelCore: "@babel/core" // needed for Babel v7
 	        }
 	      },
-	      
+	      {
+	        test: /\.scss$/,
+	        use: [
+	            {
+	                loader: "style-loader" // creates style nodes from JS strings
+	            },
+	            {
+	                loader: "css-loader", // translates CSS into CommonJS                
+	            },
+	            {
+	                loader: "sass-loader" // compiles Sass to CSS
+	            }
+	        ]
+	      },
 	      {
 	        test: /\.(png|jpg|gif|svg)$/,
 	        loader: "file-loader",
@@ -44,11 +57,11 @@ mix.webpackConfig({
 	  },
 	  plugins: [
 	    //Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
-	    /*new HtmlWebpackPlugin({
+	    new HtmlWebpackPlugin({
 	      filename: "index.html", //Name of file in ./dist/
 	      template: "./resources/js/formbuilder/index.html", //Name of template in ./src
 	      hash: true
-	    }),*/
+	    }),
 	    new MiniCssExtractPlugin({
 	      filename: "[name].css",
 	      chunkFilename: "[id].css"
