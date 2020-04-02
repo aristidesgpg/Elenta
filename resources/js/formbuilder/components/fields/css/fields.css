@@ -1,0 +1,13 @@
+.rich-editor-wrapper{
+    width: 100% !important;
+    display: block !important;
+    margin-bottom: 80px !important;
+    height: 300px !important;
+}
+
+.rich-editor-textarea{
+    height: 300px !important;
+    border: 1px solid #F1F1F1 !important;
+    padding: 5px !important;
+    border-radius: 2px !important;
+}
