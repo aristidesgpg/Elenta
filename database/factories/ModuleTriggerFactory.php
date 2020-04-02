@@ -5,7 +5,7 @@
 use App\Models\Module;
 use App\Models\Program;
 use App\Models\ProgramModule;
-use App\Models\ProgramModuleTrigger;
+use App\Models\ModuleTrigger;
 use App\Models\Template;
 use App\Models\TemplateModule;
 use App\Models\User;
@@ -23,11 +23,11 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(ProgramModuleTrigger::class, function (Faker $faker) {
-    $program_module_ids = ProgramModule::pluck('id')->toArray();
+$factory->define(ModuleTrigger::class, function (Faker $faker) {
+    $module_ids = Module::pluck('id')->toArray();
 
     return [
-        'program_module_id' => $faker->randomElement($program_module_ids),
+        'module_id' => $faker->randomElement($module_ids),
         'start_timestamp' => $faker->dateTimeThisMonth(),
         'start_timestamp_field' => null, // TODO
         'frequency' => $faker->randomElement([24,48,72, 7*24]),

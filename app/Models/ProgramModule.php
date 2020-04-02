@@ -20,11 +20,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Module|null $module
  * @property-read \App\Models\Program|null $program
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProgramModuleReminder[] $reminders
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ModuleReminder[] $reminders
  * @property-read int|null $reminders_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProgramModuleSend[] $sends
  * @property-read int|null $sends_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProgramModuleTrigger[] $triggers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ModuleTrigger[] $triggers
  * @property-read int|null $triggers_count
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramModule newModelQuery()
@@ -60,11 +60,11 @@ class ProgramModule extends Model
     }
 
     public function reminders(): HasMany {
-        return $this->hasMany(ProgramModuleReminder::class);
+        return $this->hasMany(ModuleReminder::class);
     }
 
     public function triggers(): HasMany {
-        return $this->hasMany(ProgramModuleTrigger::class);
+        return $this->hasMany(ModuleTrigger::class);
     }
 
     public function sends(): HasMany {

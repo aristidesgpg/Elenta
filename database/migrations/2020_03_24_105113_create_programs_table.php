@@ -29,6 +29,8 @@ class CreateProgramsTable extends Migration
             $table->jsonb('dynamic_fields')->nullable();
             $table->jsonb('dynamic_fields_data')->nullable();
 
+            // TODO: add venue, calendar details,  etc.
+
             $table->timestamps();
             $table->softDeletes();
 

@@ -5,8 +5,8 @@
 use App\Models\Module;
 use App\Models\Program;
 use App\Models\ProgramModule;
-use App\Models\ProgramModuleReminder;
-use App\Models\ProgramModuleTrigger;
+use App\Models\ModuleReminder;
+use App\Models\ModuleTrigger;
 use App\Models\Template;
 use App\Models\TemplateModule;
 use App\Models\User;
@@ -24,12 +24,12 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(ProgramModuleReminder::class, function (Faker $faker) {
-    $program_module_ids = ProgramModule::pluck('id')->toArray();
+$factory->define(ModuleReminder::class, function (Faker $faker) {
+    $module_ids = Module::pluck('id')->toArray();
 
     return [
-        'program_module_id' => $faker->randomElement($program_module_ids),
-        'type' => $faker->randomElement(ProgramModuleReminder::TYPES),
+        'module_id' => $faker->randomElement($module_ids),
+        'type' => $faker->randomElement(ModuleReminder::TYPES),
         'subject' => $faker->words(4, true),
         'message' => $faker->sentences(3, true),
         'frequency' => $faker->randomElement([24,48,72, 7*24]),
