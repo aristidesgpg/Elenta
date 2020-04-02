@@ -40,6 +40,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ConsultantProfile withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ConsultantProfile withoutTrashed()
  * @mixin \Eloquent
+ * @property bool $is_public
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ConsultantProfile whereIsPublic($value)
  */
 class ConsultantProfile extends Model
 {

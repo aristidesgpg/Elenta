@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\ProgramModuleReminder;
+use App\Models\ModuleReminder;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ProgramModuleReminderPolicy
+class ModuleReminderPolicy
 {
     use HandlesAuthorization;
 
@@ -25,12 +25,12 @@ class ProgramModuleReminderPolicy
      * Determine whether the user can view the program module reminder.
      *
      * @param  User  $user
-     * @param  ProgramModuleReminder  $programModuleReminder
+     * @param  ModuleReminder  $moduleReminder
      * @return mixed
      */
-    public function view(User $user, ProgramModuleReminder $programModuleReminder)
+    public function view(User $user, ModuleReminder $moduleReminder)
     {
-        return $user->id == $programModuleReminder->programModule->program->owner->user_id;
+        return $user->id == $moduleReminder->module->owner->user_id;
     }
 
     /**
@@ -48,47 +48,47 @@ class ProgramModuleReminderPolicy
      * Determine whether the user can update the program module reminder.
      *
      * @param  User  $user
-     * @param  ProgramModuleReminder  $programModuleReminder
+     * @param  ModuleReminder  $moduleReminder
      * @return mixed
      */
-    public function update(User $user, ProgramModuleReminder $programModuleReminder)
+    public function update(User $user, ModuleReminder $moduleReminder)
     {
-        return $user->id == $programModuleReminder->programModule->program->owner->user_id;
+        return $user->id == $moduleReminder->module->owner->user_id;
     }
 
     /**
      * Determine whether the user can delete the program module reminder.
      *
      * @param  User  $user
-     * @param  ProgramModuleReminder  $programModuleReminder
+     * @param  ModuleReminder  $moduleReminder
      * @return mixed
      */
-    public function delete(User $user, ProgramModuleReminder $programModuleReminder)
+    public function delete(User $user, ModuleReminder $moduleReminder)
     {
-        return $user->id == $programModuleReminder->programModule->program->owner->user_id;
+        return $user->id == $moduleReminder->module->owner->user_id;
     }
 
     /**
      * Determine whether the user can restore the program module reminder.
      *
      * @param  User  $user
-     * @param  ProgramModuleReminder  $programModuleReminder
+     * @param  ModuleReminder  $moduleReminder
      * @return mixed
      */
-    public function restore(User $user, ProgramModuleReminder $programModuleReminder)
+    public function restore(User $user, ModuleReminder $moduleReminder)
     {
-        return $user->id == $programModuleReminder->programModule->program->owner->user_id;
+        return $user->id == $moduleReminder->module->owner->user_id;
     }
 
     /**
      * Determine whether the user can permanently delete the program module reminder.
      *
      * @param  User  $user
-     * @param  ProgramModuleReminder  $programModuleReminder
+     * @param  ModuleReminder  $moduleReminder
      * @return mixed
      */
-    public function forceDelete(User $user, ProgramModuleReminder $programModuleReminder)
+    public function forceDelete(User $user, ModuleReminder $moduleReminder)
     {
-        return $user->id == $programModuleReminder->programModule->program->owner->user_id;
+        return $user->id == $moduleReminder->module->owner->user_id;
     }
 }

@@ -21,6 +21,7 @@ class CreateModulesTable extends Migration
             $table->text('description');
             $table->boolean('is_public')->default(false);
             $table->jsonb('content')->nullable();
+            // TODO: Can we set triggers, reminders, etc. in templates?
             $table->jsonb('conditions')->nullable();
 
             $table->timestamps();

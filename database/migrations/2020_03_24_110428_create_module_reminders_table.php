@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\ProgramModuleReminder;
+use App\Models\ModuleReminder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProgramModuleRemindersTable extends Migration
+class CreateModuleRemindersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +14,11 @@ class CreateProgramModuleRemindersTable extends Migration
      */
     public function up()
     {
-        Schema::create('program_module_reminders', function (Blueprint $table) {
+        Schema::create('module_reminders', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('program_module_id');
+            $table->uuid('module_id');
 
-            $table->enum('type', ProgramModuleReminder::TYPES);
+            $table->enum('type', ModuleReminder::TYPES);
             $table->string('subject');
             $table->text('message');
             $table->integer('frequency')->default(72);
@@ -27,7 +27,7 @@ class CreateProgramModuleRemindersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('program_module_id')->references('id')->on('program_modules');
+            $table->foreign('module_id')->references('id')->on('modules');
         });
     }
 

@@ -34,11 +34,11 @@ return [
     'linkedin' => [
         'client_id' => env('LINKEDIN_CLIENT_ID'),
         'client_secret' => env('LINKEDIN_CLIENT_SECRET'),
-        'redirect' => 'https://elenta.io/api/linkedin-oauth-redirect',
+        'redirect' => env('APP_URL') . '/login/linkedin/callback',
     ],
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => 'https://elenta.io/api/google-oauth-redirect',
+        'redirect' => env('APP_URL') . '/login/google/callback',
     ],
 ];
