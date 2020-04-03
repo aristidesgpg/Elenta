@@ -59,14 +59,6 @@ class ProgramModule extends Model
         return $this->belongsTo(Module::class);
     }
 
-    public function reminders(): HasMany {
-        return $this->hasMany(ModuleReminder::class);
-    }
-
-    public function triggers(): HasMany {
-        return $this->hasMany(ModuleTrigger::class);
-    }
-
     public function sends(): HasMany {
         return $this->hasMany(ProgramModuleSend::class);
     }

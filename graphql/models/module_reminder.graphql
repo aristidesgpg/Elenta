@@ -1,0 +1,43 @@
+type ModuleReminder {
+    id: ID!
+    module: Module
+
+    type: String!
+    subject: String!
+    message: String!
+    frequency: Int!
+    max_reminders: Int!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
+input CreateModuleReminderInput {
+    module: CreateModuleReminderBelongsToModule
+
+    type: String!
+    subject: String!
+    message: String!
+    frequency: Int!
+    max_reminders: Int!
+}
+
+input CreateModuleReminderBelongsToModule {
+    connect: ID!
+}
+
+input UpdateModuleReminderInput {
+    id: ID!
+    module: UpdateModuleReminderBelongsToModule
+
+    type: String!
+    subject: String!
+    message: String!
+    frequency: Int!
+    max_reminders: Int!
+}
+
+input UpdateModuleReminderBelongsToModule {
+    connect: ID!
+}

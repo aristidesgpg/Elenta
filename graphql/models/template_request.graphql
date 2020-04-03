@@ -1,0 +1,38 @@
+extend type Mutation {
+    createTemplateRequest(input: CreateTemplateRequestInput @spread): TemplateRequest! @create
+    updateTemplateRequest(input: UpdateTemplateRequestInput @spread): TemplateRequest! @update
+}
+
+input CreateTemplateRequestInput {
+    template: CreateTemplateBelongsTo!
+    learner: CreateLearnerProfileBelongsTo
+
+    email: String
+    organization: String
+    comment: String
+}
+
+input CreateTemplateBelongsTo {
+    connect: ID!
+}
+
+input UpdateTemplateRequestInput {
+    email: String
+    organization: String
+    comment: String
+}
+
+type TemplateRequest {
+    id: ID!
+    template: Template!
+    learner: LearnerProfile
+
+    email: String
+    organization: String
+    comment: String
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+

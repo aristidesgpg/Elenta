@@ -1,0 +1,26 @@
+type ModuleTrigger {
+    id: ID!
+    module: Module
+
+    start_timestamp: DateTime
+    start_timestamp_field: String
+    frequency: Int!
+    max_sends: Int!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
+input CreateModuleTriggerInput {
+    module: CreateModuleTriggerBelongsToModule
+
+    start_timestamp: DateTime
+    start_timestamp_field: String
+    frequency: Int!
+    max_sends: Int!
+}
+
+input CreateModuleTriggerBelongsToModule {
+    connect: ID!
+}

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -63,4 +64,13 @@ class Module extends Model
     public function templates(): BelongsToMany {
         return $this->belongsToMany(Template::class, TemplateModule::class);
     }
+
+    public function reminders(): HasMany {
+        return $this->hasMany(ModuleReminder::class);
+    }
+
+    public function triggers(): HasMany {
+        return $this->hasMany(ModuleTrigger::class);
+    }
+
 }

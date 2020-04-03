@@ -1,0 +1,37 @@
+extend type Mutation {
+    createLearnerProfile(input: CreateLearnerProfileInput @spread): LearnerProfile! @create
+    updateLearnerProfile(input: UpdateLearnerProfileInput @spread): LearnerProfile! @update
+}
+
+input CreateLearnerProfileInput {
+    picture_url: String!
+    role: String
+    tenure: String
+    user: CreateLearnerProfileBelongsTo!
+}
+
+input CreateLearnerProfileBelongsTo {
+    connect: ID!
+}
+
+input UpdateLearnerProfileInput {
+    picture_url: String
+    role: String
+    tenure: String
+}
+
+type LearnerProfile {
+    id: ID!
+    user: User!
+
+    picture_url: String!
+    role: String
+    tenure: String
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+
+    programs: [Program]
+    programModules: [ProgramModule]
+}

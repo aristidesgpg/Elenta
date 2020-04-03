@@ -1,0 +1,37 @@
+type Mutation {
+    createConsultantProfile(input: CreateConsultantProfileInput @spread): ConsultantProfile! @create
+    updateConsultantProfile(input: UpdateConsultantProfileInput @spread): ConsultantProfile! @update
+}
+
+input CreateConsultantProfileInput {
+    picture_url: String!
+    title: String
+    bio: String
+    user: CreateConsultantProfileBelongsTo!
+}
+
+input CreateConsultantProfileBelongsTo {
+    connect: ID!
+}
+
+input UpdateConsultantProfileInput {
+    picture_url: String
+    title: String
+    bio: String
+}
+
+type ConsultantProfile {
+    id: ID!
+    user: User!
+
+    picture_url: String!
+    title: String
+    bio: String
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+
+    programs: [Program]
+    templates: [Template]
+}
