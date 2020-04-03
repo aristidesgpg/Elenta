@@ -31,21 +31,7 @@ mix.webpackConfig({
 	          useBabel: true,
 	          babelCore: "@babel/core" // needed for Babel v7
 	        }
-	      },
-	      {
-	        test: /\.scss$/,
-	        use: [
-	            {
-	                loader: "style-loader" // creates style nodes from JS strings
-	            },
-	            {
-	                loader: "css-loader", // translates CSS into CommonJS                
-	            },
-	            {
-	                loader: "sass-loader" // compiles Sass to CSS
-	            }
-	        ]
-	      },
+	      },	      
 	      {
 	        test: /\.(png|jpg|gif|svg)$/,
 	        loader: "file-loader",
@@ -69,6 +55,7 @@ mix.webpackConfig({
 	  ]
 });
 
-mix.react('resources/js/formbuilder/index.tsx', 'public/js/formbuilder.js')
-.sass('resources/sass/app.scss', 'public/css');
+mix.react('resources/js/formbuilder/index.tsx', 'public/js/formbuilder.js').
+sass('resources/js/formbuilder/components/common/nestedselect/SxSelect.scss', 'public/css').
+sass('resources/js/formbuilder/components/common/nestedselect/SubMenu/SubMenu.scss', 'public/css');
 
