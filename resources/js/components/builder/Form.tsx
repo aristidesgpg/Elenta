@@ -8,6 +8,7 @@ import EditableField from "./fields/EditableField";
 import TitleField from "./fields/TitleField";
 import DescriptionField from "./fields/DescriptionField";
 import { TextField, RichText} from "./fields/TextField";
+import { Question } from "./fields/Question";
 
 interface State{
   error: string;
@@ -15,6 +16,7 @@ interface State{
   uiSchema: any;
   formData: any;
   currentIndex: number;
+  newKey: number;
 }
 
 interface Props{
@@ -33,12 +35,13 @@ export default class Form extends React.Component<Props, State>{
         description: "Enter some description for your form here",
         properties: {}
       },
-      uiSchema: {
+      uiSchema: {        
         "ui:order": []
       },
       formData: {},
       currentIndex: 0,
-    };
+      newKey: 0
+    };    
     DescriptionField.defaultProps = { updateFormDescription: this.updateFormDescription };
     TitleField.defaultProps = { updateFormTitle: this.updateFormTitle };
     EditableField.defaultProps = { addField: this.addField, switchField: this.swapFields,
@@ -46,21 +49,21 @@ export default class Form extends React.Component<Props, State>{
                                   renameField: this.renameField, insertField: this.insertField,
                                   swapFields: this.swapFields };
       TextField.defaultProps ={ getTagList: this.getTagList };
-
+    
   }
 
   componentDidMount() {
-
+    
     //Object.assign(
     //{}, DescriptionField.defaultProps || {}, {updateFormDescription: this.updateFormDescription});
   }
 
   onChange = (e) => {
-    console.log("FormData" , e);
+    //console.log("FormData" , e);    
   }
 
   //*********  Actions  ***********/
-
+  
   updateFormDescription = (description: string)=>{
     this.setState({ schema: { ...this.state.schema, description } })
   }
@@ -68,7 +71,7 @@ export default class Form extends React.Component<Props, State>{
   updateFormTitle = (title: string)=>{
     this.setState({ schema: { ...this.state.schema, title } })
   }
-
+  
 
   addField = (field: any) : any =>{
     const { currentIndex, schema, uiSchema } = this.state;
@@ -78,19 +81,19 @@ export default class Form extends React.Component<Props, State>{
     schema.properties[_slug] = {...field.jsonSchema, title: name};
     uiSchema[_slug] = field.uiSchema;
     uiSchema["ui:order"] = (uiSchema["ui:order"] || []).concat(_slug);
-    return this.setState({ schema, uiSchema });
+    return this.setState({ schema, uiSchema });    
   }
 
   switchField = (propertyName:string, newField: any) => {
     const { schema, uiSchema } = this.state;
     schema.properties[propertyName] = {...newField.jsonSchema};
     uiSchema[propertyName] = newField.uiSchema;
-    this.setState({ schema, uiSchema });
+    this.setState({ schema, uiSchema });    
   }
 
   removeField = (name: string) => {
-    const { schema, uiSchema } = this.state;
-
+    const { schema, uiSchema } = this.state;    
+    
     const requiredFields = schema.required || [];
     delete schema.properties[name];
     delete uiSchema[name];
@@ -105,10 +108,11 @@ export default class Form extends React.Component<Props, State>{
     return this.setState({ ...newSchema, uiSchema, error: null });
   }
 
-  updateField = (name: string, newSchema: any, required: boolean, newLabel: string) => {
+  updateField = (name: string, newSchema: any, required: boolean, newLabel: string) => {    
     const { schema } = this.state;
     const existing = Object.keys(schema.properties);
     const newName = slugify(newLabel);
+       
     if (name !== newName && existing.indexOf(newName) !== -1) {
       // Field name already exists, we can't update state
       const error = `Duplicate field name "${newName}", operation aborted.`;
@@ -126,7 +130,8 @@ export default class Form extends React.Component<Props, State>{
     if (newName !== name) {
       return this.renameField(name, newName);
     }
-    return this.setState({ schema });
+    let newKey = Math.random();
+    return this.setState({ schema, error: null, newKey });    
   }
 
   renameField = (name: string, newName: string) => {
@@ -145,7 +150,8 @@ export default class Form extends React.Component<Props, State>{
     uiSchema["ui:order"] = order.map(fieldName => {
       return fieldName === name ? newName : fieldName;
     });
-    this.setState({schema, uiSchema, error: null});
+    let newKey = Math.random();
+    this.setState({ schema, uiSchema, error: null, newKey });
   }
 
   insertField = (field:any, before:any) => {
@@ -161,7 +167,7 @@ export default class Form extends React.Component<Props, State>{
     insertedState.uiSchema["ui:order"] = newOrder;
     this.setState({ ...insertedState, error: null });
   }
-
+  
   swapFields = (source, target) => {
     const { uiSchema } = this.state;
     const order = uiSchema["ui:order"];
@@ -192,42 +198,44 @@ export default class Form extends React.Component<Props, State>{
 
   //********  Render *******/
   render() {
-    const { error, schema } = this.state;
-    //console.log("dragndropstatus", dragndropStatus);
-    console.log(this.state);
+    const { error, schema, newKey } = this.state;
+    console.log("State", this.state);
     const widgets = {
-      richtext:RichText
+      RichText: RichText      
     };
-    const registry = {
+    const registry = {    
       ...getDefaultRegistry(),
-      fields: {
+      fields: {      
         ...getDefaultRegistry().fields,
         SchemaField: EditableField,
         TitleField: TitleField,
-        DescriptionField: DescriptionField,
+        DescriptionField: DescriptionField,       
       },
-      widgets:{...widgets,...getDefaultRegistry().widgets}
-    };
-    return (
+      //widgets:{...widgets,...getDefaultRegistry().widgets}
+    };      
+    return (      
       <div>
         {error ? <div className="alert alert-danger">{error}</div> : <div/>}
         <div className="rjsf builder-form">
-        {<SchemaField {...this.state} fields={{richeditor:TextField}}
-            registry={registry} onChange={this.onChange}>
-    </SchemaField>}
-        {false &&   <JsonForm {...this.state} fields={{SchemaField: EditableField,
-        TitleField: TitleField,
-        DescriptionField: DescriptionField}} >
+        {true && <SchemaField key={newKey} {...this.state} 
+                              schema={schema}                               
+                              registry={registry} 
+                              onChange={this.onChange}>              
+                  </SchemaField>}
+        {false && <h1>Preview</h1>}
+        {false && <JsonForm key={newKey+1} {...this.state} 
+                    fields={{Question: Question}} 
+                    widgets={{...widgets}} >
           <button type="submit" className="hidden">Submit</button>
           </JsonForm>}
         </div>
-
-        <FormActions
+  
+        <FormActions  
             schema = {schema}
             addField = {this.addField}
             switchField = {this.switchField}/>
       </div>
     );
-  }
-
+  }  
+  
 }

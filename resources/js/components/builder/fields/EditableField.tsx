@@ -4,6 +4,7 @@ import Form from "react-jsonschema-form";
 import SchemaField from "react-jsonschema-form/lib/components/fields/SchemaField";
 import { ButtonToolbar, Button } from "react-bootstrap";
 import { TextField, RichText} from "./TextField";
+import { Question } from "./Question";
 
 function pickKeys(source, target, excludedKeys) {
   const result = {};
@@ -34,22 +35,20 @@ class FieldPropertiesEditor extends React.Component<any,any> {
     this.state = {editedSchema: props.schema};
   }
 
-  onChange({formData}) {
-    console.log("FormData",formData);
+  onChange({formData}) {    
     this.setState({editedSchema: formData});
   }
 
   render() {
-    const {schema, name, required, uiSchema, onCancel, onUpdate, onDelete} = this.props;
+    
+    const {schema, name, required, uiSchema, onCancel, onUpdate, onDelete, fields} = this.props;
     const formData = {
       ...schema,
       required,
       ...this.state.editedSchema,
       name: this.state.name
     };
-    console.log(formData);
-    const fields = { RichEditor:TextField };
-
+    
     return (
       <div className="panel panel-default field-editor">
         <div className="panel-heading clearfix">
@@ -134,7 +133,7 @@ export default class EditableField extends React.Component<any,any> {
 
   handleUpdate({formData}) {
     // Exclude the "type" key when picking the keys as it is handled by the
-    // SWITCH_FIELD action.
+    // SWITCH_FIELD action.    
     const updated = pickKeys(this.props.schema, formData, ["type"]);
     const schema = {...this.props.schema, ...updated};
     this.setState({edit: false, schema});
@@ -166,25 +165,35 @@ export default class EditableField extends React.Component<any,any> {
   }
 
   render() {
-    const props = this.props;
-
+    const props = this.props;    
+    const fields = {RichEditor:TextField, 
+                    Question: Question};
+    const widgets = {
+        RichText: RichText      
+      };
     if (this.state.edit) {
       return (
         <FieldPropertiesEditor
-          {...props}
+          {...props}           
+          fields = {{...fields}}
+          widgets = {{...widgets}}
           onCancel={this.handleCancel.bind(this)}
           onUpdate={this.handleUpdate.bind(this)}
           onDelete={this.handleDelete.bind(this)} />
       );
     }
-
-    if (props.schema.type === "object") {
-      if (!props.name) {
+    
+    /*if (props.schema.type === "object") {      
+      if (props.name !="") {        
+        // This can only be the root form object, returning a regular SchemaField.
+        return <Form {...props} idSchema={{$id: props.name}} />;
+      }
+      if (props.uiSchema == undefined) {
         // This can only be the root form object, returning a regular SchemaField.
         return <SchemaField {...props} idSchema={{$id: props.name}} />;
       }
-    }
-
+    }*/
+    
     return (
       <DraggableFieldContainer
         draggableType="moved-field"
@@ -194,9 +203,13 @@ export default class EditableField extends React.Component<any,any> {
         onDelete={this.handleDelete.bind(this)}
         onDoubleClick={this.handleEdit.bind(this)}
         onDrop={this.handleDrop.bind(this)}>
-        <SchemaField {...props}
+        <Form {...props}
           schema={this.state.schema}
-          idSchema={{$id: props.name}} />
+          idSchema={{$id: props.name}}
+          fields = {{...fields}}
+          widgets = {{...widgets}} >
+          <button type="submit" className="hidden">Submit</button>
+        </Form>
       </DraggableFieldContainer>
     );
   }
