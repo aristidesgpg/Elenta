@@ -1,3 +1,7 @@
+extend type Query {
+    getTemplate(id: ID! @eq): Template! @find
+}
+
 extend type Mutation {
     createTemplate(input: CreateTemplateInput @spread): Template! @create
     updateTemplate(input: UpdateTemplateInput @spread): Template! @update

@@ -13,10 +13,6 @@ var MiniCssExtractPlugin = require("mini-css-extract-plugin");
  |
  */
 
-//mix.js('resources/js/app.js', 'public/js')
-    //.sass('resources/sass/app.scss', 'public/css');
-
-
 mix.webpackConfig({
 	 resolve: {
 	    extensions: [".js", ".ts", ".tsx"]
@@ -31,7 +27,7 @@ mix.webpackConfig({
 	          useBabel: true,
 	          babelCore: "@babel/core" // needed for Babel v7
 	        }
-	      },	      
+	      },
 	      {
 	        test: /\.(png|jpg|gif|svg)$/,
 	        loader: "file-loader",
@@ -45,7 +41,7 @@ mix.webpackConfig({
 	    //Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
 	    new HtmlWebpackPlugin({
 	      filename: "index.html", //Name of file in ./dist/
-	      template: "./resources/js/formbuilder/index.html", //Name of template in ./src
+	      template: "./resources/js/index.html", //Name of template in ./src
 	      hash: true
 	    }),
 	    new MiniCssExtractPlugin({
@@ -55,7 +51,7 @@ mix.webpackConfig({
 	  ]
 });
 
-mix.react('resources/js/formbuilder/index.tsx', 'public/js/formbuilder.js').
-sass('resources/js/formbuilder/components/common/nestedselect/SxSelect.scss', 'public/css').
-sass('resources/js/formbuilder/components/common/nestedselect/SubMenu/SubMenu.scss', 'public/css');
+mix.react('resources/js/index.tsx', 'public/js/formbuilder.js').
+sass('resources/js/components/common/nestedselect/SxSelect.scss', 'public/css').
+sass('resources/js/components/common/nestedselect/SubMenu/SubMenu.scss', 'public/css');
 

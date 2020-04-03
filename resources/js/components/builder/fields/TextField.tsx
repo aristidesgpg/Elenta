@@ -4,31 +4,31 @@ import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import ReactHtmlParser from 'react-html-parser';
-import SxSelect from '../common/nestedselect/SxSelect';
+import SxSelect from '../../common/nestedselect/SxSelect';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './css/fields.css';
 
 export class RichText extends  React.Component<any,any>{
 
     constructor(props) {
-        super(props);        
+        super(props);
         this.state = {schema: props.schema};
     }
 
     render(){
         const { schema } = this.state;
-        try{ 
-            let jsonValue = JSON.parse(schema.textValue); 
+        try{
+            let jsonValue = JSON.parse(schema.textValue);
             return(
                 <div>{ReactHtmlParser(jsonValue)}</div>
             );
-          } catch(e) { 
+          } catch(e) {
             //document.writeln("Caught: " + e.message)
           }
         return(
             <div>
                 {schema.textValue !=="" && <div>{"JSON Parsing Error in RichText"}</div>}
-            </div>            
+            </div>
         );
     }
 }
@@ -37,10 +37,10 @@ export class TextField extends React.Component<any,any>{
     public static defaultProps = {
       getTagList: (): any[] => { return [{}];}
     };
-  
+
     constructor(props) {
         super(props);
-        const { schema } = props;        
+        const { schema } = props;
         console.log("Props", props);
         this.state = {...props, editorState: EditorState.createEmpty()};
     }
@@ -48,8 +48,8 @@ export class TextField extends React.Component<any,any>{
     componentDidMount(){
         const { formData } = this.state;
         try{
-            const htmlValue = JSON.parse(formData.textValue);            
-            this.setState({editorState: convertFromRaw(htmlValue)});            
+            const htmlValue = JSON.parse(formData.textValue);
+            this.setState({editorState: convertFromRaw(htmlValue)});
         }
         catch(e){
 
@@ -64,7 +64,7 @@ export class TextField extends React.Component<any,any>{
         formData.textValue =JSON.stringify(draftToHtml(convertToRaw(editorState.getCurrentContent())));
         this.props.onChange(formData);
     };
-    
+
     render(){
         const { editorState } = this.state;
         return (
@@ -92,7 +92,7 @@ interface TagOptionProps{
 }
 
 class TagOption extends React.Component<any, any> {
-    
+
   onSelectChange = (item)=>{
     const { editorState, onChange } = this.props;
     const contentState = Modifier.replaceText(

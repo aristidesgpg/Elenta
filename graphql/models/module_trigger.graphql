@@ -24,3 +24,18 @@ input CreateModuleTriggerInput {
 input CreateModuleTriggerBelongsToModule {
     connect: ID!
 }
+
+input UpdateModuleTriggerInput {
+    id: ID!
+    module: UpdateModuleTriggerBelongsToModule
+
+    type: String!
+    subject: String!
+    message: String!
+    frequency: Int!
+    max_reminders: Int!
+}
+
+input UpdateModuleTriggerBelongsToModule {
+    connect: ID!
+}
