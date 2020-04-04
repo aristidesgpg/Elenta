@@ -1,3 +1,7 @@
+extend type Query {
+    getConsultantProfile(id: ID! @eq): ConsultantProfile! @find
+}
+
 type Mutation {
     createConsultantProfile(input: CreateConsultantProfileInput @spread): ConsultantProfile! @create
     updateConsultantProfile(input: UpdateConsultantProfileInput @spread): ConsultantProfile! @update
