@@ -1,3 +1,7 @@
+extend type Query {
+    getProgram(id: ID! @eq): Program! @find
+}
+
 type Program {
     id: ID!
     owner: ConsultantProfile!
@@ -18,7 +22,7 @@ type Program {
 
     programModules: [ProgramModule]
     modules: [Module]
-    learners: [User]
+    learners: [LearnerProfile]
     invites: [ProgramInvite]
 }
 

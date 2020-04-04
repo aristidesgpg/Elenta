@@ -28,7 +28,7 @@ type ConsultantProfile {
     id: ID!
     user: User!
 
-    picture_url: String!
+    picture_url: String
     title: String
     bio: String
 
