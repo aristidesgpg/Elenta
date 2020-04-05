@@ -43,7 +43,7 @@ const GET_TEMPLATE = gql`
     }
 `
 
-export const TemplateEditor = () => {
+export const TemplateContentEditor = () => {
     const [activeModule, setActiveModule] = useState();
 
     let {id} = useParams();
@@ -68,4 +68,4 @@ export const TemplateEditor = () => {
     )
 };
 
-export default TemplateEditor;
+export default TemplateContentEditor;

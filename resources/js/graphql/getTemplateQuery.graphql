@@ -1,0 +1,30 @@
+query getTemplate($id: ID!) {
+    getTemplate(id: $id) {
+        id
+        title
+        dynamic_fields
+        created_at
+        modules {
+            id
+            title
+            description
+            content
+            conditions
+            reminders {
+                id
+                type
+                subject
+                message
+                frequency
+                max_reminders
+            }
+            triggers {
+                id
+                start_timestamp
+                start_timestamp_field
+                frequency
+                max_sends
+            }
+        }
+    }
+}

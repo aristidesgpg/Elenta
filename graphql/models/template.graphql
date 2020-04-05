@@ -3,8 +3,8 @@ extend type Query {
 }
 
 extend type Mutation {
-    createTemplate(input: CreateTemplateInput @spread): Template! @create
-    updateTemplate(input: UpdateTemplateInput @spread): Template! @update
+    createTemplate(input: CreateTemplateInput! @spread): Template! @create
+    updateTemplate(input: UpdateTemplateInput! @spread): Template! @update
 }
 
 input CreateTemplateInput {
@@ -27,6 +27,7 @@ input CreateModulesBelongsToMany {
 }
 
 input UpdateTemplateInput {
+    id: ID!
     title: String
     can_request: Boolean
     is_public: Boolean

@@ -1,16 +1,24 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "es6",
-    "moduleResolution": "node",
-    "declaration": false,
-    "noImplicitAny": false,
-    "jsx": "react",
-    "sourceMap": true,
-    "noLib": false,
-    "suppressImplicitAnyIndexErrors": true,
-    "skipLibCheck": true
-  },
-  "compileOnSave": false,
-  "exclude": ["node_modules"]
+    "compilerOptions": {
+        "target": "es6",
+        "module": "es6",
+        "moduleResolution": "node",
+        "declaration": false,
+        "noImplicitAny": false,
+        "jsx": "react",
+        "sourceMap": true,
+        "noLib": false,
+        "suppressImplicitAnyIndexErrors": true,
+        "skipLibCheck": true,
+        "allowSyntheticDefaultImports": true,
+        "typeRoots": [
+            "node_modules/@types",
+            "resources/js/graphql"
+        ]
+    },
+    "compileOnSave": false,
+    "include": "resources/js/**/*.ts",
+    "exclude": [
+        "node_modules"
+    ]
 }
