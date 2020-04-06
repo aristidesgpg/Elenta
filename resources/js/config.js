@@ -32,7 +32,7 @@ export default {
       },
       formData: {}
     },
-    {
+    /*{
       id: "question",
       icon: "text-color",
       label: "Question",
@@ -60,7 +60,7 @@ export default {
         }
       },
       formData: {}
-    },
+    },*/
     {
       id: "text",
       icon: "text-color",
@@ -111,7 +111,7 @@ export default {
       },
       formData: {}
     },
-    {
+    /*{
       id: "checkbox",
       icon: "check",
       label: "Checkbox",
@@ -131,14 +131,56 @@ export default {
         editUISchema:{}
       },
       formData: {}
+    },*/
+    {
+      id: "rank",
+      icon: "star",
+      label: "Rank",
+      jsonSchema: {
+        type: "array",
+        title: "A Rank Item list",
+        description:"",
+        items: {
+          type: "string",
+          enum: ["Item 1", "Item 2", "Item 3"],
+        }
+      },
+      uiSchema: {
+        "ui:field": "Rank",
+        editSchema: {
+          type: "object",
+          properties: {
+            title: {type: "string", title: "Title"},
+            description:{type: "string", title: "Description"},
+            required: {type: "boolean"},
+            items: {
+              type: "object",
+              title: "Rank",
+              properties: {
+                enum: {
+                  title: "",
+                  type: "array",
+                  items: {
+                    type: "string"
+                  },
+                  default: ["Item 1", "Item 2", "Item3 3"],
+                }
+              }
+            }
+          }
+        },
+        editUISchema:{}
+      },
+      formData: {}
     },
     {
       id: "multiple-checkbox",
       icon: "check",
-      label: "Multiple choices",
+      label: "Checkboxes",
       jsonSchema: {
         type: "array",
         title: "A multiple choices list",
+        description:"",
         items: {
           type: "string",
           enum: ["choice 1", "choice 2", "choice 3"],
@@ -150,7 +192,8 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            title: {type: "string", title: "Label"},
+            title: {type: "string", title: "Title"},
+            description:{type: "string", title: "Description"},
             required: {type: "boolean"},
             items: {
               type: "object",
@@ -175,9 +218,10 @@ export default {
     {
       id: "radiobuttonlist",
       icon: "list",
-      label: "Choice list",
+      label: "Radio Buttons",
       jsonSchema: {
         type: "string",
+        description:"",
         title: "Edit me",
         enum: ["option 1", "option 2", "option 3"],
       },
@@ -186,7 +230,8 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            title: {type: "string", title: "Label"},
+            title: {type: "string", title: "Title"},
+            description:{type: "string", title: "Description"},
             required: {type: "boolean"},
             enum: {
               type: "array",
@@ -204,11 +249,12 @@ export default {
     {
       id: "select",
       icon: "chevron-down",
-      label: "Select List",
+      label: "Dropdown",
       jsonSchema: {
         type: "string",
         format: "string",
         title: "Edit me",
+        description:"",
         enum: ["option 1", "option 2", "option 3"],
       },
       uiSchema: {
@@ -216,7 +262,8 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            title: {type: "string", title: "Label"},
+            title: {type: "string", title: "Title"},
+            description:{type: "string", title: "Description"},
             required: {type: "boolean"},
             enum: {
               type: "array",
@@ -239,13 +286,15 @@ export default {
         type: "string",
         format: "date",
         title: "Edit me",
+        description:""
       },
       uiSchema: {
-        "ui:widget": "alt-date",
+        "ui:field": "rdp",
         editSchema: {
           type: "object",
           properties: {
-            title: {type: "string", title: "Label"},
+            title: {type: "string", title: "Title"},
+            description:{type: "string", title: "Description"},
             required: {type: "boolean"}
           }
         },
