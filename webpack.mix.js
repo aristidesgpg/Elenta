@@ -1,6 +1,16 @@
 const mix = require('laravel-mix');
+const dotenv = require('dotenv');
+
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require('webpack');
+
+const env = dotenv.config().parsed;
+//TODO: Make sure we only add safe keys to bundle
+const envKeys = Object.keys(env).reduce((prev, next) => {
+  prev[`process.env.${next}`] = JSON.stringify(env[next]);
+  return prev;
+}, {});
 
 /*
  |--------------------------------------------------------------------------
@@ -52,7 +62,8 @@ mix.webpackConfig({
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css"
-    })
+    }),
+    new webpack.DefinePlugin(envKeys)
   ]
 });
 

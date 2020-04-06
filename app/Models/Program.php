@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $format
  * @property int|null $max_learners
  * @property string|null $start_timestamp
- * @property bool $can_share
+ * @property bool $can_invite
  * @property bool $is_public
  * @property mixed|null $dynamic_fields
  * @property mixed|null $dynamic_fields_data
