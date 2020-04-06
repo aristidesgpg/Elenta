@@ -10,6 +10,7 @@ import DescriptionField from "./fields/DescriptionField";
 import { TextField, RichTextWidget} from "./fields/TextField";
 import { Question } from "./fields/Question";
 import { RankField } from "./fields/RankField";
+import * as Datetime from 'react-datetime';
 
 interface State{
   error: string;
@@ -227,9 +228,9 @@ export default class Form extends React.Component<Props, State>{
                               onChange={this.onChange}>              
                   </SchemaField>}
         {false && <h1>Preview</h1>}
-        {true && <JsonForm key={newKey+1} {...this.state} 
+        {false && <JsonForm key={newKey+1} {...this.state} 
                     schema ={schema} uiSchema = {uiSchema}
-                    fields={{Question: Question, Rank:RankField}} 
+                    fields={{Question: Question, Rank:RankField, rdp: Datetime}} 
                     widgets={{...widgets}} onChange={this.onChange} >
           <button type="submit" className="hidden">Submit</button>
           </JsonForm>}

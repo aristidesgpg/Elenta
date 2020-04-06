@@ -1,9 +1,7 @@
 import * as React from "react";
 import { Draggable, Droppable } from "react-drag-and-drop";
 import Form from "react-jsonschema-form";
-//import SchemaField from "react-jsonschema-form/lib/components/fields/SchemaField";
-import ReactDatePicker from "react-jsonschema-form-extras/lib/ReactDatePicker";
-import "react-day-picker/lib/style.css";
+import * as Datetime from 'react-datetime';
 import { ButtonToolbar, Button } from "react-bootstrap";
 import { TextField, RichTextWidget} from "./TextField";
 import { Question } from "./Question";
@@ -172,7 +170,7 @@ export default class EditableField extends React.Component<any,any> {
     const props = this.props;    
     const fields = {RichEditor:TextField, 
                     Question: Question,
-                    rdp: ReactDatePicker,
+                    rdp: Datetime,
                     Rank: RankField
                     };
     const widgets = {
