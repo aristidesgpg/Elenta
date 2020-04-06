@@ -81,11 +81,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function learner(): HasMany {
+    public function learnerProfile(): HasMany {
         return $this->hasMany(LearnerProfile::class);
     }
 
-    public function consultant(): HasMany {
+    public function consultantProfile(): HasMany {
         return $this->hasMany(ConsultantProfile::class);
     }
 }

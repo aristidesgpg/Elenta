@@ -1,9 +1,14 @@
 import * as React from "react";
 import ModuleCard from "./ModuleCard";
 
-export const ModuleList = ({modules}) => {
+export const ModuleList = ({modules, activeModule, setActiveModule}) => {
   return modules.map(m => (
-      <ModuleCard module={m} active={false}/>
+      <ModuleCard
+          key={m.id}
+          module={m}
+          isActive={activeModule != undefined ? m.id === activeModule.id : false}
+          setActiveModule={setActiveModule}
+      />
   ));
 };
 

@@ -1,13 +1,28 @@
+extend type Query {
+    getProgram(id: ID! @eq): Program! @find
+}
+
+extend type Mutation {
+    createProgram(input: CreateProgramInput! @spread): Program! @create
+    updateProgram(input: UpdateProgramInput! @spread): Program! @update
+}
+
+enum ProgramFormat {
+    SELF_DIRECTED
+    IN_PERSON
+    VIRTUAL_ATTENDANCE
+}
+
 type Program {
     id: ID!
     owner: ConsultantProfile!
     template: Template!
 
     title: String!
-    format: String!
+    format: ProgramFormat!
     max_learners: Int
     start_timestamp: DateTime
-    can_share: Boolean
+    can_invite: Boolean
     is_public: Boolean
     dynamic_fields: String
     dynamic_fields_data: String
@@ -18,8 +33,56 @@ type Program {
 
     programModules: [ProgramModule]
     modules: [Module]
-    learners: [User]
+    learners: [LearnerProfile]
     invites: [ProgramInvite]
+}
+
+input CreateProgramInput {
+    owner: CreateConsultantProfileBelongsTo!
+    template: CreateProgramBelongsTo!
+
+    title: String!
+    format: ProgramFormat!
+    max_learners: Int
+    start_timestamp: DateTime
+    can_invite: Boolean
+    is_public: Boolean
+    dynamic_fields: String
+    dynamic_fields_data: String
+
+    programModules: CreateModulesBelongsToManyPrograms
+}
+
+input CreateProgramBelongsTo {
+    connect: ConnectProgram!
+}
+
+input ConnectProgram {
+    id: ID!
+}
+
+input CreateModulesBelongsToManyPrograms {
+    connect: [ConnectProgramModule!]
+}
+
+input UpdateProgramInput {
+    id: ID!
+    title: String
+    can_request: Boolean
+    is_public: Boolean
+    dynamic_fields: String
+
+    modules: UpdateModulesBelongsToManyPrograms
+}
+
+input UpdateModulesBelongsToManyPrograms {
+    sync: [ConnectProgramModule!]
+}
+
+input ConnectProgramModule {
+    id: ID!
+    folder: String
+    order: Int
 }
 
 type ProgramModule {

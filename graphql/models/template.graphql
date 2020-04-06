@@ -1,14 +1,15 @@
 extend type Query {
     getTemplate(id: ID! @eq): Template! @find
+    getTemplatesByOwner(consultant_profile_id: ID! @eq(key: "consultant_profile_id")): [Template!]! @all
 }
 
 extend type Mutation {
-    createTemplate(input: CreateTemplateInput @spread): Template! @create
-    updateTemplate(input: UpdateTemplateInput @spread): Template! @update
+    createTemplate(input: CreateTemplateInput! @spread): Template! @create
+    updateTemplate(input: UpdateTemplateInput! @spread): Template! @update
 }
 
 input CreateTemplateInput {
-    owner: CreateUserBelongsTo!
+    owner: CreateConsultantProfileBelongsTo!
 
     title: String!
     can_request: Boolean!
@@ -18,15 +19,12 @@ input CreateTemplateInput {
     modules: CreateModulesBelongsToMany
 }
 
-input CreateUserBelongsTo {
-    connect: ID!
-}
-
-input CreateModulesBelongsToMany {
+input CreateModulesBelongsToManyTemplates {
     connect: [ConnectTemplateModule!]
 }
 
 input UpdateTemplateInput {
+    id: ID!
     title: String
     can_request: Boolean
     is_public: Boolean
@@ -35,7 +33,7 @@ input UpdateTemplateInput {
     modules: UpdateModulesBelongsToMany
 }
 
-input UpdateModulesBelongsToMany {
+input UpdateModulesBelongsToManyTemplates {
     sync: [ConnectTemplateModule!]
 }
 

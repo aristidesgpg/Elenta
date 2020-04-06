@@ -1,0 +1,17 @@
+overwrite: true
+schema: "http://elenta.dev/graphql"
+documents: "./resources/js/graphql/*.graphql"
+generates:
+  resources/js/graphql/graphql-generated.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+        #      - "typescript-graphql-files-modules"
+        #      - "typescript-document-nodes"
+      - "fragment-matcher"
+    config:
+      withHooks: true
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

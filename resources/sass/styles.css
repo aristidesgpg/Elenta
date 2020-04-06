@@ -1,14 +1,16 @@
+body {
+    padding-top: 70px;
+}
 
-  
-  .builder-form .panel {
+.builder-form .panel {
     margin-bottom: 0;
-  }
-  
-  .builder-inner-actions {
+}
+
+.builder-inner-actions {
     margin-bottom: 30px;
-  }
-  
-  .dropdown-item {
+}
+
+.dropdown-item {
     display: block;
     width: 100%;
     padding: 0.25rem 1.5rem;
@@ -19,4 +21,4 @@
     white-space: nowrap;
     background-color: transparent;
     border: 0;
-  }
+}
