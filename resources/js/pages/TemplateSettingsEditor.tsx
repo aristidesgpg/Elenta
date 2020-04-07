@@ -2,7 +2,7 @@ import * as React from "react";
 import {useParams} from "react-router-dom";
 import {gql} from "apollo-boost";
 import ElentaForm from "../components/elenta-form/ElentaForm";
-import {CREATE_TEMPLATE, GET_TEMPLATE, UPDATE_TEMPLATE} from "../graphql/queries";
+import {GET_TEMPLATE, UPSERT_TEMPLATE} from "../graphql/queries";
 
 const schema = {
   title: "Create Template",
@@ -43,7 +43,7 @@ export const TemplateSettingsEditor = () => {
     return <ElentaForm
       schema={schema}
       uiSchema={uiSchema}
-      mutation={CREATE_TEMPLATE}
+      mutation={UPSERT_TEMPLATE}
       mutationVars={
         {
           owner: {
@@ -53,13 +53,20 @@ export const TemplateSettingsEditor = () => {
       }
     />
   } else {
+    schema.title = "Update Template";
     return <ElentaForm
-        schema={schema}
-        uiSchema={uiSchema}
-        query={GET_TEMPLATE}
-        mutation={UPDATE_TEMPLATE}
-        queryVars={{variables: {id}}}
-      />
+      schema={schema}
+      uiSchema={uiSchema}
+      query={GET_TEMPLATE}
+      mutation={UPSERT_TEMPLATE}
+      queryVars={
+        {
+          variables: {
+            id: id
+          }
+        }
+      }
+    />
   }
 };
 

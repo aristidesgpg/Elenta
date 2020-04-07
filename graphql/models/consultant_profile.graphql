@@ -11,10 +11,10 @@ input CreateConsultantProfileInput {
     picture_url: String!
     title: String
     bio: String
-    user: CreateConsultantProfileBelongsTo!
+    user: ConsultantProfileBelongsTo!
 }
 
-input CreateConsultantProfileBelongsTo {
+input ConsultantProfileBelongsTo {
     connect: ID!
 }
 

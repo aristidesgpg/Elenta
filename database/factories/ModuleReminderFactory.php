@@ -32,7 +32,7 @@ $factory->define(ModuleReminder::class, function (Faker $faker) {
         'type' => $faker->randomElement(ModuleReminder::TYPES),
         'subject' => $faker->words(4, true),
         'message' => $faker->sentences(3, true),
-        'frequency' => $faker->randomElement([24,48,72, 7*24]),
+        'frequency' => $faker->numberBetween(1, 5),
         'max_reminders' => $faker->numberBetween(1, 5)
     ];
 });

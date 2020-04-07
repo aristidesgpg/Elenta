@@ -3,8 +3,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    createProgram(input: CreateProgramInput! @spread): Program! @create
-    updateProgram(input: UpdateProgramInput! @spread): Program! @update
+    upsertProgram(input: UpsertProgramInput! @spread): Program! @upsert
 }
 
 enum ProgramFormat {
@@ -37,12 +36,13 @@ type Program {
     invites: [ProgramInvite]
 }
 
-input CreateProgramInput {
-    owner: CreateConsultantProfileBelongsTo!
-    template: CreateProgramBelongsTo!
+input UpsertProgramInput {
+    id: ID
+    owner: ConsultantProfileBelongsToTemplate
+    template: ProgramBelongsToTemplate
 
-    title: String!
-    format: ProgramFormat!
+    title: String
+    format: ProgramFormat
     max_learners: Int
     start_timestamp: DateTime
     can_invite: Boolean
@@ -50,32 +50,19 @@ input CreateProgramInput {
     dynamic_fields: String
     dynamic_fields_data: String
 
-    programModules: CreateModulesBelongsToManyPrograms
+    programModules: ModulesBelongsToManyPrograms
 }
 
-input CreateProgramBelongsTo {
-    connect: ConnectProgram!
+input ProgramBelongsToTemplate {
+    connect: ID!
 }
 
-input ConnectProgram {
-    id: ID!
+input ConsultantProfileBelongsToTemplate {
+    connect: ID!
 }
 
-input CreateModulesBelongsToManyPrograms {
+input ModulesBelongsToManyPrograms {
     connect: [ConnectProgramModule!]
-}
-
-input UpdateProgramInput {
-    id: ID!
-    title: String
-    can_request: Boolean
-    is_public: Boolean
-    dynamic_fields: String
-
-    modules: UpdateModulesBelongsToManyPrograms
-}
-
-input UpdateModulesBelongsToManyPrograms {
     sync: [ConnectProgramModule!]
 }
 
@@ -101,7 +88,6 @@ type ProgramModule {
     triggers: [ModuleTrigger]
     sends: [ProgramModuleSend]
 }
-
 
 type ProgramModuleSend {
     id: ID!

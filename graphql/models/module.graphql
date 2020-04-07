@@ -1,51 +1,36 @@
 extend type Mutation {
-    createModule(input: CreateModuleInput @spread): Module! @create
-    updateModule(input: UpdateModuleInput @spread): Module! @update
+    upsertModule(input: UpsertModuleInput @spread): Module! @upsert
     deleteModule(id: ID!): Module @delete
 }
 
-input CreateModuleInput {
-    owner: CreateModuleBelongsToUser!
+extend type Query {
+    getModule(id: ID! @eq): Module! @find
+}
 
-    title: String!
-    description: String!
-    is_public: Boolean!
+input UpsertModuleInput {
+    id: ID
+    owner: ModuleBelongsToConsultantProfile
+
+    title: String
+    description: String
+    is_public: Boolean
     content: String
     conditions: String
 
-    reminders: CreateModuleHasManyReminders
-    triggers: CreateModuleHasManyTriggers
+    reminders: ModuleHasManyReminders
+    triggers: ModuleHasManyTriggers
 }
 
-input CreateModuleBelongsToUser {
+input ModuleBelongsToConsultantProfile {
     connect: ID!
 }
 
-input CreateModuleHasManyReminders {
-    create: [CreateModuleReminderInput!]
+input ModuleHasManyReminders {
+    upsert: [UpsertModuleReminderInput!]
 }
 
-input CreateModuleHasManyTriggers {
-    create: [CreateModuleTriggerInput!]
-}
-
-input UpdateModuleInput {
-    title: String
-    description: String!
-    is_public: Boolean!
-    content: String
-    conditions: String
-
-    reminders: UpdateModuleHasManyReminders
-    triggers: UpdateModuleHasManyTriggers
-}
-
-input UpdateModuleHasManyReminders {
-    update: [UpdateModuleReminderInput!]
-}
-
-input UpdateModuleHasManyTriggers {
-    update: [UpdateModuleTriggerInput!]
+input ModuleHasManyTriggers {
+    upsert: [UpsertModuleTriggerInput!]
 }
 
 type Module {

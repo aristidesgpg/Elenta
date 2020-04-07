@@ -6,7 +6,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule}) => {
       <ModuleCard
           key={m.id}
           module={m}
-          isActive={activeModule != undefined ? m.id === activeModule.id : false}
+          isActive={activeModule ? m.id === activeModule.id : false}
           setActiveModule={setActiveModule}
       />
   ));

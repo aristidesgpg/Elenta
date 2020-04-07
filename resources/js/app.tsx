@@ -14,7 +14,7 @@ import PageContainer from "./components/page-container/PageContainer";
 import TemplateSettingsEditor from "./pages/TemplateSettingsEditor";
 import {setContext} from "apollo-link-context";
 import ProgramSettingsEditor from "./pages/ProgramSettingsEditor";
-
+import ModuleSettingsEditor from "./components/modules/ModuleSettingsEditor";
 
 const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"

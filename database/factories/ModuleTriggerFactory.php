@@ -30,7 +30,7 @@ $factory->define(ModuleTrigger::class, function (Faker $faker) {
         'module_id' => $faker->randomElement($module_ids),
         'start_timestamp' => $faker->dateTimeThisMonth(),
         'start_timestamp_field' => null, // TODO
-        'frequency' => $faker->randomElement([24,48,72, 7*24]),
+        'frequency' => $faker->numberBetween(1, 3),
         'max_sends' => $faker->numberBetween(1, 5), // TODO
     ];
 });

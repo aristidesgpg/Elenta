@@ -2,7 +2,6 @@ type ModuleReminder {
     id: ID!
     module: Module
 
-    type: String!
     subject: String!
     message: String!
     frequency: Int!
@@ -13,31 +12,11 @@ type ModuleReminder {
     deleted_at: DateTime!
 }
 
-input CreateModuleReminderInput {
-    module: CreateModuleReminderBelongsToModule
+input UpsertModuleReminderInput {
+    id: ID
 
-    type: String!
-    subject: String!
-    message: String!
-    frequency: Int!
-    max_reminders: Int!
-}
-
-input CreateModuleReminderBelongsToModule {
-    connect: ID!
-}
-
-input UpdateModuleReminderInput {
-    id: ID!
-    module: UpdateModuleReminderBelongsToModule
-
-    type: String!
-    subject: String!
-    message: String!
-    frequency: Int!
-    max_reminders: Int!
-}
-
-input UpdateModuleReminderBelongsToModule {
-    connect: ID!
+    subject: String
+    message: String
+    frequency: Int
+    max_reminders: Int
 }
