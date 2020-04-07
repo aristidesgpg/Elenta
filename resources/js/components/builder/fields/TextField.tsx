@@ -8,7 +8,9 @@ import SxSelect from '../../common/nestedselect/SxSelect';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './css/fields.css';
 
-export class RichText extends  React.Component<any,any>{
+
+//Widget
+export class RichTextWidget extends  React.Component<any,any>{
 
   constructor(props) {
       super(props);                        
@@ -36,6 +38,7 @@ export class RichText extends  React.Component<any,any>{
   }
 }
 
+// Editor Field
 export class TextField extends React.Component<any,any>{
   public static defaultProps = {
     getTagList: (): any[] => { return [{}];}

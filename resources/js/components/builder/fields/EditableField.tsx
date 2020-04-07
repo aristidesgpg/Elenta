@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Draggable, Droppable } from "react-drag-and-drop";
 import Form from "react-jsonschema-form";
-import SchemaField from "react-jsonschema-form/lib/components/fields/SchemaField";
+import * as Datetime from 'react-datetime';
 import { ButtonToolbar, Button } from "react-bootstrap";
-import { TextField, RichText} from "./TextField";
+import { TextField, RichTextWidget} from "./TextField";
 import { Question } from "./Question";
+import { RankField } from "./RankField";
 
 function pickKeys(source, target, excludedKeys) {
   const result = {};
@@ -164,17 +165,22 @@ export default class EditableField extends React.Component<any,any> {
     }
   }
 
+
   render() {
     const props = this.props;    
     const fields = {RichEditor:TextField, 
-                    Question: Question};
+                    Question: Question,
+                    rdp: Datetime,
+                    Rank: RankField
+                    };
     const widgets = {
-        RichText: RichText      
+        RichText: RichTextWidget,                
       };
+    
     if (this.state.edit) {
       return (
         <FieldPropertiesEditor
-          {...props}           
+          {...props}                     
           fields = {{...fields}}
           widgets = {{...widgets}}
           onCancel={this.handleCancel.bind(this)}
@@ -193,7 +199,7 @@ export default class EditableField extends React.Component<any,any> {
         return <SchemaField {...props} idSchema={{$id: props.name}} />;
       }
     }*/
-    
+    //
     return (
       <DraggableFieldContainer
         draggableType="moved-field"
@@ -203,11 +209,11 @@ export default class EditableField extends React.Component<any,any> {
         onDelete={this.handleDelete.bind(this)}
         onDoubleClick={this.handleEdit.bind(this)}
         onDrop={this.handleDrop.bind(this)}>
-        <Form {...props}
+        <Form {...props}          
           schema={this.state.schema}
           idSchema={{$id: props.name}}
           fields = {{...fields}}
-          widgets = {{...widgets}} >
+          widgets = {{...widgets}}>
           <button type="submit" className="hidden">Submit</button>
         </Form>
       </DraggableFieldContainer>

@@ -70,6 +70,7 @@
   "moment": "^2.24.0",
   "react": "latest",
   "react-bootstrap": "latest",
+  "react-datetime": "^2.16.3",
   "react-bootstrap-table-next": "^4.0.0",
   "react-datetime": "^2.16.3",
   "react-dom": "latest",

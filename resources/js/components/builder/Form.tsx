@@ -7,8 +7,10 @@ import FormActions from "./FormActions";
 import EditableField from "./fields/EditableField";
 import TitleField from "./fields/TitleField";
 import DescriptionField from "./fields/DescriptionField";
-import { TextField, RichText} from "./fields/TextField";
+import { TextField, RichTextWidget} from "./fields/TextField";
 import { Question } from "./fields/Question";
+import { RankField } from "./fields/RankField";
+import * as Datetime from 'react-datetime';
 
 interface State{
   error: string;
@@ -59,7 +61,7 @@ export default class Form extends React.Component<Props, State>{
   }
 
   onChange = (e) => {
-    //console.log("FormData" , e);    
+    console.log("FormData" , e);    
   }
 
   //*********  Actions  ***********/
@@ -81,7 +83,8 @@ export default class Form extends React.Component<Props, State>{
     schema.properties[_slug] = {...field.jsonSchema, title: name};
     uiSchema[_slug] = field.uiSchema;
     uiSchema["ui:order"] = (uiSchema["ui:order"] || []).concat(_slug);
-    return this.setState({ schema, uiSchema });    
+    let newKey = Math.random();
+    return this.setState({ schema, uiSchema, newKey });    
   }
 
   switchField = (propertyName:string, newField: any) => {
@@ -105,7 +108,8 @@ export default class Form extends React.Component<Props, State>{
       delete schema.required;
     }
     const newSchema = clone(schema);
-    return this.setState({ ...newSchema, uiSchema, error: null });
+    let newKey = Math.random();
+    return this.setState({ ...newSchema, uiSchema, error: null, newKey });
   }
 
   updateField = (name: string, newSchema: any, required: boolean, newLabel: string) => {    
@@ -175,7 +179,8 @@ export default class Form extends React.Component<Props, State>{
     const idxTarget = order.indexOf(target);
     order[idxSource] = target;
     order[idxTarget] = source;
-    this.setState({ uiSchema, error: null });
+    let newKey = Math.random();
+    this.setState({ uiSchema, error: null, newKey });
   }
 
   getTagList = (): any[] =>{
@@ -195,13 +200,13 @@ export default class Form extends React.Component<Props, State>{
             }
           ];
   }
-
+  
   //********  Render *******/
   render() {
-    const { error, schema, newKey } = this.state;
+    const { error, schema, newKey, uiSchema } = this.state;
     console.log("State", this.state);
     const widgets = {
-      RichText: RichText      
+      RichText: RichTextWidget      
     };
     const registry = {    
       ...getDefaultRegistry(),
@@ -224,8 +229,9 @@ export default class Form extends React.Component<Props, State>{
                   </SchemaField>}
         {false && <h1>Preview</h1>}
         {false && <JsonForm key={newKey+1} {...this.state} 
-                    fields={{Question: Question}} 
-                    widgets={{...widgets}} >
+                    schema ={schema} uiSchema = {uiSchema}
+                    fields={{Question: Question, Rank:RankField, rdp: Datetime}} 
+                    widgets={{...widgets}} onChange={this.onChange} >
           <button type="submit" className="hidden">Submit</button>
           </JsonForm>}
         </div>
