@@ -32,6 +32,67 @@ export default {
       },
       formData: {}
     },
+    {
+      id: "numberinput",
+      icon: "text-color",
+      label: "Number Input",
+      jsonSchema: {
+        type: "number", 
+        title: "Edit me",
+        description: "",
+        minimum: 0,
+        maximum: 100,
+        multipleOf: 2,
+        default: 0        
+      },
+      uiSchema: {        
+        editSchema: {                                  
+          type: "object",                
+          properties: {                     
+            title: {type: "string", title: "Label"},
+            description: {type: "string", title: "Description"},
+            required: {type: "boolean"},
+            minimum:{ type: "number", title:"Minimum", default:0 },
+            maximum:{ type: "number", title:"Maximum", default:100 },
+            multipleOf:{ type: "number", title:"Step", default: 1 },
+          }
+        },
+        editUISchema:{},
+      },
+      formData: {}
+    },
+    {
+      id: "slider",
+      icon: "text-color",
+      label: "Slider",
+      jsonSchema: {
+        type: "number", 
+        title: "Edit me",
+        description: "",
+        minimum: 0,
+        maximum: 100,
+        multipleOf: 2,
+        default: [0,1,1,2],
+        count:4,
+        pushable: true        
+      },
+      uiSchema: {  
+        "ui:widget": "Range",      
+        editSchema: {                                  
+          type: "object",                
+          properties: {                     
+            title: {type: "string", title: "Label"},
+            description: {type: "string", title: "Description"},
+            required: {type: "boolean"},
+            minimum:{ type: "number", title:"Minimum", default:0 },
+            maximum:{ type: "number", title:"Maximum", default:100 },
+            multipleOf:{ type: "number", title:"Step", default: 1 },
+          }
+        },
+        editUISchema:{},
+      },
+      formData: {}
+    },
     /*{
       id: "question",
       icon: "text-color",
@@ -78,8 +139,8 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            title: {type: "string", title: "Label"},
-            description: {type: "string", title: "Example value"},
+            title: {type: "string", title: "Title"},
+            description: {type: "string", title: "Description"},
             required: {type: "boolean"},
           }
         },
@@ -102,8 +163,8 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            title: {type: "string", title: "Label"},
-            description: {type: "string", title: "Example value"},
+            title: {type: "string", title: "Title"},
+            description: {type: "string", title: "Description"},
             required: {type: "boolean"},
           },
           editUISchema:{}

@@ -37,8 +37,8 @@ const client = new ApolloClient({
 
 export const App = () => {
   return (
-    <ApolloProvider client={client}>
-        <PageContainer>
+    //<ApolloProvider client={client}>
+        //<PageContainer>
           <HashRouter>
             <Switch>
               <Route exact={true} path="/consultant-dashboard" component={ConsultantDashboard}/>
@@ -49,7 +49,7 @@ export const App = () => {
               <Route exact={true} path="/" component={Form}/>
             </Switch>
           </HashRouter>
-        </PageContainer>
-    </ApolloProvider>
+        //</PageContainer>
+    //</ApolloProvider>
   );
 };

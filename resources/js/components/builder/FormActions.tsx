@@ -25,23 +25,22 @@ export default class FormActions extends React.Component<Props, State>{
     return (
       <div>
         <ButtonToolbar className="builder-inner-actions">
-          <Button className="pull-right" variant="info">
-            <a className="pull-right" download={filename} href={schemaFileContent}>
+          <Button className="float-right" variant="info">
+            <a className="float-right" download={filename} href={schemaFileContent}>
               <i className="glyphicon glyphicon-download" />&nbsp;
                 Download JSON schema
             </a>
           </Button>
           
-          <FieldListDropdown className="pull-right" 
+          <FieldListDropdown className="float-right" 
             name = {""}
             addField = {this.props.addField}
-            switchField = {this.props.switchField}>
-            <i className="glyphicon glyphicon-plus" />
+            switchField = {this.props.switchField}>            
             Add a field
           </FieldListDropdown>        
         </ButtonToolbar>      
       </div>
     );
-  }
+  }//<i className="fas fa-plus-square"/>
   
 }

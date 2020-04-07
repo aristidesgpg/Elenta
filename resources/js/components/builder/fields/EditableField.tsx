@@ -1,11 +1,15 @@
 import * as React from "react";
 import { Draggable, Droppable } from "react-drag-and-drop";
-import Form from "react-jsonschema-form";
-import * as Datetime from 'react-datetime';
+//import Form from "react-jsonschema-form";
+import * as Datetime from "react-datetime";
 import { ButtonToolbar, Button } from "react-bootstrap";
 import { TextField, RichTextWidget} from "./TextField";
 import { Question } from "./Question";
 import { RankField } from "./RankField";
+import { Range } from "rc-slider";
+import 'rc-slider/assets/index.css';
+import Form from 'react-jsonschema-form-bs4';
+//import {withTheme} from "@rjsf/core";
 
 function pickKeys(source, target, excludedKeys) {
   const result = {};
@@ -51,20 +55,19 @@ class FieldPropertiesEditor extends React.Component<any,any> {
     };
     
     return (
-      <div className="panel panel-default field-editor">
-        <div className="panel-heading clearfix">
+      <div className="row panel panel-default field-editor">
+        <div className="panel-heading clearfix col-12">
             <strong className="panel-title">Edit {name}</strong>
-
-            <ButtonToolbar className="pull-right">              
-              <Button variant="link" onClick={onDelete}>
-                delete <i className="glyphicon glyphicon-trash"/>
+            <ButtonToolbar className="float-right">              
+              <Button variant="danger" onClick={onDelete}>
+                delete <i className="fas fa-trash-alt"/>
               </Button>
-              <Button variant="link" name="close-btn" onClick={onCancel}>
-                close <i className="glyphicon glyphicon-remove-sign"/>
+              <Button variant="primary" name="close-btn" onClick={onCancel}>
+                close <i className="far fa-times-circle"/>
               </Button>
             </ButtonToolbar>
         </div>
-        <div className="panel-body">          
+        <div className="panel-body col-12">          
           <Form
             formData={formData}
             schema={uiSchema.editSchema}
@@ -72,7 +75,7 @@ class FieldPropertiesEditor extends React.Component<any,any> {
             fields={fields}
             onChange={this.onChange.bind(this)}
             onSubmit={onUpdate}>
-            <button type="submit" className="btn btn-info pull-right">Submit</button>
+            <button type="submit" className="btn btn-info float-right">Submit</button>
           </Form>
         </div>
       </div>
@@ -98,11 +101,11 @@ function DraggableFieldContainer(props) {
             {children}
           </div>
           <div className="col-sm-3 editable-field-actions">
-            <Button variant="link" onClick={onEdit}>
-              edit <i className="glyphicon glyphicon-edit"/>
+            <Button variant="success" onClick={onEdit}>
+              edit <i className="far fa-edit"/>
             </Button>
-            <Button variant="link" onClick={onDelete}>
-              delete <i className="glyphicon glyphicon-trash"/>
+            <Button variant="danger" onClick={onDelete}>
+              delete <i className="fas fa-trash-alt"/>
             </Button>
           </div>
         </div>
@@ -169,12 +172,14 @@ export default class EditableField extends React.Component<any,any> {
   render() {
     const props = this.props;    
     const fields = {RichEditor:TextField, 
-                    Question: Question,
-                    rdp: Datetime,
-                    Rank: RankField
-                    };
+                    Question: Question,                    
+                    Rank: RankField,
+                    //rdp: Datetime,
+                    
+                    };//
     const widgets = {
-        RichText: RichTextWidget,                
+        RichText: RichTextWidget,   
+        Range: Range             
       };
     
     if (this.state.edit) {
@@ -211,10 +216,10 @@ export default class EditableField extends React.Component<any,any> {
         onDrop={this.handleDrop.bind(this)}>
         <Form {...props}          
           schema={this.state.schema}
-          idSchema={{$id: props.name}}
+          //idSchema={{$id: props.name}}
           fields = {{...fields}}
           widgets = {{...widgets}}>
-          <button type="submit" className="hidden">Submit</button>
+          <button type="submit" hidden>Submit</button>
         </Form>
       </DraggableFieldContainer>
     );

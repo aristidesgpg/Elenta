@@ -22,3 +22,56 @@ body {
     background-color: transparent;
     border: 0;
 }
+
+.editable-field {
+    padding: .35em;
+}
+
+.editable-field:hover {
+    background: #fafafa;
+    cursor: move;
+}
+
+.editable-field label:hover {
+    cursor: move;
+}
+  
+.editable-field-actions {
+    text-align: right;
+    padding-left: 0;
+}
+
+.fas + span {
+    margin-left: .5em;
+}
+
+.editable-field-actions .btn {    
+    margin-left: 6px;
+}
+
+.field-editor .btn{
+    margin-left: 6px;
+}
+
+.panel-heading
+{
+    margin-bottom: 10px;
+}
+
+.panel-heading .panel-title {
+    display: inline-block;      
+}
+
+.panel-body{
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    background-color: lightyellow;  
+}
+
+.btn-toolbar {
+   float: right;
+}
+
+.btn-toolbar .btn{
+    margin-left: 6px;
+}
