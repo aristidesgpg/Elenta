@@ -1,5 +1,6 @@
 import {gql} from 'graphql.macro';
 
+//TODO: fragments
 export const GET_TEMPLATE = gql`
   query getTemplate($id: ID!) {
     getTemplate(id: $id) {
@@ -17,7 +18,6 @@ export const GET_TEMPLATE = gql`
         conditions
         reminders {
           id
-          type
           subject
           message
           frequency
@@ -44,20 +44,9 @@ export const GET_TEMPLATES_BY_OWNER = gql`
   }
 `;
 
-export const CREATE_TEMPLATE = gql`
-  mutation createTemplate($input: CreateTemplateInput!) {
-    createTemplate(input: $input) {
-      title
-      can_request
-      is_public
-      dynamic_fields
-    }
-  }
-`;
-
-export const UPDATE_TEMPLATE = gql`
-  mutation updateTemplate($input: UpdateTemplateInput!) {
-    updateTemplate(input: $input) {
+export const UPSERT_TEMPLATE = gql`
+  mutation updateTemplate($input: UpsertTemplateInput!) {
+    upsertTemplate(input: $input) {
       id
       title
       can_request
@@ -80,6 +69,10 @@ export const GET_PROGRAM = gql`
       dynamic_fields
       dynamic_fields_data
       created_at
+      template {
+        id
+        title
+      }
       modules {
         id
         title
@@ -88,7 +81,6 @@ export const GET_PROGRAM = gql`
         conditions
         reminders {
           id
-          type
           subject
           message
           frequency
@@ -112,10 +104,14 @@ export const GET_PROGRAM = gql`
   }
 `
 
-export const CREATE_PROGRAM = gql`
-  mutation createProgram($input: CreateProgramInput!) {
-    createProgram(input: $input) {
+export const UPSERT_PROGRAM = gql`
+  mutation upsertProgram($input: UpsertProgramInput!) {
+    upsertProgram(input: $input) {
       id
+      template {
+        id
+        title
+      }
       title
       format
       max_learners
@@ -128,18 +124,28 @@ export const CREATE_PROGRAM = gql`
   }
 `;
 
-export const UPDATE_PROGRAM = gql`
-  mutation updateProgram($input: UpdateProgramInput!) {
-    updateProgram(input: $input) {
+export const UPSERT_MODULE = gql`
+  mutation upsertModule($input: UpsertModuleInput!) {
+    upsertModule(input: $input) {
       id
       title
-      format
-      max_learners
-      start_timestamp
-      can_invite
-      is_public
-      dynamic_fields
-      dynamic_fields_data
+      description
+      content
+      conditions
+      reminders {
+        id
+        subject
+        message
+        frequency
+        max_reminders
+      }
+      triggers {
+        id
+        start_timestamp
+        start_timestamp_field
+        frequency
+        max_sends
+      }
     }
   }
 `;

@@ -12,30 +12,11 @@ type ModuleTrigger {
     deleted_at: DateTime!
 }
 
-input CreateModuleTriggerInput {
-    module: CreateModuleTriggerBelongsToModule
+input UpsertModuleTriggerInput {
+    id: ID
 
     start_timestamp: DateTime
     start_timestamp_field: String
-    frequency: Int!
-    max_sends: Int!
-}
-
-input CreateModuleTriggerBelongsToModule {
-    connect: ID!
-}
-
-input UpdateModuleTriggerInput {
-    id: ID!
-    module: UpdateModuleTriggerBelongsToModule
-
-    type: String!
-    subject: String!
-    message: String!
-    frequency: Int!
-    max_reminders: Int!
-}
-
-input UpdateModuleTriggerBelongsToModule {
-    connect: ID!
+    frequency: Int
+    max_sends: Int
 }

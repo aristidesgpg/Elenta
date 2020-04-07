@@ -50,6 +50,7 @@ class ModuleReminder extends Model
 
     protected $guarded = [];
 
+    //TODO: Remove types
     public const TYPES = ['MANUAL', 'AUTOMATED'];
 
     public function module(): BelongsTo {

@@ -58,7 +58,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Program withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Program withoutTrashed()
  * @mixin \Eloquent
- * @property bool $can_invite
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Program whereCanInvite($value)
  */
 class Program extends Model

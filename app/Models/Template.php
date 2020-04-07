@@ -51,6 +51,7 @@ class Template extends Model
     use SoftDeletes;
     use UsesUuid;
 
+    //TODO: Move to Program
     public const FORMATS = ['SELF_DIRECTED', 'IN_PERSON', 'VIRTUAL_ATTENDANCE'];
 
     protected $guarded = [];

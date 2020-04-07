@@ -69,6 +69,7 @@
   "graphql.macro": "^1.4.2",
   "html-to-draftjs": "^1.5.0",
   "rc-slider": "^9.2.4",
+  "moment": "^2.24.0",
   "react": "latest",
   "react-bootstrap": "latest",
   "react-bootstrap-table-next": "^4.0.0",

@@ -4,36 +4,23 @@ extend type Query {
 }
 
 extend type Mutation {
-    createTemplate(input: CreateTemplateInput! @spread): Template! @create
-    updateTemplate(input: UpdateTemplateInput! @spread): Template! @update
+    upsertTemplate(input: UpsertTemplateInput! @spread): Template! @upsert
 }
 
-input CreateTemplateInput {
-    owner: CreateConsultantProfileBelongsTo!
+input UpsertTemplateInput {
+    id: ID
+    owner: ConsultantProfileBelongsTo
 
-    title: String!
-    can_request: Boolean!
-    is_public: Boolean!
-    dynamic_fields: String
-
-    modules: CreateModulesBelongsToMany
-}
-
-input CreateModulesBelongsToManyTemplates {
-    connect: [ConnectTemplateModule!]
-}
-
-input UpdateTemplateInput {
-    id: ID!
     title: String
     can_request: Boolean
     is_public: Boolean
     dynamic_fields: String
 
-    modules: UpdateModulesBelongsToMany
+    modules: ModulesBelongsToManyTemplates
 }
 
-input UpdateModulesBelongsToManyTemplates {
+input ModulesBelongsToManyTemplates {
+    connect: [ConnectTemplateModule!]
     sync: [ConnectTemplateModule!]
 }
 

@@ -22,7 +22,7 @@ const GET_CONSULTANT_PROFILE = gql`
         format
         max_learners
         start_timestamp
-        can_share
+        can_invite
         is_public
         programModules {
           id

@@ -1,9 +1,10 @@
 import * as React from "react";
 import {useParams} from "react-router-dom";
 import ElentaForm from "../components/elenta-form/ElentaForm";
-import {CREATE_PROGRAM, GET_PROGRAM, GET_TEMPLATES_BY_OWNER, UPDATE_PROGRAM} from "../graphql/queries";
+import {GET_PROGRAM, GET_TEMPLATES_BY_OWNER, UPSERT_PROGRAM} from "../graphql/queries";
 import {useLazyQuery, useQuery} from "@apollo/react-hooks";
 import _ from "lodash";
+import moment from "moment";
 
 const schema = {
   title: "Create Program",
@@ -104,7 +105,7 @@ export const ProgramSettingsEditor = () => {
         schema={schema}
         uiSchema={uiSchema}
         rulesSchema={rulesSchema}
-        mutation={CREATE_PROGRAM}
+        mutation={UPSERT_PROGRAM}
         mutationVars={
           {
             owner: {
@@ -112,16 +113,35 @@ export const ProgramSettingsEditor = () => {
             }
           }
         }
+        mutationTransform={(d) => {
+            d['template'] = {
+              connect: d.template
+            };
+            d['start_timestamp'] = moment(d.start_timestamp).format("Y-MM-DD HH:mm:ss");
+          }
+        }
       />
     } else {
       schema.title = 'Update Program';
+      schema.properties.template["readOnly"] = true;
       return <ElentaForm
         schema={schema}
         uiSchema={uiSchema}
         rulesSchema={rulesSchema}
         query={GET_PROGRAM}
-        mutation={UPDATE_PROGRAM}
-        queryVars={{variables: {id}}}
+        mutation={UPSERT_PROGRAM}
+        queryVars={
+          {
+            variables: {
+              id: id
+            }
+          }
+        }
+        mutationTransform={(d) => {
+            delete d['template'];
+            d['start_timestamp'] = moment(d.start_timestamp).format("Y-MM-DD HH:mm:ss");
+          }
+        }
       />
     }
   }

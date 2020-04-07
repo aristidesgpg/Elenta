@@ -1,7 +1,6 @@
 import * as React from "react";
 import Container from "react-bootstrap/Container";
 import JsonForm from "react-jsonschema-form";
-import {useParams} from "react-router-dom";
 import {useLazyQuery, useMutation, useQuery} from "@apollo/react-hooks";
 import {DocumentNode, gql} from "apollo-boost";
 import Spinner from "react-bootstrap/Spinner";
@@ -9,18 +8,7 @@ import {useEffect, useState} from "react";
 import _ from "lodash";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-
-interface ElentaFormProps {
-  schema: any,
-  uiSchema?: any,
-  rulesSchema?: any,
-  query?: DocumentNode,
-  mutation?: DocumentNode,
-  queryVars?: object,
-  mutationVars?: object
-}
+import ElentaFormButton from "./ElentaFormButton";
 
 export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
   ({
@@ -30,7 +18,9 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
      query,
      mutation,
      queryVars,
-     mutationVars
+     mutationVars,
+     queryTransform,
+     mutationTransform
    }) => {
 
     const [localUiSchema, setLocalUiSchema] = useState(uiSchema);
@@ -44,27 +34,26 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
 
         if (queryData) {
           // Returns with first child as query name, e.g queryData.getTemplate.id. Get first child.
+          queryTransform(queryData);
           let newState = _.pick(queryData[Object.keys(queryData)[0]], Object.keys(schema.properties));
-          setFormState(newState);
+          // Sometimes we fetch a child object, let's flatten this to an id so the state is one level deep
+          Object.keys(newState).forEach(k => {
+            if (typeof (newState[k]) == 'object') newState[k] = newState[k].id;
+          });
           onChange({formData: newState});
         }
       }
-
-      if (mutation && mutationData) {
-        let newState = _.pick(mutationData[Object.keys(mutationData)[0]], Object.keys(schema.properties));
-        setFormState(newState);
-        onChange({formData: newState});
-      }
-    }, [queryData, mutationData]);
+    }, [queryData]);
 
     const onSubmit = ({formData}, e) => {
       e.preventDefault();
+      let submitData = _.cloneDeep(formData);
+      mutationTransform(submitData);
+      runMutation({variables: {input: Object.assign(mutationVars, submitData)}});
       setFormState(formData);
-      runMutation({variables: {input: Object.assign(mutationVars, formData)}});
     };
 
     const onChange = ({formData}) => {
-      setFormState(formData);
       // Custom addition to rjsf, allowing fields to hide based on values of
       // other fields
       let fields = Object.keys(rulesSchema);
@@ -75,7 +64,12 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
             let fieldVal = formData[rulesSchema[f].requires.field];
             let validVals = rulesSchema[f].requires.values;
             if (validVals.includes(fieldVal)) {
-              delete tempUiSchema[f]["ui:widget"];
+              // We don't want the default for date-times
+              if (schema.properties[f].format == 'date-time') {
+                _.set(tempUiSchema, f + '.ui:widget', 'alt-datetime');
+              } else {
+                delete tempUiSchema[f]["ui:widget"];
+              }
             } else if (localUiSchema[f]) {
               _.set(tempUiSchema, f + '.ui:widget', 'hidden');
             }
@@ -83,13 +77,23 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
         });
         setLocalUiSchema(tempUiSchema);
       }
+      setFormState(formData);
     };
 
     const log = (type) => console.log.bind(console, type);
 
-    if (queryError) return (
-      <Alert variant="danger" transition={null}>Something went wrong, please try again</Alert>
-    );
+    if (queryError) {
+      console.log(queryError);
+      return (
+        <Alert variant="danger" transition={null}>
+          {
+            queryError.graphQLErrors.map(e => {
+              return <p>{e.message}</p>
+            })
+          }
+        </Alert>
+      );
+    }
 
     return (
       <Container>
@@ -106,35 +110,37 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
                     onChange={onChange}
                     onError={log("errors")}
           >
-            <div>
-              <Button type="submit">
-                {
-                  mutationLoading ?
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                    /> : "Submit"
-                }
-              </Button>
-              {
-                mutationData &&
-                <Alert variant="success" transition={null}>Success!</Alert>
-              }
-              {
-                mutationError &&
-                <Alert variant='danger' transition={null}>
-                  Form Error please try again
-                </Alert>
-              }
-            </div>
+            <ElentaFormButton
+              mutationLoading={mutationLoading}
+              mutationError={mutationError}
+              mutationData={mutationData}
+            />
           </JsonForm>
         }
 
       </Container>
     );
   };
+
+interface ElentaFormProps {
+  schema: any,
+  uiSchema?: any,
+  rulesSchema?: any,
+  query?: DocumentNode,
+  mutation?: DocumentNode,
+  queryVars?: object,
+  mutationVars?: object,
+  queryTransform?: any,
+  mutationTransform?: any
+}
+
+ElentaForm.defaultProps = {
+  uiSchema: {},
+  rulesSchema: {},
+  queryVars: {},
+  mutationVars: {},
+  queryTransform: (d) => d,
+  mutationTransform: (d) => d
+};
 
 export default ElentaForm;
