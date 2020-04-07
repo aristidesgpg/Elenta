@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Draggable, Droppable } from "react-drag-and-drop";
 //import Form from "react-jsonschema-form";
-import * as Datetime from "react-datetime";
 import { ButtonToolbar, Button } from "react-bootstrap";
 import { TextField, RichTextWidget} from "./TextField";
-import { Question } from "./Question";
+import DTPicker from "./DTPicker";
 import { RankField } from "./RankField";
+
 import { Range } from "rc-slider";
 import 'rc-slider/assets/index.css';
 import Form from 'react-jsonschema-form-bs4';
@@ -171,14 +171,12 @@ export default class EditableField extends React.Component<any,any> {
 
   render() {
     const props = this.props;    
-    const fields = {RichEditor:TextField, 
-                    Question: Question,                    
-                    Rank: RankField,
-                    //rdp: Datetime,
-                    
-                    };//
+    const fields = {RichEditor:TextField,                                  
+                    Rank: RankField,                    
+                    };
     const widgets = {
         RichText: RichTextWidget,   
+        rdp: DTPicker,
         Range: Range             
       };
     

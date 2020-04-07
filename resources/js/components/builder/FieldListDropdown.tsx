@@ -60,7 +60,7 @@ export default class FieldListDropdown extends React.Component<Props, State> {
                 //eventKey={index}
                 onSelect={() => this.handleFieldListAction(index)}
                 className = "dropdown-item"
-                ><i className={`glyphicon glyphicon-${field.icon}`} />
+                ><i className={`${field.icon}`} />
                 {field.label}
               </Dropdown.Item>;
           })}

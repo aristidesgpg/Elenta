@@ -8,7 +8,7 @@ export default {
   fieldList: [
     {
       id: "richtext",
-      icon: "text-color",
+      icon: "font",
       label: "Rich text",
       jsonSchema: {
         type: "string", 
@@ -34,7 +34,7 @@ export default {
     },
     {
       id: "numberinput",
-      icon: "text-color",
+      icon: "sort-numeric-up",
       label: "Number Input",
       jsonSchema: {
         type: "number", 
@@ -350,7 +350,7 @@ export default {
         description:""
       },
       uiSchema: {
-        "ui:field": "rdp",
+        "ui:widget": "rdp",
         editSchema: {
           type: "object",
           properties: {
