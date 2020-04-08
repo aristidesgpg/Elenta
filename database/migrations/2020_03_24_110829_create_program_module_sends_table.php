@@ -16,7 +16,7 @@ class CreateProgramModuleSendsTable extends Migration
     {
         Schema::create('program_module_sends', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('program_module_id');
+            $table->bigInteger('program_module_id');
             $table->uuid('learner_profile_id');
 
             $table->enum('reason', ProgramModuleSend::REASONS);

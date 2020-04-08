@@ -45,6 +45,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $consultant_profile_id
  * @property-read \App\Models\ConsultantProfile $owner
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Module whereConsultantProfileId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ModuleReminder[] $reminders
+ * @property-read int|null $reminders_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ModuleTrigger[] $triggers
+ * @property-read int|null $triggers_count
  */
 class Module extends Model
 {
@@ -62,7 +66,7 @@ class Module extends Model
     }
 
     public function templates(): BelongsToMany {
-        return $this->belongsToMany(Template::class, TemplateModule::class);
+        return $this->belongsToMany(Template::class, 'template_modules');
     }
 
     public function reminders(): HasMany {

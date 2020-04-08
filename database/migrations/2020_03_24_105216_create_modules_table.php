@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateModulesTable extends Migration
@@ -18,10 +19,9 @@ class CreateModulesTable extends Migration
             $table->uuid('consultant_profile_id');
 
             $table->string('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->boolean('is_public')->default(false);
             $table->jsonb('content')->nullable();
-            // TODO: Can we set triggers, reminders, etc. in templates?
             $table->jsonb('conditions')->nullable();
 
             $table->timestamps();

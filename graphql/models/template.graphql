@@ -16,10 +16,10 @@ input UpsertTemplateInput {
     is_public: Boolean
     dynamic_fields: String
 
-    modules: ModulesBelongsToManyTemplates
+    modules: TemplatesBelongsToManyModules
 }
 
-input ModulesBelongsToManyTemplates {
+input TemplatesBelongsToManyModules {
     connect: [ConnectTemplateModule!]
     sync: [ConnectTemplateModule!]
 }

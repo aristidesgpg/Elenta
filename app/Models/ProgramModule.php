@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Mail\ProgramModuleMailer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * App\Models\ProgramModule
@@ -47,19 +49,36 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ProgramModule extends Model
 {
     use SoftDeletes;
-    use UsesUuid;
 
     protected $guarded = [];
 
-    public function program(): BelongsTo {
+    public function program(): BelongsTo
+    {
         return $this->belongsTo(Program::class);
     }
 
-    public function module(): BelongsTo {
+    public function module(): BelongsTo
+    {
         return $this->belongsTo(Module::class);
     }
 
-    public function sends(): HasMany {
+    public function sends(): HasMany
+    {
         return $this->hasMany(ProgramModuleSend::class);
+    }
+
+    public function sendModule(LearnerProfile $l, string $reason, string $channel, string $subject = "", string $message = "")
+    {
+        $pms = new ProgramModuleSend();
+        $pms->fill([
+            'program_module_id' => $this->id,
+            'learner_profile_id' => $l->id,
+            'reason' => $reason,
+            'channel' => $channel,
+            'subject' => $subject,
+            'message' => $message
+        ]);
+        $pms->save();
+        $pms->send();
     }
 }

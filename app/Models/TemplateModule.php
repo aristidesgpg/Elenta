@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
+use Signifly\PivotEvents\HasPivotEvents;
 
 /**
  * App\Models\TemplateModule
@@ -40,8 +42,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class TemplateModule extends Model
 {
     use SoftDeletes;
-    use UsesUuid;
 
+    protected $casts = [
+        'id' => 'string'
+    ];
     protected $guarded = [];
 
     public function module(): BelongsTo {

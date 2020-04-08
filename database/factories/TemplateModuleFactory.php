@@ -8,6 +8,7 @@ use App\Models\Template;
 use App\Models\TemplateModule;
 use App\Models\User;
 use Faker\Generator as Faker;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 /*
