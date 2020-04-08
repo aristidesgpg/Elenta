@@ -1,14 +1,23 @@
 import * as React from "react";
-import NavbarBrand from "react-bootstrap/NavbarBrand";
-import Navbar, {NavbarText} from "react-bootstrap/Navbar";
+import {
+  NavbarBrand,
+  Navbar,
+  Dropdown,
+  Container,
+  Button,
+  Image,
+  Row
+} from "react-bootstrap";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import NavbarToggle from "react-bootstrap/NavbarToggle";
-import Dropdown from "react-bootstrap/Dropdown";
 import ProfileDropdownItem from "./ProfileDropdownItem";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
+import {NavLink} from "react-router-dom";
+import {useQuery} from "@apollo/react-hooks";
+import {CURRENT_USER} from "../../../graphql/queries";
+import './ElentaNav.scss';
 
-export const ElentaNav = ({profiles}) => {
+export const ElentaNav = () => {
+  const {data: {user}} = useQuery(CURRENT_USER);
 
   return (
     <Container>
@@ -17,18 +26,43 @@ export const ElentaNav = ({profiles}) => {
           <NavbarBrand href="/">Elenta</NavbarBrand>
           <NavbarToggle/>
           <NavbarCollapse className="justify-content-end">
-            <Dropdown>
-              <Dropdown.Toggle id="account-dropdown">
-                Welcome Back
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {
-                  profiles.map(p => {
-                    return <ProfileDropdownItem key={p.id} profile={p} />
-                  })
-                }
-              </Dropdown.Menu>
-            </Dropdown>
+            {user
+              ?
+              <>
+                Welcome Back, <b>{user.name}</b>
+                <Dropdown>
+                  <Dropdown.Toggle id="account-dropdown"
+                                   className="account-dropdown rounded-circle">
+                    {
+                      user.consultantProfile.length
+                        ? <Image src={user.consultantProfile[0].picture_url}
+                                 className="profile-image"
+                                 alt="Profile image" roundedCircle/>
+                        : <Image src='https://lorempixel.com/30/30/?64665'
+                                 className="profile-image"
+                                 alt="Profile image" roundedCircle/>
+                    }
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {
+                      user.consultantProfile.map(p => {
+                        return <ProfileDropdownItem key={p.id} profile={p}/>
+                      })
+                    }
+
+                    <Dropdown.Item>
+                      Logout
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </>
+              :
+              <div>
+                <NavLink to={'/login'} activeClassName="disabled">
+                  <Button>Log in</Button>
+                </NavLink>
+              </div>
+            }
           </NavbarCollapse>
         </Navbar>
       </Row>

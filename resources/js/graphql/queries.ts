@@ -182,7 +182,41 @@ export const UPSERT_MODULE = gql`
 
 export const GET_ME = gql`
   query me {
-    getUser(id: "f11fd4e5-dfb4-49bd-818a-5efb75b733ae") {
+    getUser(id: "5bc3d401-6d2c-4cf8-92d8-7aaaac6dac3f") {
+      id
+      name
+      email
+      email_verified_at
+      learnerProfile {
+        id
+        picture_url
+        role
+        tenure
+      }
+      consultantProfile {
+        id
+        picture_url
+        title
+        bio
+      }
+    }
+  }
+`;
+
+export const USERS = gql`
+  query USERS {
+    users {
+      id
+      name
+    }
+  }
+`;
+
+//Local apollo state queries
+
+export const CURRENT_USER = gql`
+  {
+    user @client{
       id
       name
       email

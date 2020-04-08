@@ -4,7 +4,7 @@ import Form from "./components/builder/Form";
 import Login from "./pages/Login";
 
 import ApolloClient from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import {InMemoryCache} from 'apollo-cache-inmemory';
 import {createHttpLink, HttpLink} from 'apollo-link-http';
 import {ApolloProvider} from '@apollo/react-hooks';
 
@@ -20,7 +20,7 @@ const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"
 });
 
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext((_, {headers}) => {
   const token = localStorage.getItem('token');
   return {
     headers: {
@@ -38,8 +38,8 @@ export const ElentaClient = new ApolloClient({
 export const App = () => {
   return (
     <ApolloProvider client={ElentaClient}>
+      <HashRouter>
         <PageContainer>
-          <HashRouter>
             <Switch>
               <Route exact={true} path="/consultant-dashboard" component={ConsultantDashboard}/>
               <Route exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
@@ -49,8 +49,8 @@ export const App = () => {
               <Route exact={true} path="/program/content/:id" component={ProgramEditorPage}/>
               <Route exact={true} path="/" component={Form}/>
             </Switch>
-          </HashRouter>
         </PageContainer>
+      </HashRouter>
     </ApolloProvider>
   );
 };

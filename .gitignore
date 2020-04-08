@@ -2,8 +2,10 @@
 /public/hot
 /public/storage
 /public/mix-manifest.json
+/public/js
 /storage/*.key
 /vendor
+/.idea
 .env
 package-lock.json
 .env.backup
