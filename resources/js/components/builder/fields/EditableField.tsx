@@ -3,9 +3,12 @@ import { Draggable, Droppable } from "react-drag-and-drop";
 //import Form from "react-jsonschema-form";
 import { ButtonToolbar, Button } from "react-bootstrap";
 import { TextField, RichTextWidget} from "./TextField";
+import EditorTitleField from "./EditorTitleField";
+import EditorDescField from "./EditorDescField";
 import DTPicker from "./DTPicker";
 import { RankField } from "./RankField";
-
+import { ImageWidget } from "./ImageWidget"
+import { VideoWidget } from "./VideoWidget"
 import { Range } from "rc-slider";
 import 'rc-slider/assets/index.css';
 import Form from 'react-jsonschema-form-bs4';
@@ -38,9 +41,28 @@ class FieldPropertiesEditor extends React.Component<any,any> {
   constructor(props) {
     super(props);
     this.state = {editedSchema: props.schema};
+    EditorTitleField.defaultProps = {updateTitle: this.onUpdateTitleDesc,
+                                    getFormData: this.getFormData};
+    EditorDescField.defaultProps = {updateDescription: this.onUpdateTitleDesc,
+                                    getFormData: this.getFormData}
   }
 
-  onChange({formData}) {    
+  getFormData = () =>{
+    const {schema, name, required, uiSchema, onCancel, onUpdate, onDelete, fields} = this.props;
+    const formData = {
+      ...schema,
+      required,
+      ...this.state.editedSchema,
+      name: this.state.name
+    };
+    return formData;
+  }
+
+  onUpdateTitleDesc = (formData) =>{    
+    this.setState({editedSchema: formData});
+  }
+
+  onChange = ({formData}) => {        
     this.setState({editedSchema: formData});
   }
 
@@ -71,9 +93,9 @@ class FieldPropertiesEditor extends React.Component<any,any> {
           <Form
             formData={formData}
             schema={uiSchema.editSchema}
-            uiSchema = {uiSchema.editUISchema}
-            fields={fields}
-            onChange={this.onChange.bind(this)}
+            uiSchema = {uiSchema.editUISchema}            
+            fields={{...fields, TitleField: EditorTitleField, DescriptionField: EditorDescField}}
+            onChange={this.onChange}
             onSubmit={onUpdate}>
             <button type="submit" className="btn btn-info float-right">Submit</button>
           </Form>
@@ -100,10 +122,7 @@ function DraggableFieldContainer(props) {
           <div className="col-sm-9">
             {children}
           </div>
-          <div className="col-sm-3 editable-field-actions">
-            <Button variant="success" onClick={onEdit}>
-              edit <i className="far fa-edit"/>
-            </Button>
+          <div className="col-sm-3 editable-field-actions">            
             <Button variant="danger" onClick={onDelete}>
               delete <i className="fas fa-trash-alt"/>
             </Button>
@@ -112,6 +131,9 @@ function DraggableFieldContainer(props) {
       </Droppable>
     </Draggable>
   );
+  /*<Button variant="success" onClick={onEdit}>
+              edit <i className="far fa-edit"/>
+            </Button>*/
 }
 
 export default class EditableField extends React.Component<any,any> {
@@ -176,8 +198,10 @@ export default class EditableField extends React.Component<any,any> {
                     };
     const widgets = {
         RichText: RichTextWidget,   
-        rdp: DTPicker,
-        Range: Range             
+        RDP: DTPicker,
+        Range: Range,
+        Image: ImageWidget,
+        Video: VideoWidget             
       };
     
     if (this.state.edit) {

@@ -17,3 +17,8 @@
     padding: 5px !important;
     border-radius: 2px !important;
 }
+
+legend {
+  display: block;  
+  border-bottom: 1px solid lightgray;
+}

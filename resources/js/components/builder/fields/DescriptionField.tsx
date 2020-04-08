@@ -12,7 +12,7 @@ const DescriptionField = (props: Props) => {
     props.updateFormDescription(formData.description);
   };
 
-  const {id, description=""} = props;
+  const {id, description=""} = props;  
   return (
     <p id={id}>
       <RIEInput

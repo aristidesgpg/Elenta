@@ -12,17 +12,19 @@ export default {
       label: "Rich text",
       jsonSchema: {
         type: "string", 
+        title: "Edit me",
         textValue:"\"<p>Text</p>\"",
-        default: "Text"
+        default: "Rich Text"
       },
       uiSchema: {
         "ui:options":{
-          label:true
+          label:false
         },
         "ui:widget":"RichText",
         editSchema: {                                  
           type: "object",                
-          properties: {                     
+          properties: {       
+            title: {type: "string", title: "Title"},              
             textValue:{type: "string"}
           }
         },
@@ -47,10 +49,12 @@ export default {
       },
       uiSchema: {        
         editSchema: {                                  
-          type: "object",                
+          type: "object",                          
+          title:"Title",
+          description:"Description",
           properties: {                     
-            title: {type: "string", title: "Label"},
-            description: {type: "string", title: "Description"},
+            //title: {type: "string", title: "Title"},
+            //description: {type: "string", title: "Description"},
             required: {type: "boolean"},
             minimum:{ type: "number", title:"Minimum", default:0 },
             maximum:{ type: "number", title:"Maximum", default:100 },
@@ -79,10 +83,10 @@ export default {
       uiSchema: {  
         "ui:widget": "Range",      
         editSchema: {                                  
-          type: "object",                
-          properties: {                     
-            title: {type: "string", title: "Label"},
-            description: {type: "string", title: "Description"},
+          type: "object",
+          title:"Title",
+          description:"Description",                
+          properties: {                                 
             required: {type: "boolean"},
             minimum:{ type: "number", title:"Minimum", default:0 },
             maximum:{ type: "number", title:"Maximum", default:100 },
@@ -138,9 +142,9 @@ export default {
         },*/
         editSchema: {
           type: "object",
-          properties: {
-            title: {type: "string", title: "Title"},
-            description: {type: "string", title: "Description"},
+          title:"Title",
+          description:"Description",
+          properties: {            
             required: {type: "boolean"},
           }
         },
@@ -162,9 +166,9 @@ export default {
         "ui:widget": "textarea",
         editSchema: {
           type: "object",
-          properties: {
-            title: {type: "string", title: "Title"},
-            description: {type: "string", title: "Description"},
+          title:"Title",
+          description:"Description",
+          properties: {            
             required: {type: "boolean"},
           },
           editUISchema:{}
@@ -210,9 +214,9 @@ export default {
         "ui:field": "Rank",
         editSchema: {
           type: "object",
-          properties: {
-            title: {type: "string", title: "Title"},
-            description:{type: "string", title: "Description"},
+          title:"Title",
+          description:"Description",
+          properties: {            
             required: {type: "boolean"},
             items: {
               type: "object",
@@ -237,7 +241,7 @@ export default {
     {
       id: "multiple-checkbox",
       icon: "check",
-      label: "Checkboxes",
+      label: "Multiple Choices",
       jsonSchema: {
         type: "array",
         title: "A multiple choices list",
@@ -252,9 +256,9 @@ export default {
         "ui:widget": "checkboxes",
         editSchema: {
           type: "object",
-          properties: {
-            title: {type: "string", title: "Title"},
-            description:{type: "string", title: "Description"},
+          title:"Title",
+          description:"Description",
+          properties: {            
             required: {type: "boolean"},
             items: {
               type: "object",
@@ -290,9 +294,9 @@ export default {
         "ui:widget": "radio",
         editSchema: {
           type: "object",
-          properties: {
-            title: {type: "string", title: "Title"},
-            description:{type: "string", title: "Description"},
+          title:"Title",
+          description:"Description",
+          properties: {            
             required: {type: "boolean"},
             enum: {
               type: "array",
@@ -322,9 +326,9 @@ export default {
         "ui:widget": "select",
         editSchema: {
           type: "object",
-          properties: {
-            title: {type: "string", title: "Title"},
-            description:{type: "string", title: "Description"},
+          title:"Title",
+          description:"Description",
+          properties: {            
             required: {type: "boolean"},
             enum: {
               type: "array",
@@ -350,13 +354,59 @@ export default {
         description:""
       },
       uiSchema: {
-        "ui:widget": "rdp",
+        "ui:widget": "RDP",
         editSchema: {
           type: "object",
-          properties: {
-            title: {type: "string", title: "Title"},
-            description:{type: "string", title: "Description"},
+          title:"Title",
+          description:"Description",
+          properties: {            
             required: {type: "boolean"}
+          }
+        },
+        editUISchema:{}
+      },
+      formData: {}
+    },
+    {
+      id: "image",
+      icon: "font",
+      label: "Image",
+      jsonSchema: {
+        type: "string", 
+        imageURL: "",
+        title: "Edit me",   
+        description:""             
+      },
+      uiSchema: {        
+        "ui:widget":"Image",
+        editSchema: {                                  
+          type: "object",   
+          title:"Title",                       
+          properties: {                   
+            imageURL:{type: "string", title:"Image URL"}
+          }
+        },
+        editUISchema:{}
+      },
+      formData: {}
+    },
+    {
+      id: "video",
+      icon: "font",
+      label: "Video",
+      jsonSchema: {
+        type: "string", 
+        videoURL: "",
+        title: "Edit me",   
+        description:""             
+      },
+      uiSchema: {        
+        "ui:widget":"Video",
+        editSchema: {                                  
+          type: "object",   
+          title:"Title",                       
+          properties: {                   
+            videoURL:{type: "string", title:"Video URL"}
           }
         },
         editUISchema:{}

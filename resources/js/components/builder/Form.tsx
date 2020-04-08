@@ -63,7 +63,7 @@ export default class Form extends React.Component<Props, State>{
   }
 
   onChange = (e) => {
-    console.log("FormData" , e);    
+    //console.log("FormData" , e);    
   }
 
   //*********  Actions  ***********/
@@ -211,9 +211,9 @@ export default class Form extends React.Component<Props, State>{
       RichText: RichTextWidget      
     };
     const registry = {    
-      ...getDefaultRegistry(),
+      ...getDefaultRegistry(),      
       fields: {      
-        ...getDefaultRegistry().fields,
+        ...getDefaultRegistry().fields,       
         SchemaField: EditableField,
         TitleField: TitleField,
         DescriptionField: DescriptionField,       

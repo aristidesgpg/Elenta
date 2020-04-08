@@ -68,8 +68,8 @@
   "graphql-tag": "^2.10.3",
   "graphql.macro": "^1.4.2",
   "html-to-draftjs": "^1.5.0",
-  "rc-slider": "^9.2.4",
   "moment": "^2.24.0",
+  "rc-slider": "^9.2.4",
   "react": "latest",
   "react-bootstrap": "latest",
   "react-bootstrap-table-next": "^4.0.0",
@@ -81,6 +81,7 @@
   "react-jsonschema-form": "^1.8.1",
   "react-jsonschema-form-bs4": "^1.7.1",
   "react-onclickoutside": "^6.7.1",
+  "react-player": "^1.15.3",
   "react-router-dom": "latest",
   "riek": "^1.0.2",
   "string": "^3.3.1"
