@@ -14,7 +14,7 @@ class CreateProgramModulesTable extends Migration
     public function up()
     {
         Schema::create('program_modules', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->uuid('program_id')->nullable();
             $table->uuid('module_id')->nullable();
 

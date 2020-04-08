@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use App\Mail\ProgramModuleMailer;
+use App\Mail\ProgramModuleTriggerMail;
+use Grosv\LaravelPasswordlessLogin\LoginUrl;
+use Grosv\LaravelPasswordlessLogin\PasswordlessLogin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * App\Models\ProgramModuleSend
@@ -63,8 +68,13 @@ class ProgramModuleSend extends Model
 
     protected $guarded = [];
 
-    public const REASONS = ['MANUAL', 'TRIGGER', 'REMINDER'];
-    public const CHANNELS = ['EMAIL', 'SLACK'];
+    public const REASON_MANUAL = 'MANUAL';
+    public const REASON_TRIGGER = 'TRIGGER';
+    public const REASON_REMINDER = 'REMINDER';
+    public const REASONS = [self::REASON_MANUAL, self::REASON_TRIGGER, self::REASON_REMINDER];
+
+    public const CHANNEL_EMAIL = 'EMAIL';
+    public const CHANNELS = [self::CHANNEL_EMAIL];
 
 
     public function programModule(): BelongsTo {
@@ -73,5 +83,17 @@ class ProgramModuleSend extends Model
 
     public function learner(): BelongsTo {
         return $this->belongsTo(LearnerProfile::class, 'learner_profile_id');
+    }
+
+    public function send() {
+        if (!$this->send_timestamp) {
+            Mail::to($this->learner->user->email)->send(new ProgramModuleTriggerMail($this->programModule));
+        }
+    }
+
+    public function respondUrl() {
+        $generator = new LoginUrl($this->learner->user);
+        $generator->setRedirectUrl(config(env('APP_URL'))."/learner/module/{$this->programModule->module->id}");
+        return $generator->generate();
     }
 }

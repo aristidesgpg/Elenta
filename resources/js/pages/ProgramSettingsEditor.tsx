@@ -5,6 +5,7 @@ import {GET_PROGRAM, GET_TEMPLATES_BY_OWNER, UPSERT_PROGRAM} from "../graphql/qu
 import {useLazyQuery, useQuery} from "@apollo/react-hooks";
 import _ from "lodash";
 import moment from "moment";
+import LoadingContainer from "../components/component-container/LoadingContainer";
 
 const schema = {
   title: "Create Program",
@@ -87,9 +88,6 @@ export const ProgramSettingsEditor = () => {
 
   const {loading: queryLoading, error: queryError, data: queryData} = useQuery(GET_TEMPLATES_BY_OWNER, {variables: {consultant_profile_id: "818cecf2-b1b9-4f80-b095-565faeea1953"}});
 
-  if (queryLoading) return <p>Loading...</p>;
-  if (queryError) return <p>Error...</p>;
-
   if (queryData) {
     if (queryData.getTemplatesByOwner.length == 0) {
       return <p>Please create a Template first</p>;
@@ -101,48 +99,52 @@ export const ProgramSettingsEditor = () => {
 
     if (id == "new") {
       schema.title = 'Create Program';
-      return <ElentaForm
-        schema={schema}
-        uiSchema={uiSchema}
-        rulesSchema={rulesSchema}
-        mutation={UPSERT_PROGRAM}
-        mutationVars={
-          {
-            owner: {
-              connect: "c798b1a1-fdc7-4b59-9599-9f991b94dc51"
+      return <LoadingContainer loading={queryLoading} error={queryError}>
+        <ElentaForm
+          schema={schema}
+          uiSchema={uiSchema}
+          rulesSchema={rulesSchema}
+          mutation={UPSERT_PROGRAM}
+          mutationVars={
+            {
+              owner: {
+                connect: "c798b1a1-fdc7-4b59-9599-9f991b94dc51"
+              }
             }
           }
-        }
-        mutationTransform={(d) => {
+          mutationTransform={(d) => {
             d['template'] = {
               connect: d.template
             };
             d['start_timestamp'] = moment(d.start_timestamp).format("Y-MM-DD HH:mm:ss");
           }
-        }
-      />
+          }
+        />
+      </LoadingContainer>
     } else {
       schema.title = 'Update Program';
       schema.properties.template["readOnly"] = true;
-      return <ElentaForm
-        schema={schema}
-        uiSchema={uiSchema}
-        rulesSchema={rulesSchema}
-        query={GET_PROGRAM}
-        mutation={UPSERT_PROGRAM}
-        queryVars={
-          {
-            variables: {
-              id: id
+      return <LoadingContainer loading={queryLoading} error={queryError}>
+        <ElentaForm
+          schema={schema}
+          uiSchema={uiSchema}
+          rulesSchema={rulesSchema}
+          query={GET_PROGRAM}
+          mutation={UPSERT_PROGRAM}
+          queryVars={
+            {
+              variables: {
+                id: id
+              }
             }
           }
-        }
-        mutationTransform={(d) => {
+          mutationTransform={(d) => {
             delete d['template'];
             d['start_timestamp'] = moment(d.start_timestamp).format("Y-MM-DD HH:mm:ss");
           }
-        }
-      />
+          }
+        />
+      </LoadingContainer>
     }
   }
 };

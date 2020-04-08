@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateTemplateModulesTable extends Migration
@@ -14,12 +15,12 @@ class CreateTemplateModulesTable extends Migration
     public function up()
     {
         Schema::create('template_modules', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->uuid('template_id')->nullable();
             $table->uuid('module_id')->nullable();
 
             $table->string('folder')->nullable();
-            $table->integer('order');
+            $table->integer('order')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

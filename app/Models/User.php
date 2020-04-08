@@ -60,6 +60,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $consultant_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\LearnerProfile[] $learner
  * @property-read int|null $learner_count
+ * @property-read int|null $consultant_profile_count
+ * @property-read int|null $learner_profile_count
  */
 class User extends Authenticatable
 {
@@ -87,5 +89,9 @@ class User extends Authenticatable
 
     public function consultantProfile(): HasMany {
         return $this->hasMany(ConsultantProfile::class);
+    }
+
+    public function firstName() {
+        return explode(' ', $this->name)[0];
     }
 }

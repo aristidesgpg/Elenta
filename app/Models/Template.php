@@ -45,6 +45,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Template withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Template withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateModule[] $templateModules
+ * @property-read int|null $template_modules_count
  */
 class Template extends Model
 {

@@ -94,7 +94,37 @@ export const GET_PROGRAM = gql`
           max_sends
         }
       }
+      programModules {
+        id
+        module {
+          id
+          title
+        }
+        sends {
+          learner {
+            id
+          }
+          reason
+          channel
+          subject
+          message
+
+          send_timestamp
+          open_timestamp
+          click_timestamp
+          response_timestamp
+
+          response_feedback
+          response_rating
+          response_data
+        }
+
+      }
       learners {
+        user {
+          id
+          name
+        }
         id
         picture_url
         role
@@ -152,7 +182,7 @@ export const UPSERT_MODULE = gql`
 
 export const GET_ME = gql`
   query me {
-    getUser(id: "f99175c5-c3fe-48e5-a622-0b0efb7bdc67") {
+    getUser(id: "f11fd4e5-dfb4-49bd-818a-5efb75b733ae") {
       id
       name
       email

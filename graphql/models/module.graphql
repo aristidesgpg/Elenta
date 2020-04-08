@@ -17,8 +17,18 @@ input UpsertModuleInput {
     content: String
     conditions: String
 
+    programs: ModuleBelongsToManyPrograms
+    templates: ModuleBelongsToManyTemplates
     reminders: ModuleHasManyReminders
     triggers: ModuleHasManyTriggers
+}
+
+input ModuleBelongsToManyPrograms {
+    connect: [ID!]
+}
+
+input ModuleBelongsToManyTemplates {
+    connect: [ID!]
 }
 
 input ModuleBelongsToConsultantProfile {

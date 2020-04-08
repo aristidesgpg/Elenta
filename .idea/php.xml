@@ -134,6 +134,8 @@
       <path value="$PROJECT_DIR$/vendor/barryvdh/reflection-docblock" />
       <path value="$PROJECT_DIR$/vendor/symfony/filesystem" />
       <path value="$PROJECT_DIR$/vendor/laravel/ui" />
+      <path value="$PROJECT_DIR$/vendor/signifly/laravel-pivot-events" />
+      <path value="$PROJECT_DIR$/vendor/grosv/laravel-passwordless-login" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

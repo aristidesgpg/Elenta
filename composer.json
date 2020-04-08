@@ -12,6 +12,7 @@
         "aws/aws-sdk-php": "~3.0",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
+        "grosv/laravel-passwordless-login": "^1.1",
         "guzzlehttp/guzzle": "^6.5",
         "justinrainbow/json-schema": "^5.2",
         "laravel/cashier": "^10.7",

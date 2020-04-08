@@ -11,6 +11,7 @@ import Col from "react-bootstrap/Col";
 import Form from "../components/builder/Form";
 import TemplateTable from "../components/templates/TemplateTable";
 import ProgramList from "../components/programs/ProgramList";
+import LoadingContainer from "../components/component-container/LoadingContainer";
 
 const GET_CONSULTANT_PROFILE = gql`
   query getConsultantProfile {
@@ -60,11 +61,8 @@ const GET_CONSULTANT_PROFILE = gql`
 export const ConsultantDashboard = () => {
   const {loading, error, data} = useQuery(GET_CONSULTANT_PROFILE);
 
-  if (loading) return <Spinner animation="border"/>;
-  if (error) return <p>Error :(</p>;
-
   return (
-    <Container>
+    <LoadingContainer loading={loading} error={error}>
       <Container>
         <ProgramList
           programs={data.getConsultantProfile.programs}
@@ -75,7 +73,7 @@ export const ConsultantDashboard = () => {
           templates={data.getConsultantProfile.templates}
         />
       </Container>
-    </Container>
+    </LoadingContainer>
   )
 };
 

@@ -9,7 +9,8 @@ export const ElentaFormButton: React.FunctionComponent<ElentaFormButtonProps> =
      mutationData,
      mutationError,
      onClick,
-     disabled
+     disabled,
+     title
    }) => {
     return (
       <div>
@@ -22,7 +23,7 @@ export const ElentaFormButton: React.FunctionComponent<ElentaFormButtonProps> =
                 size="sm"
                 role="status"
                 aria-hidden="true"
-              /> : "Submit"
+              /> : title
           }
         </Button>
         {
@@ -49,12 +50,14 @@ interface ElentaFormButtonProps {
   mutationData: any,
   onClick?: any,
   disabled?: boolean
+  title?: string
 }
 
 ElentaFormButton.defaultProps = {
   onClick: () => {
   },
-  disabled: false
+  disabled: false,
+  title: "Submit"
 };
 
 export default ElentaFormButton;

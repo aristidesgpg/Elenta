@@ -9,6 +9,7 @@ import _ from "lodash";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import ElentaFormButton from "./ElentaFormButton";
+import LoadingContainer from "../component-container/LoadingContainer";
 
 export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
   ({
@@ -79,30 +80,10 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
       }
       setFormState(formData);
     };
-
     const log = (type) => console.log.bind(console, type);
 
-    if (queryError) {
-      console.log(queryError);
-      return (
-        <Alert variant="danger" transition={null}>
-          {
-            queryError.graphQLErrors.map(e => {
-              return <p>{e.message}</p>
-            })
-          }
-        </Alert>
-      );
-    }
-
     return (
-      <Container>
-        {
-          queryLoading &&
-          <Spinner animation="border"/>
-        }
-        {
-          !queryLoading &&
+      <LoadingContainer loading={queryLoading} error={queryError}>
           <JsonForm schema={schema}
                     uiSchema={localUiSchema}
                     formData={formState}
@@ -116,9 +97,7 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
               mutationData={mutationData}
             />
           </JsonForm>
-        }
-
-      </Container>
+      </LoadingContainer>
     );
   };
 
