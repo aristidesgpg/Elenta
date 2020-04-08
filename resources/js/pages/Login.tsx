@@ -1,28 +1,24 @@
 import * as React from "react";
 import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
-import Spinner from "react-bootstrap/Spinner";
-
-const USERS = gql`
-    query USERS {
-        users {
-            id
-            name
-        }
-    }
-`
+import {CURRENT_USER} from "../graphql/queries";
+import {Redirect} from "react-router-dom";
+import {Tab, Tabs} from "react-bootstrap";
 
 export const Login = () => {
- const { loading, error, data } = useQuery(USERS);
+  const {data: {user}} = useQuery(CURRENT_USER);
 
-  if (loading) return <Spinner animation="border" />;
-  if (error) return <p>Error :(</p>;
+  if (user) return (<Redirect to="/" />);
 
-  return data.users.map(({ id, name }) => (
-      <p>
-          {id}: {name}
-      </p>
-  ));
+  return (
+    <Tabs defaultActiveKey="log-in" id="uncontrolled-tab-example">
+      <Tab eventKey="log-in" title="Log in">
+        LoginForm
+      </Tab>
+      <Tab eventKey="sign-up" title="Sign Up">
+        SignUpForm
+      </Tab>
+    </Tabs>
+  );
 };
 
 export default Login;
