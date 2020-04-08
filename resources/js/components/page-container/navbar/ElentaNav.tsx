@@ -34,13 +34,14 @@ export const ElentaNav = () => {
                   <Dropdown.Toggle id="account-dropdown"
                                    className="account-dropdown rounded-circle">
                     {
-                      user.consultantProfile.length
-                        ? <Image src={user.consultantProfile[0].picture_url}
-                                 className="profile-image"
-                                 alt="Profile image" roundedCircle/>
-                        : <Image src='https://lorempixel.com/30/30/?64665'
-                                 className="profile-image"
-                                 alt="Profile image" roundedCircle/>
+                      user.consultantProfile.length &&
+                      <Image src={
+                        user.consultantProfile[0].picture_url
+                          ? user.consultantProfile[0].picture_url
+                          : 'https://lorempixel.com/30/30/?64665'
+                      }
+                             className="profile-image"
+                             alt="Profile image" roundedCircle/>
                     }
                   </Dropdown.Toggle>
                   <Dropdown.Menu>

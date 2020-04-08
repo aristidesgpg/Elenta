@@ -24,6 +24,9 @@ const envKeys = Object.keys(env).reduce((prev, next) => {
  */
 
 mix.webpackConfig({
+  output: {
+    publicPath: "",
+  },
   resolve: {
     extensions: [".js", ".ts", ".tsx", ".gql", ".graphql"]
   },

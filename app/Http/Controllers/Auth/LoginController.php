@@ -53,6 +53,7 @@ class LoginController extends Controller
     public function handleProviderCallback(String $provider)
     {
         $user = Socialite::driver($provider)->user();
+        /** @var User $existing_user */
         $existing_user = User::whereEmail($user->getEmail())->first();
 
         if (!isset($existing_user)) {
@@ -61,10 +62,12 @@ class LoginController extends Controller
                 'email' => $user->getEmail(),
                 'password' => Hash::make(Str::random())
             ]);
-        }
-        Auth::login($existing_user);
 
-        return redirect()->intended('app');
+            $existing_user->consultantProfile()->create();
+        }
+        $token = $existing_user->createToken('default')->plainTextToken;
+        $uri = '/#/login/callback/'.$token;
+        return redirect($uri);
     }
 
     public function authenticate(Request $request)

@@ -15,6 +15,8 @@ import {setContext} from "apollo-link-context";
 import ProgramSettingsEditor from "./pages/ProgramSettingsEditor";
 import TemplateEditorPage from "./pages/TemplateEditorPage";
 import ProgramEditorPage from "./pages/ProgramEditorPage";
+import LoginCallback from "./pages/LoginCallback";
+import PrivateRoute from "./hoc/PrivateRoute";
 
 const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"
@@ -32,7 +34,8 @@ const authLink = setContext((_, {headers}) => {
 
 export const ElentaClient = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  resolvers: {}
 });
 
 export const App = () => {
@@ -41,13 +44,14 @@ export const App = () => {
       <HashRouter>
         <PageContainer>
             <Switch>
-              <Route exact={true} path="/consultant-dashboard" component={ConsultantDashboard}/>
-              <Route exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
-              <Route exact={true} path="/template/settings/:id" component={TemplateSettingsEditor}/>
               <Route exact={true} path="/login" component={Login}/>
-              <Route exact={true} path="/template/content/:id" component={TemplateEditorPage}/>
-              <Route exact={true} path="/program/content/:id" component={ProgramEditorPage}/>
+              <Route exact={true} path="/login/callback/:token" component={LoginCallback}/>
               <Route exact={true} path="/" component={Form}/>
+              <PrivateRoute exact={true} path="/consultant-dashboard" component={ConsultantDashboard}/>
+              <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
+              <PrivateRoute exact={true} path="/template/settings/:id" component={TemplateSettingsEditor}/>
+              <PrivateRoute exact={true} path="/template/content/:id" component={TemplateEditorPage}/>
+              <PrivateRoute exact={true} path="/program/content/:id" component={ProgramEditorPage}/>
             </Switch>
         </PageContainer>
       </HashRouter>
