@@ -1,6 +1,6 @@
 import * as React from "react";
 import JsonForm from "react-jsonschema-form";
-import SchemaField from "react-jsonschema-form/lib/components/fields/SchemaField";
+import SchemaField from "react-jsonschema-form-bs4/lib/components/fields/SchemaField";
 import {getDefaultRegistry} from "react-jsonschema-form/lib/utils";
 import {slugify, clone, unique} from "../../utils/utils"
 import FormActions from "./FormActions";
@@ -10,7 +10,9 @@ import DescriptionField from "./fields/DescriptionField";
 import { TextField, RichTextWidget} from "./fields/TextField";
 import { Question } from "./fields/Question";
 import { RankField } from "./fields/RankField";
-import * as Datetime from 'react-datetime';
+import * as Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+
 
 interface State{
   error: string;
@@ -219,7 +221,7 @@ export default class Form extends React.Component<Props, State>{
       //widgets:{...widgets,...getDefaultRegistry().widgets}
     };      
     return (      
-      <div>
+      <div className="container-fluid">
         {error ? <div className="alert alert-danger">{error}</div> : <div/>}
         <div className="rjsf builder-form">
         {true && <SchemaField key={newKey} {...this.state} 

@@ -18,7 +18,7 @@ interface Props{
 export default class FieldListDropdown extends React.Component<Props, State> {
   
   public static defaultProps = {
-    variant: "default"
+    variant: "success"
   };
 
   constructor(props: any) {
@@ -59,7 +59,8 @@ export default class FieldListDropdown extends React.Component<Props, State> {
             return <Dropdown.Item key={index}
                 //eventKey={index}
                 onSelect={() => this.handleFieldListAction(index)}
-                ><i className={`glyphicon glyphicon-${field.icon}`} />
+                className = "dropdown-item"
+                ><i className={`${field.icon}`} />
                 {field.label}
               </Dropdown.Item>;
           })}

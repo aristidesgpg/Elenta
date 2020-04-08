@@ -8,7 +8,7 @@ export default {
   fieldList: [
     {
       id: "richtext",
-      icon: "text-color",
+      icon: "font",
       label: "Rich text",
       jsonSchema: {
         type: "string", 
@@ -29,6 +29,67 @@ export default {
         editUISchema:{
           "ui:field":"RichEditor"
         }
+      },
+      formData: {}
+    },
+    {
+      id: "numberinput",
+      icon: "sort-numeric-up",
+      label: "Number Input",
+      jsonSchema: {
+        type: "number", 
+        title: "Edit me",
+        description: "",
+        minimum: 0,
+        maximum: 100,
+        multipleOf: 2,
+        default: 0        
+      },
+      uiSchema: {        
+        editSchema: {                                  
+          type: "object",                
+          properties: {                     
+            title: {type: "string", title: "Label"},
+            description: {type: "string", title: "Description"},
+            required: {type: "boolean"},
+            minimum:{ type: "number", title:"Minimum", default:0 },
+            maximum:{ type: "number", title:"Maximum", default:100 },
+            multipleOf:{ type: "number", title:"Step", default: 1 },
+          }
+        },
+        editUISchema:{},
+      },
+      formData: {}
+    },
+    {
+      id: "slider",
+      icon: "text-color",
+      label: "Slider",
+      jsonSchema: {
+        type: "number", 
+        title: "Edit me",
+        description: "",
+        minimum: 0,
+        maximum: 100,
+        multipleOf: 2,
+        default: [0,1,1,2],
+        count:4,
+        pushable: true        
+      },
+      uiSchema: {  
+        "ui:widget": "Range",      
+        editSchema: {                                  
+          type: "object",                
+          properties: {                     
+            title: {type: "string", title: "Label"},
+            description: {type: "string", title: "Description"},
+            required: {type: "boolean"},
+            minimum:{ type: "number", title:"Minimum", default:0 },
+            maximum:{ type: "number", title:"Maximum", default:100 },
+            multipleOf:{ type: "number", title:"Step", default: 1 },
+          }
+        },
+        editUISchema:{},
       },
       formData: {}
     },
@@ -78,8 +139,8 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            title: {type: "string", title: "Label"},
-            description: {type: "string", title: "Example value"},
+            title: {type: "string", title: "Title"},
+            description: {type: "string", title: "Description"},
             required: {type: "boolean"},
           }
         },
@@ -102,8 +163,8 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            title: {type: "string", title: "Label"},
-            description: {type: "string", title: "Example value"},
+            title: {type: "string", title: "Title"},
+            description: {type: "string", title: "Description"},
             required: {type: "boolean"},
           },
           editUISchema:{}
@@ -289,7 +350,7 @@ export default {
         description:""
       },
       uiSchema: {
-        "ui:field": "rdp",
+        "ui:widget": "rdp",
         editSchema: {
           type: "object",
           properties: {
