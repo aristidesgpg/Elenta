@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import {
   NavbarBrand,
   Navbar,
@@ -21,7 +22,14 @@ export const ElentaNav = () => {
 
   const logout = () => {
     localStorage.removeItem('token');
-    window.location.reload();
+
+    axios.post('/logout')
+      .then(function (response) {
+        window.location.reload();
+      })
+      .catch(function (error) {
+        window.location.reload();
+      });
   };
 
   return (
