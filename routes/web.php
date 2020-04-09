@@ -24,7 +24,7 @@ Route::group([
 
 Route::group([
     'prefix' => '/webhook',
-    'namespace' => 'App\Http\Controllers'
+    'namespace' => '\App\Http\Controllers'
 ], function () {
     Route::get('elenta-ses-events', 'WebhookController@handleElentaSesEvent');
 });
