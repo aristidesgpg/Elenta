@@ -17,8 +17,6 @@ import {CURRENT_USER, GET_CONSULTANT_PROFILE} from "../graphql/queries";
 export const ConsultantDashboard = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
 
-  if (!user) return (<Redirect to="/"/>);
-
   const {loading, error, data} = useQuery(GET_CONSULTANT_PROFILE, {
     variables: {user_id: user.id},
   });

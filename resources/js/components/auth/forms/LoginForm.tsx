@@ -1,23 +1,10 @@
-import * as React from "react";
-import PropTypes, {element} from "prop-types";
-// import Form from "react-jsonschema-form-bs4";
+import React, {useState} from "react";
+import axios from "axios";
 import Form from "react-jsonschema-form";
-import {Button, Col} from "react-bootstrap";
-import {validateEmail} from "../../../utils/utils";
+import {Alert, Button, Col} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
-
-const ErrorListTemplate = (props) => {
-  const {errors} = props;
-  return (
-    <ul className="errors-list">
-      {errors.map(error => (
-        <li key={error.stack}>
-          {error.stack}
-        </li>
-      ))}
-    </ul>
-  );
-};
+import {validateEmail} from "../../../utils/utils";
+import ErrorListTemplate from "./ErrorListTemplate";
 
 const validate = ({email}, errors) => {
   if (!validateEmail(email)) {
@@ -26,62 +13,112 @@ const validate = ({email}, errors) => {
   return errors;
 };
 
+const loginFormData = {
+  schema: {
+    type: "object",
+    title: "",
+    description: "",
+    autoComplete: "off",
+    isRequired: true,
+    required: [
+      "password"
+    ],
+    properties: {
+      email: {
+        type: "string",
+        title: "Login",
+        description: "",
+      },
+      password: {
+        type: "string",
+        title: "Password",
+        description: "",
+      },
+    }
+  },
+  uiSchema: {
+    email: {
+      "ui:placeholder": "Enter email",
+      "ui:widget": "email",
+      "ui:options": {
+        inputType: 'email',
+        autoComplete: 'off',
+      }
+    },
+    password: {
+      "ui:placeholder": "Password",
+      "ui:widget": "password"
+    },
+  },
+  formData: {
+    email: '',
+    password: '',
+  },
+  extraErrors: {},
+  liveValidate: false
+};
+
 const LoginForm = () => {
+  const [form, setForm] = useState(loginFormData);
+  const [showAlert, setShowAlert] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const login = (formData) => {
+    axios.post('/login', formData)
+      .then(function (response) {
+        console.log(response);
+
+        localStorage.setItem('token', response.data.token);
+        window.location.reload();
+      })
+      .catch(function (error) {
+        const errors = error.response.data.errors;
+        // The extraErrors feature doesn't include in the version of 1.8.0.
+        const extraErrors = Object.keys(errors).reduce((acc, error) => (
+          {
+            ...acc, [error]: {
+              __errors: errors[error]
+            }
+          }
+        ), {});
+        setForm({...form, extraErrors});
+        setErrors(errors);
+        setShowAlert(true);
+      });
+  };
+
   return (
     <Col sm={{span: 8, offset: 2}}>
       <div className="form-title text-center">
         Log in
       </div>
-      <Form
-        liveValidate={true}
-        className={"auth-form"}
-        schema={{
-          type: "object",
-          title: "",
-          description: "",
-          liveValidate: true,
-          autoComplete: "off",
-          isRequired: true,
-          properties: {
-            email: {
-              type: "string",
-              title: "Login",
-              description: "",
-            },
-            password: {
-              type: "string",
-              title: "Password",
-              description: "",
-              minLength: 6,
-              maxLength: 16
-            },
-          }
-        }}
-        uiSchema={{
-          email: {
-            "ui:placeholder": "Enter email",
-            "ui:widget": "email",
-            "ui:options": {
-              inputType: 'email',
-              autoComplete: 'off',
+      {showAlert &&
+      <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+        {Object.keys(errors).map(error => (
+          <div key={error}>
+            {
+              errors[error].map((message, index) => (
+                <p key={index}>
+                  {message}
+                </p>
+              ))
             }
-          },
-          password: {
-            "ui:placeholder": "Password",
-            "ui:widget": "password"
-          },
+          </div>
+        ))}
+      </Alert>
+      }
+      <Form
+        className={"auth-form"}
+        liveValidate={form.liveValidate}
+        schema={form.schema}
+        uiSchema={form.uiSchema}
+        formData={form.formData}
+        extraErrors={form.extraErrors}
+        onChange={(formData) => {
+          setForm({...form, ...formData, liveValidate: true});
         }}
-        formData={{
-          email: '',
-          password: '',
-        }}
-        onChange={(formData) => console.log({
-          ...element,
-          ...formData
-        })}
-        onSubmit={({formData}, e) => {
-          console.log("submitted formData", formData);
-          console.log("submit event", e);
+        onSubmit={({formData}) => {
+          login(formData);
         }}
         onError={(errors, val) => console.log('errors', {errors, val})}
         validate={validate}
@@ -113,26 +150,3 @@ const LoginForm = () => {
 LoginForm.propTypes = {};
 
 export default LoginForm;
-
-
-/*
-      <hr/>
-      <div className="settings">
-        {element.schema.isRequired &&
-        <div className="property">
-          <i className='glyphicon glyphicon-ok-sign'/> Required
-        </div>
-        }
-
-        {element.schema.showInDashboard &&
-        <div className="property">
-          <i className='glyphicon glyphicon-ok-sign'/> Show in Dashboard
-        </div>
-        }
-
-        <button className="btn btn-danger remove-element"
-                onClick={() => onRemove(element)}>
-          <i className='glyphicon glyphicon-trash'/>
-        </button>
-      </div>
-      */
