@@ -5,12 +5,12 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 type Query {
-    me: User @auth
     users: [User!]! @all
 }
 
 extend type Query @middleware(checks: ["auth:sanctum"]) {
     getUser(id: ID! @eq): User! @find
+    me: User @auth
 }
 
 #import models/*.graphql
