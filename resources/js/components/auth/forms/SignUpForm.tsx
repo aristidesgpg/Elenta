@@ -189,6 +189,7 @@ const SignUpForm = () => {
       </Alert>
       }
       <Form
+        idPrefix={'sign-up-form'}
         className={"auth-form"}
         liveValidate={form.liveValidate}
         schema={form.schema}
