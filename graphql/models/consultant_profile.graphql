@@ -1,5 +1,5 @@
 extend type Query {
-    getConsultantProfile(id: ID! @eq): ConsultantProfile! @find
+    getConsultantProfile(user_id: ID! @eq): ConsultantProfile! @find
 }
 
 type Mutation {

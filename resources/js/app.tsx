@@ -46,7 +46,7 @@ export const App = () => {
             <Switch>
               <Route exact={true} path="/login" component={Login}/>
               <Route exact={true} path="/login/callback/:token" component={LoginCallback}/>
-              <Route exact={true} path="/" component={Form}/>
+              <PrivateRoute exact={true} path="/" component={Form}/>
               <PrivateRoute exact={true} path="/consultant-dashboard" component={ConsultantDashboard}/>
               <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
               <PrivateRoute exact={true} path="/template/settings/:id" component={TemplateSettingsEditor}/>

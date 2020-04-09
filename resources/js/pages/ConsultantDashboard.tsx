@@ -2,7 +2,7 @@ import * as React from "react";
 import {useQuery} from '@apollo/react-hooks';
 import {gql} from 'apollo-boost';
 import Spinner from "react-bootstrap/Spinner";
-import {useParams} from "react-router-dom";
+import {Redirect, useParams} from "react-router-dom";
 import ModuleList from "../components/modules/ModuleList";
 import {useState} from "react";
 import Container from "react-bootstrap/Container";
@@ -12,67 +12,33 @@ import Form from "../components/builder/Form";
 import TemplateTable from "../components/templates/TemplateTable";
 import ProgramList from "../components/programs/ProgramList";
 import LoadingContainer from "../components/component-container/LoadingContainer";
-
-const GET_CONSULTANT_PROFILE = gql`
-  query getConsultantProfile {
-    getConsultantProfile(id: "c9933e52-2c60-440c-9fe8-42bb3320ab34") {
-      id
-      programs {
-        id
-        title
-        format
-        max_learners
-        start_timestamp
-        can_invite
-        is_public
-        programModules {
-          id
-          module {
-            id
-            title
-          }
-          sends {
-            id
-            response_timestamp
-          }
-        }
-        learners {
-          id
-        }
-        invites {
-          id
-        }
-      }
-      templates {
-        title
-        can_request
-        is_public
-        requests {
-          id
-        }
-        programs {
-          id
-        }
-      }
-    }
-  }
-`
+import {CURRENT_USER, GET_CONSULTANT_PROFILE} from "../graphql/queries";
 
 export const ConsultantDashboard = () => {
-  const {loading, error, data} = useQuery(GET_CONSULTANT_PROFILE);
+  const {data: {user}} = useQuery(CURRENT_USER);
+
+  if (!user) return (<Redirect to="/"/>);
+
+  const {loading, error, data} = useQuery(GET_CONSULTANT_PROFILE, {
+    variables: {user_id: user.id},
+  });
 
   return (
     <LoadingContainer loading={loading} error={error}>
-      <Container>
-        <ProgramList
-          programs={data.getConsultantProfile.programs}
-        />
-      </Container>
-      <Container>
-        <TemplateTable
-          templates={data.getConsultantProfile.templates}
-        />
-      </Container>
+      {data &&
+      <>
+        <Container>
+          <ProgramList
+            programs={data.getConsultantProfile.programs}
+          />
+        </Container>
+        <Container>
+          <TemplateTable
+            templates={data.getConsultantProfile.templates}
+          />
+        </Container>
+      </>
+      }
     </LoadingContainer>
   )
 };

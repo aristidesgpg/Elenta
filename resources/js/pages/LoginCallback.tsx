@@ -1,21 +1,20 @@
 import React, {useEffect} from "react";
 import {useQuery} from '@apollo/react-hooks';
-import {useParams} from "react-router-dom";
-import {CURRENT_USER} from "../graphql/queries";
-import {Redirect} from "react-router-dom";
+import {useParams, Redirect} from "react-router-dom";
 import {Container, Spinner} from "react-bootstrap";
+import {CURRENT_USER} from "../graphql/queries";
 
 export const LoginCallback = () => {
   const {token} = useParams();
   const {data: {user}} = useQuery(CURRENT_USER);
 
-  if (user) return (<Redirect to="/"/>);
+  if (user) return (<Redirect to="/consultant-dashboard"/>);
 
   useEffect(() => {
     if (token) {
-      localStorage.setItem('token', token)
+      localStorage.setItem('token', token);
+      window.location.reload();
     }
-    window.location.assign('/#/consultant-dashboard');
   }, [token]);
 
   return (
