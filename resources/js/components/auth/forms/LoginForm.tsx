@@ -5,6 +5,7 @@ import {Alert, Button, Col} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {validateEmail} from "../../../utils/utils";
 import ErrorListTemplate from "./ErrorListTemplate";
+import ForgotPasswordModal from "./ForgotPasswordModal";
 
 const validate = ({email}, errors) => {
   if (!validateEmail(email)) {
@@ -62,12 +63,11 @@ const LoginForm = () => {
   const [form, setForm] = useState(loginFormData);
   const [showAlert, setShowAlert] = useState(false);
   const [errors, setErrors] = useState({});
+  const [showModal, setShowModal] = useState(false);
 
   const login = (formData) => {
     axios.post('/login', formData)
       .then(function (response) {
-        console.log(response);
-
         localStorage.setItem('token', response.data.token);
         window.location.reload();
       })
@@ -88,63 +88,70 @@ const LoginForm = () => {
   };
 
   return (
-    <Col sm={{span: 8, offset: 2}}>
-      <div className="form-title text-center">
-        Log in
-      </div>
-      {showAlert &&
-      <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
-        {Object.keys(errors).map(error => (
-          <div key={error}>
-            {
-              errors[error].map((message, index) => (
-                <p key={index}>
-                  {message}
-                </p>
-              ))
-            }
-          </div>
-        ))}
-      </Alert>
-      }
-      <Form
-        idPrefix={'log-in-form'}
-        className={"auth-form"}
-        liveValidate={form.liveValidate}
-        schema={form.schema}
-        uiSchema={form.uiSchema}
-        formData={form.formData}
-        extraErrors={form.extraErrors}
-        onChange={(formData) => {
-          setForm({...form, ...formData, liveValidate: true});
-        }}
-        onSubmit={({formData}) => {
-          login(formData);
-        }}
-        onError={(errors, val) => console.log('errors', {errors, val})}
-        validate={validate}
-        ErrorList={ErrorListTemplate}
-      >
-
-        <NavLink to={'/login'}>
-          Forgot the password?
-        </NavLink>
-
-        <div className="form-actions">
-          <div className="title">Log in with</div>
-          <div className="social-buttons">
-            <a href="/login/google" className="btn btn-outline-info">
-              <i className="fab fa-google"/> Google
-            </a>
-            <a href="/login/linkedin" className="btn btn-outline-info">
-              <i className="fab fa-linkedin-in"/> Linkedin
-            </a>
-          </div>
-          <Button variant="info" type="submit" className="submit-button">Log In</Button>
+    <>
+      <Col sm={{span: 8, offset: 2}}>
+        <div className="form-title text-center">
+          Log in
         </div>
+        {showAlert &&
+        <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+          {Object.keys(errors).map(error => (
+            <div key={error}>
+              {
+                errors[error].map((message, index) => (
+                  <p key={index}>
+                    {message}
+                  </p>
+                ))
+              }
+            </div>
+          ))}
+        </Alert>
+        }
+        <Form
+          idPrefix={'log-in-form'}
+          className={"auth-form"}
+          liveValidate={form.liveValidate}
+          schema={form.schema}
+          uiSchema={form.uiSchema}
+          formData={form.formData}
+          extraErrors={form.extraErrors}
+          onChange={(formData) => {
+            setForm({...form, ...formData, liveValidate: true});
+          }}
+          onSubmit={({formData}) => {
+            login(formData);
+          }}
+          onError={(errors, val) => console.log('errors', {errors, val})}
+          validate={validate}
+          ErrorList={ErrorListTemplate}
+        >
 
-      </Form>
-    </Col>
+          <a className="active" href="#"
+             onClick={(e) => {
+               e.preventDefault();
+               setShowModal(true);
+             }}>
+            Forgot the password?
+          </a>
+
+          <div className="form-actions">
+            <div className="title">Log in with</div>
+            <div className="social-buttons">
+              <a href="/login/google" className="btn btn-outline-info">
+                <i className="fab fa-google"/> Google
+              </a>
+              <a href="/login/linkedin" className="btn btn-outline-info">
+                <i className="fab fa-linkedin-in"/> Linkedin
+              </a>
+            </div>
+            <Button variant="info" type="submit" className="submit-button">Log In</Button>
+          </div>
+
+        </Form>
+      </Col>
+      <ForgotPasswordModal show={showModal} onClose={setShowModal}/>
+    </>
   )
 };
 

@@ -4,7 +4,7 @@ import {useParams, Redirect} from "react-router-dom";
 import {Container, Spinner} from "react-bootstrap";
 import {CURRENT_USER} from "../graphql/queries";
 
-export const LoginCallback = () => {
+export const LoginCallbackPage = () => {
   const {token} = useParams();
   const {data: {user}} = useQuery(CURRENT_USER);
 
@@ -24,4 +24,4 @@ export const LoginCallback = () => {
   );
 };
 
-export default LoginCallback;
+export default LoginCallbackPage;

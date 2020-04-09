@@ -147,8 +147,6 @@ const SignUpForm = () => {
 
     axios.post('/register', data)
       .then(function (response) {
-        console.log(response);
-
         localStorage.setItem('token', response.data.token);
         window.location.reload();
       })

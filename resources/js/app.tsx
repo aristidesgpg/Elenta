@@ -1,7 +1,7 @@
 import * as React from "react";
 import {HashRouter, Switch, Route} from "react-router-dom";
 import Form from "./components/builder/Form";
-import Login from "./pages/Login";
+import LoginPage from "./pages/LoginPage";
 
 import ApolloClient from 'apollo-client';
 import {InMemoryCache} from 'apollo-cache-inmemory';
@@ -15,7 +15,8 @@ import {setContext} from "apollo-link-context";
 import ProgramSettingsEditor from "./pages/ProgramSettingsEditor";
 import TemplateEditorPage from "./pages/TemplateEditorPage";
 import ProgramEditorPage from "./pages/ProgramEditorPage";
-import LoginCallback from "./pages/LoginCallback";
+import LoginCallbackPage from "./pages/LoginCallbackPage";
+import PasswordResetPage from "./pages/PasswordResetPage";
 import PrivateRoute from "./hoc/PrivateRoute";
 
 const httpLink = createHttpLink({
@@ -44,8 +45,9 @@ export const App = () => {
       <HashRouter>
         <PageContainer>
             <Switch>
-              <Route exact={true} path="/login" component={Login}/>
-              <Route exact={true} path="/login/callback/:token" component={LoginCallback}/>
+              <Route exact={true} path="/login" component={LoginPage}/>
+              <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
+              <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
               <PrivateRoute exact={true} path="/" component={Form}/>
               <PrivateRoute exact={true} path="/consultant-dashboard" component={ConsultantDashboard}/>
               <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
