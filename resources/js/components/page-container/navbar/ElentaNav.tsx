@@ -19,6 +19,11 @@ import './ElentaNav.scss';
 export const ElentaNav = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
 
+  const logout = () => {
+    localStorage.removeItem('token');
+    window.location.reload();
+  };
+
   return (
     <Container>
       <Row>
@@ -51,7 +56,7 @@ export const ElentaNav = () => {
                       })
                     }
 
-                    <Dropdown.Item>
+                    <Dropdown.Item onClick={() => logout()}>
                       Logout
                     </Dropdown.Item>
                   </Dropdown.Menu>
