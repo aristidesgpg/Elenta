@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\ConfirmsPasswords;
 use Illuminate\Support\Facades\Log;
 use Psy\Exception\Exception;
 

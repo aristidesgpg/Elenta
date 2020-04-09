@@ -20,17 +20,17 @@ export const LoadingContainer = (props) => {
   }
   const {loading, error, data} = response;
 
-  if (loading) return (
+  if (loading || props.loading) return (
     <Container>
         <Spinner animation="border"/>
     </Container>
   );
 
-  if (error) return (
+  if (error || props.error) return (
     <Container>
       <Alert variant="danger" transition={null}>
         {
-          error.graphQLErrors.map(e => {
+          error.graphQLErrors.concat(props.error.graphQLErrors).map(e => {
             return <p key={e.message}>{e.message}</p>
           })
         }

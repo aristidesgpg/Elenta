@@ -182,7 +182,7 @@ export const UPSERT_MODULE = gql`
 
 export const GET_ME = gql`
   query me {
-    getUser(id: "c4f15f14-e22e-44d8-ac1f-389e8c644da1") {
+    getUser(id: "df049ff6-f95f-43cf-95a3-a0d8b01ea010") {
       id
       name
       email

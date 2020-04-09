@@ -15,7 +15,7 @@ import LoadingContainer from "../components/component-container/LoadingContainer
 
 const GET_CONSULTANT_PROFILE = gql`
   query getConsultantProfile {
-    getConsultantProfile(id: "c9933e52-2c60-440c-9fe8-42bb3320ab34") {
+    getConsultantProfile(id: "8dc9a042-5f5f-4ca1-b26e-e9b42ed34336") {
       id
       programs {
         id
@@ -62,18 +62,20 @@ export const ConsultantDashboard = () => {
   const {loading, error, data} = useQuery(GET_CONSULTANT_PROFILE);
 
   return (
-    <LoadingContainer loading={loading} error={error}>
+    <Container>
       <Container>
-        <ProgramList
-          programs={data.getConsultantProfile.programs}
-        />
+        <h2>Programs</h2>
+        <LoadingContainer loading={loading} error={error}>
+          <ProgramList programs={data ? data.getConsultantProfile.programs : []}/>
+        </LoadingContainer>
       </Container>
       <Container>
-        <TemplateTable
-          templates={data.getConsultantProfile.templates}
-        />
+        <h2>Templates</h2>
+        <LoadingContainer loading={loading} error={error}>
+          <TemplateTable templates={data ? data.getConsultantProfile.templates : []}/>
+        </LoadingContainer>
       </Container>
-    </LoadingContainer>
+    </Container>
   )
 };
 

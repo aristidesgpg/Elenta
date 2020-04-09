@@ -23,6 +23,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "laravel/vapor-cli": "^1.6",
+        "laravel/vapor-core": "^2.5",
         "nuwave/lighthouse": "^4.11",
         "pusher/pusher-php-server": "^4.1"
     },
