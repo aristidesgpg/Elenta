@@ -9,6 +9,7 @@ import {
   Image,
   Row
 } from "react-bootstrap";
+import {get} from "lodash";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import NavbarToggle from "react-bootstrap/NavbarToggle";
 import ProfileDropdownItem from "./ProfileDropdownItem";
@@ -19,6 +20,7 @@ import './ElentaNav.scss';
 
 export const ElentaNav = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
+  const consultantProfile = get(user, 'consultantProfile[0]', null);
 
   const logout = () => {
     localStorage.removeItem('token');
@@ -47,10 +49,10 @@ export const ElentaNav = () => {
                   <Dropdown.Toggle id="account-dropdown"
                                    className="account-dropdown rounded-circle">
                     {
-                      user.consultantProfile.length &&
+                      consultantProfile &&
                       <Image src={
-                        user.consultantProfile[0].picture_url
-                          ? user.consultantProfile[0].picture_url
+                        consultantProfile.picture_url
+                          ? consultantProfile.picture_url
                           : 'https://lorempixel.com/30/30/?64665'
                       }
                              className="profile-image"
