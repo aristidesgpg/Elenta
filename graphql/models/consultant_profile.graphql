@@ -2,9 +2,10 @@ extend type Query {
     getConsultantProfile(user_id: ID! @eq): ConsultantProfile! @find
 }
 
-type Mutation {
+type Mutation @middleware(checks: ["auth:sanctum"]) {
     createConsultantProfile(input: CreateConsultantProfileInput @spread): ConsultantProfile! @create
-    updateConsultantProfile(input: UpdateConsultantProfileInput @spread): ConsultantProfile! @update
+
+    updateConsultantProfile(input: UpdateConsultantProfileInput @spread): UpdateConsultantProfile! @updateConsultantProfile @field(resolver: "App\\GraphQL\\Resolvers\\UpdateConsultantProfileResolver@resolve")
 }
 
 input CreateConsultantProfileInput {
@@ -19,9 +20,15 @@ input ConsultantProfileBelongsTo {
 }
 
 input UpdateConsultantProfileInput {
+    id: ID!
     picture_url: String
     title: String
+    email: String @rules(apply: ["email"])
     bio: String
+
+    old_password: String
+    password: String
+    password_confirmation: String
 }
 
 type ConsultantProfile {
@@ -38,4 +45,16 @@ type ConsultantProfile {
 
     programs: [Program]
     templates: [Template]
+}
+
+type UpdateConsultantProfile {
+    id: ID!
+
+    picture_url: String
+    title: String
+    bio: String
+
+    old_password: String
+    password: String
+    password_confirmation: String
 }

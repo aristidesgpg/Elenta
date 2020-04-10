@@ -264,6 +264,9 @@ export const GET_CONSULTANT_PROFILE = gql`
   query getConsultantProfile($user_id : ID!) {
     getConsultantProfile(user_id: $user_id) {
       id
+      picture_url
+      title
+      bio
       programs {
         id
         title
@@ -301,6 +304,20 @@ export const GET_CONSULTANT_PROFILE = gql`
           id
         }
       }
+    }
+  }
+`;
+
+export const UPDATE_CONSULTANT_PROFILE = gql`
+  mutation updateConsultantProfile($input: UpdateConsultantProfileInput!) {
+    updateConsultantProfile(input: $input) {
+      id
+      picture_url
+      title
+      bio
+      old_password
+      password
+      password_confirmation
     }
   }
 `;
