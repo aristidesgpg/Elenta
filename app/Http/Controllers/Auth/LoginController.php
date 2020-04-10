@@ -63,7 +63,9 @@ class LoginController extends Controller
                 'password' => Hash::make(Str::random())
             ]);
 
-            $existing_user->consultantProfile()->create();
+            $existing_user->consultantProfile()->create([
+                'picture_url' => $user->getAvatar()
+            ]);
         }
         $token = $existing_user->createToken('default')->plainTextToken;
         $uri = '/#/login/callback/' . $token;
