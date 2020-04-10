@@ -3,6 +3,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import * as moment from "moment";
+import {formatDate} from "../../utils/utils";
 
 export const ProgramLearnerTable = ({program}) => {
   const columns = [
@@ -41,15 +42,15 @@ export const ProgramLearnerTable = ({program}) => {
         if (send.response_timestamp) {
           // TODO change to thumb up/down icon in red or green
           obj[m.id] = (<p>
-            Completed on {moment(send.response_timestamp).format("ddd Do MMM YY")}, with a rating
+            Completed on {formatDate(send.response_timestamp)}, with a rating
             of {send.response_rating}
           </p>)
         } else if (send.click_timestamp) {
-          obj[m.id] = <p>Clicked on {moment(send.click_timestamp).format("ddd Do MMM YY")}</p>
+          obj[m.id] = <p>Clicked on {formatDate(send.click_timestamp)}</p>
         } else if (send.open_timestamp) {
-          obj[m.id] = <p>Opened on {moment(send.open_timestamp).format("ddd Do MMM YY")}</p>
+          obj[m.id] = <p>Opened on {formatDate(send.open_timestamp)}</p>
         } else if (send.send_timestamp) {
-          obj[m.id] = <p>Sent on {moment(send.send_timestamp).format("ddd Do MMM YY")}</p>
+          obj[m.id] = <p>Sent on {formatDate(send.send_timestamp)}</p>
         } else {
           obj[m.id] = <p>Not sent yet</p>
         }

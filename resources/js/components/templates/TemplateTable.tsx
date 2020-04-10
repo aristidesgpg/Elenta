@@ -1,6 +1,5 @@
 import * as React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
-
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 export const TemplateTable = ({templates}) => {
@@ -11,7 +10,16 @@ export const TemplateTable = ({templates}) => {
         {dataField: 'is_public', text: 'Public'},
         {dataField: 'can_request', text: 'Requestable'}
     ];
-    return <BootstrapTable keyField='id' data={templates} columns={columns}/>
+
+    let tableData = templates.map(t => {
+      return {
+        'title': <a href={`/#/template/content/${t.id}`}>t.title</a>,
+        'is_public': t.is_public,
+        'can_request': t.can_request
+      };
+    });
+
+    return <BootstrapTable keyField='id' data={tableData} columns={columns}/>
 };
 
 export default TemplateTable;

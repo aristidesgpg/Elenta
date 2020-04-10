@@ -70,6 +70,10 @@ class User extends Authenticatable
     use SoftDeletes;
     use Billable;
     use UsesUuid;
+    use CanResetPassword;
+
+    public const TYPE_CONSULTANT = 1;
+    public const TYPE_LEARNER = 2;
 
     protected $fillable = [
         'name', 'email', 'password',

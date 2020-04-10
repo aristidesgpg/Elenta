@@ -10,11 +10,12 @@ export const ElentaFormButton: React.FunctionComponent<ElentaFormButtonProps> =
      mutationError,
      onClick,
      disabled,
-     title
+     title,
+     className
    }) => {
     return (
-      <div>
-        <Button type="submit" onClick={onClick} disabled={disabled}>
+      <div className={className}>
+        <Button type="submit" onClick={onClick} disabled={disabled} className="w-100">
           {
             mutationLoading ?
               <Spinner
@@ -50,7 +51,8 @@ interface ElentaFormButtonProps {
   mutationData: any,
   onClick?: any,
   disabled?: boolean
-  title?: string
+  title?: string,
+  className?: string
 }
 
 ElentaFormButton.defaultProps = {

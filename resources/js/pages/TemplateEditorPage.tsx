@@ -9,6 +9,7 @@ import LoadingContainer from "../components/component-container/LoadingContainer
 import {useEffect, useState} from "react";
 import _ from "lodash";
 import Col from "react-bootstrap/Col";
+import Nav from "react-bootstrap/Nav";
 
 export const TemplateEditorPage = () => {
   let {id} = useParams();
@@ -50,23 +51,36 @@ export const TemplateEditorPage = () => {
   // TODO: Passing mutation* for the button here is a sloppy abstraction - need to clean it up
   return (
     <LoadingContainer loading={loading} error={error}>
-      <Tabs defaultActiveKey="modules" id="template-editor" transition={false}>
-        <Tab eventKey="modules" title="Content">
-          <ModuleEditor
-            modules={template ? template.modules : {}}
-            addModule={addModule}
-            buttonLoading={mutationLoading}
-            buttonError={mutationError}
-            buttonData={mutationData}
-          />
-        </Tab>
-        <Tab eventKey="learners" title="Learners">
-          test
-        </Tab>
-        <Tab eventKey="results" title="Results">
-          test
-        </Tab>
-      </Tabs>
+      <Tab.Container defaultActiveKey="modules" id="template-editor" transition={false}>
+        <Nav variant="tabs" fill className="justify-content-center">
+          <Nav.Item>
+            <Nav.Link eventKey="modules">Modules</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="learners">Learners</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="results">Results</Nav.Link>
+          </Nav.Item>
+        </Nav>
+        <Tab.Content>
+          <Tab.Pane eventKey="modules" title="Content">
+            <ModuleEditor
+              modules={template ? template.modules : {}}
+              addModule={addModule}
+              buttonLoading={mutationLoading}
+              buttonError={mutationError}
+              buttonData={mutationData}
+            />
+          </Tab.Pane>
+          <Tab.Pane eventKey="requests" title="Requests">
+            test
+          </Tab.Pane>
+          <Tab.Pane eventKey="programs" title="Programs">
+            test
+          </Tab.Pane>
+        </Tab.Content>
+      </Tab.Container>
     </LoadingContainer>
   )
 };

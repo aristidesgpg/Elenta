@@ -14,6 +14,7 @@ const schema = {
     },
     start_timestamp: {
       type: "string",
+      title: "Start Time",
       default: ""
     },
     start_timestamp_field: {

@@ -66,8 +66,20 @@ class LoginController extends Controller
             $existing_user->consultantProfile()->create();
         }
         $token = $existing_user->createToken('default')->plainTextToken;
-        $uri = '/#/login/callback/'.$token;
+        $uri = '/#/login/callback/' . $token;
         return redirect($uri);
+    }
+
+    /**
+     * Send the response after the user was authenticated.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        $token = Auth::user()->createToken('default')->plainTextToken;
+        return compact("token");
     }
 
     public function authenticate(Request $request)

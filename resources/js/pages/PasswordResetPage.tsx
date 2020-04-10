@@ -2,16 +2,16 @@ import * as React from "react";
 import {useQuery} from '@apollo/react-hooks';
 import {CURRENT_USER} from "../graphql/queries";
 import {Redirect} from "react-router-dom";
-import LoginTabs from "../components/auth/LoginTabs";
+import PasswordReset from "../components/auth/PasswordReset";
 
-export const Login = () => {
+export const PasswordResetPage = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
 
-  if (user) return (<Redirect to="/"/>);
+  if (user) return (<Redirect to="/consultant-dashboard"/>);
 
   return (
-    <LoginTabs/>
+    <PasswordReset/>
   );
 };
 
-export default Login;
+export default PasswordResetPage;

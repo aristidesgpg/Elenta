@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import {
   NavbarBrand,
   Navbar,
@@ -18,6 +19,18 @@ import './ElentaNav.scss';
 
 export const ElentaNav = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
+
+  const logout = () => {
+    localStorage.removeItem('token');
+
+    axios.post('/logout')
+      .then(function (response) {
+        window.location.reload();
+      })
+      .catch(function (error) {
+        window.location.reload();
+      });
+  };
 
   return (
     <Container>
@@ -51,7 +64,7 @@ export const ElentaNav = () => {
                       })
                     }
 
-                    <Dropdown.Item>
+                    <Dropdown.Item onClick={() => logout()}>
                       Logout
                     </Dropdown.Item>
                   </Dropdown.Menu>

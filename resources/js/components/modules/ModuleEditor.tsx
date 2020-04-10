@@ -15,6 +15,7 @@ import Tab from "react-bootstrap/Tab";
 import ElentaFormButton from "../elenta-form/ElentaFormButton";
 import _ from "lodash";
 import Button from "react-bootstrap/Button";
+import Nav from "react-bootstrap/Nav";
 
 export const ModuleEditor =
   ({
@@ -62,7 +63,7 @@ export const ModuleEditor =
     };
 
     return (
-      <Container>
+      <Container className="pl-0 pr-0 pt-4">
         <Row>
           <Col md={3}>
             <ModuleList modules={modules}
@@ -78,25 +79,37 @@ export const ModuleEditor =
             />
           </Col>
           <Col>
-            <ElentaFormButton
-              onClick={onSave}
-              mutationLoading={mutationLoading}
-              mutationError={mutationError}
-              mutationData={mutationData}
-            />
-            <Tabs defaultActiveKey="content" id="module-editor" transition={false}>
-              <Tab eventKey="content" title="Content">
-                <Form/>
-              </Tab>
-              <Tab eventKey="settings" title="Settings">
-                <ModuleSettingsEditor
-                  reminder={formReminder}
-                  trigger={formTrigger}
-                  setFormReminder={setFormReminder}
-                  setFormTrigger={setFormTrigger}
-                />
-              </Tab>
-            </Tabs>
+            <Tab.Container defaultActiveKey="content" id="module-editor" transition={false}>
+                <Nav variant="tabs">
+                  <Nav.Item>
+                    <Nav.Link eventKey="content">Content</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="settings">Settings</Nav.Link>
+                  </Nav.Item>
+                  <ElentaFormButton
+                    className="ml-auto"
+                    title="Save Module"
+                    onClick={onSave}
+                    mutationLoading={mutationLoading}
+                    mutationError={mutationError}
+                    mutationData={mutationData}
+                  />
+                </Nav>
+                <Tab.Content>
+                  <Tab.Pane eventKey="content" title="Content">
+                    <Form/>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="settings" title="Settings">
+                    <ModuleSettingsEditor
+                      reminder={formReminder}
+                      trigger={formTrigger}
+                      setFormReminder={setFormReminder}
+                      setFormTrigger={setFormTrigger}
+                    />
+                  </Tab.Pane>
+                </Tab.Content>
+            </Tab.Container>
           </Col>
         </Row>
       </Container>

@@ -180,9 +180,32 @@ export const UPSERT_MODULE = gql`
   }
 `;
 
+export const GET_USER = gql`
+  query getUser($id : ID!) {
+    getUser(id: $id) {
+      id
+      name
+      email
+      email_verified_at
+      learnerProfile {
+        id
+        picture_url
+        role
+        tenure
+      }
+      consultantProfile {
+        id
+        picture_url
+        title
+        bio
+      }
+    }
+  }
+`;
+
 export const GET_ME = gql`
   query me {
-    getUser(id: "c4f15f14-e22e-44d8-ac1f-389e8c644da1") {
+    me {
       id
       name
       email
@@ -232,6 +255,51 @@ export const CURRENT_USER = gql`
         picture_url
         title
         bio
+      }
+    }
+  }
+`;
+
+export const GET_CONSULTANT_PROFILE = gql`
+  query getConsultantProfile($user_id : ID!) {
+    getConsultantProfile(user_id: $user_id) {
+      id
+      programs {
+        id
+        title
+        format
+        max_learners
+        start_timestamp
+        can_invite
+        is_public
+        programModules {
+          id
+          module {
+            id
+            title
+          }
+          sends {
+            id
+            response_timestamp
+          }
+        }
+        learners {
+          id
+        }
+        invites {
+          id
+        }
+      }
+      templates {
+        title
+        can_request
+        is_public
+        requests {
+          id
+        }
+        programs {
+          id
+        }
       }
     }
   }
