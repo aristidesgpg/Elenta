@@ -12,9 +12,11 @@ import { VideoWidget } from "./VideoWidget"
 import { Range } from "rc-slider";
 import 'rc-slider/assets/index.css';
 import Form from 'react-jsonschema-form-bs4';
+import RepeaterEditField from "./repeater/RepeaterEditField";
+
 //import {withTheme} from "@rjsf/core";
 
-function pickKeys(source, target, excludedKeys) {
+export function pickKeys(source, target, excludedKeys) {
   const result = {};
 
   let isExcluded;
@@ -28,7 +30,7 @@ function pickKeys(source, target, excludedKeys) {
   return result;
 }
 
-function shouldHandleDoubleClick(node) {
+export function shouldHandleDoubleClick(node) {
   // disable doubleclick on number input, so people can use inc/dec arrows
   if (node.tagName === "INPUT" &&
       node.getAttribute("type") === "number") {
@@ -41,10 +43,6 @@ class FieldPropertiesEditor extends React.Component<any,any> {
   constructor(props) {
     super(props);
     this.state = {editedSchema: props.schema};
-    EditorTitleField.defaultProps = {updateTitle: this.onUpdateTitleDesc,
-                                    getFormData: this.getFormData};
-    EditorDescField.defaultProps = {updateDescription: this.onUpdateTitleDesc,
-                                    getFormData: this.getFormData}
   }
 
   getFormData = () =>{
@@ -89,12 +87,14 @@ class FieldPropertiesEditor extends React.Component<any,any> {
               </Button>
             </ButtonToolbar>
         </div>
-        <div className="panel-body col-12">          
+        <div className="panel-body col-12">   
+          <EditorTitleField title ={formData.title} updateTitle= { this.onUpdateTitleDesc } getFormData={ this.getFormData }/>
+          <EditorDescField  description={formData.description} updateDescription={ this.onUpdateTitleDesc } getFormData={ this.getFormData }/>       
           <Form
             formData={formData}
             schema={uiSchema.editSchema}
             uiSchema = {uiSchema.editUISchema}            
-            fields={{...fields, TitleField: EditorTitleField, DescriptionField: EditorDescField}}
+            fields={{...fields}}
             onChange={this.onChange}
             onSubmit={onUpdate}>
             <button type="submit" className="btn btn-info float-right">Submit</button>
@@ -105,7 +105,7 @@ class FieldPropertiesEditor extends React.Component<any,any> {
   }
 }
 
-function DraggableFieldContainer(props) {
+export function DraggableFieldContainer(props) {
   const {
     children,
     dragData,
@@ -131,9 +131,6 @@ function DraggableFieldContainer(props) {
       </Droppable>
     </Draggable>
   );
-  /*<Button variant="success" onClick={onEdit}>
-              edit <i className="far fa-edit"/>
-            </Button>*/
 }
 
 export default class EditableField extends React.Component<any,any> {
@@ -150,16 +147,17 @@ export default class EditableField extends React.Component<any,any> {
     this.setState({schema: nextProps.schema});
   }*/
 
-  handleEdit(event) {
+  handleEdit = (event) => {
     event.preventDefault();
     if (shouldHandleDoubleClick(event.target)) {
       this.setState({edit: true});
     }
   }
 
-  handleUpdate({formData}) {
+  handleUpdate = ({formData}) => {
     // Exclude the "type" key when picking the keys as it is handled by the
-    // SWITCH_FIELD action.    
+    // SWITCH_FIELD action.   
+    //console.log("Update", formData); 
     const updated = pickKeys(this.props.schema, formData, ["type"]);
     const schema = {...this.props.schema, ...updated};
     this.setState({edit: false, schema});
@@ -174,12 +172,12 @@ export default class EditableField extends React.Component<any,any> {
     }
   }
 
-  handleCancel(event) {
+  handleCancel = (event) => {
     event.preventDefault();
     this.setState({edit: false});
   }
 
-  handleDrop(data) {
+  handleDrop = (data) => {
     const {name, swapFields, insertField} = this.props;
     if ("moved-field" in data && data["moved-field"]) {
       if (data["moved-field"] !== name) {
@@ -204,16 +202,28 @@ export default class EditableField extends React.Component<any,any> {
         Video: VideoWidget             
       };
     
-    if (this.state.edit) {
-      return (
-        <FieldPropertiesEditor
-          {...props}                     
+    if (this.state.edit) {           
+      if(props.uiSchema.isRepeater == true){
+        return (<RepeaterEditField {...props}                     
           fields = {{...fields}}
           widgets = {{...widgets}}
-          onCancel={this.handleCancel.bind(this)}
-          onUpdate={this.handleUpdate.bind(this)}
-          onDelete={this.handleDelete.bind(this)} />
-      );
+          onCancel={this.handleCancel}
+          onUpdate={this.handleUpdate}
+          onDelete={this.handleDelete} />
+        );
+      }
+      else{
+        return (
+          <FieldPropertiesEditor
+            {...props}                     
+            fields = {{...fields}}
+            widgets = {{...widgets}}
+            onCancel={this.handleCancel}
+            onUpdate={this.handleUpdate}
+            onDelete={this.handleDelete} />
+        );  
+      }
+      
     }
     
     /*if (props.schema.type === "object") {      
@@ -232,10 +242,10 @@ export default class EditableField extends React.Component<any,any> {
         draggableType="moved-field"
         droppableTypes={["moved-field", "field"]}
         dragData={props.name}
-        onEdit={this.handleEdit.bind(this)}
-        onDelete={this.handleDelete.bind(this)}
-        onDoubleClick={this.handleEdit.bind(this)}
-        onDrop={this.handleDrop.bind(this)}>
+        onEdit={this.handleEdit}
+        onDelete={this.handleDelete}
+        onDoubleClick={this.handleEdit}
+        onDrop={this.handleDrop}>
         <Form {...props}          
           schema={this.state.schema}
           //idSchema={{$id: props.name}}

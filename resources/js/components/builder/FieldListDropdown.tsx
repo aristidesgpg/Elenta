@@ -38,7 +38,7 @@ export default class FieldListDropdown extends React.Component<Props, State> {
     const fieldList = this.state.fieldList;
     fieldIndex = parseInt(fieldIndex, 10);    
     if (typeof fieldList[fieldIndex] !== "undefined") {
-      const field = fieldList[fieldIndex];      
+      const field = fieldList[fieldIndex];            
       if (this.state.fieldListAction === "switch_field") {
         this.props.switchField(this.props.name, field);
       } else {

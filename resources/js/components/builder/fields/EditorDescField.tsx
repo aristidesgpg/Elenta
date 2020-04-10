@@ -2,7 +2,13 @@ import * as React from "react";
 import {RIEInput} from "riek";
 import { any } from "prop-types";
 
-const EditorDescField = (props: any, state: any) => {
+interface Props {
+  description: string;
+  updateDescription: (any)=> void,
+  getFormData: ()=> any
+}
+
+const EditorDescField = (props: Props, state: any) => {
 
   const onUpdate = function(description) {        
     const formData = props.getFormData();
@@ -13,7 +19,7 @@ const EditorDescField = (props: any, state: any) => {
   const formData = props.getFormData(); 
   let {id, description} = formData;
   
-  if(props.description == undefined){
+  if(props.description == undefined || description == null){
     return(<React.Fragment></React.Fragment>);
   }
   if(description == "" && props.description != undefined){
@@ -32,9 +38,5 @@ const EditorDescField = (props: any, state: any) => {
   );
 }
 
-EditorDescField.defaultProps = {
-  updateDescription: (any)=> {},
-  getFormData: ()=> any
-}
 
 export default EditorDescField;

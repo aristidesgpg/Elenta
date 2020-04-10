@@ -1,5 +1,5 @@
 import * as React from "react";
-import JsonForm from "react-jsonschema-form";
+import JsonForm from "react-jsonschema-form-bs4";
 import SchemaField from "react-jsonschema-form-bs4/lib/components/fields/SchemaField";
 import {getDefaultRegistry} from "react-jsonschema-form/lib/utils";
 import {slugify, clone, unique} from "../../utils/utils"
@@ -8,8 +8,15 @@ import EditableField from "./fields/EditableField";
 import TitleField from "./fields/TitleField";
 import DescriptionField from "./fields/DescriptionField";
 import { TextField, RichTextWidget} from "./fields/TextField";
-import { Question } from "./fields/Question";
 import { RankField } from "./fields/RankField";
+import EditorTitleField from "./fields/EditorTitleField";
+import EditorDescField from "./fields/EditorDescField";
+import DTPicker from "./fields/DTPicker";
+import { ImageWidget } from "./fields/ImageWidget"
+import { VideoWidget } from "./fields/VideoWidget"
+import { Range } from "rc-slider";
+
+
 import * as Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
@@ -78,12 +85,14 @@ export default class Form extends React.Component<Props, State>{
   
 
   addField = (field: any) : any =>{
+    
     const { currentIndex, schema, uiSchema } = this.state;
     this.setState({ currentIndex: currentIndex + 1 });
     const name = `Question ${currentIndex}`;
     const _slug = slugify(name);
-    schema.properties[_slug] = {...field.jsonSchema, title: name};
-    uiSchema[_slug] = field.uiSchema;
+    const jsonSchema = clone(field.jsonSchema);
+    schema.properties[_slug] = {...jsonSchema, title: name};
+    uiSchema[_slug] = clone(field.uiSchema);
     uiSchema["ui:order"] = (uiSchema["ui:order"] || []).concat(_slug);
     let newKey = Math.random();
     return this.setState({ schema, uiSchema, newKey });    
@@ -207,9 +216,16 @@ export default class Form extends React.Component<Props, State>{
   render() {
     const { error, schema, newKey, uiSchema } = this.state;
     console.log("State", this.state);
+    const fields = {RichEditor:TextField,                                  
+                    Rank: RankField,                    
+                  };
     const widgets = {
-      RichText: RichTextWidget      
-    };
+                      RichText: RichTextWidget,   
+                      RDP: DTPicker,
+                      Range: Range,
+                      Image: ImageWidget,
+                      Video: VideoWidget             
+                  };
     const registry = {    
       ...getDefaultRegistry(),      
       fields: {      
@@ -232,7 +248,7 @@ export default class Form extends React.Component<Props, State>{
         {false && <h1>Preview</h1>}
         {false && <JsonForm key={newKey+1} {...this.state} 
                     schema ={schema} uiSchema = {uiSchema}
-                    fields={{Question: Question, Rank:RankField, rdp: Datetime}} 
+                    fields={{...fields}} 
                     widgets={{...widgets}} onChange={this.onChange} >
           <button type="submit" className="hidden">Submit</button>
           </JsonForm>}
@@ -240,6 +256,7 @@ export default class Form extends React.Component<Props, State>{
   
         <FormActions  
             schema = {schema}
+            uiSchema = {uiSchema}
             addField = {this.addField}
             switchField = {this.switchField}/>
       </div>

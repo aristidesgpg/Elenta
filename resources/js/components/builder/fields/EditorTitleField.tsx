@@ -2,7 +2,13 @@ import * as React from "react";
 import {RIEInput} from "riek";
 import { any } from "prop-types";
 
-const EditorTitleField = (props: any, state: any) => {
+interface Props {
+  title: string;
+  updateTitle: (any)=> void,
+  getFormData: ()=> any
+}
+
+const EditorTitleField = (props: Props, state: any) => {
 
   const onUpdate = function(title) {    
     const formData = props.getFormData();
@@ -12,12 +18,13 @@ const EditorTitleField = (props: any, state: any) => {
     //props.updateComponentTitle
   };
   const formData = props.getFormData();
-  console.log("FormData", props);
-  const {id, title=""} = formData;
+  
+  let {id, title=""} = formData;
   let bShowStatic: boolean = false;
-  if(props.title != "Title"){
+  //console.log("FormData", props);
+  /*if(props.title != "Title"){
     bShowStatic = true;
-  }
+  }*/  
   return (
     <React.Fragment>
       { bShowStatic && <h3 id={id}>{props.title}</h3>}
@@ -32,11 +39,6 @@ const EditorTitleField = (props: any, state: any) => {
       }
     </React.Fragment>    
   );
-}
-
-EditorTitleField.defaultProps = {
-  updateTitle: (any)=>{},
-  getFormData: ()=> any
 }
 
 export default EditorTitleField;

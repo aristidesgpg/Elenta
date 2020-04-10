@@ -49,12 +49,8 @@ export default {
       },
       uiSchema: {        
         editSchema: {                                  
-          type: "object",                          
-          title:"Title",
-          description:"Description",
-          properties: {                     
-            //title: {type: "string", title: "Title"},
-            //description: {type: "string", title: "Description"},
+          type: "object",                                    
+          properties: {                                 
             required: {type: "boolean"},
             minimum:{ type: "number", title:"Minimum", default:0 },
             maximum:{ type: "number", title:"Maximum", default:100 },
@@ -83,9 +79,7 @@ export default {
       uiSchema: {  
         "ui:widget": "Range",      
         editSchema: {                                  
-          type: "object",
-          title:"Title",
-          description:"Description",                
+          type: "object",                         
           properties: {                                 
             required: {type: "boolean"},
             minimum:{ type: "number", title:"Minimum", default:0 },
@@ -97,35 +91,6 @@ export default {
       },
       formData: {}
     },
-    /*{
-      id: "question",
-      icon: "text-color",
-      label: "Question",
-      jsonSchema: {
-        type: "object", 
-        properties:{
-          questionTitle:{type:"string"},
-          questionDesc:{type:"string"}
-        },
-        title: ""
-      },
-      uiSchema: {
-        "ui:options":{
-          label:true
-        },         
-        "ui:field":"Question",
-        editSchema: {                                  
-          type: "object",
-          properties: {
-            title: {type: "string", title: "Label"},
-            required: {type: "boolean"}
-          }
-        },
-        editUISchema:{           
-        }
-      },
-      formData: {}
-    },*/
     {
       id: "text",
       icon: "text-color",
@@ -136,14 +101,9 @@ export default {
         description: "",
         default: ""
       },
-      uiSchema: {
-        /*"ui:options":{
-          label:false
-        },*/
+      uiSchema: {        
         editSchema: {
-          type: "object",
-          title:"Title",
-          description:"Description",
+          type: "object",          
           properties: {            
             required: {type: "boolean"},
           }
@@ -165,9 +125,7 @@ export default {
       uiSchema: {
         "ui:widget": "textarea",
         editSchema: {
-          type: "object",
-          title:"Title",
-          description:"Description",
+          type: "object",          
           properties: {            
             required: {type: "boolean"},
           },
@@ -176,27 +134,6 @@ export default {
       },
       formData: {}
     },
-    /*{
-      id: "checkbox",
-      icon: "check",
-      label: "Checkbox",
-      jsonSchema: {
-        type: "boolean",
-        title: "Edit me",
-        default: false,
-      },
-      uiSchema: {
-        editSchema: {
-          type: "object",
-          properties: {
-            title: {type: "string", title: "Label"},
-            required: {type: "boolean"},
-          }
-        },
-        editUISchema:{}
-      },
-      formData: {}
-    },*/
     {
       id: "rank",
       icon: "star",
@@ -213,9 +150,7 @@ export default {
       uiSchema: {
         "ui:field": "Rank",
         editSchema: {
-          type: "object",
-          title:"Title",
-          description:"Description",
+          type: "object",          
           properties: {            
             required: {type: "boolean"},
             items: {
@@ -255,9 +190,7 @@ export default {
       uiSchema: {
         "ui:widget": "checkboxes",
         editSchema: {
-          type: "object",
-          title:"Title",
-          description:"Description",
+          type: "object",          
           properties: {            
             required: {type: "boolean"},
             items: {
@@ -293,9 +226,7 @@ export default {
       uiSchema: {
         "ui:widget": "radio",
         editSchema: {
-          type: "object",
-          title:"Title",
-          description:"Description",
+          type: "object",          
           properties: {            
             required: {type: "boolean"},
             enum: {
@@ -325,9 +256,7 @@ export default {
       uiSchema: {
         "ui:widget": "select",
         editSchema: {
-          type: "object",
-          title:"Title",
-          description:"Description",
+          type: "object",          
           properties: {            
             required: {type: "boolean"},
             enum: {
@@ -356,9 +285,7 @@ export default {
       uiSchema: {
         "ui:widget": "RDP",
         editSchema: {
-          type: "object",
-          title:"Title",
-          description:"Description",
+          type: "object",          
           properties: {            
             required: {type: "boolean"}
           }
@@ -380,8 +307,7 @@ export default {
       uiSchema: {        
         "ui:widget":"Image",
         editSchema: {                                  
-          type: "object",   
-          title:"Title",                       
+          type: "object",                                
           properties: {                   
             imageURL:{type: "string", title:"Image URL"}
           }
@@ -403,13 +329,40 @@ export default {
       uiSchema: {        
         "ui:widget":"Video",
         editSchema: {                                  
-          type: "object",   
-          title:"Title",                       
+          type: "object",                             
           properties: {                   
             videoURL:{type: "string", title:"Video URL"}
           }
         },
         editUISchema:{}
+      },
+      formData: {}
+    },
+    {
+      id: "repeater",
+      icon: "check",
+      label: "Repeater",
+      jsonSchema: {
+        "type":"array",
+        title:"new",
+        minItems: 0,
+        maxItems: 3,
+        description:"Description",
+         items:{
+           type:"object",
+           "properties":{},
+          }         
+      },
+      uiSchema: {      
+          isRepeater: true,         
+          "items":{
+            
+          },
+          editSchema: {                                  
+            "type":"object",              
+             "properties":{ }       
+          },
+          editUISchema:{}
       },
       formData: {}
     },

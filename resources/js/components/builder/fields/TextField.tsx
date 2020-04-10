@@ -19,7 +19,7 @@ export class RichTextWidget extends  React.Component<any,any>{
 
   render(){
       const { schema } = this.state;
-      console.log(schema);
+      
       try{ 
           let jsonValue = JSON.parse(schema.textValue);             
           return(

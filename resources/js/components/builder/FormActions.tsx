@@ -8,6 +8,7 @@ interface State{
 
 interface Props{
   schema: any;
+  uiSchema: any;
   addField: (field: any) =>void;
   switchField: (name:string, field: any) => void;
 }
@@ -20,7 +21,8 @@ export default class FormActions extends React.Component<Props, State>{
 
   render() {
     const filename = this.props.schema.title + ".json";
-    const schemaFileContent = "data:application/json;base64," + btoa(JSON.stringify(this.props.schema));   
+    const schemaFileContent = "data:application/json;base64," + btoa(JSON.stringify(this.props.schema));
+    const uiSchemaFileContent = "data:application/json;base64," + btoa(JSON.stringify(this.props.uiSchema));   
     
     return (
       <div>
@@ -29,6 +31,12 @@ export default class FormActions extends React.Component<Props, State>{
             <a className="float-right" download={filename} href={schemaFileContent}>
               <i className="glyphicon glyphicon-download" />&nbsp;
                 Download JSON schema
+            </a>
+          </Button>
+          <Button className="float-right" variant="info">
+            <a className="float-right" download={filename} href={uiSchemaFileContent}>
+              <i className="glyphicon glyphicon-download" />&nbsp;
+                Download UI schema
             </a>
           </Button>
           
