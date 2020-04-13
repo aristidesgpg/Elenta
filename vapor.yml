@@ -7,16 +7,29 @@ environments:
         memory: 1024
         cli-memory: 512
         runtime: php-7.4
+        database: elenta-production
+        database-user: production
+        storage: elenta-production
+        cache: elenta-production
         build:
             - 'COMPOSER_MIRROR_PATH_REPOS=1 composer install --no-dev'
             - 'php artisan event:cache'
             - 'npm ci && npm run prod && rm -rf node_modules'
+        deploy:
+            - 'php artisan migrate'
+
     staging:
         domain: staging.elenta.io
         memory: 1024
         cli-memory: 512
         runtime: php-7.4
+        database: elenta-staging
+        database-user: staging
+        storage: elenta-staging
+        cache: elenta-staging
         build:
-            - 'COMPOSER_MIRROR_PATH_REPOS=1 composer install'
+            - 'COMPOSER_MIRROR_PATH_REPOS=1 composer install --no-dev'
             - 'php artisan event:cache'
-            - 'npm ci && npm run dev && rm -rf node_modules'
+            - 'npm ci && npm run prod && rm -rf node_modules'
+        deploy:
+            - 'php artisan migrate'

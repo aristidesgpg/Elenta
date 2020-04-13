@@ -12,6 +12,11 @@ const envKeys = Object.keys(env).reduce((prev, next) => {
   return prev;
 }, {});
 
+let ASSET_URL = ""
+if (process.env.ASSET_URL && process.env.ASSET_URL.length > 0) {
+    ASSET_URL = process.env.ASSET_URL + "/";
+}
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -25,7 +30,7 @@ const envKeys = Object.keys(env).reduce((prev, next) => {
 
 mix.webpackConfig({
   output: {
-    publicPath: "",
+    publicPath: ASSET_URL,
   },
   resolve: {
     extensions: [".js", ".ts", ".tsx", ".gql", ".graphql"]
@@ -66,13 +71,16 @@ mix.webpackConfig({
       filename: "[name].css",
       chunkFilename: "[id].css"
     }),
-    new webpack.DefinePlugin(envKeys)
+    new webpack.DefinePlugin(envKeys),
+    new webpack.DefinePlugin({
+        "process.env.ASSET_PATH": JSON.stringify(ASSET_URL)
+    })
   ]
 });
 
 mix.react(
   'resources/js/index.tsx',
-  'public/js/formbuilder.js')
+  'public/js/elenta-app.js')
 .sass('resources/js/components/common/nestedselect/SxSelect.scss', 'public/css')
 .sass('resources/js/components/common/nestedselect/SubMenu/SubMenu.scss', 'public/css')
 .sourceMaps(process.env.MIX_ENV === 'local', 'source-map');

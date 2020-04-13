@@ -19,3 +19,4 @@ graph.png
 .vapor/
 .env.production
 .env.staging
+.env.beta

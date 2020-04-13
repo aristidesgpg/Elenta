@@ -1,5 +1,5 @@
 import * as React from "react";
-import {HashRouter, Switch, Route} from "react-router-dom";
+import {BrowserRouter, Switch, Route} from "react-router-dom";
 import Form from "./components/builder/Form";
 import LoginPage from "./pages/LoginPage";
 
@@ -43,13 +43,13 @@ export const ElentaClient = new ApolloClient({
 export const App = () => {
   return (
     <ApolloProvider client={ElentaClient}>
-      <HashRouter>
+      <BrowserRouter>
         <PageContainer>
             <Switch>
               <Route exact={true} path="/login" component={LoginPage}/>
               <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
               <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
-              <PrivateRoute exact={true} path="/" component={Form}/>
+              <Route exact={true} path="/" component={Form}/>
               <PrivateRoute exact={true} path="/consultant-dashboard" component={ConsultantDashboard}/>
               <PrivateRoute exact={true} path="/consultant-profile-settings" component={ConsultantProfileSettingsPage}/>
               <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
@@ -58,7 +58,7 @@ export const App = () => {
               <PrivateRoute exact={true} path="/program/content/:id" component={ProgramEditorPage}/>
             </Switch>
         </PageContainer>
-      </HashRouter>
+      </BrowserRouter>
     </ApolloProvider>
   );
 };

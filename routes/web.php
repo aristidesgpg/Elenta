@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::view('/', 'index');
 Route::group([
     'prefix' => '/login/{provider}',
     'namespace' => 'Auth'
