@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Models\ConsultantProfile
@@ -60,5 +61,19 @@ class ConsultantProfile extends Model
 
     public function programs(): HasMany {
         return $this->hasMany(Program::class);
+    }
+
+
+    function getPictureUrlAttribute($path)
+    {
+        if (stripos($path, 'https://') !== 0 && stripos($path, 'http://') !== 0) {
+            if (config('filesystems.cloud') === 'public') {
+                $path = Storage::disk(config('filesystems.cloud'))->url($path);
+            } else {
+                $path = Storage::disk(config('filesystems.cloud'))->temporaryUrl($path, now()->addDay(2));
+            }
+        }
+
+        return $path;
     }
 }

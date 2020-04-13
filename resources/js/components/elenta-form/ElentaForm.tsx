@@ -10,6 +10,11 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import ElentaFormButton from "./ElentaFormButton";
 import LoadingContainer from "../component-container/LoadingContainer";
+import ProfilePictureFileWidget from "../widgets/ProfilePictureFileWidget";
+
+const widgets = {
+  FileWidget: ProfilePictureFileWidget
+};
 
 export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
   ({
@@ -21,7 +26,8 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
      queryVars,
      mutationVars,
      queryTransform,
-     mutationTransform
+     mutationTransform,
+     validate
    }) => {
 
     const [localUiSchema, setLocalUiSchema] = useState(uiSchema);
@@ -84,19 +90,21 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
 
     return (
       <LoadingContainer loading={queryLoading} error={queryError}>
-          <JsonForm schema={schema}
-                    uiSchema={localUiSchema}
-                    formData={formState}
-                    onSubmit={onSubmit}
-                    onChange={onChange}
-                    onError={log("errors")}
-          >
-            <ElentaFormButton
-              mutationLoading={mutationLoading}
-              mutationError={mutationError}
-              mutationData={mutationData}
-            />
-          </JsonForm>
+        <JsonForm schema={schema}
+                  uiSchema={localUiSchema}
+                  formData={formState}
+                  onSubmit={onSubmit}
+                  onChange={onChange}
+                  validate={validate}
+                  widgets={widgets}
+                  onError={log("errors")}
+        >
+          <ElentaFormButton
+            mutationLoading={mutationLoading}
+            mutationError={mutationError}
+            mutationData={mutationData}
+          />
+        </JsonForm>
       </LoadingContainer>
     );
   };
@@ -110,7 +118,8 @@ interface ElentaFormProps {
   queryVars?: object,
   mutationVars?: object,
   queryTransform?: any,
-  mutationTransform?: any
+  mutationTransform?: any,
+  validate?: any
 }
 
 ElentaForm.defaultProps = {

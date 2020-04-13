@@ -17,6 +17,7 @@ import TemplateEditorPage from "./pages/TemplateEditorPage";
 import ProgramEditorPage from "./pages/ProgramEditorPage";
 import LoginCallbackPage from "./pages/LoginCallbackPage";
 import PasswordResetPage from "./pages/PasswordResetPage";
+import ConsultantProfileSettingsPage from "./pages/ConsultantProfileSettingsPage";
 import PrivateRoute from "./hoc/PrivateRoute";
 
 const httpLink = createHttpLink({
@@ -50,6 +51,7 @@ export const App = () => {
               <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
               <Route exact={true} path="/" component={Form}/>
               <PrivateRoute exact={true} path="/consultant-dashboard" component={ConsultantDashboard}/>
+              <PrivateRoute exact={true} path="/consultant-profile-settings" component={ConsultantProfileSettingsPage}/>
               <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
               <PrivateRoute exact={true} path="/template/settings/:id" component={TemplateSettingsEditor}/>
               <PrivateRoute exact={true} path="/template/content/:id" component={TemplateEditorPage}/>

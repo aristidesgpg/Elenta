@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useParams} from "react-router-dom";
 import ElentaForm from "../components/elenta-form/ElentaForm";
-import {GET_PROGRAM, GET_TEMPLATES_BY_OWNER, UPSERT_PROGRAM} from "../graphql/queries";
+import {CURRENT_USER, GET_PROGRAM, GET_TEMPLATES_BY_OWNER, UPSERT_PROGRAM} from "../graphql/queries";
 import {useLazyQuery, useQuery} from "@apollo/react-hooks";
 import _ from "lodash";
 import moment from "moment";
@@ -85,8 +85,10 @@ const rulesSchema = {
 
 export const ProgramSettingsEditor = () => {
   let {id} = useParams();
+  const {data: {user}} = useQuery(CURRENT_USER);
+  const consultant_profile_id = _.get(user, 'consultantProfile[0].id', null);
 
-  const {loading: queryLoading, error: queryError, data: queryData} = useQuery(GET_TEMPLATES_BY_OWNER, {variables: {consultant_profile_id: "818cecf2-b1b9-4f80-b095-565faeea1953"}});
+  const {loading: queryLoading, error: queryError, data: queryData} = useQuery(GET_TEMPLATES_BY_OWNER, {variables: {consultant_profile_id}});
 
   if (queryData) {
     if (queryData.getTemplatesByOwner.length == 0) {
@@ -147,6 +149,7 @@ export const ProgramSettingsEditor = () => {
       </LoadingContainer>
     }
   }
+  return null;
 };
 
 export default ProgramSettingsEditor;
