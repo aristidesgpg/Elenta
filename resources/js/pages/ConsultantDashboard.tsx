@@ -8,7 +8,7 @@ import {useState} from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Form from "../components/builder/Form";
+import ElentaFormBuilder from "../components/builder/ElentaFormBuilder";
 import TemplateTable from "../components/templates/TemplateTable";
 import ProgramList from "../components/programs/ProgramList";
 import LoadingContainer from "../components/component-container/LoadingContainer";

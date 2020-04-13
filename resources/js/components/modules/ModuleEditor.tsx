@@ -7,7 +7,7 @@ import {useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Form from "../builder/Form";
+import ElentaFormBuilder from "../builder/ElentaFormBuilder";
 import {UPSERT_MODULE} from "../../graphql/queries";
 import Tabs from "react-bootstrap/Tabs";
 import ModuleSettingsEditor from "./ModuleSettingsEditor";
@@ -98,7 +98,7 @@ export const ModuleEditor =
                 </Nav>
                 <Tab.Content>
                   <Tab.Pane eventKey="content" title="Content">
-                    <Form/>
+                    <ElentaFormBuilder schema={{}} uiSchema={{}} onSave ={(schema,uiSchema)=>{}}/>
                   </Tab.Pane>
                   <Tab.Pane eventKey="settings" title="Settings">
                     <ModuleSettingsEditor

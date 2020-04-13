@@ -31,24 +31,20 @@ interface State{
 }
 
 interface Props{
-
+  schema: any;
+  uiSchema: any;
+  onSave: (schema: any, uiSchema: any) => void;
 }
 
-export default class Form extends React.Component<Props, State>{
+export default class ElentaFormBuilder extends React.Component<Props, State>{
 
   constructor(props: Props) {
     super(props);
+    const { schema, uiSchema } = props;
     this.state = {
       error: null,
-      schema: {
-        type: "object",
-        title: "Untitled form",
-        description: "Enter some description for your form here",
-        properties: {}
-      },
-      uiSchema: {        
-        "ui:order": []
-      },
+      schema,
+      uiSchema,
       formData: {},
       currentIndex: 0,
       newKey: 0
@@ -216,6 +212,10 @@ export default class Form extends React.Component<Props, State>{
           ];
   }
   
+  saveSchema = ()=>{
+    const { schema, uiSchema } = this.state;
+    this.props.onSave(schema, uiSchema);
+  }
   //********  Render *******/
   render() {
     const createSliderWithTooltip = Slider.createSliderWithTooltip;
@@ -249,24 +249,26 @@ export default class Form extends React.Component<Props, State>{
                               schema={schema}                               
                               registry={registry} 
                               onChange={this.onChange}>              
-                  </SchemaField>}
-        {true && <h1>Preview</h1>}
-        {true && <JsonForm key={newKey+1} {...this.state} 
+                  </SchemaField>}        
+        </div>  
+        <FormActions  
+            schema = {schema}
+            uiSchema = {uiSchema}
+            addField = {this.addField}
+            switchField = {this.switchField}
+            saveSchema = {this.saveSchema}/>
+      </div>
+    );
+    
+    /*{false && <h1>Preview</h1>}
+        {false && <JsonForm key={newKey+1} {...this.state} 
                     schema ={schema} uiSchema = {uiSchema}
                     fields={{...fields}} 
                     widgets={{...widgets}} onChange={this.onChange} 
                     onSubmit={this.onSubmit}>
           <button type="submit" className="">Submit</button>
           </JsonForm>}
-        </div>
-  
-        <FormActions  
-            schema = {schema}
-            uiSchema = {uiSchema}
-            addField = {this.addField}
-            switchField = {this.switchField}/>
-      </div>
-    );
+    */
   }  
   
 }
