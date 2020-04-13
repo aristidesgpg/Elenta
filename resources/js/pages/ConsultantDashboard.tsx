@@ -24,18 +24,21 @@ export const ConsultantDashboard = () => {
   return (
     <LoadingContainer loading={loading} error={error}>
       {data &&
-      <>
+      <div>
         <Container>
+          <h3>Programs</h3>
           <ProgramList
             programs={data.getConsultantProfile.programs}
+            showCreate={data.getConsultantProfile.templates.length > 0}
           />
         </Container>
         <Container>
+          <h3>Templates</h3>
           <TemplateTable
             templates={data.getConsultantProfile.templates}
           />
         </Container>
-      </>
+      </div>
       }
     </LoadingContainer>
   )

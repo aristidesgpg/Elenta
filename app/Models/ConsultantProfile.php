@@ -63,9 +63,10 @@ class ConsultantProfile extends Model
         return $this->hasMany(Program::class);
     }
 
-
     function getPictureUrlAttribute($path)
     {
+        //TODO: temporary until we have permanent file storage solution
+        return $path;
         if (stripos($path, 'https://') !== 0 && stripos($path, 'http://') !== 0) {
             if (config('filesystems.cloud') === 'public') {
                 $path = Storage::disk(config('filesystems.cloud'))->url($path);

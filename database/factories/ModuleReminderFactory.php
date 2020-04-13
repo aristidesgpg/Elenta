@@ -29,7 +29,6 @@ $factory->define(ModuleReminder::class, function (Faker $faker) {
 
     return [
         'module_id' => $faker->randomElement($module_ids),
-        'type' => $faker->randomElement(ModuleReminder::TYPES),
         'subject' => $faker->words(4, true),
         'message' => $faker->sentences(3, true),
         'frequency' => $faker->numberBetween(1, 5),

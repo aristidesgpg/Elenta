@@ -68,7 +68,7 @@ class LoginController extends Controller
             ]);
         }
         $token = $existing_user->createToken('default')->plainTextToken;
-        $uri = '/#/login/callback/' . $token;
+        $uri = "/login/callback/$token";
         return redirect($uri);
     }
 

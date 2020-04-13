@@ -1,18 +1,18 @@
 import * as React from "react";
 import {useMutation, useQuery} from '@apollo/react-hooks';
 import {useParams} from "react-router-dom";
-import {GET_TEMPLATE, UPSERT_MODULE} from "../graphql/queries";
-import Tabs from "react-bootstrap/Tabs";
+import {CURRENT_USER, CURRENT_USER_PROFILE, GET_TEMPLATE, UPSERT_MODULE} from "../graphql/queries";
 import Tab from "react-bootstrap/Tab";
 import ModuleEditor from "../components/modules/ModuleEditor";
 import LoadingContainer from "../components/component-container/LoadingContainer";
 import {useEffect, useState} from "react";
 import _ from "lodash";
-import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 
 export const TemplateEditorPage = () => {
   let {id} = useParams();
+
+  const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
   const [template, setTemplate] = useState(null);
   const {loading, error, data} = useQuery(GET_TEMPLATE, {variables: {id}});
@@ -25,7 +25,7 @@ export const TemplateEditorPage = () => {
           title: "New Module",
           description: "Module description",
           owner: {
-            connect: "6ee525f9-c935-4117-85a2-3a9a52e83300"
+            connect: userProfile.id
           },
           templates: {
             connect: [data.getTemplate.id]

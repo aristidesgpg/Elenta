@@ -1,8 +1,8 @@
 import * as React from "react";
 import {useParams} from "react-router-dom";
-import {gql} from "apollo-boost";
 import ElentaForm from "../components/elenta-form/ElentaForm";
-import {GET_TEMPLATE, UPSERT_TEMPLATE} from "../graphql/queries";
+import {CURRENT_USER, CURRENT_USER_PROFILE, GET_TEMPLATE, UPSERT_TEMPLATE} from "../graphql/queries";
+import {useQuery} from "@apollo/react-hooks";
 
 const schema = {
   title: "Create Template",
@@ -38,6 +38,7 @@ const uiSchema = {
 
 export const TemplateSettingsEditor = () => {
   let {id} = useParams();
+  const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
   if (id == "new") {
     return <ElentaForm
@@ -47,8 +48,12 @@ export const TemplateSettingsEditor = () => {
       mutationVars={
         {
           owner: {
-            connect: "c798b1a1-fdc7-4b59-9599-9f991b94dc51"
+            connect: userProfile.id
           }
+        }
+      }
+      onSuccess={(data) => {
+          window.location.replace(`/template/content/${data.upsertTemplate.id}`);
         }
       }
     />

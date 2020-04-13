@@ -36,19 +36,18 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+            'host' => env('MAIL_HOST', 'smtp.gmail.com'),
             'port' => env('MAIL_PORT', 587),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
         ],
-
         'ses' => [
             'transport' => 'ses',
             'key' => env('SES_KEY'),
             'secret' => env('SES_SECRET'),
-            'region' => 'us-east-1',
+            'region' => 'ap-southeast-2',
         ],
 
         'mailgun' => [
@@ -86,14 +85,20 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'noreply@elenta.io'),
+        'address' => env('MAIL_FROM_ADDRESS', 'team@elenta.io'),
         'name' => env('MAIL_FROM_NAME', 'Elenta'),
     ],
 
     'reply_to' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'noreply@elenta.io'),
+        'address' => env('MAIL_FROM_ADDRESS', 'team@elenta.io'),
         'name' => env('MAIL_FROM_NAME', 'Elenta'),
     ],
+
+    // Send all emails to developer when not in production
+    'to' => env('APP_ENV') != 'production' ? [
+        'address' => env('UNIVERSAL_TO_ADDRESS'),
+        'name' => env('UNIVERSAL_TO_NAME', 'Elenta Staging')
+    ] : null,
 
     /*
     |--------------------------------------------------------------------------

@@ -235,31 +235,6 @@ export const USERS = gql`
   }
 `;
 
-//Local apollo state queries
-
-export const CURRENT_USER = gql`
-  {
-    user @client{
-      id
-      name
-      email
-      email_verified_at
-      learnerProfile {
-        id
-        picture_url
-        role
-        tenure
-      }
-      consultantProfile {
-        id
-        picture_url
-        title
-        bio
-      }
-    }
-  }
-`;
-
 export const GET_CONSULTANT_PROFILE = gql`
   query getConsultantProfile($user_id : ID!) {
     getConsultantProfile(user_id: $user_id) {
@@ -318,6 +293,42 @@ export const UPDATE_CONSULTANT_PROFILE = gql`
       old_password
       password
       password_confirmation
+    }
+  }
+`;
+
+//Local apollo state queries
+
+export const CURRENT_USER = gql`
+  {
+    user @client{
+      id
+      name
+      email
+      email_verified_at
+      learnerProfile {
+        id
+        picture_url
+        role
+        tenure
+      }
+      consultantProfile {
+        id
+        picture_url
+        title
+        bio
+      }
+    }
+  }
+`;
+
+export const CURRENT_USER_PROFILE = gql`
+  {
+    userProfile @client{
+      id
+      picture_url
+      title
+      bio
     }
   }
 `;

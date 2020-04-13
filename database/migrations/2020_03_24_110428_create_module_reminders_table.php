@@ -18,7 +18,6 @@ class CreateModuleRemindersTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('module_id');
 
-            $table->enum('type', ModuleReminder::TYPES);
             $table->string('subject');
             $table->text('message');
             $table->integer('frequency')->default(72);

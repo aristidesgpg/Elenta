@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useMutation, useQuery} from '@apollo/react-hooks';
 import {useParams} from "react-router-dom";
-import {GET_PROGRAM, UPSERT_MODULE} from "../graphql/queries";
+import {CURRENT_USER_PROFILE, GET_PROGRAM, UPSERT_MODULE} from "../graphql/queries";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import ModuleEditor from "../components/modules/ModuleEditor";
@@ -14,6 +14,7 @@ import Nav from "react-bootstrap/Nav";
 export const ProgramEditorPage = () => {
   let {id} = useParams();
 
+  const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
   const [program, setProgram] = useState(null);
   const {loading, error, data} = useQuery(GET_PROGRAM, {variables: {id}});
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
@@ -25,7 +26,7 @@ export const ProgramEditorPage = () => {
           title: "New Module",
           description: "Module description",
           owner: {
-            connect: "6ee525f9-c935-4117-85a2-3a9a52e83300"
+            connect: userProfile.id
           },
           programs: {
             connect: [data.getProgram.id]
