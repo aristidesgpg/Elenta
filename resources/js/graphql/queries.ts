@@ -290,9 +290,44 @@ export const UPDATE_CONSULTANT_PROFILE = gql`
       picture_url
       title
       bio
-      old_password
-      password
-      password_confirmation
+
+      programs {
+        id
+        title
+        format
+        max_learners
+        start_timestamp
+        can_invite
+        is_public
+        programModules {
+          id
+          module {
+            id
+            title
+          }
+          sends {
+            id
+            response_timestamp
+          }
+        }
+        learners {
+          id
+        }
+        invites {
+          id
+        }
+      }
+      templates {
+        title
+        can_request
+        is_public
+        requests {
+          id
+        }
+        programs {
+          id
+        }
+      }
     }
   }
 `;

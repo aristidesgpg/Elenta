@@ -5,7 +5,7 @@ extend type Query {
 type Mutation @middleware(checks: ["auth:sanctum"]) {
     createConsultantProfile(input: CreateConsultantProfileInput @spread): ConsultantProfile! @create
 
-    updateConsultantProfile(input: UpdateConsultantProfileInput @spread): UpdateConsultantProfile! @updateConsultantProfile @field(resolver: "App\\GraphQL\\Resolvers\\UpdateConsultantProfileResolver@resolve")
+    updateConsultantProfile(input: UpdateConsultantProfileInput @spread): ConsultantProfile! @updateConsultantProfile @field(resolver: "App\\GraphQL\\Resolvers\\UpdateConsultantProfileResolver@resolve")
 }
 
 input CreateConsultantProfileInput {
@@ -23,6 +23,7 @@ input UpdateConsultantProfileInput {
     id: ID!
     picture_url: String
     title: String
+    name: String
     email: String @rules(apply: ["email"])
     bio: String
 
@@ -45,16 +46,4 @@ type ConsultantProfile {
 
     programs: [Program]
     templates: [Template]
-}
-
-type UpdateConsultantProfile {
-    id: ID!
-
-    picture_url: String
-    title: String
-    bio: String
-
-    old_password: String
-    password: String
-    password_confirmation: String
 }

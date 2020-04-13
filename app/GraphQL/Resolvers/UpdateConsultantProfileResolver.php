@@ -26,7 +26,8 @@ class UpdateConsultantProfileResolver
         /** @var User $user */
         $user = Auth::user();
         $user->update([
-            'email' => $args['email']
+            'email' => $args['email'],
+            'name' => $args['name']
         ]);
 
         $old_password = $args['old_password'] ?? null;
@@ -41,7 +42,7 @@ class UpdateConsultantProfileResolver
         /** @var ConsultantProfile $consultantProfile */
         $consultantProfile = $user->consultantProfile()->first();
         $consultantProfile->update([
-            'bio' => $args['email'] ?? '',
+            'bio' => $args['bio'] ?? '',
             'title' => $args['title'] ?? ''
         ]);
 

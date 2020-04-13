@@ -4,8 +4,8 @@ import {
   GET_CONSULTANT_PROFILE,
   UPDATE_CONSULTANT_PROFILE,
 } from "../graphql/queries";
-import {useQuery} from "@apollo/react-hooks";
-import {get} from "lodash";
+import {useApolloClient, useQuery} from "@apollo/react-hooks";
+import {get, pick} from "lodash";
 import LoadingContainer from "../components/component-container/LoadingContainer";
 import ElentaForm from "../components/elenta-form/ElentaForm";
 import {validateEmail} from "../utils/utils";
@@ -46,7 +46,7 @@ const schema = {
               title: " ",
             },
 
-            title: {
+            name: {
               type: "string",
               title: "Name",
               description: "",
@@ -64,6 +64,11 @@ const schema = {
           title: "",
           type: "object",
           properties: {
+            title: {
+              type: "string",
+              title: "Title",
+              description: "",
+            },
             bio: {
               type: "string",
               title: "Biography",
@@ -110,7 +115,7 @@ const uiSchema = {
   },
   profile: {
     mainData: {
-      title: {
+      name: {
         "ui:placeholder": "Enter your name",
       },
       email: {
@@ -123,6 +128,9 @@ const uiSchema = {
       },
     },
     biography: {
+      title: {
+        "ui:placeholder": "Enter your profile name",
+      },
       bio: {
         "ui:widget": "textarea",
         "ui:placeholder": "Enter your biography",
@@ -150,6 +158,7 @@ const uiSchema = {
 
 export const ConsultantProfileSettingsPage = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
+  const client = useApolloClient();
 
   const {loading, error, data} = useQuery(GET_CONSULTANT_PROFILE, {
     variables: {user_id: user.id},
@@ -158,7 +167,8 @@ export const ConsultantProfileSettingsPage = () => {
   const consultantProfile = get(data, 'getConsultantProfile', {});
 
   schema.properties.profile.properties.mainData.properties.picture_url["picture_url"] = consultantProfile.picture_url || null;
-  schema.properties.profile.properties.mainData.properties.title["default"] = consultantProfile.title;
+  schema.properties.profile.properties.mainData.properties.name["default"] = user.name;
+  schema.properties.profile.properties.biography.properties.title["default"] = consultantProfile.title;
   schema.properties.profile.properties.biography.properties.bio["default"] = consultantProfile.bio || "";
 
   schema.properties.profile.properties.mainData.properties.email["default"] = user.email;
@@ -190,6 +200,14 @@ export const ConsultantProfileSettingsPage = () => {
         });
       }}
       validate={validate}
+      onSuccess={(data) => {
+        const userProfile = get(data, 'updateConsultantProfile', null);
+        client.writeData({
+          data: {
+            userProfile
+          }
+        });
+      }}
     />
   </LoadingContainer>
 
