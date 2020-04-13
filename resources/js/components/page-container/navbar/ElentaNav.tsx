@@ -15,12 +15,12 @@ import NavbarToggle from "react-bootstrap/NavbarToggle";
 import ProfileDropdownItem from "./ProfileDropdownItem";
 import {NavLink} from "react-router-dom";
 import {useQuery} from "@apollo/react-hooks";
-import {CURRENT_USER} from "../../../graphql/queries";
+import {CURRENT_USER, CURRENT_USER_PROFILE} from "../../../graphql/queries";
 import './ElentaNav.scss';
 
 export const ElentaNav = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
-  const consultantProfile = get(user, 'consultantProfile[0]', null);
+  const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
   const logout = () => {
     localStorage.removeItem('token');
@@ -49,10 +49,10 @@ export const ElentaNav = () => {
                   <Dropdown.Toggle id="account-dropdown"
                                    className="account-dropdown rounded-circle">
                     {
-                      consultantProfile &&
+                      userProfile &&
                       <Image src={
-                        consultantProfile.picture_url
-                          ? consultantProfile.picture_url
+                        userProfile.picture_url
+                          ? userProfile.picture_url
                           : 'https://lorempixel.com/30/30/?64665'
                       }
                              className="profile-image"
@@ -60,11 +60,7 @@ export const ElentaNav = () => {
                     }
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    {
-                      user.consultantProfile.map(p => {
-                        return <ProfileDropdownItem key={p.id} profile={p}/>
-                      })
-                    }
+                    {userProfile && <ProfileDropdownItem key={userProfile.id} profile={userProfile}/>}
 
                     <Dropdown.Item onClick={() => logout()}>
                       Logout

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useMutation, useQuery} from '@apollo/react-hooks';
 import {useParams} from "react-router-dom";
-import {CURRENT_USER, GET_TEMPLATE, UPSERT_MODULE} from "../graphql/queries";
+import {CURRENT_USER, CURRENT_USER_PROFILE, GET_TEMPLATE, UPSERT_MODULE} from "../graphql/queries";
 import Tab from "react-bootstrap/Tab";
 import ModuleEditor from "../components/modules/ModuleEditor";
 import LoadingContainer from "../components/component-container/LoadingContainer";
@@ -12,8 +12,7 @@ import Nav from "react-bootstrap/Nav";
 export const TemplateEditorPage = () => {
   let {id} = useParams();
 
-  //TODO: Can we fetch the current profile too, based on the nav?
-  const {data: {user}} = useQuery(CURRENT_USER);
+  const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
   const [template, setTemplate] = useState(null);
   const {loading, error, data} = useQuery(GET_TEMPLATE, {variables: {id}});
@@ -26,7 +25,7 @@ export const TemplateEditorPage = () => {
           title: "New Module",
           description: "Module description",
           owner: {
-            connect: user.consultantProfile[0].id
+            connect: userProfile.id
           },
           templates: {
             connect: [data.getTemplate.id]

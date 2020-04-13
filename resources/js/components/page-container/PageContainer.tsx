@@ -1,6 +1,7 @@
 import * as React from "react";
 import {useApolloClient, useQuery} from "@apollo/react-hooks";
 import Row from "react-bootstrap/Row";
+import {get} from "lodash";
 import LoadingContainer from "../component-container/LoadingContainer";
 import ElentaNav from "./navbar/ElentaNav";
 import {GET_ME} from "../../graphql/queries";
@@ -21,7 +22,13 @@ export const PageContainer = (props) => {
   }
   const {loading, error, data} = response;
 
-  client.writeData({data: {user: data ? data.me : null}});
+  // TODO change the logic of getting the correct profile
+  const userProfile = get(data, 'me.consultantProfile[0]', null);
+  const user = get(data, 'me', null);
+  client.writeData({data: {
+    user,
+    userProfile
+  }});
 
   return (
     <LoadingContainer loading={loading} error={error}>

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useParams} from "react-router-dom";
 import ElentaForm from "../components/elenta-form/ElentaForm";
-import {CURRENT_USER, GET_TEMPLATE, UPSERT_TEMPLATE} from "../graphql/queries";
+import {CURRENT_USER, CURRENT_USER_PROFILE, GET_TEMPLATE, UPSERT_TEMPLATE} from "../graphql/queries";
 import {useQuery} from "@apollo/react-hooks";
 
 const schema = {
@@ -38,8 +38,7 @@ const uiSchema = {
 
 export const TemplateSettingsEditor = () => {
   let {id} = useParams();
-  //TODO: Can we fetch the current profile too, based on the nav?
-  const {data: {user}} = useQuery(CURRENT_USER);
+  const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
   if (id == "new") {
     return <ElentaForm
@@ -49,7 +48,7 @@ export const TemplateSettingsEditor = () => {
       mutationVars={
         {
           owner: {
-            connect: user.consultantProfile[0].id
+            connect: userProfile.id
           }
         }
       }
