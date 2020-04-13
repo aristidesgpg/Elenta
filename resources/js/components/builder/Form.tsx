@@ -14,8 +14,8 @@ import EditorDescField from "./fields/EditorDescField";
 import DTPicker from "./fields/DTPicker";
 import { ImageWidget } from "./fields/ImageWidget"
 import { VideoWidget } from "./fields/VideoWidget"
-import { Range } from "rc-slider";
-
+import Slider, { Range } from "rc-slider";
+import 'rc-slider/assets/index.css';
 
 import * as Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
@@ -71,6 +71,10 @@ export default class Form extends React.Component<Props, State>{
 
   onChange = (e) => {
     //console.log("FormData" , e);    
+  }
+
+  onSubmit = (e) => {
+    console.log("FormData" , e);    
   }
 
   //*********  Actions  ***********/
@@ -214,6 +218,7 @@ export default class Form extends React.Component<Props, State>{
   
   //********  Render *******/
   render() {
+    const createSliderWithTooltip = Slider.createSliderWithTooltip;
     const { error, schema, newKey, uiSchema } = this.state;
     console.log("State", this.state);
     const fields = {RichEditor:TextField,                                  
@@ -222,7 +227,7 @@ export default class Form extends React.Component<Props, State>{
     const widgets = {
                       RichText: RichTextWidget,   
                       RDP: DTPicker,
-                      Range: Range,
+                      Range: createSliderWithTooltip(Slider),
                       Image: ImageWidget,
                       Video: VideoWidget             
                   };
@@ -245,12 +250,13 @@ export default class Form extends React.Component<Props, State>{
                               registry={registry} 
                               onChange={this.onChange}>              
                   </SchemaField>}
-        {false && <h1>Preview</h1>}
-        {false && <JsonForm key={newKey+1} {...this.state} 
+        {true && <h1>Preview</h1>}
+        {true && <JsonForm key={newKey+1} {...this.state} 
                     schema ={schema} uiSchema = {uiSchema}
                     fields={{...fields}} 
-                    widgets={{...widgets}} onChange={this.onChange} >
-          <button type="submit" className="hidden">Submit</button>
+                    widgets={{...widgets}} onChange={this.onChange} 
+                    onSubmit={this.onSubmit}>
+          <button type="submit" className="">Submit</button>
           </JsonForm>}
         </div>
   

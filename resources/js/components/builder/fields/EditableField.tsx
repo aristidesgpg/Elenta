@@ -9,7 +9,7 @@ import DTPicker from "./DTPicker";
 import { RankField } from "./RankField";
 import { ImageWidget } from "./ImageWidget"
 import { VideoWidget } from "./VideoWidget"
-import { Range } from "rc-slider";
+import Slider, { Range } from "rc-slider";
 import 'rc-slider/assets/index.css';
 import Form from 'react-jsonschema-form-bs4';
 import RepeaterEditField from "./repeater/RepeaterEditField";
@@ -197,7 +197,7 @@ export default class EditableField extends React.Component<any,any> {
     const widgets = {
         RichText: RichTextWidget,   
         RDP: DTPicker,
-        Range: Range,
+        Range: Slider,
         Image: ImageWidget,
         Video: VideoWidget             
       };

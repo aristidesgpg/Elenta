@@ -71,10 +71,11 @@ export default {
         description: "",
         minimum: 0,
         maximum: 100,
-        multipleOf: 2,
-        default: [0,1,1,2],
-        count:4,
-        pushable: true        
+        multipleOf: 1,
+        //default: [0,1,1,2],
+        count:1,
+        marks:{number: "ReactNode"}
+        //pushable: true        
       },
       uiSchema: {  
         "ui:widget": "Range",      
@@ -277,8 +278,8 @@ export default {
       icon: "calendar",
       label: "Date",
       jsonSchema: {
-        type: "string",
-        format: "date",
+        type: "integer",
+        format: "date-time",
         title: "Edit me",
         description:""
       },
