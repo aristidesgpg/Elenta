@@ -118,12 +118,10 @@ onSelectChange = (item)=>{
 }
 
 render() {
-  return (
-    <div className="container-fluid">
+  return (    
       <SxSelect
         placeholder="Form/Question" list={this.props.tagList}
-        onSelectChange={this.onSelectChange}/>
-    </div>
+        onSelectChange={this.onSelectChange}/>    
   );
 }
 }
