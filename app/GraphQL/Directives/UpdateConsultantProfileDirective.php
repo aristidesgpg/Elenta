@@ -14,10 +14,11 @@ class UpdateConsultantProfileDirective extends ValidationDirective
     {
         return [
             'id' => ['required'],
+            'name' => ['required', 'string'],
             'email' => ['required', Rule::unique('users', 'email')->ignore($this->args['id'], 'id')],
             'bio' => ['required', 'string'],
             'title' => ['required', 'string'],
-            'old_password' => ['sometimes', 'string', 'password_match'],
+            'old_password' => ['required_with:password', 'string', 'password_match'],
             'password' => ['required_with:old_password', 'string', 'min:6', 'max:16', 'confirmed'],
         ];
     }
