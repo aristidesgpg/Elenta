@@ -46,10 +46,12 @@ export const App = () => {
       <BrowserRouter>
         <PageContainer>
             <Switch>
+              <Route exact={true} path="/" component={Form}/>
+
               <Route exact={true} path="/login" component={LoginPage}/>
               <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
               <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
-              <Route exact={true} path="/" component={Form}/>
+
               <PrivateRoute exact={true} path="/consultant-dashboard" component={ConsultantDashboard}/>
               <PrivateRoute exact={true} path="/consultant-profile-settings" component={ConsultantProfileSettingsPage}/>
               <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>

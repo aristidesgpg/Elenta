@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property string $id
  * @property string $program_module_id
- * @property string $type
  * @property string $subject
  * @property string $message
  * @property int $frequency
@@ -49,9 +48,6 @@ class ModuleReminder extends Model
     use UsesUuid;
 
     protected $guarded = [];
-
-    //TODO: Remove types
-    public const TYPES = ['MANUAL', 'AUTOMATED'];
 
     public function module(): BelongsTo {
         return $this->belongsTo(Module::class);

@@ -27,7 +27,8 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
      mutationVars,
      queryTransform,
      mutationTransform,
-     validate
+     validate,
+     onSuccess
    }) => {
 
     const [localUiSchema, setLocalUiSchema] = useState(uiSchema);
@@ -51,6 +52,12 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
         }
       }
     }, [queryData]);
+
+    useEffect(() => {
+      if (!mutationLoading && !mutationError && mutationData) {
+        if (onSuccess) onSuccess(mutationData);
+      }
+    }, [mutationData]);
 
     const onSubmit = ({formData}, e) => {
       e.preventDefault();
@@ -119,7 +126,8 @@ interface ElentaFormProps {
   mutationVars?: object,
   queryTransform?: any,
   mutationTransform?: any,
-  validate?: any
+  validate?: any,
+  onSuccess?: any
 }
 
 ElentaForm.defaultProps = {

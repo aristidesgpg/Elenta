@@ -1,7 +1,5 @@
 import * as React from "react";
 import {useMutation, useQuery} from '@apollo/react-hooks';
-import Spinner from "react-bootstrap/Spinner";
-import {useParams} from "react-router-dom";
 import ModuleList from "./ModuleList";
 import {useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
@@ -9,12 +7,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "../builder/Form";
 import {UPSERT_MODULE} from "../../graphql/queries";
-import Tabs from "react-bootstrap/Tabs";
 import ModuleSettingsEditor from "./ModuleSettingsEditor";
 import Tab from "react-bootstrap/Tab";
 import ElentaFormButton from "../elenta-form/ElentaFormButton";
 import _ from "lodash";
-import Button from "react-bootstrap/Button";
 import Nav from "react-bootstrap/Nav";
 
 export const ModuleEditor =
@@ -32,8 +28,10 @@ export const ModuleEditor =
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
 
     useEffect(() => {
-      setFormReminder(_.omit(activeModule.reminders[0], "__typename"));
-      setFormTrigger(_.omit(activeModule.triggers[0], "__typename"));
+      if (activeModule) {
+        setFormReminder(_.omit(activeModule.reminders[0], "__typename"));
+        setFormTrigger(_.omit(activeModule.triggers[0], "__typename"));
+      }
     }, [activeModule]);
 
     useEffect(() => {

@@ -36,7 +36,7 @@ export const ElentaFormButton: React.FunctionComponent<ElentaFormButtonProps> =
           <Alert variant='danger' transition={null}>
             {
               mutationError.graphQLErrors.map(e => {
-                return <p>{e.message}</p>
+                return <p key={e}>{e.message}</p>
               })
             }
           </Alert>
