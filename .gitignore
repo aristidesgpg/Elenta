@@ -21,3 +21,4 @@ graph.png
 .env.production
 .env.staging
 .env.beta
+.DS_STORE

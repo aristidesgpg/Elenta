@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -89,5 +90,12 @@ class Program extends Model
 
     public function invites(): HasMany {
         return $this->hasMany(ProgramInvite::class);
+    }
+
+    /**
+     * Get all of the tags for the program.
+     */
+    public function tags(): MorphToMany {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 }
