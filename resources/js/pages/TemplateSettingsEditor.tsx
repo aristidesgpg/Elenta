@@ -75,7 +75,9 @@ export const TemplateSettingsEditor = () => {
             modules: {
               create: [
                 {
-                  owner: userProfile.id,
+                  owner: {
+                    connect: userProfile.id
+                  },
                   title: "New Module",
                   description: "This is a new Module"
                 }

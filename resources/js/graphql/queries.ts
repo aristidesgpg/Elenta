@@ -289,6 +289,7 @@ export const GET_CONSULTANT_PROFILE = gql`
         }
       }
       templates {
+        id
         title
         can_request
         is_public

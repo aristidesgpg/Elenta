@@ -3,6 +3,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
+import {Link} from "react-router-dom";
 
 export const TemplateTable = ({templates}) => {
   if (templates && templates.length > 0) {
@@ -16,7 +17,7 @@ export const TemplateTable = ({templates}) => {
 
     let tableData = templates.map(t => {
       return {
-        'title': <a href={`/#/template/content/${t.id}`}>{t.title}</a>,
+        'title': <Link to={`/template/content/${t.id}`}>{t.title}</Link>,
         'is_public': t.is_public,
         'can_request': t.can_request
       };
@@ -27,7 +28,7 @@ export const TemplateTable = ({templates}) => {
     return (
       <Alert variant="info">
         It looks like you don't have any Templates yet, start by creating one below
-        <Button href="/template/settings/new">Create Template</Button>
+        <Link to="/template/settings/new"><Button >Create Template</Button></Link>
       </Alert>
     );
   }
