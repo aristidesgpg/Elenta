@@ -245,11 +245,10 @@ export default class ElentaFormBuilder extends React.Component<Props, State>{
       <div className="container-fluid">
         {error ? <div className="alert alert-danger">{error}</div> : <div/>}
         <div className="rjsf builder-form">
-        {true && <SchemaField key={newKey} {...this.state} 
-                              schema={schema}                               
-                              registry={registry} 
-                              onChange={this.onChange}>              
-                  </SchemaField>}        
+          <SchemaField key={newKey} {...this.state} 
+                      schema={schema}                               
+                      registry={registry} 
+                      onChange={this.onChange}/>                                
         </div>  
         <FormActions  
             schema = {schema}

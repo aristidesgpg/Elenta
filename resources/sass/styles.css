@@ -7,7 +7,8 @@ body {
 }
 
 .builder-inner-actions {
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .dropdown-item {
@@ -24,7 +25,7 @@ body {
 }
 
 .editable-field {
-    padding: .35em;
+
 }
 
 .editable-field:hover {
@@ -49,8 +50,31 @@ body {
     margin-left: 6px;
 }
 
+.editable-field-close{
+    justify-content: center;
+}
+
+.rjsf>.form-group{
+    margin-bottom: 0px!important;
+}
 .field-editor .btn{
     margin-left: 6px;
+}
+
+.editfield-title{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-right: 0px!important;
+    padding-left: 0px!important;     
+}
+
+.editfield-title strong{
+    margin-left: 5px;    
+}
+
+.editfield-body{
+    border: 1px dashed #ccc;
+    padding-top: 10px;    
 }
 
 .panel-heading
@@ -63,13 +87,13 @@ body {
 }
 
 .panel-body{
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    background-color: lightyellow;  
+      
 }
-
+/***background-color: lightyellow;  **/
 .btn-toolbar {
    float: right;
+   height: 100%;
+   align-items: center;
 }
 
 .btn-toolbar .btn{
