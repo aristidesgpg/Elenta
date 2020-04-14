@@ -33,7 +33,7 @@ interface State {
 
 interface Props {
   schema: any,
-  uiSchema: any,
+  uiSchema: any,  
   onSave: (schema: any, uiSchema: any) => void,
   excludedFields?: string[]
 }
@@ -239,18 +239,7 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
   render() {
     const createSliderWithTooltip = Slider.createSliderWithTooltip;
     const {error, schema, newKey, uiSchema} = this.state;
-    console.log("State", this.state);
-    const fields = {
-      RichEditor: TextField,
-      Rank: RankField,
-    };
-    const widgets = {
-      RichText: RichTextWidget,
-      RDP: DTPicker,
-      Range: createSliderWithTooltip(Slider),
-      Image: ImageWidget,
-      Video: VideoWidget
-    };
+    console.log("State", this.state);    
     const registry = {
       ...getDefaultRegistry(),
       fields: {
@@ -279,8 +268,21 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
             excludedFields={this.props.excludedFields}
             />
       </div>
-    );
+    );    
+  }
+}
 
+/*const fields = {
+      RichEditor: TextField,
+      Rank: RankField,
+    };
+    const widgets = {
+      RichText: RichTextWidget,
+      RDP: DTPicker,
+      Range: createSliderWithTooltip(Slider),
+      Image: ImageWidget,
+      Video: VideoWidget
+    };*/
     /*{false && <h1>Preview</h1>}
         {false && <JsonForm key={newKey+1} {...this.state}
                     schema ={schema} uiSchema = {uiSchema}
@@ -290,6 +292,3 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
           <button type="submit" className="">Submit</button>
           </JsonForm>}
     */
-  }
-
-}

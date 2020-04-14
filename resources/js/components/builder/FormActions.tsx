@@ -28,7 +28,7 @@ export default class FormActions extends React.Component<Props, State> {
 
     return (
       <div>
-        <ButtonToolbar className="builder-inner-actions">
+        <ButtonToolbar className="builder-inner-actions">        
           <Button className="float-right" variant="info" onClick={() => {
             this.props.saveSchema();
           }}>
