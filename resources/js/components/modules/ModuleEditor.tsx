@@ -21,6 +21,15 @@ export const ModuleEditor =
      buttonError,
      buttonData
    }) => {
+    const [formContent, setFormContent] = useState({
+      schema: {
+        type: "object",
+        properties: {}
+      },
+      uiSchema: {
+        "ui:order": []
+      }
+    });
     const [formReminder, setFormReminder] = useState(null);
     const [formTrigger, setFormTrigger] = useState(null);
     const [activeModule, setActiveModule] = useState(modules[0]);
@@ -31,6 +40,7 @@ export const ModuleEditor =
       if (activeModule) {
         setFormReminder(_.omit(activeModule.reminders[0], "__typename"));
         setFormTrigger(_.omit(activeModule.triggers[0], "__typename"));
+        if(activeModule.content) setFormContent(JSON.parse(activeModule.content));
       }
     }, [activeModule]);
 
@@ -54,7 +64,8 @@ export const ModuleEditor =
               upsert: [
                 formTrigger
               ]
-            }
+            },
+            content: JSON.stringify(formContent)
           }
         }
       });
@@ -78,35 +89,45 @@ export const ModuleEditor =
           </Col>
           <Col>
             <Tab.Container defaultActiveKey="content" id="module-editor" transition={false}>
-                <Nav variant="tabs">
-                  <Nav.Item>
-                    <Nav.Link eventKey="content">Content</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="settings">Settings</Nav.Link>
-                  </Nav.Item>
-                  <ElentaFormButton
-                    className="ml-auto"
-                    title="Save Module"
-                    onClick={onSave}
-                    mutationLoading={mutationLoading}
-                    mutationError={mutationError}
-                    mutationData={mutationData}
+              <Nav variant="tabs">
+                <Nav.Item>
+                  <Nav.Link eventKey="content">Content</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="settings">Settings</Nav.Link>
+                </Nav.Item>
+                <ElentaFormButton
+                  className="ml-auto"
+                  title="Save Module"
+                  onClick={onSave}
+                  mutationLoading={mutationLoading}
+                  mutationError={mutationError}
+                  mutationData={mutationData}
+                />
+              </Nav>
+              <Tab.Content>
+                <Tab.Pane eventKey="content" title="Content">
+                  <ElentaFormBuilder
+                    schema={formContent.schema}
+                    uiSchema={formContent.uiSchema}
+                    onSave={(schema, uiSchema) => {
+                      let o = {
+                        schema: schema,
+                        uiSchema: uiSchema
+                      };
+                      setFormContent(o);
+                    }}
                   />
-                </Nav>
-                <Tab.Content>
-                  <Tab.Pane eventKey="content" title="Content">
-                    <ElentaFormBuilder schema={{}} uiSchema={{}} onSave ={(schema,uiSchema)=>{}}/>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="settings" title="Settings">
-                    <ModuleSettingsEditor
-                      reminder={formReminder}
-                      trigger={formTrigger}
-                      setFormReminder={setFormReminder}
-                      setFormTrigger={setFormTrigger}
-                    />
-                  </Tab.Pane>
-                </Tab.Content>
+                </Tab.Pane>
+                <Tab.Pane eventKey="settings" title="Settings">
+                  <ModuleSettingsEditor
+                    reminder={formReminder}
+                    trigger={formTrigger}
+                    setFormReminder={setFormReminder}
+                    setFormTrigger={setFormTrigger}
+                  />
+                </Tab.Pane>
+              </Tab.Content>
             </Tab.Container>
           </Col>
         </Row>

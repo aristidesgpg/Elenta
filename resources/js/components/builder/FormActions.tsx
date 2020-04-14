@@ -1,20 +1,21 @@
 import * as React from "react";
 import FieldListDropdown from "./FieldListDropdown";
-import {Button, ButtonToolbar, ButtonGroup}  from "react-bootstrap";
+import {Button, ButtonToolbar, ButtonGroup} from "react-bootstrap";
 
-interface State{
-  
+interface State {
+
 }
 
-interface Props{
-  schema: any;
-  uiSchema: any;
-  addField: (field: any) =>void;
-  switchField: (name:string, field: any) => void;
-  saveSchema: () => void;
+interface Props {
+  schema: any,
+  uiSchema: any,
+  addField: (field: any) => void,
+  switchField: (name: string, field: any) => void,
+  saveSchema: () => void,
+  excludedFields?: string[]
 }
 
-export default class FormActions extends React.Component<Props, State>{
+export default class FormActions extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
@@ -23,21 +24,25 @@ export default class FormActions extends React.Component<Props, State>{
   render() {
     const filename = this.props.schema.title + ".json";
     const schemaFileContent = "data:application/json;base64," + btoa(JSON.stringify(this.props.schema));
-    const uiSchemaFileContent = "data:application/json;base64," + btoa(JSON.stringify(this.props.uiSchema));   
-    
+    const uiSchemaFileContent = "data:application/json;base64," + btoa(JSON.stringify(this.props.uiSchema));
+
     return (
       <div>
-        <ButtonToolbar className="builder-inner-actions">          
-          <Button className="float-right" variant="info" onClick={()=>{this.props.saveSchema();}}>            
-                Save Form Schema            
+        <ButtonToolbar className="builder-inner-actions">
+          <Button className="float-right" variant="info" onClick={() => {
+            this.props.saveSchema();
+          }}>
+            Save Form Schema
           </Button>
-          <FieldListDropdown className="float-right" 
-            name = {""}
-            addField = {this.props.addField}
-            switchField = {this.props.switchField}>            
+          <FieldListDropdown className="float-right"
+                             name={""}
+                             addField={this.props.addField}
+                             switchField={this.props.switchField}
+                             excludedFields={this.props.excludedFields}
+          >
             Add a field
-          </FieldListDropdown>        
-        </ButtonToolbar>      
+          </FieldListDropdown>
+        </ButtonToolbar>
       </div>
     );
   }//<i className="fas fa-plus-square"/>

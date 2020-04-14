@@ -28,7 +28,8 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
      queryTransform,
      mutationTransform,
      validate,
-     onSuccess
+     onSuccess,
+     children
    }) => {
 
     const [localUiSchema, setLocalUiSchema] = useState(uiSchema);
@@ -106,6 +107,7 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
                   widgets={widgets}
                   onError={log("errors")}
         >
+          {children}
           <ElentaFormButton
             mutationLoading={mutationLoading}
             mutationError={mutationError}
@@ -127,7 +129,8 @@ interface ElentaFormProps {
   queryTransform?: any,
   mutationTransform?: any,
   validate?: any,
-  onSuccess?: any
+  onSuccess?: any,
+  children?: any
 }
 
 ElentaForm.defaultProps = {
