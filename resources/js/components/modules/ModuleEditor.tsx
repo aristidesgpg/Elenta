@@ -102,7 +102,7 @@ export const ModuleEditor =
                   <Form.Group>
                     <Form.Label>Title: </Form.Label>
                     <RIEInput
-                      value={activeModule.title}
+                      value={activeModule ? activeModule.title : ""}
                       change={updateModuleList}
                       propName='title'
                     />
@@ -110,7 +110,7 @@ export const ModuleEditor =
                   <Form.Group>
                     <Form.Label>Description: </Form.Label>
                     <RIETextArea
-                      value={activeModule.description}
+                      value={activeModule ? activeModule.description : ""}
                       change={updateModuleList}
                       propName='description'
                     />
