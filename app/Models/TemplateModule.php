@@ -47,6 +47,10 @@ class TemplateModule extends Model
         'id' => 'string'
     ];
     protected $guarded = [];
+    protected $attributes = [
+        'folder' => '',
+        'order' => 0
+    ];
 
     public function module(): BelongsTo {
         return $this->belongsTo(Module::class);

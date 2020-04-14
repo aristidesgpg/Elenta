@@ -13,7 +13,7 @@ import {get} from "lodash";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import NavbarToggle from "react-bootstrap/NavbarToggle";
 import ProfileDropdownItem from "./ProfileDropdownItem";
-import {NavLink} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 import {useQuery} from "@apollo/react-hooks";
 import {CURRENT_USER, CURRENT_USER_PROFILE} from "../../../graphql/queries";
 import './ElentaNav.scss';
@@ -38,34 +38,33 @@ export const ElentaNav = () => {
     <Container>
       <Row>
         <Navbar bg="light" fixed="top">
-          <NavbarBrand href="/">Elenta</NavbarBrand>
+          <NavbarBrand>
+            <Link to="/dashboard">
+              <Image src="/images/logo.png" alt="logo" style={{height: '30px'}}/>
+            </Link>
+          </NavbarBrand>
           <NavbarToggle/>
           <NavbarCollapse className="justify-content-end">
             {user
               ?
               <>
-                Welcome Back, <b>{user.name}</b>
                 <Dropdown>
                   <Dropdown.Toggle id="account-dropdown"
                                    className="account-dropdown rounded-circle">
                     {
                       userProfile &&
-                      <Image src={
-                        userProfile.picture_url
-                          ? userProfile.picture_url
-                          : 'https://lorempixel.com/30/30/?64665'
-                      }
+                      <Image src={userProfile.picture_url ? userProfile.picture_url : '/images/avatar.svg'}
                              className="profile-image"
-                             alt="Profile image" roundedCircle/>
+                             alt="Profile Picture" roundedCircle/>
                     }
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    {userProfile && <ProfileDropdownItem key={userProfile.id} path={'/consultant-profile-settings'} profile={userProfile}/>}
-
+                    {userProfile && <ProfileDropdownItem key={userProfile.id} profile={userProfile}/>}
                     <Dropdown.Item onClick={() => logout()}>
                       Logout
                     </Dropdown.Item>
                   </Dropdown.Menu>
+                  <b className="pl-2 pr-4">{user.name}</b>
                 </Dropdown>
               </>
               :

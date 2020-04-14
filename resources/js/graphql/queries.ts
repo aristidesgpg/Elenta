@@ -16,6 +16,10 @@ export const GET_TEMPLATE = gql`
         description
         content
         conditions
+        pivot {
+          folder
+          order
+        }
         reminders {
           id
           subject
@@ -34,6 +38,34 @@ export const GET_TEMPLATE = gql`
     }
   }
 `;
+/*
+
+      templateModules {
+        id
+        folder
+        order
+        module {
+          title
+          description
+          content
+          conditions
+          reminders {
+            id
+            subject
+            message
+            frequency
+            max_reminders
+          }
+          triggers {
+            id
+            start_timestamp
+            start_timestamp_field
+            frequency
+            max_sends
+          }
+        }
+      }
+ */
 
 export const GET_TEMPLATES_BY_OWNER = gql`
   query getTemplatesByOwner($consultant_profile_id: ID!) {
@@ -79,6 +111,12 @@ export const GET_PROGRAM = gql`
         description
         content
         conditions
+
+        pivot {
+          folder
+          order
+        }
+        
         reminders {
           id
           subject
@@ -289,6 +327,7 @@ export const GET_CONSULTANT_PROFILE = gql`
         }
       }
       templates {
+        id
         title
         can_request
         is_public

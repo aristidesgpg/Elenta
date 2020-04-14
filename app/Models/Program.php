@@ -80,7 +80,11 @@ class Program extends Model
     }
 
     public function modules(): BelongsToMany {
-        return $this->belongsToMany(Module::class, 'program_modules');
+        return $this->belongsToMany(Module::class, 'program_modules')
+            ->withPivot([
+                'folder',
+                'order'
+            ]);
     }
 
     public function learners(): BelongsToMany {

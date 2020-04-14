@@ -7,7 +7,7 @@ import LoginTabs from "../components/auth/LoginTabs";
 export const LoginPage = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
 
-  if (user) return (<Redirect to="/consultant-dashboard"/>);
+  if (user) return (<Redirect to="/dashboard"/>);
 
   return (
     <LoginTabs/>

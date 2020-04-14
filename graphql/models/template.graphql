@@ -20,6 +20,7 @@ input UpsertTemplateInput {
 }
 
 input TemplatesBelongsToManyModules {
+    create: [UpsertModuleInput!]
     connect: [ConnectTemplateModule!]
     sync: [ConnectTemplateModule!]
 }

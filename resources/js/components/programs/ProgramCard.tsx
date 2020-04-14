@@ -5,12 +5,16 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import {formatDate} from "../../utils/utils";
+import {Link} from "react-router-dom";
+import "./ProgramCard.scss";
 
 // TODO pull styles out in CSS and/or other components
 export const ProgramCard = ({program}) => {
   return (
-    <Card>
-      <Card.Header>{program.title}</Card.Header>
+    <Card className="program-card">
+      <Card.Header>
+        <Link to={`/program/content/${program.id}`}>{program.title}</Link>
+      </Card.Header>
       <Card.Body>
         <Container className="pl-0 pr-0 pb-3">
           <h6 className="text-muted">Format</h6>
@@ -39,10 +43,6 @@ export const ProgramCard = ({program}) => {
           <ProgressBar now={60} label={"60%"}/>
         </Container>
       </Card.Body>
-      <Card.Footer>
-        <Card.Link href={`/program/content/${program.id}`}>Edit</Card.Link>
-        <Card.Link>Delete</Card.Link>
-      </Card.Footer>
     </Card>
   );
 };
