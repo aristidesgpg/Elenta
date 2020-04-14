@@ -61,7 +61,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule}) => {
             key={item.id}
             module={item}
             isActive={activeModule ? item.id === activeModule.id : false}
-            setActiveModule={setActiveModule}
+            setActiveModule={item.modules ? () => null : setActiveModule}
           >
             {item.modules &&
             <div>
