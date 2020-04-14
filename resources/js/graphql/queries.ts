@@ -79,6 +79,12 @@ export const GET_PROGRAM = gql`
         description
         content
         conditions
+
+        pivot {
+          folder
+          order
+        }
+        
         reminders {
           id
           subject

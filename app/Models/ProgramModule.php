@@ -51,6 +51,10 @@ class ProgramModule extends Model
     use SoftDeletes;
 
     protected $guarded = [];
+    protected $attributes = [
+        'folder' => '',
+        'order' => 0
+    ];
 
     public function program(): BelongsTo
     {

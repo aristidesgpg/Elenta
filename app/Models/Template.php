@@ -67,7 +67,11 @@ class Template extends Model
     }
 
     public function modules(): BelongsToMany {
-        return $this->belongsToMany(Module::class, 'template_modules');
+        return $this->belongsToMany(Module::class, 'template_modules')
+            ->withPivot([
+                'folder',
+                'order'
+            ]);
     }
 
     public function requests(): HasMany {

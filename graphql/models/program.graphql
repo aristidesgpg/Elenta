@@ -26,6 +26,8 @@ type Program {
     dynamic_fields: String
     dynamic_fields_data: String
 
+    pivot: ModulePivot
+
     created_at: DateTime!
     updated_at: DateTime!
     deleted_at: DateTime!
