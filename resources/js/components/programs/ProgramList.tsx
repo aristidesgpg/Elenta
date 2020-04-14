@@ -2,6 +2,7 @@ import * as React from "react";
 import ProgramCard from "./ProgramCard";
 import CardDeck from "react-bootstrap/CardDeck";
 import Card from "react-bootstrap/Card";
+import {Link} from "react-router-dom";
 
 export const ProgramList = ({programs, showCreate}) => {
   return (
@@ -20,7 +21,7 @@ export const ProgramList = ({programs, showCreate}) => {
         showCreate &&
         <Card>
           <Card.Body>
-            <a href="/program/settings/new">Create New Program</a>
+            <Link to="/program/settings/new">Create New Program</Link>
           </Card.Body>
         </Card>
       }

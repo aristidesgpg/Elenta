@@ -8,7 +8,7 @@ import {GET_ME} from "../../graphql/queries";
 
 export const PageContainer = (props) => {
   const client = useApolloClient();
-  const token  = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
 
   let response = {
     loading: false,
@@ -22,13 +22,19 @@ export const PageContainer = (props) => {
   }
   const {loading, error, data} = response;
 
+  if (error) {
+    localStorage.removeItem('token');
+    window.location.replace('/login');
+  }
   // TODO change the logic of getting the correct profile
   const userProfile = get(data, 'me.consultantProfile[0]', null);
   const user = get(data, 'me', null);
-  client.writeData({data: {
-    user,
-    userProfile
-  }});
+  client.writeData({
+    data: {
+      user,
+      userProfile
+    }
+  });
 
   return (
     <LoadingContainer loading={loading} error={error}>

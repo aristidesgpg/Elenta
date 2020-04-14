@@ -14,7 +14,7 @@ export const ProgramInviteTable = ({program}) => {
     return {
       email: i.email,
       invited_at: formatDate(i.created_at),
-      enrolled: i.learner.id ? "Yes" : "No"
+      enrolled: (i.learner && i.learner.id) ? "Yes" : "No"
     };
   });
 

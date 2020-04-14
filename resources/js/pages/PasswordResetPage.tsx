@@ -7,7 +7,7 @@ import PasswordReset from "../components/auth/PasswordReset";
 export const PasswordResetPage = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
 
-  if (user) return (<Redirect to="/consultant-dashboard"/>);
+  if (user) return (<Redirect to="/dashboard"/>);
 
   return (
     <PasswordReset/>

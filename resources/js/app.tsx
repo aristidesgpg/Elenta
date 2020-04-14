@@ -51,8 +51,10 @@ export const App = () => {
               <Route exact={true} path="/login" component={LoginPage}/>
               <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
               <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
-              <PrivateRoute exact={true} path="/consultant-dashboard" component={ConsultantDashboard}/>
-              <PrivateRoute exact={true} path="/consultant-profile-settings" component={ConsultantProfileSettingsPage}/>
+
+              <PrivateRoute exact={true} path="/dashboard" component={ConsultantDashboard}/>
+              <PrivateRoute exact={true} path="/preferences" component={ConsultantProfileSettingsPage}/>
+
               <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
               <PrivateRoute exact={true} path="/template/settings/:id" component={TemplateSettingsEditor}/>
               <PrivateRoute exact={true} path="/template/content/:id" component={TemplateEditorPage}/>

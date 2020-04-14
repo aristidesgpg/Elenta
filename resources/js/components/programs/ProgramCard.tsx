@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import {formatDate} from "../../utils/utils";
+import {Link} from "react-router-dom";
 
 // TODO pull styles out in CSS and/or other components
 export const ProgramCard = ({program}) => {
@@ -40,7 +41,7 @@ export const ProgramCard = ({program}) => {
         </Container>
       </Card.Body>
       <Card.Footer>
-        <Card.Link href={`/program/content/${program.id}`}>Edit</Card.Link>
+        <Link to={`/program/content/${program.id}`}>Edit</Link>
         <Card.Link>Delete</Card.Link>
       </Card.Footer>
     </Card>

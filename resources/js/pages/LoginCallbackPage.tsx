@@ -8,7 +8,7 @@ export const LoginCallbackPage = () => {
   const {token} = useParams();
   const {data: {user}} = useQuery(CURRENT_USER);
 
-  if (user) return (<Redirect to="/consultant-profile-settings"/>);
+  if (user) return (<Redirect to="/preferences"/>);
 
   useEffect(() => {
     if (token) {

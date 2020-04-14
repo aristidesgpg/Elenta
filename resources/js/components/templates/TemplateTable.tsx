@@ -16,7 +16,7 @@ export const TemplateTable = ({templates}) => {
 
     let tableData = templates.map(t => {
       return {
-        'title': <a href={`/#/template/content/${t.id}`}>t.title</a>,
+        'title': <a href={`/#/template/content/${t.id}`}>{t.title}</a>,
         'is_public': t.is_public,
         'can_request': t.can_request
       };
