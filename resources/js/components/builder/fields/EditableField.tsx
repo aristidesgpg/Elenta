@@ -2,6 +2,10 @@ import * as React from "react";
 import { Draggable, Droppable } from "react-drag-and-drop";
 //import Form from "react-jsonschema-form";
 import { ButtonToolbar, Button } from "react-bootstrap";
+import Slider, { Range } from "rc-slider";
+import 'rc-slider/assets/index.css';
+import Form from 'react-jsonschema-form-bs4';
+import debounce from 'lodash.debounce';
 import { TextField, RichTextWidget} from "./TextField";
 import EditorTitleField from "./EditorTitleField";
 import EditorDescField from "./EditorDescField";
@@ -9,11 +13,8 @@ import DTPicker from "./DTPicker";
 import { RankField } from "./RankField";
 import { ImageWidget } from "./ImageWidget"
 import { VideoWidget } from "./VideoWidget"
-import Slider, { Range } from "rc-slider";
-import 'rc-slider/assets/index.css';
-import Form from 'react-jsonschema-form-bs4';
 import RepeaterEditField from "./repeater/RepeaterEditField";
-import debounce from 'lodash.debounce';
+
 
 //import {withTheme} from "@rjsf/core";
 
@@ -120,10 +121,10 @@ export default class EditableField extends React.Component<any,any> {
     // SWITCH_FIELD action.   
     //console.log("Update", formData); 
     const updated = pickKeys(this.props.schema, formData, ["type"]);
-    const schema = {...this.props.schema, ...updated};
+    const schema = {...this.props.schema, ...updated};    
     this.setState({settingUpdated: true, schema});
     this.props.updateField(
-      this.props.name, schema, formData.required, formData.title);
+      this.props.name, schema, formData.required, formData.title);    
   }
 
   handleDelete = (event) => {
@@ -157,9 +158,12 @@ export default class EditableField extends React.Component<any,any> {
         Image: ImageWidget,
         Video: VideoWidget             
       };
-
+    const { uiSchema } = props;
+    const { schema } = this.state;
     const { isRepeater } = props.uiSchema;         
-    const { settingUpdated } = this.state;
+    if(isRepeater){
+      console.log("Schema", schema);      
+    }
     return (      
         <div className="container-fluid">
             <Draggable type="moved-field" data={props.name}>              
@@ -177,8 +181,9 @@ export default class EditableField extends React.Component<any,any> {
             <Droppable types={["field", "moved-field"]}  onDrop={this.handleDrop}>
                 <div className="row editfield-body">
                   <div className="col-sm-6">
-                    <Form {...props}          
-                    schema={this.state.schema}
+                    <Form {...props}                              
+                    schema={schema}
+                    uiSchema={uiSchema}
                     //idSchema={{$id: props.name}}
                     fields = {{...fields}}
                     widgets = {{...widgets}}>

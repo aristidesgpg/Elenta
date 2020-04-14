@@ -99,3 +99,8 @@ body {
 .btn-toolbar .btn{
     margin-left: 6px;
 }
+
+.repeater-add-btn{
+    margin-bottom: 10px;
+    float: right;
+}
