@@ -12,6 +12,8 @@ import Tab from "react-bootstrap/Tab";
 import ElentaFormButton from "../elenta-form/ElentaFormButton";
 import _ from "lodash";
 import Nav from "react-bootstrap/Nav";
+import Form from "react-bootstrap/Form";
+import {RIEInput, RIETextArea} from "riek";
 
 export const ModuleEditor =
   ({
@@ -40,7 +42,7 @@ export const ModuleEditor =
       if (activeModule) {
         setFormReminder(_.omit(activeModule.reminders[0], "__typename"));
         setFormTrigger(_.omit(activeModule.triggers[0], "__typename"));
-        if(activeModule.content) setFormContent(JSON.parse(activeModule.content));
+        if (activeModule.content) setFormContent(JSON.parse(activeModule.content));
       }
     }, [activeModule]);
 
@@ -50,11 +52,17 @@ export const ModuleEditor =
       }
     }, [buttonData]);
 
+    const updateModuleList = (d) => {
+      setActiveModule(Object.assign(activeModule, d));
+    };
+
     const onSave = () => {
       runMutation({
         variables: {
           input: {
             id: activeModule.id,
+            title: activeModule.title,
+            description: activeModule.description,
             reminders: {
               upsert: [
                 formReminder
@@ -88,6 +96,37 @@ export const ModuleEditor =
             />
           </Col>
           <Col>
+            <Row>
+              <Col md={9}>
+                <Form>
+                  <Form.Group>
+                    <Form.Label>Title: </Form.Label>
+                    <RIEInput
+                      value={activeModule.title}
+                      change={updateModuleList}
+                      propName='title'
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Description: </Form.Label>
+                    <RIETextArea
+                      value={activeModule.description}
+                      change={updateModuleList}
+                      propName='description'
+                    />
+                  </Form.Group>
+                </Form>
+              </Col>
+              <Col>
+                <ElentaFormButton
+                  title="Save Module"
+                  onClick={onSave}
+                  mutationLoading={mutationLoading}
+                  mutationError={mutationError}
+                  mutationData={mutationData}
+                />
+              </Col>
+            </Row>
             <Tab.Container defaultActiveKey="content" id="module-editor" transition={false}>
               <Nav variant="tabs">
                 <Nav.Item>
@@ -96,14 +135,6 @@ export const ModuleEditor =
                 <Nav.Item>
                   <Nav.Link eventKey="settings">Settings</Nav.Link>
                 </Nav.Item>
-                <ElentaFormButton
-                  className="ml-auto"
-                  title="Save Module"
-                  onClick={onSave}
-                  mutationLoading={mutationLoading}
-                  mutationError={mutationError}
-                  mutationData={mutationData}
-                />
               </Nav>
               <Tab.Content>
                 <Tab.Pane eventKey="content" title="Content">
