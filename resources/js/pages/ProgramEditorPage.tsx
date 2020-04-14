@@ -10,6 +10,8 @@ import {useEffect, useState} from "react";
 import _ from "lodash";
 import ProgramLearnerTable from "../components/programs/ProgramLearnerTable";
 import Nav from "react-bootstrap/Nav";
+import ProgramInviteTool from "../components/programs/ProgramInviteTool";
+import ProgramInviteTable from "../components/programs/ProgramInviteTable";
 
 export const ProgramEditorPage = () => {
   let {id} = useParams();
@@ -49,6 +51,7 @@ export const ProgramEditorPage = () => {
   }, [mutationData]);
 
   // TODO: Passing mutation* for the button here is a sloppy abstraction - need to clean it up
+  // TODO: Change this back to <Tab> without the <Nav>
   return (
     <LoadingContainer loading={loading} error={error}>
       <Tab.Container defaultActiveKey="modules" id="program-editor" transition={false}>
@@ -58,6 +61,9 @@ export const ProgramEditorPage = () => {
           </Nav.Item>
           <Nav.Item>
             <Nav.Link eventKey="learners">Learners</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="invites">Invites</Nav.Link>
           </Nav.Item>
           <Nav.Item>
             <Nav.Link eventKey="results">Results</Nav.Link>
@@ -74,9 +80,11 @@ export const ProgramEditorPage = () => {
             />
           </Tab.Pane>
           <Tab.Pane eventKey="learners" title="Learners">
-            <ProgramLearnerTable
-              program={program}
-            />
+            <ProgramLearnerTable program={program}/>
+          </Tab.Pane>
+          <Tab.Pane eventKey="invites" title="Invites">
+            <ProgramInviteTool program={program}/>
+            <ProgramInviteTable program={program} />
           </Tab.Pane>
           <Tab.Pane eventKey="results" title="Results">
             test

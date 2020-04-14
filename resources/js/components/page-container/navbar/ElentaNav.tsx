@@ -60,7 +60,7 @@ export const ElentaNav = () => {
                     }
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    {userProfile && <ProfileDropdownItem key={userProfile.id} profile={userProfile}/>}
+                    {userProfile && <ProfileDropdownItem key={userProfile.id} path={'/consultant-profile-settings'} profile={userProfile}/>}
 
                     <Dropdown.Item onClick={() => logout()}>
                       Logout

@@ -1,10 +1,13 @@
 import * as React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
+import {NavLink} from "react-router-dom";
 
-export const ProfileDropdownItem = ({profile}) => {
+export const ProfileDropdownItem = ({path, profile}) => {
   return (
     <Dropdown.Item>
-      {profile.title}
+      <NavLink to={path} activeClassName="disabled">
+        {profile.title}
+      </NavLink>
     </Dropdown.Item>
   );
 };

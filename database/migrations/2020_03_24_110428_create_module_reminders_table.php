@@ -18,9 +18,9 @@ class CreateModuleRemindersTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('module_id');
 
-            $table->string('subject');
-            $table->text('message');
-            $table->integer('frequency')->default(72);
+            $table->string('subject')->nullable();
+            $table->text('message')->nullable();
+            $table->integer('frequency')->default(1);
             $table->integer('max_reminders')->default(3);
 
             $table->timestamps();

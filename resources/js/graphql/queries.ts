@@ -130,9 +130,19 @@ export const GET_PROGRAM = gql`
         role
         tenure
       }
+      invites {
+        email
+        creator {
+          id
+          name
+        }
+        learner {
+          id
+        }
+      }
     }
   }
-`
+`;
 
 export const UPSERT_PROGRAM = gql`
   mutation upsertProgram($input: UpsertProgramInput!) {
@@ -150,6 +160,16 @@ export const UPSERT_PROGRAM = gql`
       is_public
       dynamic_fields
       dynamic_fields_data
+    }
+  }
+`;
+
+export const CREATE_PROGRAM_INVITE = gql`
+  mutation createProgramInvite($input: [CreateProgramInviteInput]!) {
+    createProgramInvite(input: $input) {
+      id
+      email
+      created_at
     }
   }
 `;

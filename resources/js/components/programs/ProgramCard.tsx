@@ -40,7 +40,7 @@ export const ProgramCard = ({program}) => {
         </Container>
       </Card.Body>
       <Card.Footer>
-        <Card.Link href={`/#/program/content/${program.id}`}>Edit</Card.Link>
+        <Card.Link href={`/program/content/${program.id}`}>Edit</Card.Link>
         <Card.Link>Delete</Card.Link>
       </Card.Footer>
     </Card>

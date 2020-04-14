@@ -1,0 +1,40 @@
+extend type Mutation {
+    createProgramInvite(input: [CreateProgramInviteInput]! @spread): ProgramInvite! @create
+}
+
+type ProgramInvite {
+    id: ID!
+    program: Program!
+    creator: User!
+    learner: LearnerProfile
+
+    email: String!
+    message: String!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
+input CreateProgramInviteInput {
+    program: ProgramInviteBelongsToProgram!
+    # TODO: Can we automatically connect this based on auth?
+    creator: ProgramInviteBelongsToUser!
+    learner: ProgramInviteBelongsToLearnerProfile
+
+    email: String!
+    message: String!
+}
+
+input ProgramInviteBelongsToProgram {
+    connect: ID!
+}
+
+input ProgramInviteBelongsToUser {
+    connect: ID!
+}
+
+input ProgramInviteBelongsToLearnerProfile {
+    connect: ID!
+}
+

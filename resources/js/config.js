@@ -11,7 +11,7 @@ export default {
       icon: "font",
       label: "Rich text",
       jsonSchema: {
-        type: "string", 
+        type: "string",
         title: "Edit me",
         textValue:"\"<p>Text</p>\"",
         default: "Rich Text"
@@ -21,10 +21,10 @@ export default {
           label:false
         },
         "ui:widget":"RichText",
-        editSchema: {                                  
-          type: "object",                
-          properties: {       
-            title: {type: "string", title: "Title"},              
+        editSchema: {
+          type: "object",
+          properties: {
+            title: {type: "string", title: "Title"},
             textValue:{type: "string"}
           }
         },
@@ -39,18 +39,18 @@ export default {
       icon: "sort-numeric-up",
       label: "Number Input",
       jsonSchema: {
-        type: "number", 
+        type: "number",
         title: "Edit me",
         description: "",
         minimum: 0,
         maximum: 100,
         multipleOf: 2,
-        default: 0        
+        default: 0
       },
-      uiSchema: {        
-        editSchema: {                                  
-          type: "object",                                    
-          properties: {                                 
+      uiSchema: {
+        editSchema: {
+          type: "object",
+          properties: {
             required: {type: "boolean"},
             minimum:{ type: "number", title:"Minimum", default:0 },
             maximum:{ type: "number", title:"Maximum", default:100 },
@@ -66,7 +66,7 @@ export default {
       icon: "text-color",
       label: "Slider",
       jsonSchema: {
-        type: "number", 
+        type: "number",
         title: "Edit me",
         description: "",
         minimum: 0,
@@ -75,13 +75,13 @@ export default {
         //default: [0,1,1,2],
         count:1,
         marks:{number: "ReactNode"}
-        //pushable: true        
+        //pushable: true
       },
-      uiSchema: {  
-        "ui:widget": "Range",      
-        editSchema: {                                  
-          type: "object",                         
-          properties: {                                 
+      uiSchema: {
+        "ui:widget": "Range",
+        editSchema: {
+          type: "object",
+          properties: {
             required: {type: "boolean"},
             minimum:{ type: "number", title:"Minimum", default:0 },
             maximum:{ type: "number", title:"Maximum", default:100 },
@@ -102,10 +102,10 @@ export default {
         description: "",
         default: ""
       },
-      uiSchema: {        
+      uiSchema: {
         editSchema: {
-          type: "object",          
-          properties: {            
+          type: "object",
+          properties: {
             required: {type: "boolean"},
           }
         },
@@ -126,8 +126,8 @@ export default {
       uiSchema: {
         "ui:widget": "textarea",
         editSchema: {
-          type: "object",          
-          properties: {            
+          type: "object",
+          properties: {
             required: {type: "boolean"},
           },
           editUISchema:{}
@@ -151,8 +151,8 @@ export default {
       uiSchema: {
         "ui:field": "Rank",
         editSchema: {
-          type: "object",          
-          properties: {            
+          type: "object",
+          properties: {
             required: {type: "boolean"},
             items: {
               type: "object",
@@ -177,7 +177,7 @@ export default {
     {
       id: "multiple-checkbox",
       icon: "check",
-      label: "Multiple Choices",
+      label: "Multiple Choice",
       jsonSchema: {
         type: "array",
         title: "A multiple choices list",
@@ -191,8 +191,8 @@ export default {
       uiSchema: {
         "ui:widget": "checkboxes",
         editSchema: {
-          type: "object",          
-          properties: {            
+          type: "object",
+          properties: {
             required: {type: "boolean"},
             items: {
               type: "object",
@@ -227,8 +227,8 @@ export default {
       uiSchema: {
         "ui:widget": "radio",
         editSchema: {
-          type: "object",          
-          properties: {            
+          type: "object",
+          properties: {
             required: {type: "boolean"},
             enum: {
               type: "array",
@@ -257,8 +257,8 @@ export default {
       uiSchema: {
         "ui:widget": "select",
         editSchema: {
-          type: "object",          
-          properties: {            
+          type: "object",
+          properties: {
             required: {type: "boolean"},
             enum: {
               type: "array",
@@ -286,8 +286,8 @@ export default {
       uiSchema: {
         "ui:widget": "RDP",
         editSchema: {
-          type: "object",          
-          properties: {            
+          type: "object",
+          properties: {
             required: {type: "boolean"}
           }
         },
@@ -300,16 +300,16 @@ export default {
       icon: "font",
       label: "Image",
       jsonSchema: {
-        type: "string", 
+        type: "string",
         imageURL: "",
-        title: "Edit me",   
-        description:""             
+        title: "Edit me",
+        description:""
       },
-      uiSchema: {        
+      uiSchema: {
         "ui:widget":"Image",
-        editSchema: {                                  
-          type: "object",                                
-          properties: {                   
+        editSchema: {
+          type: "object",
+          properties: {
             imageURL:{type: "string", title:"Image URL"}
           }
         },
@@ -322,16 +322,16 @@ export default {
       icon: "font",
       label: "Video",
       jsonSchema: {
-        type: "string", 
+        type: "string",
         videoURL: "",
-        title: "Edit me",   
-        description:""             
+        title: "Edit me",
+        description:""
       },
-      uiSchema: {        
+      uiSchema: {
         "ui:widget":"Video",
-        editSchema: {                                  
-          type: "object",                             
-          properties: {                   
+        editSchema: {
+          type: "object",
+          properties: {
             videoURL:{type: "string", title:"Video URL"}
           }
         },
@@ -352,16 +352,16 @@ export default {
          items:{
            type:"object",
            "properties":{},
-          }         
+          }
       },
-      uiSchema: {      
-          isRepeater: true,         
+      uiSchema: {
+          isRepeater: true,
           "items":{
-            
+
           },
-          editSchema: {                                  
-            "type":"object",              
-             "properties":{ }       
+          editSchema: {
+            "type":"object",
+             "properties":{ }
           },
           editUISchema:{}
       },

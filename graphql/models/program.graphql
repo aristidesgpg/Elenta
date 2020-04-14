@@ -113,20 +113,6 @@ type ProgramModuleSend {
     deleted_at: DateTime!
 }
 
-type ProgramInvite {
-    id: ID!
-    program: Program!
-    creator: User!
-    learner: LearnerProfile
-
-    email: String!
-    message: String!
-
-    created_at: DateTime!
-    updated_at: DateTime!
-    deleted_at: DateTime!
-}
-
 type ProgramLearner {
     id: ID!
     program: Program!

@@ -8,37 +8,39 @@ interface State{
 }
 
 interface Props{
-  className: string;
-  name: string;
-  variant: any;
-  addField: (field: any) => void;
-  switchField: (name:string, field: any) =>void;
+  className: string,
+  name: string,
+  variant: any,
+  addField: (field: any) => void,
+  switchField: (name:string, field: any) =>void,
+  excludedFields: string[]
 }
 
 export default class FieldListDropdown extends React.Component<Props, State> {
-  
+
   public static defaultProps = {
-    variant: "success"
+    variant: "success",
+    excludedFields: []
   };
 
   constructor(props: any) {
     super(props);
 
     let fieldListAction = "add_field";
-    if (this.props.name !== "") {      
+    if (this.props.name !== "") {
       fieldListAction = "switch_field";
     }
     this.state = {
-      fieldList: config.fieldList,
+      fieldList: config.fieldList.filter(f => !this.props.excludedFields.includes(f.id)),
       fieldListAction: fieldListAction
     };
   }
 
   handleFieldListAction = (fieldIndex) => {
     const fieldList = this.state.fieldList;
-    fieldIndex = parseInt(fieldIndex, 10);    
+    fieldIndex = parseInt(fieldIndex, 10);
     if (typeof fieldList[fieldIndex] !== "undefined") {
-      const field = fieldList[fieldIndex];            
+      const field = fieldList[fieldIndex];
       if (this.state.fieldListAction === "switch_field") {
         this.props.switchField(this.props.name, field);
       } else {
