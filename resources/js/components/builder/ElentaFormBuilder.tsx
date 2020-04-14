@@ -16,6 +16,7 @@ import {ImageWidget} from "./fields/ImageWidget"
 import {VideoWidget} from "./fields/VideoWidget"
 import Slider, {Range} from "rc-slider";
 import 'rc-slider/assets/index.css';
+import _ from "lodash";
 
 import * as Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
@@ -69,8 +70,14 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if ((this.state !== prevState)) {
+    if (!_.isEqual(this.state, prevState)) {
       this.saveSchema();
+    }
+    if (!_.isEqual(this.props, prevProps)) {
+      this.setState({
+        schema: this.props.schema,
+        uiSchema: this.props.uiSchema
+      })
     }
   }
 
