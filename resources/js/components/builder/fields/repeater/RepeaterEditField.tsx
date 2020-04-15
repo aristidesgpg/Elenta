@@ -126,15 +126,22 @@ export default class RepeaterEditField extends React.Component<any,any> {
   }
 
   swapFields = (source, target) => {      
-    const { uiSchema } = this.state;
+    const { uiSchema, editedSchema } = this.state;
     const order = uiSchema["ui:order"];
     const idxSource = order.indexOf(source);
     const idxTarget = order.indexOf(target);
     order[idxSource] = target;
     order[idxTarget] = source;
     let newKey = Math.random();
-    this.setState({ uiSchema, newKey });
-    this.onChangeDebounced({ formData: this.state.editedSchema });
+    
+    let schemaProperties = {};
+    for(let i = 0; i < order.length; i++){
+      const name = order[i];
+      schemaProperties[name] = editedSchema.items.properties[name];
+    }
+    editedSchema.items.properties = schemaProperties;
+    this.setState({ uiSchema, newKey, editedSchema });
+    this.onChangeDebounced({ formData: editedSchema });
   }
 
   onChangeMaxItem = (event) =>{
@@ -145,9 +152,7 @@ export default class RepeaterEditField extends React.Component<any,any> {
   }
 
   render() {    
-    
-    const { name, required, onCancel, onDelete} = this.props;
-    console.log(this.props);
+    const { required} = this.props;    
     const { schema, uiSchema, newKey, editedSchema } = this.state;
     const formData = {
       ...schema,

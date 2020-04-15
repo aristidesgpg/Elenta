@@ -53,6 +53,8 @@ type Module {
     content: String
     conditions: String
 
+    pivot: ModulePivot
+
     created_at: DateTime!
     updated_at: DateTime!
     deleted_at: DateTime!
@@ -61,4 +63,9 @@ type Module {
     programs: [Program]
     reminders: [ModuleReminder]
     triggers: [ModuleTrigger]
+}
+
+type ModulePivot {
+    folder: String
+    order: String
 }

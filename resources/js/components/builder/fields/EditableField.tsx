@@ -147,6 +147,7 @@ export default class EditableField extends React.Component<any,any> {
 
 
   render() {
+    const createSliderWithTooltip = Slider.createSliderWithTooltip;
     const props = this.props;    
     const fields = {RichEditor:TextField,                                  
                     Rank: RankField,                    
@@ -154,16 +155,14 @@ export default class EditableField extends React.Component<any,any> {
     const widgets = {
         RichText: RichTextWidget,   
         RDP: DTPicker,
-        Range: Slider,
+        Range: createSliderWithTooltip(Slider),
         Image: ImageWidget,
         Video: VideoWidget             
       };
     const { uiSchema } = props;
     const { schema } = this.state;
     const { isRepeater } = props.uiSchema;         
-    if(isRepeater){
-      console.log("Schema", schema);      
-    }
+    
     return (      
         <div className="container-fluid">
             <Draggable type="moved-field" data={props.name}>              

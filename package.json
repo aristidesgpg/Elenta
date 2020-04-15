@@ -84,7 +84,9 @@
   "react-onclickoutside": "^6.7.1",
   "react-player": "^1.15.3",
   "react-router-dom": "latest",
+  "react-sortablejs": "^1.5.1",
   "riek": "^1.0.2",
+  "sortablejs": "^1.10.2",
   "string": "^3.3.1"
  }
 }
