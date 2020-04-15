@@ -1,6 +1,8 @@
 import * as React from "react";
-import {useParams} from "react-router-dom";
+import {useParams, Redirect} from "react-router-dom";
 import ElentaForm from "../components/elenta-form/ElentaForm";
+import JsonForm from "react-jsonschema-form";
+
 import {
   CURRENT_USER,
   CURRENT_USER_PROFILE,
@@ -12,6 +14,7 @@ import {useLazyQuery, useQuery} from "@apollo/react-hooks";
 import _ from "lodash";
 import moment from "moment";
 import LoadingContainer from "../components/component-container/LoadingContainer";
+import {useEffect, useState} from "react";
 
 const schema = {
   title: "Create Program",
@@ -92,12 +95,28 @@ const rulesSchema = {
 export const ProgramSettingsEditor = () => {
   let {id} = useParams();
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
-
+  // TODO: We can fetch this when we load the consultant profile, and then pass the data down or fetch from cache
   const {loading: queryLoading, error: queryError, data: queryData} = useQuery(GET_TEMPLATES_BY_OWNER, {variables: {consultant_profile_id: userProfile.id}});
+
+  const [dynamicFields, setDynamicFields] = useState({formData: {}});
+  const [currentTemplate, setCurrentTemplate] = useState(null);
+  // TODO: This whole page needs refactoring, along with TemplateSettingsEditor. We shouldn't be using the ref
+  let formRef = {state: {formData: {}}};
+
+  useEffect(() => {
+    if (queryData) {
+      setCurrentTemplate(queryData.getTemplatesByOwner[0]);
+    }
+  }, [queryData]);
 
   if (queryData) {
     if (queryData.getTemplatesByOwner.length == 0) {
-      return <p>Please create a Template first</p>;
+      return (
+        <>
+          <p>Please create a Template first</p>
+          <Redirect to="/dashboard"/>
+        </>
+      );
     }
 
     schema.properties.template.enum = _.map(queryData.getTemplatesByOwner, 'id');
@@ -124,9 +143,27 @@ export const ProgramSettingsEditor = () => {
               connect: d.template
             };
             d['start_timestamp'] = moment(d.start_timestamp).format("Y-MM-DD HH:mm:ss");
+            d['dynamic_fields'] = JSON.stringify(
+              Object.assign(
+                JSON.parse(currentTemplate.dynamic_fields),
+                {formData: formRef.state.formData}
+              )
+            )
+          }}
+          handleChange={(d) => {
+            setCurrentTemplate(queryData.getTemplatesByOwner.filter(q => q.id == d.id)[0])
+          }}
+        >
+          {
+            currentTemplate && currentTemplate.dynamic_fields &&
+            <JsonForm schema={JSON.parse(currentTemplate.dynamic_fields).schema}
+                      uiSchema={JSON.parse(currentTemplate.dynamic_fields).uiSchema}
+                      ref={form => formRef = form}
+            >
+              <br/>
+            </JsonForm>
           }
-          }
-        />
+        </ElentaForm>
       </LoadingContainer>
     } else {
       schema.title = 'Update Program';
@@ -145,12 +182,31 @@ export const ProgramSettingsEditor = () => {
               }
             }
           }
+          queryTransform={d => {
+            setDynamicFields(JSON.parse(d.getProgram.dynamic_fields));
+          }}
           mutationTransform={(d) => {
             delete d['template'];
             d['start_timestamp'] = moment(d.start_timestamp).format("Y-MM-DD HH:mm:ss");
+            d['dynamic_fields'] = JSON.stringify(
+              Object.assign(
+                JSON.parse(currentTemplate.dynamic_fields),
+                {formData: formRef.state.formData}
+              )
+            )
+          }}
+        >
+          {
+            currentTemplate && currentTemplate.dynamic_fields &&
+            <JsonForm schema={JSON.parse(currentTemplate.dynamic_fields).schema}
+                      uiSchema={JSON.parse(currentTemplate.dynamic_fields).uiSchema}
+                      formData={dynamicFields.formData}
+                      ref={form => formRef = form}
+            >
+              <br/>
+            </JsonForm>
           }
-          }
-        />
+        </ElentaForm>
       </LoadingContainer>
     }
   }

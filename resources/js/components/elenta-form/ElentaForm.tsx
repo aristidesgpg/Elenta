@@ -1,13 +1,9 @@
 import * as React from "react";
-import Container from "react-bootstrap/Container";
 import JsonForm from "react-jsonschema-form";
 import {useLazyQuery, useMutation, useQuery} from "@apollo/react-hooks";
 import {DocumentNode, gql} from "apollo-boost";
-import Spinner from "react-bootstrap/Spinner";
 import {useEffect, useState} from "react";
 import _ from "lodash";
-import Button from "react-bootstrap/Button";
-import Alert from "react-bootstrap/Alert";
 import ElentaFormButton from "./ElentaFormButton";
 import LoadingContainer from "../component-container/LoadingContainer";
 import ProfilePictureFileWidget from "../widgets/ProfilePictureFileWidget";
@@ -29,9 +25,15 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
      mutationTransform,
      validate,
      onSuccess,
+     handleChange,
      children
    }) => {
 
+    //TODO: Lift state up
+    let formRef = {
+      submit: () => {
+      }
+    };
     const [localUiSchema, setLocalUiSchema] = useState(uiSchema);
     const [formState, setFormState] = useState(null);
     const [runQuery, {loading: queryLoading, error: queryError, data: queryData}] = useLazyQuery(query);
@@ -93,6 +95,7 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
         setLocalUiSchema(tempUiSchema);
       }
       setFormState(formData);
+      handleChange(formData);
     };
     const log = (type) => console.log.bind(console, type);
 
@@ -106,14 +109,19 @@ export const ElentaForm: React.FunctionComponent<ElentaFormProps> =
                   validate={validate}
                   widgets={widgets}
                   onError={log("errors")}
+                  ref={form => formRef = form}
         >
-          {children}
-          <ElentaFormButton
-            mutationLoading={mutationLoading}
-            mutationError={mutationError}
-            mutationData={mutationData}
-          />
+          <br/>
         </JsonForm>
+        {children}
+        <ElentaFormButton
+          mutationLoading={mutationLoading}
+          mutationError={mutationError}
+          mutationData={mutationData}
+          onClick={() => {
+            formRef.submit()
+          }}
+        />
       </LoadingContainer>
     );
   };
@@ -130,6 +138,7 @@ interface ElentaFormProps {
   mutationTransform?: any,
   validate?: any,
   onSuccess?: any,
+  handleChange?: any,
   children?: any
 }
 
@@ -139,7 +148,8 @@ ElentaForm.defaultProps = {
   queryVars: {},
   mutationVars: {},
   queryTransform: (d) => d,
-  mutationTransform: (d) => d
+  mutationTransform: (d) => d,
+  handleChange: (d) => d
 };
 
 export default ElentaForm;

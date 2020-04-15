@@ -45,7 +45,6 @@ const uiSchema = {
 };
 
 export const TemplateSettingsEditor = () => {
-  // TODO: Can we make dynamic fields a rjsf type with a new component
   const [dynamicFields, setDynamicFields] = useState({
     schema: {
       type: "object",

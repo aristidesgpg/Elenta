@@ -13,9 +13,13 @@ export const ElentaFormButton: React.FunctionComponent<ElentaFormButtonProps> =
      title,
      className
    }) => {
+    const handleClick = (e) => {
+      e.preventDefault();
+      onClick(e);
+    }
     return (
       <div className={className}>
-        <Button type="submit" onClick={onClick} disabled={disabled} className="w-100">
+        <Button type="submit" onClick={handleClick} disabled={disabled} className="w-100">
           {
             mutationLoading ?
               <Spinner

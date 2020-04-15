@@ -1,5 +1,4 @@
 import * as React from "react";
-import JsonForm from "react-jsonschema-form-bs4";
 import SchemaField from "react-jsonschema-form-bs4/lib/components/fields/SchemaField";
 import {getDefaultRegistry} from "react-jsonschema-form/lib/utils";
 import {slugify, clone, unique} from "../../utils/utils"
@@ -8,17 +7,10 @@ import EditableField from "./fields/EditableField";
 import TitleField from "./fields/TitleField";
 import DescriptionField from "./fields/DescriptionField";
 import {TextField, RichTextWidget} from "./fields/TextField";
-import {RankField} from "./fields/RankField";
-import EditorTitleField from "./fields/EditorTitleField";
-import EditorDescField from "./fields/EditorDescField";
-import DTPicker from "./fields/DTPicker";
-import {ImageWidget} from "./fields/ImageWidget"
-import {VideoWidget} from "./fields/VideoWidget"
 import Slider, {Range} from "rc-slider";
 import 'rc-slider/assets/index.css';
 import _ from "lodash";
 
-import * as Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
 
@@ -33,7 +25,7 @@ interface State {
 
 interface Props {
   schema: any,
-  uiSchema: any,  
+  uiSchema: any,
   onSave: (schema: any, uiSchema: any) => void,
   excludedFields?: string[]
 }
@@ -239,7 +231,7 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
   render() {
     const createSliderWithTooltip = Slider.createSliderWithTooltip;
     const {error, schema, newKey, uiSchema} = this.state;
-    console.log("State", this.state);    
+    console.log("State", this.state);
     const registry = {
       ...getDefaultRegistry(),
       fields: {
@@ -268,7 +260,7 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
             excludedFields={this.props.excludedFields}
             />
       </div>
-    );    
+    );
   }
 }
 

@@ -2,12 +2,9 @@
 
 namespace App\GraphQL\Resolvers;
 
-use App\Models\ConsultantProfile;
 use App\Models\ProgramInvite;
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,15 +21,23 @@ class CreateProgramInvitesResolver
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
+        //TODO: Add some protection here to stop people spamming - e.g domain restriction, or throttling
         $invites = [];
         foreach ($args['input'] as $input) {
             $invite = new ProgramInvite();
             $invite->fill([
                 'email' => $input['email'],
-                'message' => $input['message'],
+                'message' => $input['message'] ?: "",
                 'program_id' => $input['program']['connect'],
-                'user_id' => $input['creator']['connect'],
+                'user_id' => Auth::user()->id
             ]);
+            // TODO: Emails need to be at a profile level if they're at different companies
+            // Make consultant/learner profiles 1-1 relationship
+            if ($existing_user = User::whereEmail($input['email'])->first()) {
+                if ($existing_user->learnerProfile) {
+                    $invite->learner_profile_id = $existing_user->learnerProfile[0]->id;
+                }
+            }
             $invite->save();
             $invites[] = $invite;
         }

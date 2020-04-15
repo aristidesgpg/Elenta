@@ -20,6 +20,7 @@ import LoginCallbackPage from "./pages/LoginCallbackPage";
 import PasswordResetPage from "./pages/PasswordResetPage";
 import ConsultantProfileSettingsPage from "./pages/ConsultantProfileSettingsPage";
 import PrivateRoute from "./hoc/PrivateRoute";
+import LearnerDashboard from "./pages/LearnerDashboard";
 
 const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"

@@ -83,8 +83,10 @@ export const ProgramEditorPage = () => {
             <ProgramLearnerTable program={program}/>
           </Tab.Pane>
           <Tab.Pane eventKey="invites" title="Invites">
-            <ProgramInviteTool program={program}/>
+            <h3>Invites</h3>
             <ProgramInviteTable invites={program ? program.invites : []} />
+            <h3>Invite by Email</h3>
+            <ProgramInviteTool program={program}/>
           </Tab.Pane>
           <Tab.Pane eventKey="results" title="Results">
             test

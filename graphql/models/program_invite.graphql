@@ -1,4 +1,4 @@
-extend type Mutation {
+extend type Mutation @middleware(checks: ["auth:sanctum"]){
     createProgramInvite(input: CreateProgramInviteInput! @spread): ProgramInvite! @create
     createProgramInvites(input: [CreateProgramInviteInput]! @spread): [ProgramInvite]! @field(resolver: "App\\GraphQL\\Resolvers\\CreateProgramInvitesResolver@resolve")
 }
@@ -19,12 +19,10 @@ type ProgramInvite {
 
 input CreateProgramInviteInput {
     program: ProgramInviteBelongsToProgram!
-    # TODO: Can we automatically connect this based on auth?
-    creator: ProgramInviteBelongsToUser!
     learner: ProgramInviteBelongsToLearnerProfile
 
     email: String!
-    message: String!
+    message: String
 }
 
 input ProgramInviteBelongsToProgram {

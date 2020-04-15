@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -50,6 +51,19 @@ class LearnerProfile extends Model
 
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::saved(function (LearnerProfile $l) {
+            $invites = ProgramInvite::whereEmail($l->user->email)->get();
+            if ($invites->count() > 0) {
+                $invites->each(function (ProgramInvite $i) use ($l) {
+                    $i->learner_profile_id = $l->id;
+                });
+            }
+        });
+    }
+
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
@@ -60,5 +74,9 @@ class LearnerProfile extends Model
 
     public function programModules(): BelongsToMany {
         return $this->belongsToMany(ProgramModule::class, 'program_module_sends');
+    }
+
+    public function programInvites(): HasMany {
+        return $this->hasMany(ProgramInvite::class);
     }
 }
