@@ -31,6 +31,12 @@ export const GET_TEMPLATE = gql`
           max_sends
         }
       }
+      requests {
+        id
+        email
+        organization
+        comment
+      }
     }
   }
 `;

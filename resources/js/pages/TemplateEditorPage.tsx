@@ -8,6 +8,7 @@ import LoadingContainer from "../components/component-container/LoadingContainer
 import {useEffect, useState} from "react";
 import _ from "lodash";
 import Nav from "react-bootstrap/Nav";
+import TemplateRequestTable from "../components/templates/TemplateRequestTable";
 
 export const TemplateEditorPage = () => {
   let {id} = useParams();
@@ -57,10 +58,7 @@ export const TemplateEditorPage = () => {
             <Nav.Link eventKey="modules">Modules</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="learners">Learners</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="results">Results</Nav.Link>
+            <Nav.Link eventKey="requests">Requests</Nav.Link>
           </Nav.Item>
         </Nav>
         <Tab.Content>
@@ -74,10 +72,7 @@ export const TemplateEditorPage = () => {
             />
           </Tab.Pane>
           <Tab.Pane eventKey="requests" title="Requests">
-            test
-          </Tab.Pane>
-          <Tab.Pane eventKey="programs" title="Programs">
-            test
+            <TemplateRequestTable requests={template.requests} />
           </Tab.Pane>
         </Tab.Content>
       </Tab.Container>

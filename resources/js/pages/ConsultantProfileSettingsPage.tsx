@@ -9,6 +9,7 @@ import {get, pick} from "lodash";
 import LoadingContainer from "../components/component-container/LoadingContainer";
 import ElentaForm from "../components/elenta-form/ElentaForm";
 import {validateEmail} from "../utils/utils";
+import { useHistory } from "react-router-dom";
 
 const validate = ({profile: {mainData: {email}}, passwords: {old_password, password, password_confirmation}}, errors) => {
   if (!validateEmail(email)) {
@@ -159,6 +160,7 @@ const uiSchema = {
 export const ConsultantProfileSettingsPage = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
   const client = useApolloClient();
+  const history = useHistory();
 
   const {loading, error, data} = useQuery(GET_CONSULTANT_PROFILE, {
     variables: {user_id: user.id},
@@ -207,11 +209,10 @@ export const ConsultantProfileSettingsPage = () => {
             userProfile
           }
         });
+        history.push('/dashboard');
       }}
     />
   </LoadingContainer>
-
-  return null;
 };
 
 export default ConsultantProfileSettingsPage;

@@ -1,11 +1,12 @@
 extend type Mutation {
-    createProgramInvite(input: [CreateProgramInviteInput]! @spread): ProgramInvite! @create
+    createProgramInvite(input: CreateProgramInviteInput! @spread): ProgramInvite! @create
+    createProgramInvites(input: [CreateProgramInviteInput]! @spread): [ProgramInvite]! @field(resolver: "App\\GraphQL\\Resolvers\\CreateProgramInvitesResolver@resolve")
 }
 
 type ProgramInvite {
     id: ID!
-    program: Program!
-    creator: User!
+    program: Program
+    creator: User
     learner: LearnerProfile
 
     email: String!

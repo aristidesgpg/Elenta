@@ -3,14 +3,14 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import {formatDate} from "../../utils/utils";
 
-export const ProgramInviteTable = ({program}) => {
+export const ProgramInviteTable = ({invites}) => {
   const columns = [
     {dataField: "email", text: "Email"},
     {dataField: "invited_at", text: "Sent"},
     {dataField: "enrolled", text: "Enrolled"}
   ];
 
-  let tableData = program.invites.map(i => {
+  let tableData = invites.map(i => {
     return {
       email: i.email,
       invited_at: formatDate(i.created_at),

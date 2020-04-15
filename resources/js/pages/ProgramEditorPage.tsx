@@ -84,7 +84,7 @@ export const ProgramEditorPage = () => {
           </Tab.Pane>
           <Tab.Pane eventKey="invites" title="Invites">
             <ProgramInviteTool program={program}/>
-            <ProgramInviteTable program={program} />
+            <ProgramInviteTable invites={program ? program.invites : []} />
           </Tab.Pane>
           <Tab.Pane eventKey="results" title="Results">
             test

@@ -115,6 +115,9 @@ export const TemplateSettingsEditor = () => {
       uiSchema={uiSchema}
       query={GET_TEMPLATE}
       mutation={UPSERT_TEMPLATE}
+      mutationTransform={d => {
+        d.dynamic_fields = JSON.stringify(dynamicFields)
+      }}
       queryVars={{
         variables: {
           id: id

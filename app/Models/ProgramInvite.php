@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Mail\ProgramInviteMail;
+use App\Mail\ProgramModuleTriggerMail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * App\Models\ProgramInvite
@@ -47,6 +50,14 @@ class ProgramInvite extends Model
 
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::saved(function (ProgramInvite $pi) {
+            $pi->send();
+        });
+    }
+
     public function program(): BelongsTo {
         return $this->belongsTo(Program::class);
     }
@@ -57,5 +68,9 @@ class ProgramInvite extends Model
 
     public function creator(): BelongsTo {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function send() {
+        Mail::to($this->creator->email)->send(new ProgramInviteMail($this));
     }
 }
