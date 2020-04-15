@@ -1,0 +1,15 @@
+extend type Query {
+    tags: [Tag!]! @all
+}
+
+type Tag {
+    id: ID!
+    name: String!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+# put taggable below here
+# define relations
+
