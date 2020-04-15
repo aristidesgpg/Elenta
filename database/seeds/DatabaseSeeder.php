@@ -10,6 +10,7 @@ use App\Models\ProgramModule;
 use App\Models\ModuleReminder;
 use App\Models\ProgramModuleSend;
 use App\Models\ModuleTrigger;
+use App\Models\Tag;
 use App\Models\Template;
 use App\Models\TemplateModule;
 use App\Models\TemplateRequest;
@@ -40,5 +41,6 @@ class DatabaseSeeder extends Seeder
         factory(ProgramLearner::class, 50)->create();
         factory(TemplateRequest::class, 200)->create();
         factory(ProgramInvite::class, 200)->create();
+        factory(Tag::class, 10)->create();
     }
 }
