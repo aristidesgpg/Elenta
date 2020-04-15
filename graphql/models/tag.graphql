@@ -1,15 +1,33 @@
 extend type Query {
-    tags: [Tag!]! @all
+    tags: [Tag] @all
+    taggables: [Taggable] @all
 }
 
 type Tag {
     id: ID!
     name: String!
+    taggable: [Taggable]
 
     created_at: DateTime!
     updated_at: DateTime!
+    deleted_at: DateTime!
+
+    programs: [Program]
+    templates: [Template]
+    modules: [Module]
 }
 
-# put taggable below here
-# define relations
+
+type Taggable {
+    id: ID!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+
+    tags: [Tag]
+    programs: [Program]
+    templates: [Template]
+    modules: [Module]
+}
 

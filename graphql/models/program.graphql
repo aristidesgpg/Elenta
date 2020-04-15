@@ -34,6 +34,7 @@ type Program {
     modules: [Module]
     learners: [LearnerProfile]
     invites: [ProgramInvite]
+    tags: [Tag]
 }
 
 input UpsertProgramInput {

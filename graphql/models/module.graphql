@@ -61,4 +61,5 @@ type Module {
     programs: [Program]
     reminders: [ModuleReminder]
     triggers: [ModuleTrigger]
+    tags: [Tag]
 }

@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -53,19 +56,19 @@ class Taggable extends Model
     public const MODULE = Module::class;
 
     public function templates(): BelongsToMany {
-        return $this->belongsToMany(Template::class, 'taggable_id');
+        return $this->belongsToMany(Template::class, 'templates');
     }
 
     public function programs(): BelongsToMany {
-        return $this->belongsToMany(Program::class, 'taggable_id');
+        return $this->belongsToMany(Program::class, 'programs');
     }
 
 
     public function modules(): BelongsToMany {
-        return $this->belongsToMany(Module::class, 'taggable_id');
+        return $this->belongsToMany(Module::class, 'modules');
     }
 
-    public function tags(): BelongsToMany {
-        return $this->belongsToMany(Tag::class, 'taggable_id');
+    public function tags(): Morp {
+        return $this->belongsToMany(Tag::class, 'tags');
     }
 }
