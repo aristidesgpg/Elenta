@@ -6,6 +6,8 @@ import Slider, { Range } from "rc-slider";
 import 'rc-slider/assets/index.css';
 import Form from 'react-jsonschema-form-bs4';
 import debounce from 'lodash.debounce';
+import Modal from 'react-modal';
+import moment from "moment";
 import { TextField, RichTextWidget} from "./TextField";
 import EditorTitleField from "./EditorTitleField";
 import EditorDescField from "./EditorDescField";
@@ -15,8 +17,8 @@ import { ImageWidget } from "./ImageWidget"
 import { VideoWidget } from "./VideoWidget"
 import RepeaterEditField from "./repeater/RepeaterEditField";
 
-
 //import {withTheme} from "@rjsf/core";
+Modal.setAppElement('#root')
 
 export function pickKeys(source, target, excludedKeys) {
   const result = {};
@@ -42,9 +44,26 @@ export function shouldHandleDoubleClick(node) {
 }
 
 class FieldPropertiesEditor extends React.Component<any,any> {
+  static answerModalStyle = {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'  
+}
+
   constructor(props) {
     super(props);
-    this.state = {editedSchema: props.schema};
+    const { uiType } = props.uiSchema;
+    let enableCorAnswer = false;
+    if(uiType =="numberinput" || uiType =="slider" ||
+       uiType =="text" || uiType =="multilinetext" ||
+       uiType =="rank" || uiType =="multiple-checkbox" ||
+       uiType =="radio" || uiType =="select" || uiType =="date"){
+        enableCorAnswer = true;
+       }
+    this.state = {editedSchema: props.schema, showSetCorAnswer: false, enableCorAnswer};
     this.onChangeDebounced = debounce(this.onChangeDebounced, 500);
   }
 
@@ -72,17 +91,50 @@ class FieldPropertiesEditor extends React.Component<any,any> {
   onChangeDebounced = ({formData}) =>{
     this.props.onUpdate({formData})
   }
+  
+  /******* Begin - Correct Answer Modal Event ********/
+  onShowSetCorAnswer = ()=>{
+    this.setState({showSetCorAnswer: true});
+  }
 
+  onCloseSetCorAnswer = ()=>{
+    this.setState({showSetCorAnswer: false});
+  }
+
+  onSetCorAnswer = ({formData}) => {            
+    this.setState({showSetCorAnswer: false});
+    let { editedSchema } = this.state;
+    editedSchema["correctAnswer"] = formData;
+    this.setState({editedSchema});
+    this.onChangeDebounced({formData: editedSchema});
+  }
+  //// End - Correct Answer Modal Event /////
+  
   render() {
     
-    const {schema, name, required, uiSchema, onUpdate, fields} = this.props;
+    const {schema, name, required, uiSchema, onUpdate, fields, widgets} = this.props;
+    const { editedSchema, showSetCorAnswer, enableCorAnswer } = this.state;
     const formData = {
       ...schema,
       required,
-      ...this.state.editedSchema,
+      ...editedSchema,
       name: this.state.name
     };
-
+    let corAnswerString = undefined;
+    const corAnswerValue = editedSchema.correctAnswer;
+    if(corAnswerValue !== undefined){
+      if(uiSchema.uiType != "date" && uiSchema.uiType != "multiple-checkbox"){
+        corAnswerString = `${corAnswerValue}`;
+      }        
+      else{
+        if(uiSchema.uiType == "multiple-checkbox"){
+          corAnswerString = corAnswerValue.map(i => '"' + i +'"').join(' ,');
+        }
+        else{
+          corAnswerString = new Date(corAnswerValue).toLocaleString();
+        }
+      }      
+    }
     return (
       <div className="row panel panel-default field-editor">
         <div className="panel-heading clearfix col-12">
@@ -91,6 +143,10 @@ class FieldPropertiesEditor extends React.Component<any,any> {
         <div className="panel-body col-12">   
           <EditorTitleField title ={formData.title} updateTitle= { this.onUpdateTitleDesc } getFormData={ this.getFormData }/>
           <EditorDescField  description={formData.description} updateDescription={ this.onUpdateTitleDesc } getFormData={ this.getFormData }/>       
+          {enableCorAnswer === true && <React.Fragment>
+            <button className="btn btn-primary form-group" onClick={this.onShowSetCorAnswer}>Set Correct Answer</button>
+            {corAnswerString !== undefined && <p>Correct Answer: {corAnswerString}</p>}            
+          </React.Fragment>}
           <Form
             formData={formData}
             schema={uiSchema.editSchema}
@@ -100,6 +156,29 @@ class FieldPropertiesEditor extends React.Component<any,any> {
             <button type="submit" hidden>Submit</button>
           </Form>
         </div>
+        {showSetCorAnswer && 
+              <Modal style={{content: FieldPropertiesEditor.answerModalStyle}}
+                      isOpen={true}  shouldCloseOnOverlayClick={true}
+                      onRequestClose ={this.onCloseSetCorAnswer}>
+                      <div className="answer-modal">
+                        <div className="row">
+                          <div className="col-12">
+                            <p>Set Correct Answer</p>
+                          </div>
+                          <div className="col-12 form-group">                                                  
+                            <Form          
+                              formData={corAnswerValue}                  
+                              schema={editedSchema}
+                              uiSchema = {uiSchema}            
+                              fields={fields}
+                              widgets={widgets}
+                              onSubmit={this.onSetCorAnswer}>
+                              <button type="submit" className="btn btn-success float-right btn-submit">Save</button>
+                            </Form>                        
+                          </div>
+                        </div>                                                
+                      </div>                      
+              </Modal>}
       </div>
     );
   }
@@ -161,7 +240,7 @@ export default class EditableField extends React.Component<any,any> {
       };
     const { uiSchema } = props;
     const { schema } = this.state;
-    const { isRepeater } = props.uiSchema;         
+    const { uiType } = props.uiSchema;         
     
     return (      
         <div className="container-fluid">
@@ -190,12 +269,12 @@ export default class EditableField extends React.Component<any,any> {
                     </Form>
                   </div>
                   <div className="col-sm-6">       
-                  { isRepeater === true && <RepeaterEditField {...props}                     
+                  { uiType === "repeater" && <RepeaterEditField {...props}                     
                                             fields = {{...fields}}
                                             widgets = {{...widgets}}                                      
                                             onUpdate={this.handleUpdate}/>
                   }     
-                  { isRepeater !== true && <FieldPropertiesEditor
+                  { uiType !== "repeater" && <FieldPropertiesEditor
                                             {...props}                     
                                             fields = {{...fields}}
                                             widgets = {{...widgets}}

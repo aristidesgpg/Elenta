@@ -57,9 +57,9 @@ body {
 .rjsf>.form-group{
     margin-bottom: 0px!important;
 }
-.field-editor .btn{
+/*.field-editor .btn{
     margin-left: 6px;
-}
+}*/
 
 .editfield-title{
     margin-top: 5px;
@@ -103,4 +103,17 @@ body {
 .repeater-add-btn{
     margin-bottom: 10px;
     float: right;
+}
+
+.answer-modal{
+    display: flex;
+    justify-content: center
+}
+
+.answer-modal .btn-submit{
+    margin-top:10px;
+}
+
+.answer-modal p{
+    text-align: center;
 }
