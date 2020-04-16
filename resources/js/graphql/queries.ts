@@ -214,7 +214,7 @@ export const GET_PROGRAM = gql`
           id
           title
         }
-        sends {
+        send {
           learner {
             id
           }
@@ -409,8 +409,9 @@ export const GET_LEARNER_PROFILE = gql`
           module {
             id
             title
+            content
           }
-          sends {
+          send {
             id
             response_timestamp
             response_data
@@ -452,7 +453,7 @@ export const GET_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          sends {
+          send {
             id
             response_timestamp
           }
@@ -502,7 +503,7 @@ export const UPDATE_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          sends {
+          send {
             id
             response_timestamp
           }

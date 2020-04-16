@@ -11,19 +11,19 @@ type ProgramModuleSend {
     programModule: ProgramModule
     learner: LearnerProfile
 
-    reason: String!
-    channel: String!
-    subject: String!
-    message: String!
+    reason: String
+    channel: String
+    subject: String
+    message: String
 
-    send_timestamp: DateTime!
-    open_timestamp: DateTime!
-    click_timestamp: DateTime!
-    response_timestamp: DateTime!
+    send_timestamp: DateTime
+    open_timestamp: DateTime
+    click_timestamp: DateTime
+    response_timestamp: DateTime
 
     response_feedback: String
-    response_rating: Int!
-    response_data: String!
+    response_rating: Int
+    response_data: String
 
     created_at: DateTime!
     updated_at: DateTime!

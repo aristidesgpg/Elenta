@@ -6,6 +6,7 @@ use App\Mail\ProgramModuleMailer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
@@ -88,9 +89,9 @@ class ProgramModule extends Pivot
         return $this->belongsTo(Module::class);
     }
 
-    public function sends(): HasMany
+    public function send(): HasOne
     {
-        return $this->hasMany(ProgramModuleSend::class, 'program_module_id');
+        return $this->hasOne(ProgramModuleSend::class, 'program_module_id');
     }
 
     public function sendModule(LearnerProfile $l, string $reason, string $channel, string $subject = "", string $message = "")
