@@ -123,11 +123,11 @@ class FieldPropertiesEditor extends React.Component<any,any> {
     let corAnswerString = undefined;
     const corAnswerValue = editedSchema.correctAnswer;
     if(corAnswerValue !== undefined){
-      if(uiSchema.uiType != "date" && uiSchema.uiType != "multiple-checkbox"){
+      if(uiSchema.uiType != "date" && uiSchema.uiType != "multiple-checkbox" && uiSchema.uiType != "rank"){
         corAnswerString = `${corAnswerValue}`;
       }        
       else{
-        if(uiSchema.uiType == "multiple-checkbox"){
+        if(uiSchema.uiType == "multiple-checkbox" || uiSchema.uiType == "rank"){
           corAnswerString = corAnswerValue.map(i => '"' + i +'"').join(' ,');
         }
         else{
