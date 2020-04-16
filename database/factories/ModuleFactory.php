@@ -28,7 +28,11 @@ $factory->define(Module::class, function (Faker $faker) {
         'title' => "Module {$faker->numberBetween(0, 999)}",
         'description' => $faker->paragraph(5),
         'is_public' => $faker->boolean(),
-        'content' => '{}', // TODO
+        'content' => "
+        {
+            \"schema\": {\"type\":\"object\",\"properties\":{\"number\":{\"type\":\"number\",\"title\":\"Number\",\"description\":\"\",\"minimum\":5,\"maximum\":20,\"multipleOf\":1,\"default\":0},\"short_text\":{\"type\":\"string\",\"title\":\"Short Text\",\"description\":\"\",\"default\":\"\"},\"long_text\":{\"type\":\"string\",\"title\":\"Long Text\",\"description\":\"\",\"default\":\"\"}},\"required\":[]},
+            \"uiSchema\": {\"ui:order\":[\"number\",\"short_text\",\"long_text\"],\"number\":{\"editSchema\":{\"type\":\"object\",\"properties\":{\"required\":{\"type\":\"boolean\"},\"minimum\":{\"type\":\"number\",\"title\":\"Minimum\",\"default\":0},\"maximum\":{\"type\":\"number\",\"title\":\"Maximum\",\"default\":100},\"multipleOf\":{\"type\":\"number\",\"title\":\"Step\",\"default\":1}}},\"editUISchema\":{}},\"short_text\":{\"editSchema\":{\"type\":\"object\",\"properties\":{\"required\":{\"type\":\"boolean\"}}},\"editUISchema\":{}},\"long_text\":{\"ui:widget\":\"textarea\",\"editSchema\":{\"type\":\"object\",\"properties\":{\"required\":{\"type\":\"boolean\"}},\"editUISchema\":{}}}}
+        }",
         'conditions' => '{}', // TODO
     ];
 });

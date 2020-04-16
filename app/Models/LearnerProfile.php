@@ -73,7 +73,12 @@ class LearnerProfile extends Model
     }
 
     public function programModules(): BelongsToMany {
-        return $this->belongsToMany(ProgramModule::class, 'program_module_sends');
+        return $this->belongsToMany(
+            ProgramModule::class,
+            'program_module_sends',
+            'learner_profile_id',
+            'program_module_id'
+        );
     }
 
     public function programInvites(): HasMany {

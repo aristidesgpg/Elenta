@@ -21,6 +21,7 @@ class CreateModulesTable extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->boolean('is_public')->default(false);
+            // TODO: Change to dynamic_fields ?
             $table->jsonb('content')->nullable();
             $table->jsonb('conditions')->nullable();
 

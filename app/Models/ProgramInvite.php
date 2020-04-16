@@ -54,7 +54,7 @@ class ProgramInvite extends Model
     {
         parent::boot();
         static::saved(function (ProgramInvite $pi) {
-            $pi->send();
+            //$pi->send();
         });
     }
 

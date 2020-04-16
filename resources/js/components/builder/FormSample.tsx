@@ -5,17 +5,15 @@ import ElentaFormBuilder from "./ElentaFormBuilder";
 export default class SampleFormEditor extends React.Component<any, any>{
     constructor(props: any) {
         super(props);
-        this.state = {            
+        this.state = {
             schema: {
               type: "object",
-              title: "Untitled form",
-              description: "Enter some description for your form here",
               properties: {}
             },
-            uiSchema: {        
+            uiSchema: {
               "ui:order": []
-            }            
-        };    
+            }
+        };
     }
 
     onSave = (schema: any, uiSchema: any) => {
@@ -25,7 +23,7 @@ export default class SampleFormEditor extends React.Component<any, any>{
 
     render() {
         const { schema, uiSchema } = this.state;
-        return <ElentaFormBuilder schema={schema} 
+        return <ElentaFormBuilder schema={schema}
                                 uiSchema={uiSchema} onSave={this.onSave}/>
     }
 }

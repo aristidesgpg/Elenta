@@ -131,12 +131,3 @@ type ProgramModuleSend {
     deleted_at: DateTime!
 }
 
-type ProgramLearner {
-    id: ID!
-    program: Program!
-    learner: LearnerProfile!
-
-    created_at: DateTime!
-    updated_at: DateTime!
-    deleted_at: DateTime!
-}

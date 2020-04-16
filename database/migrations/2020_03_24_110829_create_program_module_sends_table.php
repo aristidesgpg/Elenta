@@ -30,8 +30,9 @@ class CreateProgramModuleSendsTable extends Migration
             $table->timestamp('response_timestamp');
 
             $table->text('response_feedback')->nullable();
-            $table->unsignedSmallInteger('response_rating');
+            $table->unsignedSmallInteger('response_rating')->nullable();
             $table->jsonb('response_data');
+            $table->boolean('anonymous')->default(true);
 
             $table->timestamps();
             $table->softDeletes();

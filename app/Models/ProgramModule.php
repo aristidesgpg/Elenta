@@ -90,7 +90,7 @@ class ProgramModule extends Pivot
 
     public function sends(): HasMany
     {
-        return $this->hasMany(ProgramModuleSend::class);
+        return $this->hasMany(ProgramModuleSend::class, 'program_module_id');
     }
 
     public function sendModule(LearnerProfile $l, string $reason, string $channel, string $subject = "", string $message = "")

@@ -20,7 +20,8 @@ import LoginCallbackPage from "./pages/LoginCallbackPage";
 import PasswordResetPage from "./pages/PasswordResetPage";
 import ConsultantProfileSettingsPage from "./pages/ConsultantProfileSettingsPage";
 import PrivateRoute from "./hoc/PrivateRoute";
-import LearnerDashboard from "./pages/LearnerDashboard";
+import ProgramLearnerPage from "./pages/ProgramLearnerPage";
+import ProgramModuleSendEditor from "./components/learners/ProgramModuleSendEditor";
 
 const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"
@@ -52,6 +53,8 @@ export const App = () => {
               <Route exact={true} path="/login" component={LoginPage}/>
               <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
               <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
+
+              <Route exact={true} path="/program/respond/:id" component={ProgramLearnerPage}/>
 
               <PrivateRoute exact={true} path="/dashboard" component={ConsultantDashboard}/>
               <PrivateRoute exact={true} path="/preferences" component={ConsultantProfileSettingsPage}/>
