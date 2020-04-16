@@ -17,7 +17,7 @@ const sortableNodeToArray = (node) => {
   return order;
 };
 
-export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder}) => {
+export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder, renameFolder}) => {
   const [state, setState] = useState({
     items: []
   });
@@ -116,6 +116,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
           <ModuleCard
             key={`${item.id}-${index}`}
             module={item}
+            renameFolder={renameFolder}
             isActive={activeModule ? item.id === activeModule.id : false}
             setActiveModule={item.isFolder ? () => null : setActiveModule}
           >
