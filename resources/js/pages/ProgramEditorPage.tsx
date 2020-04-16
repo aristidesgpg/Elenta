@@ -93,7 +93,7 @@ export const ProgramEditorPage = () => {
         <Tab.Content>
           <Tab.Pane eventKey="modules" title="Content">
             <ModuleEditor
-              modules={program ? program.modules : {}}
+              modules={program ? program.modules : []}
               addModule={addModule}
               saveModulesOrder={saveModulesOrder}
               buttonLoading={mutationLoading}

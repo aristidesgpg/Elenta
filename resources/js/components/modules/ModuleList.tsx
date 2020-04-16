@@ -2,6 +2,21 @@ import React, {useState, useEffect} from "react";
 import Sortable from "react-sortablejs";
 import ModuleCard from "./ModuleCard";
 
+const sortableNodeToArray = (node) => {
+  const order = [];
+  const children = node.children;
+
+  for (let i = 0; i < children.length; i++) {
+    const el = children[i];
+
+    if (node) {
+      order.push(el.getAttribute('data-id'));
+    }
+  }
+
+  return order;
+};
+
 export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder}) => {
   const [state, setState] = useState({
     items: []
@@ -54,7 +69,12 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
   };
 
   const handleFolderChange = ({items, sortable, evt, folder}) => {
-    const updatedItems = [...state.items];
+    const mainFrom = evt.from.getAttribute('id') === 'main';
+    const mainListItems = sortableNodeToArray(mainFrom ? evt.from : evt.to);
+    const updatedItems  = mainListItems.map(item => {
+      return state.items.find(module => module.id === item) || modules.find(module => module.id === item);
+    });
+
     const folderIndex = updatedItems.findIndex(m => m.id === folder);
     updatedItems[folderIndex].modules = [
       ...items.map(item => {
@@ -80,6 +100,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
   return (
     <Sortable
       tag="ul"
+      id={'main'}
       onChange={(items, sortable, evt) => onChange({items, sortable, evt})}
       options={{
         group: {
@@ -101,6 +122,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
             {item.isFolder &&
             <Sortable
               tag="ul"
+              id={'sub'}
               options={{
                 group: {
                   name: 'shared',
