@@ -1,31 +1,57 @@
 import React, {useState, useEffect} from "react";
+import Sortable from "react-sortablejs";
 import ModuleCard from "./ModuleCard";
-import Sortable from 'react-sortablejs';
 
-export const ModuleList = ({modules, activeModule, setActiveModule}) => {
+export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder}) => {
   const [state, setState] = useState({
     items: []
   });
 
   useEffect(() => {
-    const items = modules.sort((a, b) => a.pivot.order - b.pivot.order).reduce((acc, module) => {
-      const folder = module.pivot.folder;
-      if (folder !== null) {
-        const folderIndex = acc.findIndex(m => m.id === folder);
+    const items = modules.sort((a, b) => parseInt(a.pivot.order) - parseInt(b.pivot.order))
+      .reduce((acc, module) => {
+        const folder = module.pivot.folder;
+        if (folder !== null) {
+          const folderIndex = acc.findIndex(m => m.id === folder);
 
-        if (folderIndex >= 0) {
-          acc[folderIndex].modules.push(module);
+          if (folderIndex >= 0) {
+            acc[folderIndex].modules.push(module);
+          } else {
+            acc.push({id: folder, title: folder, isFolder: true, modules: [module]});
+          }
         } else {
-          acc.push({id: folder, title: folder, modules: [module]});
+          acc.push(module);
         }
-      } else {
-        acc.push(module);
-      }
-      return acc;
-    }, []);
+        return acc;
+      }, []);
 
     setState({items});
   }, [modules]);
+
+  const saveOrder = (items) => {
+    let order = 1;
+    const modules = items.reduce((acc, item) => {
+      if (item.isFolder) {
+        acc = [...acc, ...item.modules.map(module => {
+          return {
+            id: module.pivot.id,
+            order: order++,
+            folder: item.title
+          };
+        })]
+      } else {
+        acc.push({
+          id: item.pivot.id,
+          order: order++,
+          folder: ''
+        });
+      }
+
+      return acc;
+    }, []);
+
+    saveModulesOrder(modules);
+  };
 
   const handleFolderChange = ({items, sortable, evt, folder}) => {
     const updatedItems = [...state.items];
@@ -36,7 +62,8 @@ export const ModuleList = ({modules, activeModule, setActiveModule}) => {
       })
     ];
 
-    setState({items: updatedItems})
+    setState({items: updatedItems});
+    saveOrder(updatedItems);
   };
 
   const onChange = ({items, sortable, evt}) => {
@@ -44,7 +71,10 @@ export const ModuleList = ({modules, activeModule, setActiveModule}) => {
       return state.items.find(module => module.id === item) || modules.find(module => module.id === item);
     });
 
-    setState({items: updatedItems})
+    if (items.length === state.items.length || items.length > state.items.length) {
+      saveOrder(updatedItems);
+    }
+    setState({items: updatedItems});
   };
 
   return (
@@ -52,41 +82,50 @@ export const ModuleList = ({modules, activeModule, setActiveModule}) => {
       tag="ul"
       onChange={(items, sortable, evt) => onChange({items, sortable, evt})}
       options={{
-        group: 'shared'
+        group: {
+          name: 'shared',
+          pull: true,
+          put: true
+        },
+        animation: 250,
       }}
     >
       {
-        state.items.map(item => (
+        state.items.map((item, index) => (
           <ModuleCard
-            key={item.id}
+            key={`${item.id}-${index}`}
             module={item}
             isActive={activeModule ? item.id === activeModule.id : false}
-            setActiveModule={item.modules ? () => null : setActiveModule}
+            setActiveModule={item.isFolder ? () => null : setActiveModule}
           >
-            {item.modules &&
-            <div>
-              <Sortable
-                tag="ul"
-                options={{
-                  group: 'shared'
-                }}
-
-                onChange={(items, sortable, evt) => handleFolderChange({items, sortable, evt, folder: item.id})}
-              >
-                {
-                  item.modules.map(subItem => {
-                    return (
-                      <ModuleCard
-                        key={subItem.id}
-                        module={subItem}
-                        isActive={activeModule ? item.id === activeModule.id : false}
-                        setActiveModule={setActiveModule}
-                      />
-                    )
-                  })
-                }
-              </Sortable>
-            </div>
+            {item.isFolder &&
+            <Sortable
+              tag="ul"
+              options={{
+                group: {
+                  name: 'shared',
+                  pull: true,
+                  put: function (to, from, item) {
+                    return item.children.length === 0;
+                  }
+                },
+                animation: 250,
+              }}
+              onChange={(items, sortable, evt) => handleFolderChange({items, sortable, evt, folder: item.id})}
+            >
+              {
+                item.modules && item.modules.map((subItem, subIndex) => {
+                  return (
+                    <ModuleCard
+                      key={`${subItem.id}-${subIndex}`}
+                      module={subItem}
+                      isActive={activeModule ? item.id === activeModule.id : false}
+                      setActiveModule={setActiveModule}
+                    />
+                  )
+                })
+              }
+            </Sortable>
             }
           </ModuleCard>
         ))

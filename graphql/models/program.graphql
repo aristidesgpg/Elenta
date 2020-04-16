@@ -4,12 +4,28 @@ extend type Query {
 
 extend type Mutation {
     upsertProgram(input: UpsertProgramInput! @spread): Program! @upsert
+    syncProgramModules(input: SyncProgramModulesInput @spread): Program! @upsert
 }
 
 enum ProgramFormat {
     SELF_DIRECTED
     IN_PERSON
     VIRTUAL_ATTENDANCE
+}
+
+input SyncProgramModulesInput {
+    id: ID!
+    templateModules: UpdateProgramModules
+}
+
+input UpdateProgramModules {
+    upsert: [SyncProgramModules!]
+}
+
+input SyncProgramModules {
+    id: ID!
+    order: String
+    folder: String
 }
 
 type Program {

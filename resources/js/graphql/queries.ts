@@ -17,6 +17,7 @@ export const GET_TEMPLATE = gql`
         content
         conditions
         pivot {
+          id
           folder
           order
         }
@@ -95,6 +96,74 @@ export const UPSERT_TEMPLATE = gql`
   }
 `;
 
+export const SYNC_TEMPLATE_MODULES = gql`
+  mutation syncTemplateModules($input: SyncTemplateModulesInput!) {
+    syncTemplateModules(input: $input) {
+      id
+      modules {
+        id
+        title
+        description
+        content
+        conditions
+        pivot {
+          id
+          folder
+          order
+        }
+        reminders {
+          id
+          subject
+          message
+          frequency
+          max_reminders
+        }
+        triggers {
+          id
+          start_timestamp
+          start_timestamp_field
+          frequency
+          max_sends
+        }
+      }
+    }
+  }
+`;
+
+export const SYNC_PROGRAM_MODULES = gql`
+  mutation syncProgramModules($input: SyncProgramModulesInput!) {
+    syncProgramModules(input: $input) {
+      id
+      modules {
+        id
+        title
+        description
+        content
+        conditions
+        pivot {
+          id
+          folder
+          order
+        }
+        reminders {
+          id
+          subject
+          message
+          frequency
+          max_reminders
+        }
+        triggers {
+          id
+          start_timestamp
+          start_timestamp_field
+          frequency
+          max_sends
+        }
+      }
+    }
+  }
+`;
+
 export const GET_PROGRAM = gql`
   query getProgram($id: ID!) {
     getProgram(id: $id) {
@@ -120,6 +189,7 @@ export const GET_PROGRAM = gql`
         conditions
 
         pivot {
+          id
           folder
           order
         }
@@ -227,6 +297,14 @@ export const UPSERT_MODULE = gql`
       description
       content
       conditions
+      templates {
+        id
+        pivot {
+          id
+          folder
+          order
+        }
+      }
       reminders {
         id
         subject

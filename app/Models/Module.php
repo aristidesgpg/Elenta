@@ -62,11 +62,25 @@ class Module extends Model
     }
 
     public function programs(): BelongsToMany {
-        return $this->belongsToMany(Program::class, 'program_modules');
+        return $this->belongsToMany(Program::class, 'program_modules')
+            ->using(ProgramModule::class)
+            ->withPivot([
+                'id',
+                'folder',
+                'order'
+            ])
+            ->orderBy('template_modules.order', 'asc');
     }
 
     public function templates(): BelongsToMany {
-        return $this->belongsToMany(Template::class, 'template_modules');
+        return $this->belongsToMany(Template::class, 'template_modules')
+            ->using(TemplateModule::class)
+            ->withPivot([
+                'id',
+                'folder',
+                'order'
+            ])
+            ->orderBy('template_modules.order', 'asc');
     }
 
     public function reminders(): HasMany {

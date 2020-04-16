@@ -6,7 +6,9 @@ use App\Mail\ProgramModuleMailer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -46,15 +48,35 @@ use Illuminate\Support\Facades\Mail;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ProgramModule withoutTrashed()
  * @mixin \Eloquent
  */
-class ProgramModule extends Model
+class ProgramModule extends Pivot
 {
     use SoftDeletes;
 
+    protected $table = "program_modules";
     protected $guarded = [];
     protected $attributes = [
         'folder' => '',
         'order' => 0
     ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function (ProgramModule $programModule) {
+            if ($programModule->order === null) {
+                $amount = ProgramModule::where('program_id', $programModule->program_id)
+                    ->select(DB::raw('max("order") as m'))
+                    ->get()
+                    ->first()
+                    ->toArray();
+                $programModule->order = $amount['m'] == null ? 0 : $amount['m'] + 1;
+            }
+        });
+    }
 
     public function program(): BelongsTo
     {
