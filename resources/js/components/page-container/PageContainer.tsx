@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useApolloClient, useQuery} from "@apollo/react-hooks";
-import Row from "react-bootstrap/Row";
+import {Row, Container, Spinner} from "react-bootstrap";
 import {get} from "lodash";
 import LoadingContainer from "../component-container/LoadingContainer";
 import ElentaNav from "./navbar/ElentaNav";
@@ -38,10 +38,21 @@ export const PageContainer = (props) => {
 
   return (
     <LoadingContainer loading={loading} error={error}>
-      <ElentaNav/>
-      <Row lg={12}>
-        {props.children}
-      </Row>
+      {loading // TODO Dirty fix on first GET_ME request
+        ? <Container className="loading-container">
+          <div className="wrapper">
+            <div className="overlay">
+              <Spinner className="loading-spinner" animation="border"/>
+            </div>
+          </div>
+        </Container>
+        : <>
+          <ElentaNav/>
+          <Row lg={12}>
+            {props.children}
+          </Row>
+        </>
+      }
     </LoadingContainer>
   );
 };
