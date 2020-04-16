@@ -63,7 +63,7 @@ type Template {
     pivot: TemplateModulePivot
 
     templateModules: [TemplateModule]
-    modules: [Module]
+    modules: [Module] @belongsToMany
     requests: [TemplateRequest]
     programs: [Program]
 }

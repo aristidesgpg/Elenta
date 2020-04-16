@@ -9,6 +9,7 @@ use Grosv\LaravelPasswordlessLogin\PasswordlessLogin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -76,6 +77,19 @@ class ProgramModuleSend extends Model
     public const CHANNEL_EMAIL = 'EMAIL';
     public const CHANNELS = [self::CHANNEL_EMAIL];
 
+    protected static function boot()
+    {
+        parent::boot();
+        // Only the learner should update this object, and the first time they do it is their response
+        static::updating(function (ProgramModuleSend $pms) {
+            if (!$pms->response_timestamp) {
+                $pms->response_timestamp = Carbon::now();
+            } else {
+                // Can't update response_data later
+                $pms->response_data = $pms->getOriginal('response_data');
+            }
+        });
+    }
 
     public function programModule(): BelongsTo {
         return $this->belongsTo(ProgramModule::class);

@@ -2,11 +2,22 @@ import * as React from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
+import "./LoadingContainer.scss";
 
 export const LoadingContainer = (props) => {
-  if (props.loading) return (
-    <Container>
-        <Spinner animation="border"/>
+  let isLoading = props.loading;
+  if (Array.isArray(props.loading)) {
+    isLoading = props.loading.reduce((p, c) => p || c);
+  }
+
+  if (isLoading) return (
+    <Container className="loading-container">
+      <div className="wrapper">
+        <div className="overlay">
+          <Spinner className="loading-spinner" animation="border"/>
+        </div>
+          {props.children}
+      </div>
     </Container>
   );
 

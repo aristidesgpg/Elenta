@@ -21,6 +21,7 @@ class CreateProgramsTable extends Migration
             $table->uuid('consultant_profile_id');
             $table->uuid('template_id');
 
+            //TODO: Add company, logo, description
             $table->string('title');
             $table->enum('format', Template::FORMATS);
             $table->integer('max_learners')->nullable();

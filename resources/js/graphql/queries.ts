@@ -13,7 +13,6 @@ export const GET_TEMPLATE = gql`
       modules {
         id
         title
-        description
         content
         conditions
         pivot {
@@ -215,7 +214,7 @@ export const GET_PROGRAM = gql`
           id
           title
         }
-        sends {
+        send {
           learner {
             id
           }
@@ -323,6 +322,17 @@ export const UPSERT_MODULE = gql`
   }
 `;
 
+export const UPDATE_PROGRAM_MODULE_SEND = gql`
+  mutation updateConsultantProfile($input: UpdateProgramModuleSendInput!) {
+    updateProgramModuleSend(input: $input) {
+      id
+      response_rating
+      response_feedback
+      response_data
+    }
+  }
+`;
+
 export const GET_USER = gql`
   query getUser($id : ID!) {
     getUser(id: $id) {
@@ -370,6 +380,7 @@ export const GET_ME = gql`
 `;
 
 
+// TODO: Shouldn't fetch programs which haven't been sent, shouldn't fetch sends which don't belong to that user
 export const GET_LEARNER_PROFILE = gql`
   query getLearnerProfile($user_id : ID!) {
     getLearnerProfile(user_id: $user_id) {
@@ -382,7 +393,6 @@ export const GET_LEARNER_PROFILE = gql`
         program {
           id
           title
-          description
           start_timestamp
         }
       }
@@ -399,11 +409,22 @@ export const GET_LEARNER_PROFILE = gql`
           module {
             id
             title
+            content
           }
-          sends {
+          send {
             id
             response_timestamp
             response_data
+            response_feedback
+            response_rating
+            programModule {
+              id
+              module {
+                id
+                title
+                content
+              }
+            }
           }
         }
       }
@@ -432,7 +453,7 @@ export const GET_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          sends {
+          send {
             id
             response_timestamp
           }
@@ -482,7 +503,7 @@ export const UPDATE_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          sends {
+          send {
             id
             response_timestamp
           }

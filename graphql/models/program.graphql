@@ -104,39 +104,6 @@ type ProgramModule {
 
     reminders: [ModuleReminder]
     triggers: [ModuleTrigger]
-    sends: [ProgramModuleSend]
+    send: ProgramModuleSend
 }
 
-type ProgramModuleSend {
-    id: ID!
-    programModule: ProgramModule
-    learner: LearnerProfile
-
-    reason: String!
-    channel: String!
-    subject: String!
-    message: String!
-
-    send_timestamp: DateTime!
-    open_timestamp: DateTime!
-    click_timestamp: DateTime!
-    response_timestamp: DateTime!
-
-    response_feedback: String
-    response_rating: Int!
-    response_data: String!
-
-    created_at: DateTime!
-    updated_at: DateTime!
-    deleted_at: DateTime!
-}
-
-type ProgramLearner {
-    id: ID!
-    program: Program!
-    learner: LearnerProfile!
-
-    created_at: DateTime!
-    updated_at: DateTime!
-    deleted_at: DateTime!
-}

@@ -28,12 +28,28 @@ export default class FormActions extends React.Component<Props, State> {
 
     return (
       <div>
-        <ButtonToolbar className="builder-inner-actions">        
+        <ButtonToolbar className="builder-inner-actions">
           <Button className="float-right" variant="info" onClick={() => {
             this.props.saveSchema();
           }}>
             Save Form Schema
           </Button>
+
+
+          {<Button className="float-right" variant="info">
+            <a className="float-right" download={filename} href={schemaFileContent}>
+              <i className="glyphicon glyphicon-download"/>&nbsp;
+              Download JSON schema
+            </a>
+          </Button>}
+          {<Button className="float-right" variant="info">
+            <a className="float-right" download={filename} href={uiSchemaFileContent}>
+              <i className="glyphicon glyphicon-download"/>&nbsp;
+              Download UI schema
+            </a>
+          </Button>}
+
+
           <FieldListDropdown className="float-right"
                              name={""}
                              addField={this.props.addField}
@@ -43,19 +59,9 @@ export default class FormActions extends React.Component<Props, State> {
             Add a field
           </FieldListDropdown>
         </ButtonToolbar>
+
+        }
       </div>
     );
-  }//<i className="fas fa-plus-square"/>
-  /*{false && <Button className="float-right" variant="info">
-            <a className="float-right" download={filename} href={schemaFileContent}>
-              <i className="glyphicon glyphicon-download" />&nbsp;
-                Download JSON schema
-            </a>
-          </Button>}
-          {false && <Button className="float-right" variant="info">
-            <a className="float-right" download={filename} href={uiSchemaFileContent}>
-              <i className="glyphicon glyphicon-download" />&nbsp;
-                Download UI schema
-            </a>
-          </Button>}*/
+  }
 }
