@@ -131,7 +131,7 @@ export const ModuleEditor =
                   <Form.Group>
                     <Form.Label>Description: </Form.Label>
                     <RIETextArea
-                      value={activeModule ? activeModule.description : ""}
+                      value={activeModule ? activeModule.description || "" : ""}
                       change={updateModuleList}
                       propName='description'
                     />
