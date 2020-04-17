@@ -120,9 +120,13 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       }];
   };
 
-  const duplicateModules = (item) => {
+  const duplicateModulesHandler = (item) => {
     console.log("duplicateModule", extractModules(item));
 
+  };
+
+  const deleteModulesHandler = (item) => {
+    deleteModules([...extractModules(item).map(module => module.id)]);
   };
 
   return (
@@ -130,6 +134,9 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       <Sortable
         tag="ul"
         id={'root-module-list'}
+        style={{
+          padding: 0
+        }}
         onChange={(items, sortable, evt) => onChange({items, sortable, evt})}
         options={{
           group: {
@@ -149,17 +156,15 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
                 setShowModal(true);
                 setEditableFolder(item)
               }}
-              duplicateModules={duplicateModules}
-              deleteModules={(item) => {
-                deleteModules([...extractModules(item).map(module => module.id)]);
-              }}
+              duplicateModules={duplicateModulesHandler}
+              deleteModules={deleteModulesHandler}
               isActive={activeModule ? item.id === activeModule.id : false}
               setActiveModule={item.isFolder ? () => null : setActiveModule}
             >
               {item.isFolder &&
               <Sortable
                 tag="ul"
-                id={'sub-module-list'}
+                className={'sub-module-list'}
                 style={{
                   padding: 0
                 }}
@@ -168,7 +173,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
                     name: 'shared',
                     pull: true,
                     put: function (to, from, item) {
-                      return item.children.length === 0;
+                      return item.children.length <= 1;
                     }
                   },
                   animation: 250,
@@ -181,8 +186,8 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
                       <ModuleCard
                         key={`${subItem.id}-${subIndex}`}
                         module={subItem}
-                        duplicateModules={duplicateModules}
-                        deleteModules={deleteModules}
+                        duplicateModules={duplicateModulesHandler}
+                        deleteModules={deleteModulesHandler}
                         isActive={activeModule ? subItem.id === activeModule.id : false}
                         setActiveModule={setActiveModule}
                       />

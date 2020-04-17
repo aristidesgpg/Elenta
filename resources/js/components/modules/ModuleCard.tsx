@@ -10,23 +10,21 @@ export const ModuleCard = ({
     <ListGroupItem as="li"
                    data-id={module.id}
                    action active={isActive} onClick={() => setActiveModule(module)}>
-      {module.isFolder
-        ? <span onClick={() => renameFolder ? renameFolder(module) : () => null}>
-           {module.title}
+      <div className="d-flex justify-content-between">
+        <span onClick={() => (module.isFolder && renameFolder) ? renameFolder(module) : () => null}>
+        {module.title}
         </span>
-        : module.title
-      }
 
-
-      <div className="actions">
-        <Button variant="outline-dark" size="sm"
-                onClick={() => duplicateModules(module)}>
-          <i className="fas fa-copy"/>
-        </Button>
-        <Button variant="outline-dark" size="sm"
-                onClick={() => deleteModules(module)}>
-          <i className="fas fa-trash"/>
-        </Button>
+        <div className="actions">
+          <Button variant="outline-dark" size="sm"
+                  onClick={() => duplicateModules(module)}>
+            <i className="fas fa-copy"/>
+          </Button>
+          <Button variant="outline-dark" size="sm"
+                  onClick={() => deleteModules(module)}>
+            <i className="fas fa-trash"/>
+          </Button>
+        </div>
       </div>
 
       {children}
