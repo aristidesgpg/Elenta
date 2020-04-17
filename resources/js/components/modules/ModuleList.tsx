@@ -18,7 +18,7 @@ const sortableNodeToArray = (node) => {
   return order;
 };
 
-export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder}) => {
+export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder, deleteModules}) => {
   const [state, setState] = useState({
     items: []
   });
@@ -49,23 +49,10 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
   const saveOrder = (items) => {
     let order = 1;
     const modules = items.reduce((acc, item) => {
-      if (item.isFolder) {
-        acc = [...acc, ...item.modules.map(module => {
-          return {
-            id: module.pivot.id,
-            order: order++,
-            folder: item.title
-          };
-        })]
-      } else {
-        acc.push({
-          id: item.pivot.id,
-          order: order++,
-          folder: ''
-        });
-      }
-
-      return acc;
+      const itemModules = extractModules(item);
+      return [...acc, ...itemModules.map(module => {
+        return {...module, order: order++};
+      })];
     }, []);
 
     saveModulesOrder(modules);
@@ -119,6 +106,25 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
     saveOrder(updatedItems);
   };
 
+  const extractModules = (item) => {
+    return item.isFolder
+      ? [...item.modules.map(module => {
+        return {
+          id: module.pivot.id,
+          folder: item.title
+        };
+      })]
+      : [{
+        id: item.pivot.id,
+        folder: ''
+      }];
+  };
+
+  const duplicateModules = (item) => {
+    console.log("duplicateModule", extractModules(item));
+
+  };
+
   return (
     <>
       <Sortable
@@ -143,6 +149,10 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
                 setShowModal(true);
                 setEditableFolder(item)
               }}
+              duplicateModules={duplicateModules}
+              deleteModules={(item) => {
+                deleteModules([...extractModules(item).map(module => module.id)]);
+              }}
               isActive={activeModule ? item.id === activeModule.id : false}
               setActiveModule={item.isFolder ? () => null : setActiveModule}
             >
@@ -150,6 +160,9 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
               <Sortable
                 tag="ul"
                 id={'sub-module-list'}
+                style={{
+                  padding: 0
+                }}
                 options={{
                   group: {
                     name: 'shared',
@@ -168,7 +181,9 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
                       <ModuleCard
                         key={`${subItem.id}-${subIndex}`}
                         module={subItem}
-                        isActive={activeModule ? item.id === activeModule.id : false}
+                        duplicateModules={duplicateModules}
+                        deleteModules={deleteModules}
+                        isActive={activeModule ? subItem.id === activeModule.id : false}
                         setActiveModule={setActiveModule}
                       />
                     )

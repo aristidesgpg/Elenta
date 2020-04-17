@@ -21,6 +21,7 @@ export const ModuleEditor =
      modules: templateModules,
      addModule,
      saveModulesOrder,
+     deleteModules,
      buttonLoading,
      buttonError,
      buttonData
@@ -114,6 +115,7 @@ export const ModuleEditor =
                         activeModule={activeModule}
                         setActiveModule={setActiveModule}
                         saveModulesOrder={saveModulesOrder}
+                        deleteModules={deleteModules}
             />
             <ElentaFormButton
               onClick={addModule}

@@ -1,7 +1,12 @@
 import * as React from "react";
 import {useMutation, useQuery} from '@apollo/react-hooks';
 import {useParams} from "react-router-dom";
-import {CURRENT_USER_PROFILE, GET_PROGRAM, SYNC_PROGRAM_MODULES, UPSERT_MODULE} from "../graphql/queries";
+import {
+  CURRENT_USER_PROFILE,
+  GET_PROGRAM,
+  UPDATE_PROGRAM_MODULES,
+  UPSERT_MODULE
+} from "../graphql/queries";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import ModuleEditor from "../components/modules/ModuleEditor";
@@ -20,7 +25,7 @@ export const ProgramEditorPage = () => {
   const [program, setProgram] = useState(null);
   const {loading, error, data} = useQuery(GET_PROGRAM, {variables: {id}});
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
-  const [runOrderMutation, {loading: mutationOrderLoading, error: mutationOrderError, data: mutationOrderData}] = useMutation(SYNC_PROGRAM_MODULES);
+  const [updateProgramModulesMutation, {loading: programModulesMutationLoading, error: programModulesMutationError, data: programModulesMutationData}] = useMutation(UPDATE_PROGRAM_MODULES);
 
   const addModule = () => {
     runMutation({
@@ -44,7 +49,7 @@ export const ProgramEditorPage = () => {
   }
 
   const saveModulesOrder = (modules) => {
-    runOrderMutation({
+    updateProgramModulesMutation({
       variables: {
         input: {
           id: program.id,
@@ -56,20 +61,33 @@ export const ProgramEditorPage = () => {
     });
   };
 
+  const deleteModules = (modules) => {
+    updateProgramModulesMutation({
+      variables: {
+        input: {
+          id: program.id,
+          programModules: {
+            delete: modules
+          }
+        }
+      }
+    });
+  };
+
   useEffect(() => {
     if (mutationData) {
       let newState = _.cloneDeep(program);
-      const module = {...mutationData.upsertModule, pivot: _.get(mutationData, "upsertModule.templates.0.pivot", {})};
-      delete module.templates;
+      const module = {...mutationData.upsertModule, pivot: _.get(mutationData, "upsertModule.programs.0.pivot", {})};
+      delete module.programs;
       newState.modules.push(module);
       setProgram(newState);
     }
-    if (mutationOrderData) {
+    if (programModulesMutationData) {
       let newState = _.cloneDeep(program);
-      newState.modules = mutationOrderData.syncProgramModules.modules;
+      newState.modules = programModulesMutationData.updateProgramModules.modules;
       setProgram(newState);
     }
-  }, [mutationData, mutationOrderData]);
+  }, [mutationData, programModulesMutationData]);
 
   // TODO: Passing mutation* for the button here is a sloppy abstraction - need to clean it up
   // TODO: Change this back to <Tab> without the <Nav>
@@ -96,6 +114,7 @@ export const ProgramEditorPage = () => {
               modules={program ? program.modules : []}
               addModule={addModule}
               saveModulesOrder={saveModulesOrder}
+              deleteModules={deleteModules}
               buttonLoading={mutationLoading}
               buttonError={mutationError}
               buttonData={mutationData}

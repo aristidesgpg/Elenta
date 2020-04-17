@@ -1,10 +1,10 @@
-extend type Query {
+extend type Query @middleware(checks: ["auth:sanctum"]) {
     getProgram(id: ID! @eq): Program! @find
 }
 
-extend type Mutation {
-    upsertProgram(input: UpsertProgramInput! @spread): Program! @upsert
-    syncProgramModules(input: SyncProgramModulesInput @spread): Program! @upsert
+extend type Mutation @middleware(checks: ["auth:sanctum"]) {
+    upsertProgram(input: UpsertProgramInput! @spread): Program! @upsert @can(ability: "update", find: "id")
+    updateProgramModules(input: UpdateProgramModulesInput @spread): Program! @update @can(ability: "update", find: "id")
 }
 
 enum ProgramFormat {
@@ -13,19 +13,14 @@ enum ProgramFormat {
     VIRTUAL_ATTENDANCE
 }
 
-input SyncProgramModulesInput {
+input UpdateProgramModulesInput {
     id: ID!
-    templateModules: UpdateProgramModules
+    templateModules: UpdateProgramModulesHasMany
 }
 
-input UpdateProgramModules {
-    upsert: [SyncProgramModules!]
-}
-
-input SyncProgramModules {
-    id: ID!
-    order: String
-    folder: String
+input UpdateProgramModulesHasMany {
+    upsert: [ConnectProgramModule!]
+    delete: [ID!]
 }
 
 type Program {
@@ -48,8 +43,8 @@ type Program {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    programModules: [ProgramModule]
-    modules: [Module]
+    programModules: [ProgramModule] @hasMany @softDeletes
+    modules: [Module] @belongsToMany
     learners: [LearnerProfile]
     invites: [ProgramInvite]
 }
