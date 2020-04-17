@@ -40,7 +40,7 @@ const RenameFolderModal = (props) => {
     if (editableFolder) {
       const newForm = {...formState};
       newForm.id = editableFolder.id;
-      newForm.folder = editableFolder.id;
+      newForm.folder = editableFolder.title;
       setFormState(newForm)
     }
   }, [editableFolder]);
@@ -65,7 +65,7 @@ const RenameFolderModal = (props) => {
           }}
           onSubmit={({formData}) => {
             props.onOk({...formData});
-            props.onClose();
+            props.onClose(false);
           }}
           onError={(errors, val) => console.log('errors', {errors, val})}
           ErrorList={ErrorListTemplate}
