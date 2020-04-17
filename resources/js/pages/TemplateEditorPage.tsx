@@ -91,7 +91,7 @@ export const TemplateEditorPage = () => {
         <Tab.Content>
           <Tab.Pane eventKey="modules" title="Content">
             <ModuleEditor
-              modules={template ? template.modules : {}}
+              modules={template ? template.modules : []}
               addModule={addModule}
               saveModulesOrder={saveModulesOrder}
               buttonLoading={mutationLoading}

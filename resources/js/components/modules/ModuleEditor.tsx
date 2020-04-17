@@ -15,6 +15,7 @@ import Nav from "react-bootstrap/Nav";
 import Form from "react-bootstrap/Form";
 import {RIEInput, RIETextArea} from "riek";
 import {Button} from "react-bootstrap";
+import RenameFolderModal from "./RenameFolderModal";
 
 export const ModuleEditor =
   ({
@@ -38,6 +39,8 @@ export const ModuleEditor =
     const [formTrigger, setFormTrigger] = useState(null);
     const [modules, setModules] = useState(templateModules);
     const [activeModule, setActiveModule] = useState(modules[0]);
+    const [showModal, setShowModal] = useState(false);
+    const [editableFolder, setEditableFolder] = useState(null);
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
 
@@ -96,6 +99,18 @@ export const ModuleEditor =
       setModules(newModules);
     };
 
+    const renameFolder = ({id, folder}) => {
+      const newModules = modules.map(module => {
+        const pivotFolder = module.pivot.folder;
+
+        if (pivotFolder && pivotFolder === id) {
+          module.pivot.folder = folder;
+        }
+        return module;
+      });
+      setModules(newModules);
+    };
+
     return (
       <Container className="pl-0 pr-0 pt-4">
         <Row>
@@ -107,6 +122,10 @@ export const ModuleEditor =
                         activeModule={activeModule}
                         setActiveModule={setActiveModule}
                         saveModulesOrder={saveModulesOrder}
+                        renameFolder={(folder) => {
+                          setShowModal(true);
+                          setEditableFolder(folder)
+                        }}
             />
             <ElentaFormButton
               onClick={addModule}
@@ -183,6 +202,10 @@ export const ModuleEditor =
             </Tab.Container>
           </Col>
         </Row>
+        <RenameFolderModal show={showModal}
+                           onClose={setShowModal}
+                           editableFolder={editableFolder}
+                           onOk={renameFolder}/>
       </Container>
     )
   };
