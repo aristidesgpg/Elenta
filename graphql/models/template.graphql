@@ -6,6 +6,7 @@ extend type Query @middleware(checks: ["auth:sanctum"]) {
 extend type Mutation @middleware(checks: ["auth:sanctum"]) {
     upsertTemplate(input: UpsertTemplateInput! @spread): Template! @upsert @can(ability: "update", find: "id")
     updateTemplateModules(input: UpdateTemplateModulesInput @spread): Template! @update @can(ability: "update", find: "id")
+    duplicateTemplateModules(input: DuplicateTemplateModulesInput @spread): Template! @can(ability: "update", find: "id") @field(resolver: "App\\GraphQL\\Resolvers\\DuplicateTemplateModulesResolver@resolve")
 }
 
 input UpsertTemplateInput {
@@ -23,6 +24,12 @@ input UpsertTemplateInput {
 input UpdateTemplateModulesInput {
     id: ID!
     templateModules: UpdateTemplateModulesHasMany
+}
+
+input DuplicateTemplateModulesInput {
+    id: ID!
+    type: String
+    modules: [ID!]
 }
 
 input UpdateTemplateModulesHasMany {

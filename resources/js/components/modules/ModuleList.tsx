@@ -18,7 +18,7 @@ const sortableNodeToArray = (node) => {
   return order;
 };
 
-export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder, deleteModules}) => {
+export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder, deleteModules, duplicateModules}) => {
   const [state, setState] = useState({
     items: []
   });
@@ -51,7 +51,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
     const modules = items.reduce((acc, item) => {
       const itemModules = extractModules(item);
       return [...acc, ...itemModules.map(module => {
-        return {...module, order: order++};
+        return {...module.pivot, order: order++};
       })];
     }, []);
 
@@ -110,23 +110,28 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
     return item.isFolder
       ? [...item.modules.map(module => {
         return {
-          id: module.pivot.id,
-          folder: item.title
+          id: module.id,
+          pivot: {
+            id: module.pivot.id,
+            folder: item.title
+          }
         };
       })]
       : [{
-        id: item.pivot.id,
-        folder: ''
+        id: item.id,
+        pivot: {
+          id: item.pivot.id,
+          folder: ''
+        }
       }];
   };
 
   const duplicateModulesHandler = (item) => {
-    console.log("duplicateModule", extractModules(item));
-
+    duplicateModules([...extractModules(item).map(module => module.id)]);
   };
 
   const deleteModulesHandler = (item) => {
-    deleteModules([...extractModules(item).map(module => module.id)]);
+    deleteModules([...extractModules(item).map(module => module.pivot.id)]);
   };
 
   return (
