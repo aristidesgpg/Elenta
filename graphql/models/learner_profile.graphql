@@ -1,3 +1,7 @@
+extend type Query {
+    getLearnerProfile(user_id: ID! @eq): LearnerProfile! @find
+}
+
 extend type Mutation {
     createLearnerProfile(input: CreateLearnerProfileInput @spread): LearnerProfile! @create
     updateLearnerProfile(input: UpdateLearnerProfileInput @spread): LearnerProfile! @update
@@ -34,4 +38,5 @@ type LearnerProfile {
 
     programs: [Program]
     programModules: [ProgramModule]
+    programInvites: [ProgramInvite]
 }

@@ -13,9 +13,13 @@ export const GET_TEMPLATE = gql`
       modules {
         id
         title
-        description
         content
         conditions
+        pivot {
+          id
+          folder
+          order
+        }
         reminders {
           id
           subject
@@ -31,6 +35,12 @@ export const GET_TEMPLATE = gql`
           max_sends
         }
       }
+      requests {
+        id
+        email
+        organization
+        comment
+      }
       tags {
         id
         name
@@ -44,6 +54,7 @@ export const GET_TEMPLATES_BY_OWNER = gql`
     getTemplatesByOwner(consultant_profile_id: $consultant_profile_id) {
       id
       title
+      dynamic_fields
     }
   }
 `;
@@ -56,6 +67,74 @@ export const UPSERT_TEMPLATE = gql`
       can_request
       is_public
       dynamic_fields
+    }
+  }
+`;
+
+export const SYNC_TEMPLATE_MODULES = gql`
+  mutation syncTemplateModules($input: SyncTemplateModulesInput!) {
+    syncTemplateModules(input: $input) {
+      id
+      modules {
+        id
+        title
+        description
+        content
+        conditions
+        pivot {
+          id
+          folder
+          order
+        }
+        reminders {
+          id
+          subject
+          message
+          frequency
+          max_reminders
+        }
+        triggers {
+          id
+          start_timestamp
+          start_timestamp_field
+          frequency
+          max_sends
+        }
+      }
+    }
+  }
+`;
+
+export const SYNC_PROGRAM_MODULES = gql`
+  mutation syncProgramModules($input: SyncProgramModulesInput!) {
+    syncProgramModules(input: $input) {
+      id
+      modules {
+        id
+        title
+        description
+        content
+        conditions
+        pivot {
+          id
+          folder
+          order
+        }
+        reminders {
+          id
+          subject
+          message
+          frequency
+          max_reminders
+        }
+        triggers {
+          id
+          start_timestamp
+          start_timestamp_field
+          frequency
+          max_sends
+        }
+      }
     }
   }
 `;
@@ -83,6 +162,13 @@ export const GET_PROGRAM = gql`
         description
         content
         conditions
+
+        pivot {
+          id
+          folder
+          order
+        }
+
         reminders {
           id
           subject
@@ -104,7 +190,7 @@ export const GET_PROGRAM = gql`
           id
           title
         }
-        sends {
+        send {
           learner {
             id
           }
@@ -138,9 +224,19 @@ export const GET_PROGRAM = gql`
         id
         name
       }
+      invites {
+        email
+        creator {
+          id
+          name
+        }
+        learner {
+          id
+        }
+      }
     }
   }
-`
+`;
 
 export const UPSERT_PROGRAM = gql`
   mutation upsertProgram($input: UpsertProgramInput!) {
@@ -162,6 +258,16 @@ export const UPSERT_PROGRAM = gql`
   }
 `;
 
+export const CREATE_PROGRAM_INVITES = gql`
+  mutation createProgramInvites($input: [CreateProgramInviteInput]!) {
+    createProgramInvites(input: $input) {
+      id
+      email
+      created_at
+    }
+  }
+`;
+
 export const UPSERT_MODULE = gql`
   mutation upsertModule($input: UpsertModuleInput!) {
     upsertModule(input: $input) {
@@ -170,6 +276,14 @@ export const UPSERT_MODULE = gql`
       description
       content
       conditions
+      templates {
+        id
+        pivot {
+          id
+          folder
+          order
+        }
+      }
       reminders {
         id
         subject
@@ -220,6 +334,16 @@ export const GET_ALL_TAGS = gql`
   }
 `;
 
+export const UPDATE_PROGRAM_MODULE_SEND = gql`
+  mutation updateConsultantProfile($input: UpdateProgramModuleSendInput!) {
+    updateProgramModuleSend(input: $input) {
+      id
+      response_rating
+      response_feedback
+      response_data
+    }
+  }
+`;
 
 export const GET_USER = gql`
   query getUser($id : ID!) {
@@ -267,11 +391,55 @@ export const GET_ME = gql`
   }
 `;
 
-export const USERS = gql`
-  query USERS {
-    users {
+
+// TODO: Shouldn't fetch programs which haven't been sent, shouldn't fetch sends which don't belong to that user
+export const GET_LEARNER_PROFILE = gql`
+  query getLearnerProfile($user_id : ID!) {
+    getLearnerProfile(user_id: $user_id) {
       id
-      name
+      picture_url
+      role
+      tenure
+      programInvites {
+        id
+        program {
+          id
+          title
+          start_timestamp
+        }
+      }
+      programs {
+        id
+        title
+        format
+        max_learners
+        start_timestamp
+        can_invite
+        is_public
+        programModules {
+          id
+          module {
+            id
+            title
+            content
+          }
+          send {
+            id
+            response_timestamp
+            response_data
+            response_feedback
+            response_rating
+            programModule {
+              id
+              module {
+                id
+                title
+                content
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -297,7 +465,7 @@ export const GET_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          sends {
+          send {
             id
             response_timestamp
           }
@@ -310,6 +478,7 @@ export const GET_CONSULTANT_PROFILE = gql`
         }
       }
       templates {
+        id
         title
         can_request
         is_public
@@ -346,7 +515,7 @@ export const UPDATE_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          sends {
+          send {
             id
             response_timestamp
           }

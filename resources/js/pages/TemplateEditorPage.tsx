@@ -1,13 +1,20 @@
 import * as React from "react";
 import {useMutation, useQuery} from '@apollo/react-hooks';
 import {useParams} from "react-router-dom";
-import {CURRENT_USER, CURRENT_USER_PROFILE, GET_TEMPLATE, UPSERT_MODULE} from "../graphql/queries";
+import {
+  CURRENT_USER,
+  CURRENT_USER_PROFILE,
+  GET_TEMPLATE,
+  SYNC_TEMPLATE_MODULES,
+  UPSERT_MODULE
+} from "../graphql/queries";
 import Tab from "react-bootstrap/Tab";
 import ModuleEditor from "../components/modules/ModuleEditor";
 import LoadingContainer from "../components/component-container/LoadingContainer";
 import {useEffect, useState} from "react";
 import _ from "lodash";
 import Nav from "react-bootstrap/Nav";
+import TemplateRequestTable from "../components/templates/TemplateRequestTable";
 
 export const TemplateEditorPage = () => {
   let {id} = useParams();
@@ -17,6 +24,7 @@ export const TemplateEditorPage = () => {
   const [template, setTemplate] = useState(null);
   const {loading, error, data} = useQuery(GET_TEMPLATE, {variables: {id}});
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
+  const [runOrderMutation, {loading: mutationOrderLoading, error: mutationOrderError, data: mutationOrderData}] = useMutation(SYNC_TEMPLATE_MODULES);
 
   const addModule = () => {
     runMutation({
@@ -35,6 +43,19 @@ export const TemplateEditorPage = () => {
     });
   };
 
+  const saveModulesOrder = (modules) => {
+    runOrderMutation({
+      variables: {
+        input: {
+          id: template.id,
+          templateModules: {
+            upsert: modules
+          }
+        }
+      }
+    });
+  };
+
   if (data && !template) {
     setTemplate(data.getTemplate);
   }
@@ -42,10 +63,17 @@ export const TemplateEditorPage = () => {
   useEffect(() => {
     if (mutationData) {
       let newState = _.cloneDeep(template);
-      newState.modules.push(mutationData.upsertModule);
+      const module = {...mutationData.upsertModule, pivot: _.get(mutationData, "upsertModule.templates.0.pivot", {})};
+      delete module.templates;
+      newState.modules.push(module);
       setTemplate(newState);
     }
-  }, [mutationData]);
+    if (mutationOrderData) {
+      let newState = _.cloneDeep(template);
+      newState.modules = mutationOrderData.syncTemplateModules.modules;
+      setTemplate(newState);
+    }
+  }, [mutationData, mutationOrderData]);
 
 
   // TODO: Passing mutation* for the button here is a sloppy abstraction - need to clean it up
@@ -57,27 +85,22 @@ export const TemplateEditorPage = () => {
             <Nav.Link eventKey="modules">Modules</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="learners">Learners</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="results">Results</Nav.Link>
+            <Nav.Link eventKey="requests">Requests</Nav.Link>
           </Nav.Item>
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="modules" title="Content">
             <ModuleEditor
-              modules={template ? template.modules : {}}
+              modules={template ? template.modules : []}
               addModule={addModule}
+              saveModulesOrder={saveModulesOrder}
               buttonLoading={mutationLoading}
               buttonError={mutationError}
               buttonData={mutationData}
             />
           </Tab.Pane>
           <Tab.Pane eventKey="requests" title="Requests">
-            test
-          </Tab.Pane>
-          <Tab.Pane eventKey="programs" title="Programs">
-            test
+            <TemplateRequestTable requests={template ? template.requests : []} />
           </Tab.Pane>
         </Tab.Content>
       </Tab.Container>

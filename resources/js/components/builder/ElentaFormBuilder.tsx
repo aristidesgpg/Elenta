@@ -1,5 +1,4 @@
 import * as React from "react";
-import JsonForm from "react-jsonschema-form-bs4";
 import SchemaField from "react-jsonschema-form-bs4/lib/components/fields/SchemaField";
 import {getDefaultRegistry} from "react-jsonschema-form/lib/utils";
 import {slugify, clone, unique} from "../../utils/utils"
@@ -8,17 +7,10 @@ import EditableField from "./fields/EditableField";
 import TitleField from "./fields/TitleField";
 import DescriptionField from "./fields/DescriptionField";
 import {TextField, RichTextWidget} from "./fields/TextField";
-import {RankField} from "./fields/RankField";
-import EditorTitleField from "./fields/EditorTitleField";
-import EditorDescField from "./fields/EditorDescField";
-import DTPicker from "./fields/DTPicker";
-import {ImageWidget} from "./fields/ImageWidget"
-import {VideoWidget} from "./fields/VideoWidget"
 import Slider, {Range} from "rc-slider";
 import 'rc-slider/assets/index.css';
 import _ from "lodash";
 
-import * as Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
 
@@ -35,7 +27,8 @@ interface Props {
   schema: any,
   uiSchema: any,
   onSave: (schema: any, uiSchema: any) => void,
-  excludedFields?: string[]
+  excludedFields?: string[],
+  tagList?: any
 }
 
 export default class ElentaFormBuilder extends React.Component<Props, State> {
@@ -211,23 +204,8 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
   }
 
   getTagList = (): any[] => {
-    return [{
-      val: "1",
-      label: "Form1",
-      items: [
-        {parentVal: 1, val: "question1", label: "Active Lisenting"},
-        {parentVal: 1, val: "question2", label: "Firday"},
-        {parentVal: 1, val: "question3", label: "Saturday"}]
-    },
-      {
-        val: "2",
-        label: "Form2",
-        items: [
-          {parentVal: 1, val: "question4", label: "Monday"},
-          {parentVal: 1, val: "question5", label: "Tuesday"},
-          {parentVal: 1, val: "question6", label: "Thursday"}]
-      }
-    ];
+    const { tagList } = this.props;
+    return  tagList == undefined ? [] : tagList;
   }
 
   saveSchema = () => {
@@ -240,17 +218,6 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
     const createSliderWithTooltip = Slider.createSliderWithTooltip;
     const {error, schema, newKey, uiSchema} = this.state;
     console.log("State", this.state);
-    const fields = {
-      RichEditor: TextField,
-      Rank: RankField,
-    };
-    const widgets = {
-      RichText: RichTextWidget,
-      RDP: DTPicker,
-      Range: createSliderWithTooltip(Slider),
-      Image: ImageWidget,
-      Video: VideoWidget
-    };
     const registry = {
       ...getDefaultRegistry(),
       fields: {
@@ -280,7 +247,20 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
             />
       </div>
     );
+  }
+}
 
+/*const fields = {
+      RichEditor: TextField,
+      Rank: RankField,
+    };
+    const widgets = {
+      RichText: RichTextWidget,
+      RDP: DTPicker,
+      Range: createSliderWithTooltip(Slider),
+      Image: ImageWidget,
+      Video: VideoWidget
+    };*/
     /*{false && <h1>Preview</h1>}
         {false && <JsonForm key={newKey+1} {...this.state}
                     schema ={schema} uiSchema = {uiSchema}
@@ -290,6 +270,3 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
           <button type="submit" className="">Submit</button>
           </JsonForm>}
     */
-  }
-
-}

@@ -5,6 +5,7 @@ extend type Query {
 
 extend type Mutation {
     upsertTemplate(input: UpsertTemplateInput! @spread): Template! @upsert
+    syncTemplateModules(input: SyncTemplateModulesInput @spread): Template! @upsert
 }
 
 input UpsertTemplateInput {
@@ -20,7 +21,23 @@ input UpsertTemplateInput {
     tags: ItemMorphsToManyTags
 }
 
+input SyncTemplateModulesInput {
+    id: ID!
+    templateModules: UpdateTemplateModules
+}
+
+input UpdateTemplateModules {
+    upsert: [SyncTemplateModules!]
+}
+
+input SyncTemplateModules {
+    id: ID!
+    order: String
+    folder: String
+}
+
 input TemplatesBelongsToManyModules {
+    create: [UpsertModuleInput!]
     connect: [ConnectTemplateModule!]
     sync: [ConnectTemplateModule!]
 }
@@ -44,11 +61,19 @@ type Template {
     updated_at: DateTime!
     deleted_at: DateTime!
 
+    pivot: TemplateModulePivot
+
     templateModules: [TemplateModule]
-    modules: [Module]
+    modules: [Module] @belongsToMany
     requests: [TemplateRequest]
     programs: [Program]
     tags: [Tag]
+}
+
+type TemplateModulePivot {
+    id: ID!
+    folder: String
+    order: String
 }
 
 type TemplateModule {

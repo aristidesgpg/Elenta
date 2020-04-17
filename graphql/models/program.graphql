@@ -4,12 +4,28 @@ extend type Query {
 
 extend type Mutation {
     upsertProgram(input: UpsertProgramInput! @spread): Program! @upsert
+    syncProgramModules(input: SyncProgramModulesInput @spread): Program! @upsert
 }
 
 enum ProgramFormat {
     SELF_DIRECTED
     IN_PERSON
     VIRTUAL_ATTENDANCE
+}
+
+input SyncProgramModulesInput {
+    id: ID!
+    templateModules: UpdateProgramModules
+}
+
+input UpdateProgramModules {
+    upsert: [SyncProgramModules!]
+}
+
+input SyncProgramModules {
+    id: ID!
+    order: String
+    folder: String
 }
 
 type Program {
@@ -25,6 +41,8 @@ type Program {
     is_public: Boolean
     dynamic_fields: String
     dynamic_fields_data: String
+
+    pivot: ModulePivot
 
     created_at: DateTime!
     updated_at: DateTime!
@@ -88,53 +106,6 @@ type ProgramModule {
 
     reminders: [ModuleReminder]
     triggers: [ModuleTrigger]
-    sends: [ProgramModuleSend]
+    send: ProgramModuleSend
 }
 
-type ProgramModuleSend {
-    id: ID!
-    programModule: ProgramModule
-    learner: LearnerProfile
-
-    reason: String!
-    channel: String!
-    subject: String!
-    message: String!
-
-    send_timestamp: DateTime!
-    open_timestamp: DateTime!
-    click_timestamp: DateTime!
-    response_timestamp: DateTime!
-
-    response_feedback: String
-    response_rating: Int!
-    response_data: String!
-
-    created_at: DateTime!
-    updated_at: DateTime!
-    deleted_at: DateTime!
-}
-
-type ProgramInvite {
-    id: ID!
-    program: Program!
-    creator: User!
-    learner: LearnerProfile
-
-    email: String!
-    message: String!
-
-    created_at: DateTime!
-    updated_at: DateTime!
-    deleted_at: DateTime!
-}
-
-type ProgramLearner {
-    id: ID!
-    program: Program!
-    learner: LearnerProfile!
-
-    created_at: DateTime!
-    updated_at: DateTime!
-    deleted_at: DateTime!
-}

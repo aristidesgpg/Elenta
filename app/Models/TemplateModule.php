@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 use Signifly\PivotEvents\HasPivotEvents;
@@ -39,14 +41,38 @@ use Signifly\PivotEvents\HasPivotEvents;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\TemplateModule withoutTrashed()
  * @mixin \Eloquent
  */
-class TemplateModule extends Model
+class TemplateModule extends Pivot
 {
     use SoftDeletes;
 
     protected $casts = [
         'id' => 'string'
     ];
+    protected $table = "template_modules";
     protected $guarded = [];
+    protected $attributes = [
+        'folder' => '',
+        'order' => 0
+    ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function (TemplateModule $templateModule) {
+            if ($templateModule->order === null) {
+                $amount = TemplateModule::where('template_id', $templateModule->template_id)
+                    ->select(DB::raw('max("order") as m'))
+                    ->get()
+                    ->first()
+                    ->toArray();
+                $templateModule->order = $amount['m'] == null ? 0 : $amount['m'] + 1;
+            }
+        });
+    }
 
     public function module(): BelongsTo {
         return $this->belongsTo(Module::class);

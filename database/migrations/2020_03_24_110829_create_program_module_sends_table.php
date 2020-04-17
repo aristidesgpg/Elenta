@@ -24,13 +24,15 @@ class CreateProgramModuleSendsTable extends Migration
             $table->string('subject');
             $table->text('message');
 
-            $table->timestamp('send_timestamp');
-            $table->timestamp('open_timestamp');
-            $table->timestamp('click_timestamp');
-            $table->timestamp('response_timestamp');
+            $table->timestamp('send_timestamp')->nullable();
+            $table->timestamp('open_timestamp')->nullable();
+            $table->timestamp('click_timestamp')->nullable();
+            $table->timestamp('response_timestamp')->nullable();
+
+            $table->timestamp('last_reminded_at')->nullable();
 
             $table->text('response_feedback')->nullable();
-            $table->unsignedSmallInteger('response_rating');
+            $table->unsignedSmallInteger('response_rating')->nullable();
             $table->jsonb('response_data');
 
             $table->timestamps();
@@ -38,6 +40,7 @@ class CreateProgramModuleSendsTable extends Migration
 
             $table->foreign('program_module_id')->references('id')->on('program_modules');
             $table->foreign('learner_profile_id')->references('id')->on('learner_profiles');
+            $table->unique(['program_module_id', 'learner_profile_id']);
         });
     }
 

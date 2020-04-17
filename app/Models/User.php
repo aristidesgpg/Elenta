@@ -72,6 +72,7 @@ class User extends Authenticatable
     use UsesUuid;
     use CanResetPassword;
 
+    // TODO: Make strings
     public const TYPE_CONSULTANT = 1;
     public const TYPE_LEARNER = 2;
 
@@ -87,6 +88,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // TODO: Change to has one
     public function learnerProfile(): HasMany {
         return $this->hasMany(LearnerProfile::class);
     }

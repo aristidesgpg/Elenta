@@ -14,11 +14,14 @@ import _ from "lodash";
 import Nav from "react-bootstrap/Nav";
 import Form from "react-bootstrap/Form";
 import {RIEInput, RIETextArea} from "riek";
+import {Button} from "react-bootstrap";
+import RenameFolderModal from "./RenameFolderModal";
 
 export const ModuleEditor =
   ({
-     modules,
+     modules: templateModules,
      addModule,
+     saveModulesOrder,
      buttonLoading,
      buttonError,
      buttonData
@@ -34,7 +37,10 @@ export const ModuleEditor =
     });
     const [formReminder, setFormReminder] = useState(null);
     const [formTrigger, setFormTrigger] = useState(null);
+    const [modules, setModules] = useState(templateModules);
     const [activeModule, setActiveModule] = useState(modules[0]);
+    const [showModal, setShowModal] = useState(false);
+    const [editableFolder, setEditableFolder] = useState(null);
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
 
@@ -79,13 +85,47 @@ export const ModuleEditor =
       });
     };
 
+    const addFolder = () => {
+      const newModules = [
+        {
+          id: "New Folder",
+          title: "New Folder",
+          isFolder: true,
+          pivot: {order: 0, folder: null},
+          modules: []
+        },
+        ...modules
+      ];
+      setModules(newModules);
+    };
+
+    const renameFolder = ({id, folder}) => {
+      const newModules = modules.map(module => {
+        const pivotFolder = module.pivot.folder;
+
+        if (pivotFolder && pivotFolder === id) {
+          module.pivot.folder = folder;
+        }
+        return module;
+      });
+      setModules(newModules);
+    };
+
     return (
       <Container className="pl-0 pr-0 pt-4">
         <Row>
           <Col md={3}>
+            <Button type="submit" onClick={addFolder} className="w-100">
+              Add Folder
+            </Button>
             <ModuleList modules={modules}
                         activeModule={activeModule}
                         setActiveModule={setActiveModule}
+                        saveModulesOrder={saveModulesOrder}
+                        renameFolder={(folder) => {
+                          setShowModal(true);
+                          setEditableFolder(folder)
+                        }}
             />
             <ElentaFormButton
               onClick={addModule}
@@ -102,7 +142,7 @@ export const ModuleEditor =
                   <Form.Group>
                     <Form.Label>Title: </Form.Label>
                     <RIEInput
-                      value={activeModule.title}
+                      value={activeModule ? activeModule.title : ""}
                       change={updateModuleList}
                       propName='title'
                     />
@@ -110,7 +150,7 @@ export const ModuleEditor =
                   <Form.Group>
                     <Form.Label>Description: </Form.Label>
                     <RIETextArea
-                      value={activeModule.description}
+                      value={activeModule ? activeModule.description || "" : ""}
                       change={updateModuleList}
                       propName='description'
                     />
@@ -162,6 +202,10 @@ export const ModuleEditor =
             </Tab.Container>
           </Col>
         </Row>
+        <RenameFolderModal show={showModal}
+                           onClose={setShowModal}
+                           editableFolder={editableFolder}
+                           onOk={renameFolder}/>
       </Container>
     )
   };

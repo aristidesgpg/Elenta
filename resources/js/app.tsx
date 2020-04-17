@@ -1,11 +1,12 @@
 import * as React from "react";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
+import {get} from "lodash";
 import FormSample from "./components/builder/FormSample";
 
 import LoginPage from "./pages/LoginPage";
 
 import ApolloClient from 'apollo-client';
-import {InMemoryCache} from 'apollo-cache-inmemory';
+import {defaultDataIdFromObject, InMemoryCache} from 'apollo-cache-inmemory';
 import {createHttpLink, HttpLink} from 'apollo-link-http';
 import {ApolloProvider} from '@apollo/react-hooks';
 
@@ -20,6 +21,8 @@ import LoginCallbackPage from "./pages/LoginCallbackPage";
 import PasswordResetPage from "./pages/PasswordResetPage";
 import ConsultantProfileSettingsPage from "./pages/ConsultantProfileSettingsPage";
 import PrivateRoute from "./hoc/PrivateRoute";
+import ProgramLearnerPage from "./pages/ProgramLearnerPage";
+import ProgramModuleSendEditor from "./components/learners/ProgramModuleSendEditor";
 
 const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"
@@ -35,9 +38,24 @@ const authLink = setContext((_, {headers}) => {
   }
 });
 
+const cache = new InMemoryCache({
+  dataIdFromObject: (obj) => {
+    switch (obj.__typename) {
+      case 'Module': {
+        const pivotId = get(obj, 'pivot.id', null);
+        const moduleDataId = `${obj.__typename}:${obj.id}`;
+        return pivotId ? `${moduleDataId}:${pivotId}` : moduleDataId;
+      }
+
+      default:
+        return defaultDataIdFromObject(obj);
+    }
+  }
+});
+
 export const ElentaClient = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache,
   resolvers: {}
 });
 
@@ -46,18 +64,22 @@ export const App = () => {
     <ApolloProvider client={ElentaClient}>
       <BrowserRouter>
         <PageContainer>
-            <Switch>
-              <Route exact={true} path="/" component={FormSample}/>
-              <Route exact={true} path="/login" component={LoginPage}/>
-              <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
-              <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
-              <PrivateRoute exact={true} path="/consultant-dashboard" component={ConsultantDashboard}/>
-              <PrivateRoute exact={true} path="/consultant-profile-settings" component={ConsultantProfileSettingsPage}/>
-              <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
-              <PrivateRoute exact={true} path="/template/settings/:id" component={TemplateSettingsEditor}/>
-              <PrivateRoute exact={true} path="/template/content/:id" component={TemplateEditorPage}/>
-              <PrivateRoute exact={true} path="/program/content/:id" component={ProgramEditorPage}/>
-            </Switch>
+          <Switch>
+            <Route exact={true} path="/" component={FormSample}/>
+            <Route exact={true} path="/login" component={LoginPage}/>
+            <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
+            <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
+
+            <Route exact={true} path="/program/respond/:id" component={ProgramLearnerPage}/>
+
+            <PrivateRoute exact={true} path="/dashboard" component={ConsultantDashboard}/>
+            <PrivateRoute exact={true} path="/preferences" component={ConsultantProfileSettingsPage}/>
+
+            <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
+            <PrivateRoute exact={true} path="/template/settings/:id" component={TemplateSettingsEditor}/>
+            <PrivateRoute exact={true} path="/template/content/:id" component={TemplateEditorPage}/>
+            <PrivateRoute exact={true} path="/program/content/:id" component={ProgramEditorPage}/>
+          </Switch>
         </PageContainer>
       </BrowserRouter>
     </ApolloProvider>

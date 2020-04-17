@@ -2,7 +2,7 @@ import * as React from "react";
 import {useQuery} from '@apollo/react-hooks';
 import {gql} from 'apollo-boost';
 import Spinner from "react-bootstrap/Spinner";
-import {Redirect, useParams} from "react-router-dom";
+import {Link, Redirect, useParams} from "react-router-dom";
 import ModuleList from "../components/modules/ModuleList";
 import {useState} from "react";
 import Container from "react-bootstrap/Container";
@@ -13,6 +13,7 @@ import TemplateTable from "../components/templates/TemplateTable";
 import ProgramList from "../components/programs/ProgramList";
 import LoadingContainer from "../components/component-container/LoadingContainer";
 import {CURRENT_USER, GET_CONSULTANT_PROFILE} from "../graphql/queries";
+import Button from "react-bootstrap/Button";
 
 export const ConsultantDashboard = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
@@ -25,15 +26,32 @@ export const ConsultantDashboard = () => {
     <LoadingContainer loading={loading} error={error}>
       {data &&
       <div>
-        <Container>
-          <h3>Programs</h3>
+        {data.getConsultantProfile.templates.length > 0 &&
+        <Container className="pb-4">
+          <Row>
+            <Col md={6}>
+              <h3>Programs</h3>
+            </Col>
+            <Col>
+              <Link to='/program/settings/new' className='float-right'><Button>Create Program</Button></Link>
+            </Col>
+          </Row>
+          <hr/>
           <ProgramList
             programs={data.getConsultantProfile.programs}
-            showCreate={data.getConsultantProfile.templates.length > 0}
           />
         </Container>
+        }
         <Container>
-          <h3>Templates</h3>
+          <Row>
+            <Col md={6}>
+              <h3>Templates</h3>
+            </Col>
+            <Col>
+              <Link to='/template/settings/new' className='float-right'><Button>Create Template</Button></Link>
+            </Col>
+          </Row>
+          <hr/>
           <TemplateTable
             templates={data.getConsultantProfile.templates}
           />

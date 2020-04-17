@@ -20,7 +20,7 @@ class CreateProgramInvitesTable extends Migration
             $table->uuid('learner_profile_id')->nullable();
 
             $table->string('email');
-            $table->string('message');
+            $table->string('message')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

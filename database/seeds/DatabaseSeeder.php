@@ -38,7 +38,19 @@ class DatabaseSeeder extends Seeder
         factory(ProgramModule::class, 100)->create();
         factory(ModuleTrigger::class, 100)->create();
         factory(ModuleReminder::class, 100)->create();
-        factory(ProgramModuleSend::class, 100)->create();
+
+        // Hack to retry till enough are created without violating unique column constraint
+        $created = false;
+        while (!$created) {
+            if (ProgramModuleSend::all()->count() >= 100) break;
+            try {
+                factory(ProgramModuleSend::class, 100)->create();
+                $created = true;
+            } catch  (\Illuminate\Database\QueryException $e) {
+                $created = false;
+            }
+        }
+
         factory(ProgramLearner::class, 50)->create();
         factory(TemplateRequest::class, 200)->create();
         factory(ProgramInvite::class, 200)->create();

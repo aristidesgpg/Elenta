@@ -21,6 +21,7 @@ class CreateProgramsTable extends Migration
             $table->uuid('consultant_profile_id');
             $table->uuid('template_id');
 
+            //TODO: Add company, logo, description
             $table->string('title');
             $table->enum('format', Template::FORMATS);
             $table->integer('max_learners')->nullable();
@@ -28,6 +29,8 @@ class CreateProgramsTable extends Migration
             $table->boolean('can_invite')->default(true);
             $table->boolean('is_public')->default(false);
             $table->jsonb('dynamic_fields')->nullable();
+
+            // TODO: Remove this, we'll store everything in dynamic_fields
             $table->jsonb('dynamic_fields_data')->nullable();
 
             // TODO: add venue, calendar details,  etc.

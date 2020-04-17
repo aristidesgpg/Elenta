@@ -13,10 +13,10 @@ export default {
       jsonSchema: {
         type: "string",
         title: "Edit me",
-        textValue:"\"<p>Text</p>\"",
-        default: "Rich Text"
+        textValue:"\"<p>Text</p>\""        
       },
       uiSchema: {
+        uiType: "richtext",
         "ui:options":{
           label:false
         },
@@ -48,6 +48,7 @@ export default {
         default: 0
       },
       uiSchema: {
+        uiType: "numberinput",
         editSchema: {
           type: "object",
           properties: {
@@ -71,13 +72,11 @@ export default {
         description: "",
         minimum: 0,
         maximum: 100,
-        multipleOf: 1,
-        //default: [0,1,1,2],
-        count:1,
-        marks:{number: "ReactNode"}
-        //pushable: true
+        multipleOf: 1,        
+        count:1,                
       },
       uiSchema: {
+        uiType: "slider",
         "ui:widget": "Range",
         editSchema: {
           type: "object",
@@ -103,6 +102,7 @@ export default {
         default: ""
       },
       uiSchema: {
+        uiType: "text",
         editSchema: {
           type: "object",
           properties: {
@@ -124,6 +124,7 @@ export default {
         default: ""
       },
       uiSchema: {
+        uiType: "multilinetext",        
         "ui:widget": "textarea",
         editSchema: {
           type: "object",
@@ -149,6 +150,7 @@ export default {
         }
       },
       uiSchema: {
+        uiType: "rank",
         "ui:field": "Rank",
         editSchema: {
           type: "object",
@@ -189,6 +191,7 @@ export default {
         uniqueItems: true,
       },
       uiSchema: {
+        uiType: "multiple-checkbox",
         "ui:widget": "checkboxes",
         editSchema: {
           type: "object",
@@ -225,6 +228,7 @@ export default {
         enum: ["option 1", "option 2", "option 3"],
       },
       uiSchema: {
+        uiType: "radio",
         "ui:widget": "radio",
         editSchema: {
           type: "object",
@@ -255,6 +259,7 @@ export default {
         enum: ["option 1", "option 2", "option 3"],
       },
       uiSchema: {
+        uiType: "select",
         "ui:widget": "select",
         editSchema: {
           type: "object",
@@ -284,6 +289,7 @@ export default {
         description:""
       },
       uiSchema: {
+        uiType: "date",
         "ui:widget": "RDP",
         editSchema: {
           type: "object",
@@ -306,6 +312,7 @@ export default {
         description:""
       },
       uiSchema: {
+        uiType: "image",
         "ui:widget":"Image",
         editSchema: {
           type: "object",
@@ -328,6 +335,7 @@ export default {
         description:""
       },
       uiSchema: {
+        uiType: "video",
         "ui:widget":"Video",
         editSchema: {
           type: "object",
@@ -355,7 +363,7 @@ export default {
           }
       },
       uiSchema: {
-          isRepeater: true,
+          uiType: "repeater",
           "items":{
 
           },

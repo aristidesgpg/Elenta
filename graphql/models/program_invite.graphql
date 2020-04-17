@@ -1,0 +1,39 @@
+extend type Mutation @middleware(checks: ["auth:sanctum"]){
+    createProgramInvite(input: CreateProgramInviteInput! @spread): ProgramInvite! @create
+    createProgramInvites(input: [CreateProgramInviteInput]! @spread): [ProgramInvite]! @field(resolver: "App\\GraphQL\\Resolvers\\CreateProgramInvitesResolver@resolve")
+}
+
+type ProgramInvite {
+    id: ID!
+    program: Program
+    creator: User
+    learner: LearnerProfile
+
+    email: String!
+    message: String!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
+input CreateProgramInviteInput {
+    program: ProgramInviteBelongsToProgram!
+    learner: ProgramInviteBelongsToLearnerProfile
+
+    email: String!
+    message: String
+}
+
+input ProgramInviteBelongsToProgram {
+    connect: ID!
+}
+
+input ProgramInviteBelongsToUser {
+    connect: ID!
+}
+
+input ProgramInviteBelongsToLearnerProfile {
+    connect: ID!
+}
+

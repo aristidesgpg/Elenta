@@ -5,6 +5,7 @@ import { ButtonToolbar, Button } from "react-bootstrap";
 import SchemaField from "react-jsonschema-form-bs4/lib/components/fields/SchemaField";
 import Form from "react-jsonschema-form-bs4";
 import { getDefaultRegistry } from "react-jsonschema-form/lib/utils";
+import debounce from 'lodash.debounce';
 import EditorTitleField from "../EditorTitleField";
 import EditorDescField from "../EditorDescField";
 import {Dropdown}  from "react-bootstrap";
@@ -34,10 +35,12 @@ export default class RepeaterEditField extends React.Component<any,any> {
                     newKey: 0,
                     currentIndex: 0
                 };
+    this.onChangeDebounced = debounce(this.onChangeDebounced, 500);
   }
 
   onUpdateTitleDesc = (formData) =>{    
     this.setState({editedSchema: formData});
+    this.onChangeDebounced({ formData });
   }
 
   getFormData = () =>{
@@ -56,10 +59,11 @@ export default class RepeaterEditField extends React.Component<any,any> {
     const properties = editedSchema.items.properties;
     editedSchema.items.properties = {...properties, ...formData};
     this.setState({ editedSchema });    
+    this.onChangeDebounced({ formData:editedSchema });
   }
 
-  onSubmit = () =>{
-    this.props.onUpdate({formData: this.state.editedSchema});
+  onChangeDebounced = ({formData}) =>{
+    this.props.onUpdate({formData})
   }
 
   handleFieldListAction = (fieldIndex) => {
@@ -92,7 +96,8 @@ export default class RepeaterEditField extends React.Component<any,any> {
     uiSchema["ui:order"] = (uiSchema["ui:order"] || []).concat(_slug);
     let newKey = Math.random();
     editedSchema.items.properties = schemaProperties;    
-    this.setState({ editedSchema, schema, uiSchema, currentIndex, newKey });    
+    this.setState({ editedSchema, schema, uiSchema, currentIndex, newKey }); 
+    this.onChangeDebounced({ formData: editedSchema });
   }
   
   /*console.log("name", name);
@@ -117,28 +122,37 @@ export default class RepeaterEditField extends React.Component<any,any> {
     const newSchema = clone(schema);
     let newKey = Math.random();
     this.setState({ ...newSchema, uiSchema, editedSchema, newKey });
+    this.onChangeDebounced({ formData: editedSchema });
   }
 
   swapFields = (source, target) => {      
-    const { uiSchema } = this.state;
+    const { uiSchema, editedSchema } = this.state;
     const order = uiSchema["ui:order"];
     const idxSource = order.indexOf(source);
     const idxTarget = order.indexOf(target);
     order[idxSource] = target;
     order[idxTarget] = source;
     let newKey = Math.random();
-    this.setState({ uiSchema, newKey });
+    
+    let schemaProperties = {};
+    for(let i = 0; i < order.length; i++){
+      const name = order[i];
+      schemaProperties[name] = editedSchema.items.properties[name];
+    }
+    editedSchema.items.properties = schemaProperties;
+    this.setState({ uiSchema, newKey, editedSchema });
+    this.onChangeDebounced({ formData: editedSchema });
   }
 
   onChangeMaxItem = (event) =>{
     let { editedSchema } = this.state;     
     editedSchema.maxItems = Math.floor(event.target.value);
     this.setState({ editedSchema });
+    this.onChangeDebounced({ formData: editedSchema });
   }
 
   render() {    
-    
-    const { name, required, onCancel, onDelete} = this.props;
+    const { required} = this.props;    
     const { schema, uiSchema, newKey, editedSchema } = this.state;
     const formData = {
       ...schema,
@@ -161,15 +175,7 @@ export default class RepeaterEditField extends React.Component<any,any> {
     return (
         <div className="row panel panel-default field-editor">
             <div className="panel-heading clearfix col-12">
-                <strong className="panel-title">Edit {name}</strong>
-                <ButtonToolbar className="float-right">              
-                    <Button variant="danger" onClick={onDelete}>
-                        delete <i className="fas fa-trash-alt"/>
-                    </Button>
-                    <Button variant="primary" name="close-btn" onClick={onCancel}>
-                        close <i className="far fa-times-circle"/>
-                    </Button>
-                </ButtonToolbar>
+                <strong className="panel-title">Settings</strong>                
             </div>
             <div className="panel-body col-12">   
                 <EditorTitleField title= {formData.title} updateTitle= { this.onUpdateTitleDesc } getFormData={ this.getFormData }/>
@@ -186,26 +192,23 @@ export default class RepeaterEditField extends React.Component<any,any> {
                     <label >Max Items</label>
                     <input className="form-control" type="number" step="1" value={editedSchema.maxItems} onChange={this.onChangeMaxItem}></input>
                 </div>
-                <ButtonToolbar className="float-right">
-                    <Dropdown drop="down" id="split-button-dropup" className={this.props.className}>
-                        <Dropdown.Toggle id="dropdown-toggle" variant={"info"}>
-                        Add a Subfield
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                        {this.state.fieldList.map((field, index) => {
-                            return <Dropdown.Item key={index}                                
-                                onSelect={() => this.handleFieldListAction(index)}
-                                className = "dropdown-item"
-                                ><i className={`${field.icon}`} />
-                                {field.label}
-                            </Dropdown.Item>;
-                        })}
-                        </Dropdown.Menu>
-                    </Dropdown>
-                    <Button variant="success" onClick ={this.onSubmit}>Submit</Button>
-                </ButtonToolbar>
                 
+                <Dropdown drop="down" id="split-button-dropup" className="repeater-add-btn">
+                    <Dropdown.Toggle id="dropdown-toggle" variant={"info"}>
+                    Add a Subfield
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                    {this.state.fieldList.map((field, index) => {
+                        return <Dropdown.Item key={index}                                
+                            onSelect={() => this.handleFieldListAction(index)}
+                            className = "dropdown-item"
+                            ><i className={`${field.icon}`} />
+                            {field.label}
+                        </Dropdown.Item>;
+                    })}
+                    </Dropdown.Menu>
+                </Dropdown>
+                <Button variant="success" hidden>Submit</Button>
             </div>
         </div>
         
@@ -230,7 +233,7 @@ function DraggableFieldContainer(props) {
             </div>
             <div className="col-sm-3 editable-field-actions">            
               <Button variant="danger" onClick={onDelete}>
-                delete <i className="fas fa-trash-alt"/>
+                <i className="fas fa-trash-alt"/>
               </Button>
             </div>
           </div>
