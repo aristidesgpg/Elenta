@@ -7,6 +7,7 @@ import ReactHtmlParser from 'react-html-parser';
 import SxSelect from '../../common/nestedselect/SxSelect';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './css/fields.css';
+import { Button } from 'react-bootstrap';
 
 
 //Widget
@@ -80,16 +81,19 @@ export class TextField extends React.Component<any,any>{
       const currentString = JSON.stringify(draftToHtml(convertToRaw(editorState.getCurrentContent())));
       if( formData.textValue !== currentString){
         formData.textValue = currentString;
-        this.props.onChange(formData);
-      }
-      
+        this.setState({formData});
+      }      
   };
+
+  onSave = ()=>{
+    this.props.onChange(this.state.formData);
+  }
   
   setEditorReference = (ref) => {
     //this.editorReferece = ref;
     console.log(ref);
     if(ref !== null){
-      this.setState({ editorReferece: ref })
+      //this.setState({ editorReferece: ref })
       //ref.focus();
     }
     
@@ -107,10 +111,9 @@ export class TextField extends React.Component<any,any>{
             onEditorStateChange={this.onEditorStateChange}
             toolbarCustomButtons={[<TagOption tagList={this.props.getTagList()} />]}
           />
-          {/*<textarea
-            disabled
-            value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
-          />*/}
+          <button className="rich-editor-btn-save btn btn-info" onClick={this.onSave}>
+            Save
+          </button>
         </div>
       );
   }

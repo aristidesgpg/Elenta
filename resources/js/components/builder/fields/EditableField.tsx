@@ -7,7 +7,6 @@ import 'rc-slider/assets/index.css';
 import Form from 'react-jsonschema-form-bs4';
 import debounce from 'lodash.debounce';
 import Modal from 'react-modal';
-import moment from "moment";
 import { TextField, RichTextWidget} from "./TextField";
 import EditorTitleField from "./EditorTitleField";
 import EditorDescField from "./EditorDescField";

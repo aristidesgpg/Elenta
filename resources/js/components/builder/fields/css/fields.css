@@ -26,3 +26,22 @@ legend {
   display: block;  
   border-bottom: 1px solid lightgray;
 }
+
+.rank-item:hover {    
+    cursor: move;
+}
+
+.rank-item span:hover {    
+    cursor: move;
+}
+
+.mediaMax{
+    max-width: 300px;
+    max-height: 300px;
+}
+
+.rich-editor-btn-save{
+    float:right;
+    margin-bottom: 10px;
+    margin-top: 10px
+}

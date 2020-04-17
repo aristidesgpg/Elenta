@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Draggable, Droppable } from "react-drag-and-drop";
+import './css/fields.css';
 
 export class RankField extends  React.Component<any,any>{
 
@@ -45,9 +46,11 @@ export class RankField extends  React.Component<any,any>{
                             <Draggable  type="moved-item"
                                         key = {index} data={item}>
                               <Droppable
+                                className="rank-item"
                                 types={["moved-item"]}
                                 onDrop={(data) => this.handleDrop(data, item)}>
-                                <span>{item}</span>
+                                <span>{`${item} `}</span>
+                                <i className="fas fa-arrows-alt-v"></i>
                               </Droppable>
                             </Draggable>);
               })
