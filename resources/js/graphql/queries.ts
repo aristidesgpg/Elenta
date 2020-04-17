@@ -95,9 +95,9 @@ export const UPSERT_TEMPLATE = gql`
   }
 `;
 
-export const SYNC_TEMPLATE_MODULES = gql`
-  mutation syncTemplateModules($input: SyncTemplateModulesInput!) {
-    syncTemplateModules(input: $input) {
+export const UPDATE_TEMPLATE_MODULES = gql`
+  mutation updateTemplateModules($input: UpdateTemplateModulesInput!) {
+    updateTemplateModules(input: $input) {
       id
       modules {
         id
@@ -129,9 +129,9 @@ export const SYNC_TEMPLATE_MODULES = gql`
   }
 `;
 
-export const SYNC_PROGRAM_MODULES = gql`
-  mutation syncProgramModules($input: SyncProgramModulesInput!) {
-    syncProgramModules(input: $input) {
+export const UPDATE_PROGRAM_MODULES = gql`
+  mutation updateProgramModules($input: UpdateProgramModulesInput!) {
+    updateProgramModules(input: $input) {
       id
       modules {
         id

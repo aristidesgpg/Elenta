@@ -59,7 +59,7 @@ type Module {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    templates: [Template]
+    templates: [Template] @belongsToMany
     programs: [Program]
     reminders: [ModuleReminder]
     triggers: [ModuleTrigger]

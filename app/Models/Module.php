@@ -67,9 +67,11 @@ class Module extends Model
             ->withPivot([
                 'id',
                 'folder',
-                'order'
+                'order',
+                'deleted_at'
             ])
-            ->orderBy('template_modules.order', 'asc');
+            ->whereNull('program_modules.deleted_at')
+            ->orderBy('program_modules.order', 'asc');
     }
 
     public function templates(): BelongsToMany {
@@ -78,8 +80,10 @@ class Module extends Model
             ->withPivot([
                 'id',
                 'folder',
-                'order'
+                'order',
+                'deleted_at'
             ])
+            ->whereNull('template_modules.deleted_at')
             ->orderBy('template_modules.order', 'asc');
     }
 

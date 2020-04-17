@@ -5,7 +5,7 @@ import {
   CURRENT_USER,
   CURRENT_USER_PROFILE,
   GET_TEMPLATE,
-  SYNC_TEMPLATE_MODULES,
+  UPDATE_TEMPLATE_MODULES,
   UPSERT_MODULE
 } from "../graphql/queries";
 import Tab from "react-bootstrap/Tab";
@@ -24,7 +24,7 @@ export const TemplateEditorPage = () => {
   const [template, setTemplate] = useState(null);
   const {loading, error, data} = useQuery(GET_TEMPLATE, {variables: {id}});
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
-  const [runOrderMutation, {loading: mutationOrderLoading, error: mutationOrderError, data: mutationOrderData}] = useMutation(SYNC_TEMPLATE_MODULES);
+  const [updateTemplateModulesMutation, {loading: templateModulesMutationLoading, error: templateModulesMutationError, data: templateModulesMutationData}] = useMutation(UPDATE_TEMPLATE_MODULES);
 
   const addModule = () => {
     runMutation({
@@ -44,12 +44,25 @@ export const TemplateEditorPage = () => {
   };
 
   const saveModulesOrder = (modules) => {
-    runOrderMutation({
+    updateTemplateModulesMutation({
       variables: {
         input: {
           id: template.id,
           templateModules: {
             upsert: modules
+          }
+        }
+      }
+    });
+  };
+
+  const deleteModules = (modules) => {
+    updateTemplateModulesMutation({
+      variables: {
+        input: {
+          id: template.id,
+          templateModules: {
+            delete: modules
           }
         }
       }
@@ -68,12 +81,12 @@ export const TemplateEditorPage = () => {
       newState.modules.push(module);
       setTemplate(newState);
     }
-    if (mutationOrderData) {
+    if (templateModulesMutationData) {
       let newState = _.cloneDeep(template);
-      newState.modules = mutationOrderData.syncTemplateModules.modules;
+      newState.modules = templateModulesMutationData.updateTemplateModules.modules;
       setTemplate(newState);
     }
-  }, [mutationData, mutationOrderData]);
+  }, [mutationData, templateModulesMutationData]);
 
 
   // TODO: Passing mutation* for the button here is a sloppy abstraction - need to clean it up
@@ -94,6 +107,7 @@ export const TemplateEditorPage = () => {
               modules={template ? template.modules : []}
               addModule={addModule}
               saveModulesOrder={saveModulesOrder}
+              deleteModules={deleteModules}
               buttonLoading={mutationLoading}
               buttonError={mutationError}
               buttonData={mutationData}

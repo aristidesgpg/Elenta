@@ -1,11 +1,11 @@
-extend type Query {
+extend type Query @middleware(checks: ["auth:sanctum"]) {
     getTemplate(id: ID! @eq): Template! @find
     getTemplatesByOwner(consultant_profile_id: ID! @eq(key: "consultant_profile_id")): [Template!]! @all
 }
 
-extend type Mutation {
-    upsertTemplate(input: UpsertTemplateInput! @spread): Template! @upsert
-    syncTemplateModules(input: SyncTemplateModulesInput @spread): Template! @upsert
+extend type Mutation @middleware(checks: ["auth:sanctum"]) {
+    upsertTemplate(input: UpsertTemplateInput! @spread): Template! @upsert @can(ability: "update", find: "id")
+    updateTemplateModules(input: UpdateTemplateModulesInput @spread): Template! @update @can(ability: "update", find: "id")
 }
 
 input UpsertTemplateInput {
@@ -20,19 +20,14 @@ input UpsertTemplateInput {
     modules: TemplatesBelongsToManyModules
 }
 
-input SyncTemplateModulesInput {
+input UpdateTemplateModulesInput {
     id: ID!
-    templateModules: UpdateTemplateModules
+    templateModules: UpdateTemplateModulesHasMany
 }
 
-input UpdateTemplateModules {
-    upsert: [SyncTemplateModules!]
-}
-
-input SyncTemplateModules {
-    id: ID!
-    order: String
-    folder: String
+input UpdateTemplateModulesHasMany {
+    upsert: [ConnectTemplateModule!]
+    delete: [ID!]
 }
 
 input TemplatesBelongsToManyModules {
@@ -62,7 +57,7 @@ type Template {
 
     pivot: TemplateModulePivot
 
-    templateModules: [TemplateModule]
+    templateModules: [TemplateModule] @hasMany @softDeletes
     modules: [Module] @belongsToMany
     requests: [TemplateRequest]
     programs: [Program]

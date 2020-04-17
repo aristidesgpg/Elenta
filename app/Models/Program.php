@@ -85,8 +85,10 @@ class Program extends Model
             ->withPivot([
                 'id',
                 'folder',
-                'order'
+                'order',
+                'deleted_at'
             ])
+            ->whereNull('program_modules.deleted_at')
             ->orderBy('program_modules.order', 'asc');
     }
 
