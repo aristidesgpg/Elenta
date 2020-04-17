@@ -58,9 +58,7 @@ export default class FormActions extends React.Component<Props, State> {
           >
             Add a field
           </FieldListDropdown>
-        </ButtonToolbar>
-
-        }
+        </ButtonToolbar>        
       </div>
     );
   }

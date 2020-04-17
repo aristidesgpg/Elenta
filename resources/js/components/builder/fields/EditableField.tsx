@@ -192,16 +192,21 @@ export default class EditableField extends React.Component<any,any> {
 
   constructor(props) {
     super(props);
-    this.state = { settingUpdated: false, schema: props.schema};
+    this.state = { schema: props.schema};
+    this.handleChangeDebounced = debounce(this.handleChangeDebounced, 1000);
+  }
+
+  componentDidMount(){
+    this.setState({ mounted: true });
   }
 
   handleUpdate = ({formData}) => {
     // Exclude the "type" key when picking the keys as it is handled by the
     // SWITCH_FIELD action.   
-    //console.log("Update", formData); 
+    console.log("Update", formData); 
     const updated = pickKeys(this.props.schema, formData, ["type"]);
     const schema = {...this.props.schema, ...updated};    
-    this.setState({settingUpdated: true, schema});
+    this.setState({ schema });
     this.props.updateField(
       this.props.name, schema, formData.required, formData.title);    
   }
@@ -222,6 +227,23 @@ export default class EditableField extends React.Component<any,any> {
     } else if ("field" in data && data.field) {
       insertField(JSON.parse(data.field), name);
     }
+  }
+
+  handleChange = ({formData}) => {    
+    const { uiType } = this.props.uiSchema;        
+    if(uiType !== "repeater" && uiType !== "rank"){
+      console.log("FormData", formData);      
+      let { mounted } = this.state;    
+      if(mounted == true && formData !== undefined){        
+        this.handleChangeDebounced({ formData});
+      }        
+    }    
+  }
+
+  handleChangeDebounced = ({formData}) =>{
+    let { schema } = this.state;    
+    schema.default = formData;            
+    this.handleUpdate({ formData: schema });
   }
 
 
@@ -263,8 +285,9 @@ export default class EditableField extends React.Component<any,any> {
                     schema={schema}
                     uiSchema={uiSchema}
                     //idSchema={{$id: props.name}}
-                    fields = {{...fields}}
-                    widgets = {{...widgets}}>
+                    fields={{...fields}}
+                    widgets={{...widgets}}
+                    onChange={this.handleChange}>
                       <button type="submit" hidden>Submit</button>
                     </Form>
                   </div>

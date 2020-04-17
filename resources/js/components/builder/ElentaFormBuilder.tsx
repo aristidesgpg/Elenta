@@ -27,7 +27,8 @@ interface Props {
   schema: any,
   uiSchema: any,
   onSave: (schema: any, uiSchema: any) => void,
-  excludedFields?: string[]
+  excludedFields?: string[],
+  tagList?: any
 }
 
 export default class ElentaFormBuilder extends React.Component<Props, State> {
@@ -203,23 +204,8 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
   }
 
   getTagList = (): any[] => {
-    return [{
-      val: "1",
-      label: "Form1",
-      items: [
-        {parentVal: 1, val: "question1", label: "Active Lisenting"},
-        {parentVal: 1, val: "question2", label: "Firday"},
-        {parentVal: 1, val: "question3", label: "Saturday"}]
-    },
-      {
-        val: "2",
-        label: "Form2",
-        items: [
-          {parentVal: 1, val: "question4", label: "Monday"},
-          {parentVal: 1, val: "question5", label: "Tuesday"},
-          {parentVal: 1, val: "question6", label: "Thursday"}]
-      }
-    ];
+    const { tagList } = this.props;
+    return  tagList == undefined ? [] : tagList;
   }
 
   saveSchema = () => {

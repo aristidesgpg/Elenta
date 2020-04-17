@@ -13,8 +13,7 @@ export default {
       jsonSchema: {
         type: "string",
         title: "Edit me",
-        textValue:"\"<p>Text</p>\"",
-        default: "Rich Text"
+        textValue:"\"<p>Text</p>\""        
       },
       uiSchema: {
         uiType: "richtext",
@@ -73,11 +72,8 @@ export default {
         description: "",
         minimum: 0,
         maximum: 100,
-        multipleOf: 1,
-        //default: [0,1,1,2],
-        count:1,
-        marks:{number: "ReactNode"}
-        //pushable: true
+        multipleOf: 1,        
+        count:1,                
       },
       uiSchema: {
         uiType: "slider",
