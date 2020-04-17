@@ -71,6 +71,7 @@
   "moment": "^2.24.0",
   "rc-slider": "^9.2.4",
   "react": "latest",
+  "react-beautiful-dnd": "^13.0.0",
   "react-bootstrap": "latest",
   "react-bootstrap-table-next": "^4.0.0",
   "react-content-loader": "^5.0.4",

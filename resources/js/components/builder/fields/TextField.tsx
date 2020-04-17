@@ -90,8 +90,7 @@ export class TextField extends React.Component<any,any>{
   }
   
   setEditorReference = (ref) => {
-    //this.editorReferece = ref;
-    console.log(ref);
+    //this.editorReferece = ref;    
     if(ref !== null){
       //this.setState({ editorReferece: ref })
       //ref.focus();
