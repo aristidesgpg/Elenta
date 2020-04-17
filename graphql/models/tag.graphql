@@ -13,14 +13,14 @@ type Tag {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    programs: [Program]
     templates: [Template]
+    programs: [Program]
     modules: [Module]
 }
 
 
 input ItemMorphsToManyTags {
-    sync: [ConnectItemTag!]
+    connect: [ConnectItemTag!]
 }
 
 input ConnectItemTag {

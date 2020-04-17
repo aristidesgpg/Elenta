@@ -17,12 +17,13 @@ class CreateTaggablesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('tag_id');
             $table->uuid('taggable_id');
-            $table->string("taggable_type");
+            $table->string('taggable_type');
 
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+            $table->unique(['taggable_id', 'tag_id', 'taggable_type']);
         });
     }
 

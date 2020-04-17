@@ -31,6 +31,10 @@ export const GET_TEMPLATE = gql`
           max_sends
         }
       }
+      tags {
+        id
+        name
+      }
     }
   }
 `;
@@ -130,6 +134,10 @@ export const GET_PROGRAM = gql`
         role
         tenure
       }
+      tags {
+        id
+        name
+      }
     }
   }
 `
@@ -179,6 +187,39 @@ export const UPSERT_MODULE = gql`
     }
   }
 `;
+
+export const GET_TAG = gql`
+  query getTag($id: ID!) {
+    getTag(id: $id) {
+      id
+      name
+      created_at
+      templates {
+        id
+        title
+      }
+      programs {
+        id
+        title
+      }
+      modules {
+        id
+        title
+      }
+    }
+  }
+`;
+
+export const GET_ALL_TAGS = gql`
+  query tags($id: ID!) {
+    getTag(id: $id) {
+      id
+      name
+      created_at
+    }
+  }
+`;
+
 
 export const GET_USER = gql`
   query getUser($id : ID!) {
