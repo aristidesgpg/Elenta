@@ -354,7 +354,7 @@ export default {
       jsonSchema: {
         "type":"array",
         title:"new",
-        minItems: 0,
+        minItems: 1,
         maxItems: 3,
         description:"Description",
          items:{

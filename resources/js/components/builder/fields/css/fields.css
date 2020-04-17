@@ -1,18 +1,22 @@
 .rich-editor-root{    
-    display: block !important;    
-    height: 300px !important;
-    overflow: hidden;
+    display: table !important;    
+    min-height: 300px !important;
+    min-width: 200px;
+    max-height: 400px;    
 }
 
 .rich-editor-wrapper{
     width: 100% !important;
-    display: block !important;
-    margin-bottom: 20px !important;
+    display: block !important;    
     height: 100% !important;
 }
 
-.rich-editor-textarea{
-    height:200px;
+.rich-editor-textarea{    
+    min-height: 140px;
+    max-height: 200px;
+    height: auto;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
     border: 1px solid #F1F1F1 !important;
     padding: 5px !important;
     border-radius: 2px !important;

@@ -12,7 +12,7 @@ export class ImageWidget extends  React.Component<any,any>{
       const { schema } = this.state;     
       return(
           <div>
-            <img src= {schema.imageURL} alt="Image"/>
+            <img className="mediaMax" src= {schema.imageURL} alt="Image"/>
           </div>            
       );
   }
