@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -68,7 +69,7 @@ class Taggable extends Model
         return $this->belongsToMany(Module::class, 'modules');
     }
 
-    public function tags(): Morp {
-        return $this->belongsToMany(Tag::class, 'tags');
+    public function tags(): MorphToMany {
+        return $this->MorphToMany(Tag::class, 'tags');
     }
 }

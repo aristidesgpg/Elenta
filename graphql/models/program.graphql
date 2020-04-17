@@ -52,6 +52,7 @@ input UpsertProgramInput {
     dynamic_fields_data: String
 
     programModules: ModulesBelongsToManyPrograms
+    tags: ItemMorphsToManyTags
 }
 
 input ProgramBelongsToTemplate {

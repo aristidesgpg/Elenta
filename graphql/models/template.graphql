@@ -6,7 +6,7 @@ extend type Query {
 extend type Mutation {
     upsertTemplate(input: UpsertTemplateInput! @spread): Template! @upsert
 }
-# add field for tags
+
 input UpsertTemplateInput {
     id: ID
     owner: ConsultantProfileBelongsTo
@@ -17,6 +17,7 @@ input UpsertTemplateInput {
     dynamic_fields: String
 
     modules: TemplatesBelongsToManyModules
+    tags: ItemMorphsToManyTags
 }
 
 input TemplatesBelongsToManyModules {

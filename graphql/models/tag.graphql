@@ -1,4 +1,5 @@
 extend type Query {
+    getTag(id: ID! @eq): Tag! @find
     tags: [Tag] @all
     taggables: [Taggable] @all
 }
@@ -18,16 +19,19 @@ type Tag {
 }
 
 
+input ItemMorphsToManyTags {
+    sync: [ConnectItemTag!]
+}
+
+input ConnectItemTag {
+    id: ID!
+}
+
 type Taggable {
     id: ID!
 
     created_at: DateTime!
     updated_at: DateTime!
     deleted_at: DateTime!
-
-    tags: [Tag]
-    programs: [Program]
-    templates: [Template]
-    modules: [Module]
 }
 

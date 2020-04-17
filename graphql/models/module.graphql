@@ -21,6 +21,7 @@ input UpsertModuleInput {
     templates: ModuleBelongsToManyTemplates
     reminders: ModuleHasManyReminders
     triggers: ModuleHasManyTriggers
+    tags: ItemMorphsToManyTags
 }
 
 input ModuleBelongsToManyPrograms {
@@ -42,6 +43,7 @@ input ModuleHasManyReminders {
 input ModuleHasManyTriggers {
     upsert: [UpsertModuleTriggerInput!]
 }
+
 
 type Module {
     id: ID!
