@@ -6,6 +6,7 @@ import {
   CURRENT_USER_PROFILE,
   GET_TEMPLATE,
   UPDATE_TEMPLATE_MODULES,
+  DUPLICATE_TEMPLATE_MODULES,
   UPSERT_MODULE
 } from "../graphql/queries";
 import Tab from "react-bootstrap/Tab";
@@ -24,7 +25,8 @@ export const TemplateEditorPage = () => {
   const [template, setTemplate] = useState(null);
   const {loading, error, data} = useQuery(GET_TEMPLATE, {variables: {id}});
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
-  const [updateTemplateModulesMutation, {loading: templateModulesMutationLoading, error: templateModulesMutationError, data: templateModulesMutationData}] = useMutation(UPDATE_TEMPLATE_MODULES);
+  const [updateTemplateModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_TEMPLATE_MODULES);
+  const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError, data: duplicateMutationData}] = useMutation(DUPLICATE_TEMPLATE_MODULES);
 
   const addModule = () => {
     runMutation({
@@ -69,6 +71,18 @@ export const TemplateEditorPage = () => {
     });
   };
 
+  const duplicateModules = (modules) => {
+    duplicateModulesMutation({
+      variables: {
+        input: {
+          id: template.id,
+          type: 'template',
+          modules
+        }
+      }
+    });
+  };
+
   if (data && !template) {
     setTemplate(data.getTemplate);
   }
@@ -81,12 +95,17 @@ export const TemplateEditorPage = () => {
       newState.modules.push(module);
       setTemplate(newState);
     }
-    if (templateModulesMutationData) {
+    if (updateMutationData) {
       let newState = _.cloneDeep(template);
-      newState.modules = templateModulesMutationData.updateTemplateModules.modules;
+      newState.modules = updateMutationData.updateTemplateModules.modules;
       setTemplate(newState);
     }
-  }, [mutationData, templateModulesMutationData]);
+    if (duplicateMutationData) {
+      let newState = _.cloneDeep(template);
+      newState.modules = duplicateMutationData.duplicateTemplateModules.modules;
+      setTemplate(newState);
+    }
+  }, [mutationData, updateMutationData, duplicateMutationData]);
 
 
   // TODO: Passing mutation* for the button here is a sloppy abstraction - need to clean it up
@@ -108,13 +127,14 @@ export const TemplateEditorPage = () => {
               addModule={addModule}
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}
+              duplicateModules={duplicateModules}
               buttonLoading={mutationLoading}
               buttonError={mutationError}
               buttonData={mutationData}
             />
           </Tab.Pane>
           <Tab.Pane eventKey="requests" title="Requests">
-            <TemplateRequestTable requests={template ? template.requests : []} />
+            <TemplateRequestTable requests={template ? template.requests : []}/>
           </Tab.Pane>
         </Tab.Content>
       </Tab.Container>

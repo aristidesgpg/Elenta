@@ -2,7 +2,7 @@ import * as React from "react";
 import {useMutation, useQuery} from '@apollo/react-hooks';
 import {useParams} from "react-router-dom";
 import {
-  CURRENT_USER_PROFILE,
+  CURRENT_USER_PROFILE, DUPLICATE_PROGRAM_MODULES,
   GET_PROGRAM,
   UPDATE_PROGRAM_MODULES,
   UPSERT_MODULE
@@ -25,7 +25,8 @@ export const ProgramEditorPage = () => {
   const [program, setProgram] = useState(null);
   const {loading, error, data} = useQuery(GET_PROGRAM, {variables: {id}});
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
-  const [updateProgramModulesMutation, {loading: programModulesMutationLoading, error: programModulesMutationError, data: programModulesMutationData}] = useMutation(UPDATE_PROGRAM_MODULES);
+  const [updateProgramModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_PROGRAM_MODULES);
+  const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError, data: duplicateMutationData}] = useMutation(DUPLICATE_PROGRAM_MODULES);
 
   const addModule = () => {
     runMutation({
@@ -74,6 +75,18 @@ export const ProgramEditorPage = () => {
     });
   };
 
+  const duplicateModules = (modules) => {
+    duplicateModulesMutation({
+      variables: {
+        input: {
+          id: program.id,
+          type: 'program',
+          modules
+        }
+      }
+    });
+  };
+
   useEffect(() => {
     if (mutationData) {
       let newState = _.cloneDeep(program);
@@ -82,12 +95,17 @@ export const ProgramEditorPage = () => {
       newState.modules.push(module);
       setProgram(newState);
     }
-    if (programModulesMutationData) {
+    if (updateMutationData) {
       let newState = _.cloneDeep(program);
-      newState.modules = programModulesMutationData.updateProgramModules.modules;
+      newState.modules = updateMutationData.updateProgramModules.modules;
       setProgram(newState);
     }
-  }, [mutationData, programModulesMutationData]);
+    if (duplicateMutationData) {
+      let newState = _.cloneDeep(program);
+      newState.modules = duplicateMutationData.duplicateProgramModules.modules;
+      setProgram(newState);
+    }
+  }, [mutationData, updateMutationData, duplicateMutationData]);
 
   // TODO: Passing mutation* for the button here is a sloppy abstraction - need to clean it up
   // TODO: Change this back to <Tab> without the <Nav>
@@ -115,6 +133,7 @@ export const ProgramEditorPage = () => {
               addModule={addModule}
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}
+              duplicateModules={duplicateModules}
               buttonLoading={mutationLoading}
               buttonError={mutationError}
               buttonData={mutationData}

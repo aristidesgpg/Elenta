@@ -129,6 +129,74 @@ export const UPDATE_TEMPLATE_MODULES = gql`
   }
 `;
 
+export const DUPLICATE_TEMPLATE_MODULES = gql`
+  mutation duplicateTemplateModules($input: DuplicateTemplateModulesInput!) {
+    duplicateTemplateModules(input: $input) {
+      id
+      modules {
+        id
+        title
+        description
+        content
+        conditions
+        pivot {
+          id
+          folder
+          order
+        }
+        reminders {
+          id
+          subject
+          message
+          frequency
+          max_reminders
+        }
+        triggers {
+          id
+          start_timestamp
+          start_timestamp_field
+          frequency
+          max_sends
+        }
+      }
+    }
+  }
+`;
+
+export const DUPLICATE_PROGRAM_MODULES = gql`
+  mutation duplicateProgramModules($input: DuplicateProgramModulesInput!) {
+    duplicateProgramModules(input: $input) {
+      id
+      modules {
+        id
+        title
+        description
+        content
+        conditions
+        pivot {
+          id
+          folder
+          order
+        }
+        reminders {
+          id
+          subject
+          message
+          frequency
+          max_reminders
+        }
+        triggers {
+          id
+          start_timestamp
+          start_timestamp_field
+          frequency
+          max_sends
+        }
+      }
+    }
+  }
+`;
+
 export const UPDATE_PROGRAM_MODULES = gql`
   mutation updateProgramModules($input: UpdateProgramModulesInput!) {
     updateProgramModules(input: $input) {
