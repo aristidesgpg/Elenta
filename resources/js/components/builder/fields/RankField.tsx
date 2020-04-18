@@ -52,8 +52,8 @@ export class RankField extends  React.Component<any,any>{
                                 {...draggableProvided.draggableProps}
                                 {...draggableProvided.dragHandleProps}                                          
                               >
-                                <span>{`${item} `}</span>
                                 <i className="fas fa-arrows-alt-v"></i>
+                                <span>{` ${item}`}</span>                                
                               </div>
                               )}
                           </Draggable>
