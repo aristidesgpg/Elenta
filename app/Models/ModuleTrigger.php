@@ -41,7 +41,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $module_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ModuleTrigger whereModuleId($value)
  */
-class ModuleTrigger extends Model
+class ModuleTrigger extends BaseModel
 {
     use SoftDeletes;
     use UsesUuid;

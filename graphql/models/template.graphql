@@ -1,10 +1,10 @@
-extend type Query @middleware(checks: ["auth:sanctum"]) {
+extend type Query {
     getTemplate(id: ID! @eq): Template! @find
     getTemplatesByOwner(consultant_profile_id: ID! @eq(key: "consultant_profile_id")): [Template!]! @all
 }
 
-extend type Mutation @middleware(checks: ["auth:sanctum"]) {
-    upsertTemplate(input: UpsertTemplateInput! @spread): Template! @upsert @can(ability: "update", find: "id")
+extend type Mutation {
+    upsertTemplate(input: UpsertTemplateInput! @spread): Template! @upsert # @can(ability: "update", find: "id")
     updateTemplateModules(input: UpdateTemplateModulesInput @spread): Template! @update @can(ability: "update", find: "id")
     duplicateTemplateModules(input: DuplicateTemplateModulesInput @spread): Template! @can(ability: "update", find: "id") @field(resolver: "App\\GraphQL\\Resolvers\\DuplicateTemplateModulesResolver@resolve")
 }
@@ -64,10 +64,10 @@ type Template {
 
     pivot: TemplateModulePivot
 
-    templateModules: [TemplateModule] @hasMany @softDeletes
-    modules: [Module] @belongsToMany
-    requests: [TemplateRequest]
-    programs: [Program]
+    templateModules: [TemplateModule] @viewPolicyFilter @hasMany @softDeletes
+    modules: [Module] @viewPolicyFilter @belongsToMany
+    requests: [TemplateRequest] @viewPolicyFilter
+    programs: [Program] @viewPolicyFilter
 }
 
 type TemplateModulePivot {

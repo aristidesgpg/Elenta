@@ -27,7 +27,7 @@ export const PageContainer = (props) => {
     window.location.replace('/login');
   }
   // TODO change the logic of getting the correct profile
-  const userProfile = get(data, 'me.consultantProfile[0]', null);
+  const userProfile = get(data, 'me.consultantProfile', null);
   const user = get(data, 'me', null);
   client.writeData({
     data: {

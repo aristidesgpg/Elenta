@@ -43,7 +43,7 @@ use Illuminate\Support\Facades\Mail;
  * @property-read \App\Models\User $creator
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramInvite whereUserId($value)
  */
-class ProgramInvite extends Model
+class ProgramInvite extends BaseModel
 {
     use SoftDeletes;
     use UsesUuid;

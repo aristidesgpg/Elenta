@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\{
+use App\Models\{ConsultantProfile,
+    LearnerProfile,
     Module,
     ModuleReminder,
     ModuleTrigger,
@@ -15,8 +16,7 @@ use App\Models\{
     Template,
     TemplateModule,
     TemplateRequest,
-    User
-};
+    User};
 use App\Policies\{
     LearnerProfilePolicy,
     ModulePolicy,
@@ -43,8 +43,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         User::class => UserPolicy::class,
-        User::class => ConsultantProfilePolicy::class,
-        User::class => LearnerProfilePolicy::class,
+        ConsultantProfile::class => ConsultantProfilePolicy::class,
+        LearnerProfile::class => LearnerProfilePolicy::class,
         Module::class => ModulePolicy::class,
         ModuleReminder::class => ModuleReminderPolicy::class,
         ModuleTrigger::class => ModuleTriggerPolicy::class,

@@ -1,4 +1,4 @@
-extend type Query @middleware(checks: ["auth:sanctum"]) {
+extend type Query {
     getProgram(id: ID! @eq): Program! @find
 }
 
@@ -50,10 +50,10 @@ type Program {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    programModules: [ProgramModule] @hasMany @softDeletes
-    modules: [Module] @belongsToMany
-    learners: [LearnerProfile]
-    invites: [ProgramInvite]
+    programModules: [ProgramModule] @hasMany @softDeletes @viewPolicyFilter
+    modules: [Module] @belongsToMany @viewPolicyFilter
+    learners: [LearnerProfile] @viewPolicyFilter
+    invites: [ProgramInvite] @viewPolicyFilter
 }
 
 input UpsertProgramInput {
@@ -104,8 +104,8 @@ type ProgramModule {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    reminders: [ModuleReminder]
-    triggers: [ModuleTrigger]
+    reminders: [ModuleReminder] @viewPolicyFilter
+    triggers: [ModuleTrigger] @viewPolicyFilter
     send: ProgramModuleSend
 }
 

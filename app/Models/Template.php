@@ -48,7 +48,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateModule[] $templateModules
  * @property-read int|null $template_modules_count
  */
-class Template extends Model
+class Template extends BaseModel
 {
     use SoftDeletes;
     use UsesUuid;

@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ProgramLearner withoutTrashed()
  * @mixin \Eloquent
  */
-class ProgramLearner extends Model
+class ProgramLearner extends BaseModel
 {
     use SoftDeletes;
     use UsesUuid;

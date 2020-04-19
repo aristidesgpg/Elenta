@@ -41,7 +41,7 @@ use Signifly\PivotEvents\HasPivotEvents;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\TemplateModule withoutTrashed()
  * @mixin \Eloquent
  */
-class TemplateModule extends Pivot
+class TemplateModule extends BasePivot
 {
     use SoftDeletes;
 

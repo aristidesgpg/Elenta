@@ -62,7 +62,7 @@ use Illuminate\Support\Facades\Mail;
  * @mixin \Eloquent
  * @property-read \App\Models\LearnerProfile $learner
  */
-class ProgramModuleSend extends Model
+class ProgramModuleSend extends BaseModel
 {
     use SoftDeletes;
     use UsesUuid;

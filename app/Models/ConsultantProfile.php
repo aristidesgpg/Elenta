@@ -44,7 +44,7 @@ use Illuminate\Support\Facades\Storage;
  * @property bool $is_public
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ConsultantProfile whereIsPublic($value)
  */
-class ConsultantProfile extends Model
+class ConsultantProfile extends BaseModel
 {
     use SoftDeletes;
     use UsesUuid;

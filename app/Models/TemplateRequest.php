@@ -39,7 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\TemplateRequest withoutTrashed()
  * @mixin \Eloquent
  */
-class TemplateRequest extends Model
+class TemplateRequest extends BaseModel
 {
     use SoftDeletes;
     use UsesUuid;

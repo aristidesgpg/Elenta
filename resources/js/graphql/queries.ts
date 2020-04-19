@@ -448,7 +448,6 @@ export const GET_ME = gql`
 `;
 
 
-// TODO: Shouldn't fetch programs which haven't been sent, shouldn't fetch sends which don't belong to that user
 export const GET_LEARNER_PROFILE = gql`
   query getLearnerProfile($user_id : ID!) {
     getLearnerProfile(user_id: $user_id) {

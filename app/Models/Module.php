@@ -50,7 +50,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ModuleTrigger[] $triggers
  * @property-read int|null $triggers_count
  */
-class Module extends Model
+class Module extends BaseModel
 {
     use SoftDeletes;
     use UsesUuid;
