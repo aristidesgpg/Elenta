@@ -15,13 +15,14 @@ import Nav from "react-bootstrap/Nav";
 import Form from "react-bootstrap/Form";
 import {RIEInput, RIETextArea} from "riek";
 import {Button} from "react-bootstrap";
-import RenameFolderModal from "./RenameFolderModal";
 
 export const ModuleEditor =
   ({
      modules: templateModules,
      addModule,
      saveModulesOrder,
+     deleteModules,
+     duplicateModules,
      buttonLoading,
      buttonError,
      buttonData
@@ -39,8 +40,6 @@ export const ModuleEditor =
     const [formTrigger, setFormTrigger] = useState(null);
     const [modules, setModules] = useState(templateModules);
     const [activeModule, setActiveModule] = useState(modules[0]);
-    const [showModal, setShowModal] = useState(false);
-    const [editableFolder, setEditableFolder] = useState(null);
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
 
@@ -57,6 +56,12 @@ export const ModuleEditor =
         setActiveModule(buttonData.upsertModule);
       }
     }, [buttonData]);
+
+    useEffect(() => {
+      if (!_.isEqual(templateModules, modules)) {
+        setModules(templateModules);
+      }
+    }, [templateModules]);
 
     const updateModuleList = (d) => {
       setActiveModule(Object.assign(activeModule, d));
@@ -86,28 +91,17 @@ export const ModuleEditor =
     };
 
     const addFolder = () => {
+      const title = `New Folder ${Math.round(Math.random() * 1e6)}`;
       const newModules = [
         {
-          id: "New Folder",
-          title: "New Folder",
+          id: title,
+          title: title,
           isFolder: true,
           pivot: {order: 0, folder: null},
           modules: []
         },
         ...modules
       ];
-      setModules(newModules);
-    };
-
-    const renameFolder = ({id, folder}) => {
-      const newModules = modules.map(module => {
-        const pivotFolder = module.pivot.folder;
-
-        if (pivotFolder && pivotFolder === id) {
-          module.pivot.folder = folder;
-        }
-        return module;
-      });
       setModules(newModules);
     };
 
@@ -122,10 +116,8 @@ export const ModuleEditor =
                         activeModule={activeModule}
                         setActiveModule={setActiveModule}
                         saveModulesOrder={saveModulesOrder}
-                        renameFolder={(folder) => {
-                          setShowModal(true);
-                          setEditableFolder(folder)
-                        }}
+                        deleteModules={deleteModules}
+                        duplicateModules={duplicateModules}
             />
             <ElentaFormButton
               onClick={addModule}
@@ -202,10 +194,6 @@ export const ModuleEditor =
             </Tab.Container>
           </Col>
         </Row>
-        <RenameFolderModal show={showModal}
-                           onClose={setShowModal}
-                           editableFolder={editableFolder}
-                           onOk={renameFolder}/>
       </Container>
     )
   };

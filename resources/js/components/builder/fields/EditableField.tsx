@@ -7,7 +7,6 @@ import 'rc-slider/assets/index.css';
 import Form from 'react-jsonschema-form-bs4';
 import debounce from 'lodash.debounce';
 import Modal from 'react-modal';
-import moment from "moment";
 import { TextField, RichTextWidget} from "./TextField";
 import EditorTitleField from "./EditorTitleField";
 import EditorDescField from "./EditorDescField";
@@ -202,8 +201,7 @@ export default class EditableField extends React.Component<any,any> {
 
   handleUpdate = ({formData}) => {
     // Exclude the "type" key when picking the keys as it is handled by the
-    // SWITCH_FIELD action.   
-    console.log("Update", formData); 
+    // SWITCH_FIELD action.       
     const updated = pickKeys(this.props.schema, formData, ["type"]);
     const schema = {...this.props.schema, ...updated};    
     this.setState({ schema });
@@ -229,10 +227,9 @@ export default class EditableField extends React.Component<any,any> {
     }
   }
 
-  handleChange = ({formData}) => {    
+  handleChange = ({formData}) => {        
     const { uiType } = this.props.uiSchema;        
-    if(uiType !== "repeater" && uiType !== "rank"){
-      console.log("FormData", formData);      
+    if(uiType !== "repeater" && uiType !== "rank"){      
       let { mounted } = this.state;    
       if(mounted == true && formData !== undefined){        
         this.handleChangeDebounced({ formData});

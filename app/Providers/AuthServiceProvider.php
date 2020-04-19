@@ -2,8 +2,36 @@
 
 namespace App\Providers;
 
-use App\Models\User;
-use App\Policies\UserPolicy;
+use App\Models\{
+    Module,
+    ModuleReminder,
+    ModuleTrigger,
+    Policies\ConsultantProfilePolicy,
+    Program,
+    ProgramInvite,
+    ProgramLearner,
+    ProgramModule,
+    ProgramModuleSend,
+    Template,
+    TemplateModule,
+    TemplateRequest,
+    User
+};
+use App\Policies\{
+    LearnerProfilePolicy,
+    ModulePolicy,
+    ModuleReminderPolicy,
+    ModuleTriggerPolicy,
+    ProgramInvitePolicy,
+    ProgramLearnerPolicy,
+    ProgramModulePolicy,
+    ProgramModuleSendPolicy,
+    ProgramPolicy,
+    TemplateModulePolicy,
+    TemplatePolicy,
+    TemplateRequestPolicy,
+    UserPolicy
+};
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -14,7 +42,20 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-         User::class => UserPolicy::class,
+        User::class => UserPolicy::class,
+        User::class => ConsultantProfilePolicy::class,
+        User::class => LearnerProfilePolicy::class,
+        Module::class => ModulePolicy::class,
+        ModuleReminder::class => ModuleReminderPolicy::class,
+        ModuleTrigger::class => ModuleTriggerPolicy::class,
+        ProgramInvite::class => ProgramInvitePolicy::class,
+        ProgramLearner::class => ProgramLearnerPolicy::class,
+        ProgramModule::class => ProgramModulePolicy::class,
+        ProgramModuleSend::class => ProgramModuleSendPolicy::class,
+        Program::class => ProgramPolicy::class,
+        Template::class => TemplatePolicy::class,
+        TemplateModule::class => TemplateModulePolicy::class,
+        TemplateRequest::class => TemplateRequestPolicy::class,
     ];
 
     /**

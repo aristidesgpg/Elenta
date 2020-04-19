@@ -164,7 +164,8 @@ export default {
                   title: "",
                   type: "array",
                   items: {
-                    type: "string"
+                    type: "string",
+                    default:"New Item"
                   },
                   default: ["Item 1", "Item 2", "Item3 3"],
                 }
@@ -205,7 +206,8 @@ export default {
                   title: "",
                   type: "array",
                   items: {
-                    type: "string"
+                    type: "string",
+                    default:"New Item"
                   },
                   default: ["choice 1", "choice 2", "choice 3"],
                 }
@@ -238,7 +240,8 @@ export default {
               type: "array",
               title: "Options",
               items: {
-                type: "string"
+                type: "string",
+                default:"New Item"
               }
             }
           }
@@ -269,7 +272,8 @@ export default {
               type: "array",
               title: "Options",
               items: {
-                type: "string"
+                type: "string",
+                default:"New Item"
               }
             }
           }
@@ -354,7 +358,7 @@ export default {
       jsonSchema: {
         "type":"array",
         title:"new",
-        minItems: 0,
+        minItems: 1,
         maxItems: 3,
         description:"Description",
          items:{

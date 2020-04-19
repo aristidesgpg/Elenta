@@ -100,11 +100,6 @@ export default class RepeaterEditField extends React.Component<any,any> {
     this.onChangeDebounced({ formData: editedSchema });
   }
   
-  /*console.log("name", name);
-  console.log("editedSchema", editedSchema);
-  console.log("schema", schema);
-  console.log("uiSchema", uiSchema);*/
-
   removeField = (name: string) => {
     let { editedSchema, schema, uiSchema } = this.state;     
     //EditedSchema => schema value of props, uiSchema: uiSchema Value of props, schema => uiSchema.editSchema

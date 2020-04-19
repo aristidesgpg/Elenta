@@ -71,9 +71,9 @@ export const UPSERT_TEMPLATE = gql`
   }
 `;
 
-export const SYNC_TEMPLATE_MODULES = gql`
-  mutation syncTemplateModules($input: SyncTemplateModulesInput!) {
-    syncTemplateModules(input: $input) {
+export const UPDATE_TEMPLATE_MODULES = gql`
+  mutation updateTemplateModules($input: UpdateTemplateModulesInput!) {
+    updateTemplateModules(input: $input) {
       id
       modules {
         id
@@ -105,9 +105,77 @@ export const SYNC_TEMPLATE_MODULES = gql`
   }
 `;
 
-export const SYNC_PROGRAM_MODULES = gql`
-  mutation syncProgramModules($input: SyncProgramModulesInput!) {
-    syncProgramModules(input: $input) {
+export const DUPLICATE_TEMPLATE_MODULES = gql`
+  mutation duplicateTemplateModules($input: DuplicateTemplateModulesInput!) {
+    duplicateTemplateModules(input: $input) {
+      id
+      modules {
+        id
+        title
+        description
+        content
+        conditions
+        pivot {
+          id
+          folder
+          order
+        }
+        reminders {
+          id
+          subject
+          message
+          frequency
+          max_reminders
+        }
+        triggers {
+          id
+          start_timestamp
+          start_timestamp_field
+          frequency
+          max_sends
+        }
+      }
+    }
+  }
+`;
+
+export const DUPLICATE_PROGRAM_MODULES = gql`
+  mutation duplicateProgramModules($input: DuplicateProgramModulesInput!) {
+    duplicateProgramModules(input: $input) {
+      id
+      modules {
+        id
+        title
+        description
+        content
+        conditions
+        pivot {
+          id
+          folder
+          order
+        }
+        reminders {
+          id
+          subject
+          message
+          frequency
+          max_reminders
+        }
+        triggers {
+          id
+          start_timestamp
+          start_timestamp_field
+          frequency
+          max_sends
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_PROGRAM_MODULES = gql`
+  mutation updateProgramModules($input: UpdateProgramModulesInput!) {
+    updateProgramModules(input: $input) {
       id
       modules {
         id

@@ -7,6 +7,7 @@ import ReactHtmlParser from 'react-html-parser';
 import SxSelect from '../../common/nestedselect/SxSelect';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './css/fields.css';
+import { Button } from 'react-bootstrap';
 
 
 //Widget
@@ -61,9 +62,11 @@ export class TextField extends React.Component<any,any>{
       }
       
   }
-  componentDidUpdate(){
-      
-    
+  componentDidUpdate(prevProps, prevState) {
+    const { editorReferece } = this.state;
+    /*if(editorReferece !== undefined){
+      editorReferece.focus();
+    }*/
   }
   componentDidMount(){
       
@@ -73,26 +76,43 @@ export class TextField extends React.Component<any,any>{
       this.setState({
         editorState,
       });
+      //console.log("editor", editorState);
       const { formData } = this.state;
-      formData.textValue =JSON.stringify(draftToHtml(convertToRaw(editorState.getCurrentContent())));
-      this.props.onChange(formData);
+      const currentString = JSON.stringify(draftToHtml(convertToRaw(editorState.getCurrentContent())));
+      if( formData.textValue !== currentString){
+        formData.textValue = currentString;
+        this.setState({formData});
+      }      
   };
+
+  onSave = ()=>{
+    this.props.onChange(this.state.formData);
+  }
   
+  setEditorReference = (ref) => {
+    //this.editorReferece = ref;    
+    if(ref !== null){
+      //this.setState({ editorReferece: ref })
+      //ref.focus();
+    }
+    
+  }
+
   render(){
       const { editorState } = this.state;
       return (
         <div className="rich-editor-root">
           <Editor
+            editorRef={this.setEditorReference}
             editorState={editorState}
             wrapperClassName="rich-editor-wrapper"
             editorClassName="rich-editor-textarea"
             onEditorStateChange={this.onEditorStateChange}
             toolbarCustomButtons={[<TagOption tagList={this.props.getTagList()} />]}
           />
-          {/*<textarea
-            disabled
-            value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
-          />*/}
+          <button className="rich-editor-btn-save btn btn-info" onClick={this.onSave}>
+            Save
+          </button>
         </div>
       );
   }

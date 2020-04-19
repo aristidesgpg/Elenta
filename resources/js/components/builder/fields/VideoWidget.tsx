@@ -11,7 +11,7 @@ export class VideoWidget extends  React.Component<any,any>{
 
   render(){
       const { schema } = this.state;     
-      return <ReactPlayer url={schema.videoURL} playing />
+      return <ReactPlayer className="mediaMax" url={schema.videoURL} playing />
   }
 }
 

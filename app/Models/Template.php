@@ -75,8 +75,10 @@ class Template extends Model
             ->withPivot([
                 'id',
                 'folder',
-                'order'
+                'order',
+                'deleted_at'
             ])
+            ->whereNull('template_modules.deleted_at')
             ->orderBy('template_modules.order', 'asc');
     }
 
