@@ -5,6 +5,8 @@ import {get} from "lodash";
 import LoadingContainer from "../component-container/LoadingContainer";
 import ElentaNav from "./navbar/ElentaNav";
 import {GET_ME} from "../../graphql/queries";
+import {ToastContextProvider} from "../../contexts/ToastContext";
+import ElentaToastContainer from "./toasts/ElentaToastContainer";
 
 export const PageContainer = (props) => {
   const client = useApolloClient();
@@ -37,23 +39,15 @@ export const PageContainer = (props) => {
   });
 
   return (
-    <LoadingContainer loading={loading} error={error}>
-      {loading // TODO Dirty fix on first GET_ME request
-        ? <Container className="loading-container">
-          <div className="wrapper">
-            <div className="overlay">
-              <Spinner className="loading-spinner" animation="border"/>
-            </div>
-          </div>
-        </Container>
-        : <>
-          <ElentaNav/>
-          <Row lg={12}>
-            {props.children}
-          </Row>
-        </>
-      }
-    </LoadingContainer>
+    <ToastContextProvider>
+      <LoadingContainer loading={loading} error={error}>
+        <ElentaNav/>
+        <ElentaToastContainer/>
+        <Row lg={12}>
+          {props.children}
+        </Row>
+      </LoadingContainer>
+    </ToastContextProvider>
   );
 };
 
