@@ -22,3 +22,4 @@ graph.png
 .env.staging
 .env.beta
 .DS_STORE
+ca.homestead.homestead.crt

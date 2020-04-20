@@ -5,7 +5,9 @@ import {CURRENT_USER_PROFILE, GET_TEMPLATE, UPSERT_TEMPLATE} from "../graphql/qu
 import {useQuery} from "@apollo/react-hooks";
 import ElentaFormBuilder from "../components/builder/ElentaFormBuilder";
 import {useState} from "react";
+import Tags from '../components/tags/Tags';
 
+// TODO: add a tags to the schema
 const schema = {
   title: "Create Template",
   type: "object",

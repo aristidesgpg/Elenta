@@ -393,13 +393,13 @@ export const GET_TAG = gql`
 `;
 
 export const GET_ALL_TAGS = gql`
-  query tags($id: ID!) {
-    getTag(id: $id) {
-      id
-      name
-      created_at
+    query tags {
+      tags {
+        id
+        name
+        created_at
+      }
     }
-  }
 `;
 
 export const UPDATE_PROGRAM_MODULE_SEND = gql`
