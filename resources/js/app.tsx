@@ -23,6 +23,7 @@ import ConsultantProfileSettingsPage from "./pages/consultants/ConsultantProfile
 import PrivateRoute from "./components/hoc/PrivateRoute";
 import ProgramLearnerPage from "./pages/learners/ProgramLearnerPage";
 import ProgramModuleSendEditor from "./components/learners/ProgramModuleSendEditor/ProgramModuleSendEditor";
+import Tags from "./components/tags/Tags";
 
 const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"

@@ -1,11 +1,11 @@
 // Fetch list of tags first
 import * as React from "react";
 import {useMutation, useQuery} from '@apollo/react-hooks';
-import LoadingContainer from "../component-container/LoadingContainer";
+// import LoadingContainer from "../component-container/LoadingContainer";
 import {useParams} from "react-router-dom";
 import {GET_ALL_TAGS, GET_LEARNER_PROFILE, UPDATE_PROGRAM_MODULE_SEND} from "../../graphql/queries";
-import ProgramModuleSendEditor from "../learners/ProgramModuleSendEditor";
-import LearnerProgramModuleList from "../learners/LearnerProgramModuleList";
+// import ProgramModuleSendEditor from "../learners/ProgramModuleSendEditor";
+// import LearnerProgramModuleList from "../learners/LearnerProgramModuleList";
 import {useEffect, useState} from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
