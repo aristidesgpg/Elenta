@@ -23,15 +23,13 @@ class CreateProgramsTable extends Migration
 
             //TODO: Add company, logo, description
             $table->string('title');
+            $table->text('description');
             $table->enum('format', Template::FORMATS);
             $table->integer('max_learners')->nullable();
             $table->timestamp('start_timestamp')->nullable();
             $table->boolean('can_invite')->default(true);
             $table->boolean('is_public')->default(false);
             $table->jsonb('dynamic_fields')->nullable();
-
-            // TODO: Remove this, we'll store everything in dynamic_fields
-            $table->jsonb('dynamic_fields_data')->nullable();
 
             // TODO: add venue, calendar details,  etc.
 

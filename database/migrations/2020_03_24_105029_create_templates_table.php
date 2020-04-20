@@ -19,6 +19,7 @@ class CreateTemplatesTable extends Migration
             $table->uuid('consultant_profile_id');
 
             $table->string('title');
+            $table->text('description');
             $table->boolean('can_request')->default(true);
             $table->boolean('is_public')->default(false);
             $table->jsonb('dynamic_fields')->nullable();

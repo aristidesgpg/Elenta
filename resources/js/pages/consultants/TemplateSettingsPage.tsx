@@ -82,7 +82,7 @@ export const TemplateSettingsPage = () => {
         dynamicFields = defaultDynamicFields;
       }
 
-      setFormState(Object.assign({}, queryData.getTemplate, {
+      setFormState(_.merge({}, queryData.getTemplate, {
         dynamic_fields: {
           schema: dynamicFields.schema,
           uiSchema: dynamicFields.uiSchema
@@ -98,7 +98,7 @@ export const TemplateSettingsPage = () => {
   }, [mutationData]);
 
   const handleChange = (data) => {
-    let newState = Object.assign({}, formState, data.formData);
+    let newState = _.merge({}, formState, data.formData);
     if (!_.isEqual(newState, formState)) {
       setFormState(newState);
     }
@@ -107,7 +107,7 @@ export const TemplateSettingsPage = () => {
   const handleSubmit = () => {
     runMutation({
         variables: {
-          input: Object.assign(
+          input: _.merge(
             {},
             _.pick(formState, ['id', 'title', 'can_request', 'is_public', 'dynamic_fields']),
             {
@@ -140,7 +140,7 @@ export const TemplateSettingsPage = () => {
             schema: schema,
             uiSchema: uiSchema
           };
-          setFormState(Object.assign({}, formState, {dynamic_fields: o}));
+          setFormState(_.merge({}, formState, {dynamic_fields: o}));
         }}
         excludedFields={['richtext', 'rank', 'slider', 'multiple-checkbox', 'radiobuttonlist', 'repeater']}
       />

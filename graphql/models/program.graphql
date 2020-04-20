@@ -1,8 +1,8 @@
 extend type Query {
-    getProgram(id: ID! @eq): Program! @find
+    getProgram(id: ID! @eq): Program! @find @viewPolicyFilter
 }
 
-extend type Mutation @middleware(checks: ["auth:sanctum"]) {
+extend type Mutation {
     upsertProgram(input: UpsertProgramInput! @spread): Program! @upsert @can(ability: "update", find: "id")
     updateProgramModules(input: UpdateProgramModulesInput @spread): Program! @update @can(ability: "update", find: "id")
     duplicateProgramModules(input: DuplicateProgramModulesInput @spread): Program! @can(ability: "update", find: "id") @field(resolver: "App\\GraphQL\\Resolvers\\DuplicateTemplateModulesResolver@resolve")

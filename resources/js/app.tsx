@@ -22,6 +22,7 @@ import ConsultantProfileSettingsPage from "./pages/consultants/ConsultantProfile
 import PrivateRoute from "./components/hoc/PrivateRoute";
 import ProgramLearnerPage from "./pages/learners/ProgramLearnerPage";
 import TemplateSettingsPage from "./pages/consultants/TemplateSettingsPage";
+import ProgramSettingsPage from "./pages/consultants/ProgramSettingsPage";
 
 const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"
@@ -74,7 +75,7 @@ export const App = () => {
             <PrivateRoute exact={true} path="/dashboard" component={ConsultantDashboard}/>
             <PrivateRoute exact={true} path="/preferences" component={ConsultantProfileSettingsPage}/>
 
-            <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
+            <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsPage}/>
             <PrivateRoute exact={true} path="/template/settings/:id" component={TemplateSettingsPage}/>
             <PrivateRoute exact={true} path="/template/content/:id" component={TemplateEditorPage}/>
             <PrivateRoute exact={true} path="/program/content/:id" component={ProgramEditorPage}/>

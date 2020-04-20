@@ -26,7 +26,7 @@ input UpdateLearnerProfileInput {
 
 type LearnerProfile {
     id: ID!
-    user: User!
+    user: User
 
     picture_url: String
     role: String
