@@ -59,7 +59,6 @@ export const TemplateSettingsEditor = () => {
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
   let history = useHistory();
 
-
   if (id == "new") {
     return (
       <ElentaForm

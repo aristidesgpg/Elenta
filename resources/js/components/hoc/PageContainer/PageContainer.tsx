@@ -39,15 +39,20 @@ export const PageContainer = (props) => {
   });
 
   return (
-    <ToastContextProvider>
-      <LoadingContainer loading={loading} error={error}>
-        <ElentaNav/>
-        <ElentaToastContainer/>
-        <Row lg={12}>
-          {props.children}
-        </Row>
-      </LoadingContainer>
-    </ToastContextProvider>
+    <>
+      {
+        !loading && !error &&
+        <ToastContextProvider>
+          <LoadingContainer loading={loading} error={error}>
+            <ElentaNav/>
+            <ElentaToastContainer/>
+            <Row lg={12}>
+              {props.children}
+            </Row>
+          </LoadingContainer>
+        </ToastContextProvider>
+      }
+    </>
   );
 };
 
