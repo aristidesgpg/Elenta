@@ -48,20 +48,22 @@ const uiSchema = {
   }
 };
 
+const defaultDynamicFields = {
+  schema: {
+    type: "object",
+    properties: {}
+  },
+  uiSchema: {
+    "ui:order": []
+  }
+};
+
 export const TemplateSettingsPage = () => {
   let {id} = useParams();
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
   const [formState, setFormState] = useState({
-    dynamic_fields: {
-      schema: {
-        type: "object",
-        properties: {}
-      },
-      uiSchema: {
-        "ui:order": []
-      }
-    }
+    dynamic_fields: defaultDynamicFields
   });
 
   const [runQuery, {loading: queryLoading, error: queryError, data: queryData}] = useLazyQuery(GET_TEMPLATE);
@@ -75,10 +77,15 @@ export const TemplateSettingsPage = () => {
     }
 
     if (queryData) {
-      setFormState(Object.assign({}, queryData, {
+      let dynamicFields = JSON.parse(queryData.getTemplate.dynamic_fields);
+      if (dynamicFields.schema === undefined) {
+        dynamicFields = defaultDynamicFields;
+      }
+
+      setFormState(Object.assign({}, queryData.getTemplate, {
         dynamic_fields: {
-          schema: JSON.parse(queryData.getTemplate.dynamic_fields).schema,
-          uiSchema: JSON.parse(queryData.getTemplate.dynamic_fields).uiSchema
+          schema: dynamicFields.schema,
+          uiSchema: dynamicFields.uiSchema
         }
       }))
     }
@@ -100,44 +107,45 @@ export const TemplateSettingsPage = () => {
   const handleSubmit = () => {
     runMutation({
         variables: {
-          input: Object.assign({}, formState, {
-            id: id == "new" ? null : id,
-            dynamic_fields: JSON.stringify(formState.dynamic_fields),
-            owner: {
-              connect: userProfile.id
-            }
-          })
+          input: Object.assign(
+            {},
+            _.pick(formState, ['id', 'title', 'can_request', 'is_public', 'dynamic_fields']),
+            {
+              id: id == "new" ? null : id,
+              dynamic_fields: JSON.stringify(formState.dynamic_fields),
+              owner: {
+                connect: userProfile.id
+              }
+            })
         }
       }
     )
   };
 
   return (
-    <>
-      <LoadingContainer loading={[mutationLoading, queryLoading]} error={[mutationError, queryError]}>
-        <JsonForm schema={schema}
-                  uiSchema={uiSchema}
-                  formData={formState}
-                  onChange={handleChange}
-        >
-          <br/>
-        </JsonForm>
-        <h3>Dynamic Fields</h3>
-        <ElentaFormBuilder
-          schema={formState.dynamic_fields.schema}
-          uiSchema={formState.dynamic_fields.uiSchema}
-          onSave={(schema: any, uiSchema: any) => {
-            let o = {
-              schema: schema,
-              uiSchema: uiSchema
-            };
-            setFormState(Object.assign({}, formState, {dynamic_fields: o}));
-          }}
-          excludedFields={['richtext', 'rank', 'slider', 'multiple-checkbox', 'radiobuttonlist', 'repeater']}
-        />
-        <Button onClick={handleSubmit}>Submit</Button>
-      </LoadingContainer>
-    </>
+    <LoadingContainer loading={[mutationLoading, queryLoading]} error={[mutationError, queryError]}>
+      <JsonForm schema={schema}
+                uiSchema={uiSchema}
+                formData={formState}
+                onChange={handleChange}
+      >
+        <br/>
+      </JsonForm>
+      <h3>Dynamic Fields</h3>
+      <ElentaFormBuilder
+        schema={formState.dynamic_fields.schema}
+        uiSchema={formState.dynamic_fields.uiSchema}
+        onSave={(schema: any, uiSchema: any) => {
+          let o = {
+            schema: schema,
+            uiSchema: uiSchema
+          };
+          setFormState(Object.assign({}, formState, {dynamic_fields: o}));
+        }}
+        excludedFields={['richtext', 'rank', 'slider', 'multiple-checkbox', 'radiobuttonlist', 'repeater']}
+      />
+      <Button onClick={handleSubmit}>Submit</Button>
+    </LoadingContainer>
   );
 };
 

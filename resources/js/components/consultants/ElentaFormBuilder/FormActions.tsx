@@ -22,7 +22,7 @@ export default class FormActions extends React.Component<Props, State> {
   }
 
   render() {
-    const filename = this.props.schema.title + ".json";
+    const filename = "schema.json";
     const schemaFileContent = "data:application/json;base64," + btoa(JSON.stringify(this.props.schema));
     const uiSchemaFileContent = "data:application/json;base64," + btoa(JSON.stringify(this.props.uiSchema));
 
@@ -58,7 +58,7 @@ export default class FormActions extends React.Component<Props, State> {
           >
             Add a field
           </FieldListDropdown>
-        </ButtonToolbar>        
+        </ButtonToolbar>
       </div>
     );
   }
