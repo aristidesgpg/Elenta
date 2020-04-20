@@ -12,7 +12,6 @@ import {ApolloProvider} from '@apollo/react-hooks';
 
 import ConsultantDashboard from "./pages/consultants/ConsultantDashboard";
 import PageContainer from "./components/hoc/PageContainer/PageContainer";
-import TemplateSettingsEditor from "./pages/consultants/TemplateSettingsEditor";
 import {setContext} from "apollo-link-context";
 import ProgramSettingsEditor from "./pages/consultants/ProgramSettingsEditor";
 import TemplateEditorPage from "./pages/consultants/TemplateEditorPage";
@@ -22,7 +21,7 @@ import PasswordResetPage from "./pages/shared/PasswordResetPage";
 import ConsultantProfileSettingsPage from "./pages/consultants/ConsultantProfileSettingsPage";
 import PrivateRoute from "./components/hoc/PrivateRoute";
 import ProgramLearnerPage from "./pages/learners/ProgramLearnerPage";
-import ProgramModuleSendEditor from "./components/learners/ProgramModuleSendEditor/ProgramModuleSendEditor";
+import TemplateSettingsPage from "./pages/consultants/TemplateSettingsPage";
 import Tags from "./components/tags/Tags";
 
 const httpLink = createHttpLink({
@@ -79,7 +78,7 @@ export const App = () => {
             <PrivateRoute exact={true} path="/preferences" component={ConsultantProfileSettingsPage}/>
 
             <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsEditor}/>
-            <PrivateRoute exact={true} path="/template/settings/:id" component={TemplateSettingsEditor}/>
+            <PrivateRoute exact={true} path="/template/settings/:id" component={TemplateSettingsPage}/>
             <PrivateRoute exact={true} path="/template/content/:id" component={TemplateEditorPage}/>
             <PrivateRoute exact={true} path="/program/content/:id" component={ProgramEditorPage}/>
           </Switch>

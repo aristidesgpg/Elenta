@@ -10,26 +10,42 @@ export const LoadingContainer = (props) => {
     isLoading = props.loading.reduce((p, c) => p || c);
   }
 
+  let errorKey = "message";
+  if (window.location.hostname !== "app.elenta.io") {
+    errorKey = "debugMessage";
+  }
+  let errors = [];
+  if (Array.isArray(props.error)) {
+    errors = props.error.filter(e => e !== undefined).map(es => {
+      return es.graphQLErrors.map(e => e[errorKey]);
+    }).flat();
+  } else if (props.error) {
+    errors = props.error.graphQLErrors.map(e => e[errorKey]);
+  }
+
   if (isLoading) return (
     <Container className="loading-container">
       <div className="wrapper">
         <div className="overlay">
           <Spinner className="loading-spinner" animation="border"/>
         </div>
-          {props.children}
+        {props.children}
       </div>
     </Container>
   );
 
-  if (props.error) return (
-    <Container>
-      <Alert variant="danger" transition={null}>
-        {
-          props.error.graphQLErrors.map(e => {
-            return <p key={e.message}>{e.message}</p>
-          })
-        }
-      </Alert>
+  if (errors.length > 0) return (
+    <Container className="loading-container">
+      <div className="wrapper">
+        <div className="overlay" style={{background: "red"}}>
+          {
+            errors.map(e => {
+              return <p key={e}>{e}</p>
+            })
+          }
+        </div>
+        {props.children}
+      </div>
     </Container>
   );
 

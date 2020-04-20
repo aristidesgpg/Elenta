@@ -91,5 +91,5 @@ mix.webpackConfig({
 
 mix.react(
   'resources/js/index.tsx',
-  'public/js/elenta-app.js')
-.sourceMaps(process.env.MIX_ENV === 'local', 'source-map');
+  'public/js/elenta-app.js'
+).sourceMaps(process.env.MIX_ENV === 'local', 'source-map');
