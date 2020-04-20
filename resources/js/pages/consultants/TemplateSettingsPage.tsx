@@ -3,10 +3,13 @@ import {useParams, useHistory} from "react-router-dom";
 import {CURRENT_USER_PROFILE, GET_TEMPLATE, UPSERT_TEMPLATE} from "../../graphql/queries";
 import {useLazyQuery, useMutation, useQuery} from "@apollo/react-hooks";
 import ElentaFormBuilder from "../../components/consultants/ElentaFormBuilder/ElentaFormBuilder";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
 import JsonForm from "react-jsonschema-form";
 import Button from "react-bootstrap/Button";
+import _ from "lodash";
+import {ToastContext} from "../../contexts/ToastContext";
+import ElentaToast from "../../components/shared/ElentaToast/ElentaToast";
 
 const schema = {
   type: "object",
@@ -64,6 +67,8 @@ export const TemplateSettingsPage = () => {
   const [runQuery, {loading: queryLoading, error: queryError, data: queryData}] = useLazyQuery(GET_TEMPLATE);
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_TEMPLATE);
 
+  const toastContext = useContext(ToastContext);
+
   useEffect(() => {
     if (!queryData && id != "new") {
       runQuery({variables: {id: id}});
@@ -79,20 +84,32 @@ export const TemplateSettingsPage = () => {
     }
   }, [queryData]);
 
+  useEffect(() => {
+    if (mutationData) {
+      toastContext.addToast({header: "Success!", body: "Saved"});
+    }
+  }, [mutationData]);
+
   const handleChange = (data) => {
-    //setFormState(Object.assign({}, formState, data));
+    let newState = Object.assign({}, formState, data.formData);
+    if (!_.isEqual(newState, formState)) {
+      setFormState(newState);
+    }
   };
 
   const handleSubmit = () => {
     runMutation({
-      variables: Object.assign({}, formState, {
-        id: id,
-        dynamic_fields: JSON.stringify(formState.dynamic_fields),
-        owner: {
-          connect: userProfile.id
+        variables: {
+          input: Object.assign({}, formState, {
+            id: id == "new" ? null : id,
+            dynamic_fields: JSON.stringify(formState.dynamic_fields),
+            owner: {
+              connect: userProfile.id
+            }
+          })
         }
-      })
-    })
+      }
+    )
   };
 
   return (
