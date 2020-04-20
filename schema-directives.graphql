@@ -190,11 +190,11 @@ directive @broadcast(
 
 # Directive class: Nuwave\Lighthouse\Schema\Directives\BuilderDirective
 """
-Use an argument to modify the query builder for a field.
+Use an argument to modify the query ElentaFormBuilder for a field.
 """
 directive @builder(
   """
-  Reference a method that is passed the query builder.
+  Reference a method that is passed the query ElentaFormBuilder.
   Consists of two parts: a class name and a method name, separated by an `@` symbol.
   If you pass only a class name, the method name defaults to `__invoke`.
   """
@@ -890,7 +890,7 @@ directive @scalar(
 
 # Directive class: Nuwave\Lighthouse\Schema\Directives\ScopeDirective
 """
-Adds a scope to the query builder.
+Adds a scope to the query ElentaFormBuilder.
 The scope method will receive the client-given value of the argument as the second parameter.
 """
 directive @scope(
@@ -1030,7 +1030,7 @@ directive @where(
   key: String
 
   """
-  Use Laravel\'s where clauses upon the query builder.
+  Use Laravel\'s where clauses upon the query ElentaFormBuilder.
   """
   clause: String
 ) on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION

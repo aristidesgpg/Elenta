@@ -1,28 +1,28 @@
 import * as React from "react";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import {get} from "lodash";
-import FormSample from "./components/builder/FormSample";
+import FormSample from "./components/consultants/ElentaFormBuilder/FormSample";
 
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/shared/LoginPage";
 
 import ApolloClient from 'apollo-client';
 import {defaultDataIdFromObject, InMemoryCache} from 'apollo-cache-inmemory';
 import {createHttpLink, HttpLink} from 'apollo-link-http';
 import {ApolloProvider} from '@apollo/react-hooks';
 
-import ConsultantDashboard from "./pages/ConsultantDashboard";
-import PageContainer from "./components/page-container/PageContainer";
-import TemplateSettingsEditor from "./pages/TemplateSettingsEditor";
+import ConsultantDashboard from "./pages/consultants/ConsultantDashboard";
+import PageContainer from "./components/hoc/PageContainer/PageContainer";
+import TemplateSettingsEditor from "./pages/consultants/TemplateSettingsEditor";
 import {setContext} from "apollo-link-context";
-import ProgramSettingsEditor from "./pages/ProgramSettingsEditor";
-import TemplateEditorPage from "./pages/TemplateEditorPage";
-import ProgramEditorPage from "./pages/ProgramEditorPage";
-import LoginCallbackPage from "./pages/LoginCallbackPage";
-import PasswordResetPage from "./pages/PasswordResetPage";
-import ConsultantProfileSettingsPage from "./pages/ConsultantProfileSettingsPage";
-import PrivateRoute from "./hoc/PrivateRoute";
-import ProgramLearnerPage from "./pages/ProgramLearnerPage";
-import ProgramModuleSendEditor from "./components/learners/ProgramModuleSendEditor";
+import ProgramSettingsEditor from "./pages/consultants/ProgramSettingsEditor";
+import TemplateEditorPage from "./pages/consultants/TemplateEditorPage";
+import ProgramEditorPage from "./pages/consultants/ProgramEditorPage";
+import LoginCallbackPage from "./pages/shared/LoginCallbackPage";
+import PasswordResetPage from "./pages/shared/PasswordResetPage";
+import ConsultantProfileSettingsPage from "./pages/consultants/ConsultantProfileSettingsPage";
+import PrivateRoute from "./components/hoc/PrivateRoute";
+import ProgramLearnerPage from "./pages/learners/ProgramLearnerPage";
+import ProgramModuleSendEditor from "./components/learners/ProgramModuleSendEditor/ProgramModuleSendEditor";
 
 const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"
