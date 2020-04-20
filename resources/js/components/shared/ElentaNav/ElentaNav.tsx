@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useEffect} from "react";
 import axios from "axios";
 import {
   NavbarBrand,
@@ -13,14 +13,101 @@ import {get} from "lodash";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import NavbarToggle from "react-bootstrap/NavbarToggle";
 import ProfileDropdownItem from "./ProfileDropdownItem";
-import {Link, NavLink} from "react-router-dom";
-import {useQuery} from "@apollo/react-hooks";
-import {CURRENT_USER, CURRENT_USER_PROFILE} from "../../../graphql/queries";
+import {Link, NavLink, useHistory, useLocation} from "react-router-dom";
+import {useApolloClient, useMutation, useQuery} from "@apollo/react-hooks";
+import {
+  CREATE_CONSULTANT_PROFILE,
+  CREATE_LEARNER_PROFILE,
+  CURRENT_USER,
+  CURRENT_USER_PROFILE,
+} from "../../../graphql/queries";
 import './ElentaNav.scss';
 
 export const ElentaNav = () => {
+  const location = useLocation();
+  const history = useHistory();
+  const client = useApolloClient();
   const {data: {user}} = useQuery(CURRENT_USER);
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
+
+  const consultantProfile = get(user, 'consultantProfile', null);
+  const learnerProfile = get(user, 'learnerProfile', null);
+
+  const [runLearnerMutation, {loading: learnerMutationLoading, error: learnerMutationError, data: learnerMutationData}] = useMutation(CREATE_LEARNER_PROFILE);
+  const [runConsultantMutation, {loading: consultantMutationLoading, error: consultantMutationError, data: consultantMutationData}] = useMutation(CREATE_CONSULTANT_PROFILE);
+
+  useEffect(() => {
+    let userProfile = null;
+
+    if (learnerMutationData) {
+      userProfile = learnerMutationData.createLearnerProfile;
+    }
+    if (consultantMutationData) {
+      userProfile = consultantMutationData.createConsultantProfile;
+    }
+
+    if (userProfile) {
+      client.writeData({
+        data: {
+          userProfile
+        }
+      });
+      redirectToProfile();
+    }
+  }, [learnerMutationData, consultantMutationData]);
+
+  const selectProfile = (profile) => {
+    if (profile.id !== userProfile.id) {
+      client.writeData({
+        data: {
+          userProfile: profile
+        }
+      });
+    }
+
+    redirectToProfile();
+  };
+
+  const redirectToProfile = () => {
+    if (location.pathname.indexOf("/preferences", 0) === -1) {
+      history.push("/preferences");
+    }
+  };
+
+  const createProfile = (accountType) => {
+    switch (accountType) {
+      case "consultant": {
+        runConsultantMutation({
+          variables: {
+            input: {
+              picture_url: "https://lorempixel.com/640/480/?20990",
+              title: "Consultant",
+              bio: "",
+              user: {
+                connect: user.id
+              }
+            }
+          }
+        });
+        break;
+      }
+      case "learner": {
+        runLearnerMutation({
+          variables: {
+            input: {
+              picture_url: "https://lorempixel.com/640/480/?20990",
+              role: "Learner",
+              tenure: "Learner",
+              user: {
+                connect: user.id
+              }
+            }
+          }
+        });
+        break;
+      }
+    }
+  };
 
   const logout = () => {
     localStorage.removeItem('token');
@@ -59,7 +146,24 @@ export const ElentaNav = () => {
                     }
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    {userProfile && <ProfileDropdownItem key={userProfile.id} profile={userProfile}/>}
+                    {
+                      consultantProfile
+                        ? <ProfileDropdownItem key={consultantProfile.id}
+                                               onClick={() => selectProfile({...consultantProfile, type: "consultant"})}
+                                               profile={consultantProfile}/>
+                        : <Dropdown.Item onClick={() => createProfile("consultant")}>
+                          Create Consultant Profile
+                        </Dropdown.Item>
+                    }
+                    {
+                      learnerProfile
+                        ? <ProfileDropdownItem key={learnerProfile.id}
+                                               onClick={() => selectProfile({...learnerProfile, type: "learner"})}
+                                               profile={learnerProfile}/>
+                        : <Dropdown.Item onClick={() => createProfile("learner")}>
+                          Create Learner Profile
+                        </Dropdown.Item>
+                    }
                     <Dropdown.Item onClick={() => logout()}>
                       Logout
                     </Dropdown.Item>

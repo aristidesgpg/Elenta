@@ -157,7 +157,7 @@ const uiSchema = {
   },
 };
 
-export const ConsultantProfileSettingsPage = () => {
+export const LearnerProfileSettingsPage = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
   const client = useApolloClient();
@@ -216,4 +216,4 @@ export const ConsultantProfileSettingsPage = () => {
   </LoadingContainer>
 };
 
-export default ConsultantProfileSettingsPage;
+export default LearnerProfileSettingsPage;

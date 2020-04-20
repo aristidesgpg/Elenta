@@ -1,11 +1,10 @@
 import * as React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
-import {Link} from "react-router-dom";
 
-export const ProfileDropdownItem = ({profile}) => {
+export const ProfileDropdownItem = ({profile, onClick}) => {
   return (
-    <Dropdown.Item>
-      <Link to="/preferences">{profile.title}</Link>
+    <Dropdown.Item onClick={onClick}>
+      {profile.title || profile.role}
     </Dropdown.Item>
   );
 };

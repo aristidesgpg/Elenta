@@ -44,34 +44,6 @@ export const GET_TEMPLATE = gql`
     }
   }
 `;
-/*
-
-      templateModules {
-        id
-        folder
-        order
-        module {
-          title
-          description
-          content
-          conditions
-          reminders {
-            id
-            subject
-            message
-            frequency
-            max_reminders
-          }
-          triggers {
-            id
-            start_timestamp
-            start_timestamp_field
-            frequency
-            max_sends
-          }
-        }
-      }
- */
 
 export const GET_TEMPLATES_BY_OWNER = gql`
   query getTemplatesByOwner($consultant_profile_id: ID!) {
@@ -447,6 +419,105 @@ export const GET_ME = gql`
   }
 `;
 
+export const CREATE_CONSULTANT_PROFILE = gql`
+  mutation createConsultantProfile($input: CreateConsultantProfileInput!) {
+    createConsultantProfile(input: $input) {
+      id
+      picture_url
+      title
+      bio
+      programs {
+        id
+        title
+        format
+        max_learners
+        start_timestamp
+        can_invite
+        is_public
+        programModules {
+          id
+          module {
+            id
+            title
+          }
+          send {
+            id
+            response_timestamp
+          }
+        }
+        learners {
+          id
+        }
+        invites {
+          id
+        }
+      }
+      templates {
+        id
+        title
+        can_request
+        is_public
+        requests {
+          id
+        }
+        programs {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_LEARNER_PROFILE = gql`
+  mutation createLearnerProfile($input: CreateLearnerProfileInput!) {
+    createLearnerProfile(input: $input) {
+      id
+      picture_url
+      role
+      tenure
+      programInvites {
+        id
+        program {
+          id
+          title
+          start_timestamp
+        }
+      }
+      programs {
+        id
+        title
+        format
+        max_learners
+        start_timestamp
+        can_invite
+        is_public
+        programModules {
+          id
+          module {
+            id
+            title
+            content
+          }
+          send {
+            id
+            response_timestamp
+            response_data
+            response_feedback
+            response_rating
+            programModule {
+              id
+              module {
+                id
+                title
+                content
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 
 export const GET_LEARNER_PROFILE = gql`
   query getLearnerProfile($user_id : ID!) {
@@ -629,6 +700,7 @@ export const CURRENT_USER_PROFILE = gql`
       picture_url
       title
       bio
+      type
     }
   }
 `;
