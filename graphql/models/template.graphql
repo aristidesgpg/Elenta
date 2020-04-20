@@ -65,10 +65,10 @@ type Template {
 
     pivot: TemplateModulePivot
 
-    templateModules: [TemplateModule] @hasMany @softDeletes
-    modules: [Module] @belongsToMany
-    requests: [TemplateRequest]
-    programs: [Program]
+    templateModules: [TemplateModule] @viewPolicyFilter @hasMany @softDeletes
+    modules: [Module] @viewPolicyFilter @belongsToMany
+    requests: [TemplateRequest] @viewPolicyFilter
+    programs: [Program] @viewPolicyFilter
     tags: [Tag]
 }
 

@@ -1,5 +1,5 @@
 export default {
-  projectName: process.env.PROJECT_NAME || "Formbuilder",
+  projectName: process.env.PROJECT_NAME || "Elenta",
   server: {
     remote: process.env.SERVER_URL,
     bucket: "formbuilder",
@@ -13,7 +13,7 @@ export default {
       jsonSchema: {
         type: "string",
         title: "Edit me",
-        textValue:"\"<p>Text</p>\""        
+        textValue:"\"<p>Text</p>\""
       },
       uiSchema: {
         uiType: "richtext",
@@ -72,8 +72,8 @@ export default {
         description: "",
         minimum: 0,
         maximum: 100,
-        multipleOf: 1,        
-        count:1,                
+        multipleOf: 1,
+        count:1,
       },
       uiSchema: {
         uiType: "slider",
@@ -124,7 +124,7 @@ export default {
         default: ""
       },
       uiSchema: {
-        uiType: "multilinetext",        
+        uiType: "multilinetext",
         "ui:widget": "textarea",
         editSchema: {
           type: "object",

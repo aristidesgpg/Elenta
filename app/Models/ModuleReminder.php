@@ -42,7 +42,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $module_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ModuleReminder whereModuleId($value)
  */
-class ModuleReminder extends Model
+class ModuleReminder extends BaseModel
 {
     use SoftDeletes;
     use UsesUuid;

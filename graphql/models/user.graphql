@@ -14,8 +14,8 @@ type User {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    learnerProfile: [LearnerProfile]
-    consultantProfile: [ConsultantProfile]
+    learnerProfile: LearnerProfile
+    consultantProfile: ConsultantProfile
 }
 
 

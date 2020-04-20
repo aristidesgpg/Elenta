@@ -53,7 +53,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
  * @property-read int|null $tags_count
  */
-class Module extends Model
+class Module extends BaseModel
 {
     use SoftDeletes;
     use UsesUuid;

@@ -61,10 +61,10 @@ type Module {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    templates: [Template] @belongsToMany
-    programs: [Program]
-    reminders: [ModuleReminder]
-    triggers: [ModuleTrigger]
+    templates: [Template] @viewPolicyFilter
+    programs: [Program] @viewPolicyFilter
+    reminders: [ModuleReminder] @viewPolicyFilter
+    triggers: [ModuleTrigger] @viewPolicyFilter
     tags: [Tag]
 }
 

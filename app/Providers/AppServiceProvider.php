@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Observers\ModelObserver;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // TODO: This doesn't belong here
         Validator::extend('password_match', function (
             $attribute, $value, $parameters, \Illuminate\Validation\Validator $validator
         ) {

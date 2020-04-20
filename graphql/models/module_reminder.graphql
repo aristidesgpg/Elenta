@@ -2,8 +2,8 @@ type ModuleReminder {
     id: ID!
     module: Module
 
-    subject: String!
-    message: String!
+    subject: String
+    message: String
     frequency: Int!
     max_reminders: Int!
 

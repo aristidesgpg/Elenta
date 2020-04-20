@@ -2,9 +2,8 @@ extend type Query {
     getConsultantProfile(user_id: ID! @eq): ConsultantProfile! @find
 }
 
-type Mutation @middleware(checks: ["auth:sanctum"]) {
+type Mutation {
     createConsultantProfile(input: CreateConsultantProfileInput @spread): ConsultantProfile! @create
-
     updateConsultantProfile(input: UpdateConsultantProfileInput @spread): ConsultantProfile! @updateConsultantProfile @field(resolver: "App\\GraphQL\\Resolvers\\UpdateConsultantProfileResolver@resolve")
 }
 
@@ -44,6 +43,6 @@ type ConsultantProfile {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    programs: [Program]
-    templates: [Template]
+    programs: [Program] @viewPolicyFilter
+    templates: [Template] @viewPolicyFilter
 }

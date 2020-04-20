@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -88,13 +91,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // TODO: Change to has one
-    public function learnerProfile(): HasMany {
-        return $this->hasMany(LearnerProfile::class);
+    // TODO: Make sure users can't be requested by someone without policy approval - name/email especially
+
+    // DB supports multiple of each, but we make it HasOne for now
+    public function learnerProfile(): HasOne {
+        return $this->hasOne(LearnerProfile::class);
     }
 
-    public function consultantProfile(): HasMany {
-        return $this->hasMany(ConsultantProfile::class);
+    public function consultantProfile(): HasOne {
+        return $this->hasOne(ConsultantProfile::class);
     }
 
     public function firstName() {

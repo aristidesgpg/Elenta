@@ -49,7 +49,7 @@ use Illuminate\Support\Facades\Mail;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ProgramModule withoutTrashed()
  * @mixin \Eloquent
  */
-class ProgramModule extends Pivot
+class ProgramModule extends BasePivot
 {
     use SoftDeletes;
 

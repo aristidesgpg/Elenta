@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\LighthouseManipulateResult;
 use App\Models\TemplateModule;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Nuwave\Lighthouse\Events\ManipulateResult;
 
 class EventServiceProvider extends ServiceProvider
 {

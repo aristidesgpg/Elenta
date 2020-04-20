@@ -1,4 +1,4 @@
-extend type Mutation @middleware(checks: ["auth:sanctum"]){
+extend type Mutation {
     createProgramInvite(input: CreateProgramInviteInput! @spread): ProgramInvite! @create
     createProgramInvites(input: [CreateProgramInviteInput]! @spread): [ProgramInvite]! @field(resolver: "App\\GraphQL\\Resolvers\\CreateProgramInvitesResolver@resolve")
 }

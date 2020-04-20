@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\LearnerProfile
@@ -44,7 +45,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProgramModule[] $programModules
  * @property-read int|null $program_modules_count
  */
-class LearnerProfile extends Model
+class LearnerProfile extends BaseModel
 {
     use SoftDeletes;
     use UsesUuid;

@@ -33,7 +33,7 @@ mix.webpackConfig({
     publicPath: ASSET_URL,
   },
   resolve: {
-    extensions: [".js", ".ts", ".tsx", ".gql", ".graphql"]
+    extensions: [".js", ".ts", ".tsx", ".scss", ".gql", ".graphql"]
   },
   module: {
     rules: [
@@ -57,6 +57,17 @@ mix.webpackConfig({
         test: /\.(graphql|gql)$/,
         exclude: /node_modules/,
         loader: "graphql-tag/loader"
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          // Creates `style` nodes from JS strings
+          MiniCssExtractPlugin.loader,
+          // Translates CSS into CommonJS
+          'css-loader',
+          // Compiles Sass to CSS
+          'sass-loader',
+        ],
       }
     ]
   },
@@ -81,6 +92,4 @@ mix.webpackConfig({
 mix.react(
   'resources/js/index.tsx',
   'public/js/elenta-app.js')
-.sass('resources/js/components/common/nestedselect/SxSelect.scss', 'public/css')
-.sass('resources/js/components/common/nestedselect/SubMenu/SubMenu.scss', 'public/css')
 .sourceMaps(process.env.MIX_ENV === 'local', 'source-map');
