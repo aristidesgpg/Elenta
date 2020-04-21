@@ -10,6 +10,7 @@ import {setContext} from "apollo-link-context";
 import {CURRENT_USER_PROFILE, GET_ME} from "./graphql/queries";
 import LoadingContainer from "./components/hoc/LoadingContainer/LoadingContainer";
 import Routes from "./Routes";
+import LoginRoutes from "./LoginRoutes";
 
 const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"
@@ -69,7 +70,7 @@ export const App = () => {
   return (
     <ApolloProvider client={ElentaClient}>
       {loading
-        ? <LoadingContainer loading={loading}/>
+        ? <LoginRoutes />
         : <Routes/>
       }
     </ApolloProvider>

@@ -3,13 +3,12 @@ import {useQuery} from '@apollo/react-hooks';
 import {useParams, Redirect} from "react-router-dom";
 import {Container, Spinner} from "react-bootstrap";
 import {CURRENT_USER} from "../../graphql/queries";
+import _ from "lodash";
 
 export const LoginCallbackPage = () => {
   const {token} = useParams();
   const storageToken = localStorage.getItem('token');
-  const {data: {user}} = useQuery(CURRENT_USER);
-
-  if (user) return (<Redirect to="/preferences"/>);
+  const user = _.get(useQuery(CURRENT_USER), 'data.user', undefined);
 
   useEffect(() => {
     if (token && token !== storageToken) {
@@ -17,6 +16,8 @@ export const LoginCallbackPage = () => {
       window.location.reload();
     }
   }, [token, storageToken]);
+
+  if (user) return (<Redirect to="/preferences"/>);
 
   return (
     <Container>
