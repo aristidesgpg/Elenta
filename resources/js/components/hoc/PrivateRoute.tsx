@@ -6,10 +6,9 @@ import {Redirect, Route} from "react-router-dom";
 export const PrivateRoute = ({component: Component, ...rest}) => {
   const {data: {user}} = useQuery(CURRENT_USER);
 
-  /*{user ? <Component/> : <Redirect to="/login" />}*/
   return (
     <Route {...rest}>
-      <Component/>
+      {user ? <Component/> : <Redirect to="/login" />}
     </Route>
   );
 };

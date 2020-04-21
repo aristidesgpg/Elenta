@@ -31,7 +31,7 @@ class ProgramModulePolicy
     public function view(User $user, ProgramModule $programModule)
     {
         return $user->id == $programModule->program->owner->user_id
-            || $programModule->program->learners->pluck('user_id')->contains($user->id);
+            || $programModule->send->learner->user_id == $user->id;
     }
 
     /**

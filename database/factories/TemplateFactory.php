@@ -24,6 +24,7 @@ $factory->define(Template::class, function (Faker $faker) {
     return [
         'consultant_profile_id' => $faker->randomElement($consultant_profile_ids),
         'title' => "Template {$faker->numberBetween(0, 999)}",
+        'description' => $faker->sentence(50),
         'can_request' => $faker->boolean(),
         'is_public' => $faker->boolean(),
         'dynamic_fields' => '{}' // TODO: Get sample JSON

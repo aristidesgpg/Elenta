@@ -27,14 +27,19 @@ class ViewPolicyFilterDirective extends BaseDirective implements FieldMiddleware
         $previousResolver = $fieldValue->getResolver();
 
         // Wrap around the resolver
-        $wrappedResolver = function ($root, array $args, GraphQLContext $context, ResolveInfo $info) use ($previousResolver): array {
+        $wrappedResolver = function ($root, array $args, GraphQLContext $context, ResolveInfo $info) use ($previousResolver) {
             // Call the resolver, passing along the resolver arguments
-            /** @var Collection $result */
             $result = $previousResolver($root, $args, $context, $info);
 
-            return $result instanceof Collection ? $result->filter(function (Model $r) {
-                return Auth::user()->can('view', $r);
-            })->toArray() : [];
+            if ($result instanceof Collection) {
+                return $result->filter(function (Model $r) {
+                    return Auth::user()->can('view', $r);
+                })->toArray();
+            } else if ($result instanceof Model && Auth::user()->can('view', $result)) {
+                return $result->toArray();
+            }
+
+            return $result;
         };
 
         // Place the wrapped resolver back upon the FieldValue
