@@ -67,6 +67,7 @@ export const UPSERT_TEMPLATE = gql`
       can_request
       is_public
       dynamic_fields
+      tags
     }
   }
 `;
@@ -367,6 +368,7 @@ export const UPSERT_PROGRAM = gql`
       can_invite
       is_public
       dynamic_fields
+      tags
     }
   }
 `;
@@ -411,6 +413,7 @@ export const UPSERT_MODULE = gql`
         frequency
         max_sends
       }
+      tags
     }
   }
 `;
