@@ -24,6 +24,11 @@ const schema = {
       title: "Title",
       default: "New Template"
     },
+    description: {
+      type: "string",
+      title: "Description",
+      default: "Template Description"
+    },
     can_request: {
       type: "boolean",
       title: "Allow Requests",
@@ -43,6 +48,9 @@ const schema = {
 const uiSchema = {
   id: {
     "ui:widget": "hidden"
+  },
+  description: {
+    "ui:widget": "textarea"
   },
   dynamic_fields: {
     "ui:widget": "hidden"

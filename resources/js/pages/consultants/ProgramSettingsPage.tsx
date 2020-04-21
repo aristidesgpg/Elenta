@@ -15,6 +15,7 @@ import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
 import DTPicker from "../../components/consultants/ElentaFormBuilder/fields/DTPicker";
 import {immutableMerge} from "../../utils/utils";
+import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
 
 const widgets = {RDP: DTPicker};
 
@@ -29,6 +30,11 @@ const schema = {
       type: "string",
       title: "Title",
       default: "New Program"
+    },
+    description: {
+      type: "string",
+      title: "Description",
+      default: "Program Description"
     },
     template: {
       type: "string",
@@ -70,6 +76,9 @@ const schema = {
 const visibleUiSchema = {
   id: {
     "ui:widget": "hidden"
+  },
+  description: {
+    "ui:widget": "textarea"
   },
   start_timestamp: {
     "ui:widget": "RDP"
@@ -248,25 +257,20 @@ export const ProgramSettingsPage = () => {
       loading={[mutationLoading, templatesQueryLoading, programQueryLoading]}
       error={[mutationError, templatesQueryError, programQueryError]}
     >
-      <JsonForm schema={schemaState}
-                uiSchema={uiSchemaState}
-                formData={_.pick(formState, Object.keys(schemaState.properties))}
-                onChange={handleChange}
-                widgets={widgets}
+      <ElentaJsonForm schema={schemaState}
+                      uiSchema={uiSchemaState}
+                      formData={_.pick(formState, Object.keys(schemaState.properties))}
+                      onChange={handleChange}
       >
         <hr/>
-      </JsonForm>
-      <JsonForm schema={dynamicFields.schema}
-                uiSchema={dynamicFields.uiSchema}
-                formData={
-                  dynamicFields.formData ?
-                    dynamicFields.formData :
-                    Object.keys(dynamicFields.schema.properties).reduce((ac,a) => ({...ac,[a]:''}),{})
-                }
-                onChange={handleDynamicChange}
+      </ElentaJsonForm>
+      <ElentaJsonForm schema={dynamicFields.schema}
+                      uiSchema={dynamicFields.uiSchema}
+                      formData={dynamicFields.formData}
+                      onChange={handleDynamicChange}
       >
         <br/>
-      </JsonForm>
+      </ElentaJsonForm>
       <Button onClick={handleSubmit}>Submit</Button>
     </LoadingContainer>
   );
