@@ -24,8 +24,34 @@
 
 legend {
   display: block;  
+  padding-bottom: 5px;
   border-bottom: 1px solid lightgray;
 }
+span.edit-in-place {
+    display: block;
+    word-wrap:break-word;
+    font-size:1rem;
+    font-weight:400;
+    line-height: 1.5;
+}
+
+.edit-in-place {
+    border: 1px dotted #ccc;
+    padding: 5px;
+    width: 100%;
+    word-wrap:break-word;
+    font-size:1rem;
+    font-weight:400;
+    line-height: 1.5;
+}
+
+p.field-description{
+    word-wrap:break-word;
+}
+.edit-in-place-active {
+    width: 100%;
+}
+
 
 .rank-item:hover {    
     cursor: move;
@@ -36,8 +62,8 @@ legend {
 }
 
 .mediaMax{
-    max-width: 300px;
-    max-height: 300px;
+    max-width: 100%;
+    max-height: 500px;
 }
 
 .rich-editor-btn-save{

@@ -45,6 +45,7 @@ export default class SampleFormEditor extends React.Component<any, any>{
         const { schema, uiSchema } = this.state;
         return <ElentaFormBuilder schema={schema}
                                 uiSchema={uiSchema} 
+                                enableCorAnswer = {true}
                                 tagList = {this.tagList()}
                                 onSave={this.onSave}/>
     }

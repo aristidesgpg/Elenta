@@ -53,15 +53,15 @@ class FieldPropertiesEditor extends React.Component<any,any> {
 }
 
   constructor(props) {
-    super(props);
+    super(props);        
     const { uiType } = props.uiSchema;
-    let enableCorAnswer = false;
-    if(uiType =="numberinput" || uiType =="slider" ||
+    let { enableCorAnswer } = props.settings;    
+    if(!enableCorAnswer || !(uiType =="numberinput" || uiType =="slider" ||
        uiType =="text" || uiType =="multilinetext" ||
        uiType =="rank" || uiType =="multiple-checkbox" ||
-       uiType =="radio" || uiType =="select" || uiType =="date"){
-        enableCorAnswer = true;
-       }
+       uiType =="radio" || uiType =="select" || uiType =="date")){
+        enableCorAnswer = false;  
+    }     
     this.state = {editedSchema: props.schema, showSetCorAnswer: false, enableCorAnswer};
     this.onChangeDebounced = debounce(this.onChangeDebounced, 500);
   }
@@ -190,7 +190,7 @@ export default class EditableField extends React.Component<any,any> {
     };
 
   constructor(props) {
-    super(props);
+    super(props);    
     this.state = { schema: props.schema};
     this.handleChangeDebounced = debounce(this.handleChangeDebounced, 1000);
   }
@@ -256,8 +256,8 @@ export default class EditableField extends React.Component<any,any> {
         Range: createSliderWithTooltip(Slider),
         Image: ImageWidget,
         Video: VideoWidget             
-      };
-    const { uiSchema } = props;
+      };    
+    const { uiSchema, registry } = props;
     const { schema } = this.state;
     const { uiType } = props.uiSchema;         
     
@@ -266,27 +266,27 @@ export default class EditableField extends React.Component<any,any> {
             <Draggable type="moved-field" data={props.name}>              
                 <div className="row editable-field">
                   <div className="col editfield-title">
-                    <i className="fas fa-ellipsis-v"/>
-                    <strong>{props.name}</strong>
+                    <i className="fas fa-grip-vertical"/>
+                    <strong>{uiSchema.label}</strong>
                     <ButtonToolbar className="float-right">           
                         <i className="fas fa-times-circle" onClick={this.handleDelete} style={{ cursor: "pointer" }}/>
                     </ButtonToolbar>
                   </div>              
-                </div>        
-              
+                </div>      
             </Draggable>
             <Droppable types={["field", "moved-field"]}  onDrop={this.handleDrop}>
                 <div className="row editfield-body">
-                  <div className="col-sm-6">
+                  <div className="col-sm-6">                    
+                    <strong className="preview-title">Preview</strong>                                                    
                     <Form {...props}                              
-                    schema={schema}
-                    uiSchema={uiSchema}
-                    //idSchema={{$id: props.name}}
-                    fields={{...fields}}
-                    widgets={{...widgets}}
-                    onChange={this.handleChange}>
+                          schema={schema}
+                          uiSchema={uiSchema}
+                          //idSchema={{$id: props.name}}
+                          fields={{...fields}}
+                          widgets={{...widgets}}
+                          onChange={this.handleChange}>
                       <button type="submit" hidden>Submit</button>
-                    </Form>
+                    </Form>                    
                   </div>
                   <div className="col-sm-6">       
                   { uiType === "repeater" && <RepeaterEditField {...props}                     
@@ -295,7 +295,8 @@ export default class EditableField extends React.Component<any,any> {
                                             onUpdate={this.handleUpdate}/>
                   }     
                   { uiType !== "repeater" && <FieldPropertiesEditor
-                                            {...props}                     
+                                            {...props}                
+                                            settings={registry.settings}     
                                             fields = {{...fields}}
                                             widgets = {{...widgets}}
                                             onUpdate={this.handleUpdate}/>

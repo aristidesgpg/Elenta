@@ -22,9 +22,9 @@ const EditorDescField = (props: Props, state: any) => {
   if(props.description == undefined || description == null){
     return(<React.Fragment></React.Fragment>);
   }
-  if(description == "" && props.description != undefined){
+  /*if(description == "" && props.description != undefined){
     description = "Enter some description";
-  }
+  }*/
   
   return (
     <p id={id}>

@@ -11,8 +11,7 @@ export default {
       icon: "font",
       label: "Rich text",
       jsonSchema: {
-        type: "string",
-        title: "Edit me",
+        type: "string",        
         textValue:"\"<p>Text</p>\""
       },
       uiSchema: {
@@ -23,12 +22,11 @@ export default {
         "ui:widget":"RichText",
         editSchema: {
           type: "object",
-          properties: {
-            title: {type: "string", title: "Title"},
+          properties: {            
             textValue:{type: "string"}
-          }
+          }          
         },
-        editUISchema:{
+        editUISchema:{          
           "ui:field":"RichEditor"
         }
       },
@@ -41,7 +39,7 @@ export default {
       jsonSchema: {
         type: "number",
         title: "Edit me",
-        description: "",
+        description: "Enter some description",
         minimum: 0,
         maximum: 100,
         multipleOf: 2,
@@ -52,7 +50,7 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            required: {type: "boolean"},
+            required: {type: "boolean", "title":"Required"},
             minimum:{ type: "number", title:"Minimum", default:0 },
             maximum:{ type: "number", title:"Maximum", default:100 },
             multipleOf:{ type: "number", title:"Step", default: 1 },
@@ -69,7 +67,7 @@ export default {
       jsonSchema: {
         type: "number",
         title: "Edit me",
-        description: "",
+        description: "Enter some description",
         minimum: 0,
         maximum: 100,
         multipleOf: 1,
@@ -81,7 +79,7 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            required: {type: "boolean"},
+            required: {type: "boolean", "title":"Required"},
             minimum:{ type: "number", title:"Minimum", default:0 },
             maximum:{ type: "number", title:"Maximum", default:100 },
             multipleOf:{ type: "number", title:"Step", default: 1 },
@@ -98,7 +96,7 @@ export default {
       jsonSchema: {
         type: "string",
         title: "Edit me",
-        description: "",
+        description: "Enter some description",
         default: ""
       },
       uiSchema: {
@@ -106,7 +104,7 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            required: {type: "boolean"},
+            required: {type: "boolean", "title":"Required"},
           }
         },
         editUISchema:{}
@@ -120,7 +118,7 @@ export default {
       jsonSchema: {
         type: "string",
         title: "Edit me",
-        description: "",
+        description: "Enter some description",
         default: ""
       },
       uiSchema: {
@@ -129,7 +127,7 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            required: {type: "boolean"},
+            required: {type: "boolean", "title":"Required"},
           },
           editUISchema:{}
         },
@@ -143,7 +141,7 @@ export default {
       jsonSchema: {
         type: "array",
         title: "A Rank Item list",
-        description:"",
+        description:"Enter some description",
         items: {
           type: "string",
           enum: ["Item 1", "Item 2", "Item 3"],
@@ -155,7 +153,7 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            required: {type: "boolean"},
+            required: {type: "boolean", "title":"Required"},
             items: {
               type: "object",
               title: "Rank",
@@ -184,7 +182,7 @@ export default {
       jsonSchema: {
         type: "array",
         title: "A multiple choices list",
-        description:"",
+        description:"Enter some description",
         items: {
           type: "string",
           enum: ["choice 1", "choice 2", "choice 3"],
@@ -197,7 +195,7 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            required: {type: "boolean"},
+            required: {type: "boolean", "title":"Required"},
             items: {
               type: "object",
               title: "Choices",
@@ -225,7 +223,7 @@ export default {
       label: "Radio Buttons",
       jsonSchema: {
         type: "string",
-        description:"",
+        description:"Enter some description",
         title: "Edit me",
         enum: ["option 1", "option 2", "option 3"],
       },
@@ -235,7 +233,7 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            required: {type: "boolean"},
+            required: {type: "boolean", "title":"Required"},
             enum: {
               type: "array",
               title: "Options",
@@ -258,7 +256,7 @@ export default {
         type: "string",
         format: "string",
         title: "Edit me",
-        description:"",
+        description:"Enter some description",
         enum: ["option 1", "option 2", "option 3"],
       },
       uiSchema: {
@@ -267,7 +265,7 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            required: {type: "boolean"},
+            required: {type: "boolean", "title":"Required"},
             enum: {
               type: "array",
               title: "Options",
@@ -290,7 +288,7 @@ export default {
         type: "integer",
         format: "date-time",
         title: "Edit me",
-        description:""
+        description:"Enter some description"
       },
       uiSchema: {
         uiType: "date",
@@ -298,7 +296,7 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            required: {type: "boolean"}
+            required: {type: "boolean", "title":"Required"},
           }
         },
         editUISchema:{}
@@ -313,7 +311,7 @@ export default {
         type: "string",
         imageURL: "",
         title: "Edit me",
-        description:""
+        description:"Enter some description"
       },
       uiSchema: {
         uiType: "image",
@@ -336,7 +334,7 @@ export default {
         type: "string",
         videoURL: "",
         title: "Edit me",
-        description:""
+        description:"Enter some description"
       },
       uiSchema: {
         uiType: "video",
@@ -360,7 +358,7 @@ export default {
         title:"new",
         minItems: 1,
         maxItems: 3,
-        description:"Description",
+        description:"Enter some description",
          items:{
            type:"object",
            "properties":{},
