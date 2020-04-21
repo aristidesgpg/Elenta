@@ -32,7 +32,7 @@ const Routes = () => {
           <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
           <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
           {
-            userProfile.type === "learner" &&
+            userProfile && userProfile.type === "learnerProfile" &&
               <>
                 <Route exact={true} path="/program/respond/:id" component={ProgramLearnerPage}/>
                 <PrivateRoute exact={true} path="/dashboard" component={LearnerDashboard}/>
@@ -40,7 +40,7 @@ const Routes = () => {
               </>
           }
           {
-            userProfile.type === "consultant" &&
+            userProfile && userProfile.type === "consultantProfile" &&
             <>
               <PrivateRoute exact={true} path="/dashboard" component={ConsultantDashboard}/>
               <PrivateRoute exact={true} path="/preferences" component={ConsultantProfileSettingsPage}/>

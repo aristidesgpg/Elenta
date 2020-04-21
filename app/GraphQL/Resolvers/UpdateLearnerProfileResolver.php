@@ -2,7 +2,7 @@
 
 namespace App\GraphQL\Resolvers;
 
-use App\Models\ConsultantProfile;
+use App\Models\LearnerProfile;
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\Storage;
@@ -11,14 +11,14 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Illuminate\Support\Facades\Auth;
 
 
-class UpdateConsultantProfileResolver
+class UpdateLearnerProfileResolver
 {
     /**
      * @param $rootValue
      * @param array $args
      * @param \Nuwave\Lighthouse\Support\Contracts\GraphQLContext|null $context
      * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
-     * @return ConsultantProfile
+     * @return LearnerProfile
      * @throws \Exception
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
@@ -39,11 +39,11 @@ class UpdateConsultantProfileResolver
         $picture_url = $args['picture_url'] ?? null;
 
 
-        /** @var ConsultantProfile $consultantProfile */
-        $consultantProfile = $user->consultantProfile()->findOrFail($args['id']);
-        $consultantProfile->update([
-            'bio' => $args['bio'] ?? '',
-            'title' => $args['title'] ?? ''
+        /** @var LearnerProfile $learnerProfile */
+        $learnerProfile = $user->learnerProfile()->findOrFail($args['id']);
+        $learnerProfile->update([
+            'role' => $args['role'] ?? '',
+            'tenure' => $args['tenure'] ?? ''
         ]);
 
         if ($picture_url) {
@@ -57,12 +57,12 @@ class UpdateConsultantProfileResolver
             file_put_contents($filePath, base64_decode($picture_url));
 
             $picture_url = $this->storeToTempFolderFromPath($filePath, $tempFileName . "." . $extension);
-            $consultantProfile->update([
+            $learnerProfile->update([
                 'picture_url' => $picture_url,
             ]);
         }
 
-        return $consultantProfile->load(['templates', 'programs']);
+        return $learnerProfile->load(['programInvites', 'programs']);
     }
 
 
