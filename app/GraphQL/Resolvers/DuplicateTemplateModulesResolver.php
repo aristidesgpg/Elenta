@@ -52,14 +52,14 @@ class DuplicateTemplateModulesResolver
 
                 $rootObject->modules()->attach($newModule);
 
-                $module->triggers()->each(function (ModuleTrigger $moduleTrigger) use ($newModule) {
+                $module->trigger()->each(function (ModuleTrigger $moduleTrigger) use ($newModule) {
                     /** @var ModuleTrigger $newTrigger */
                     $newTrigger = $moduleTrigger->replicate();
                     $newTrigger->module()->associate($newModule);
                     $newTrigger->save();
                 });
 
-                $module->reminders()->each(function (ModuleReminder $moduleReminder) use ($newModule) {
+                $module->reminder()->each(function (ModuleReminder $moduleReminder) use ($newModule) {
                     /** @var ModuleReminder $newReminder */
                     $newReminder = $moduleReminder->replicate();
                     $newReminder->module()->associate($newModule);
