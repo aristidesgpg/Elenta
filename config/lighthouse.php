@@ -181,6 +181,7 @@ return [
 
     'error_handlers' => [
         \Nuwave\Lighthouse\Execution\ExtensionErrorHandler::class,
+        \App\GraphQL\ErrorHandlers\ElentaLighthouseErrorHandler::class
     ],
 
     /*

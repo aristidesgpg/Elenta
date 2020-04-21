@@ -1,8 +1,8 @@
 extend type Query {
-    getProgram(id: ID! @eq): Program! @find
+    getProgram(id: ID! @eq): Program! @find #@viewPolicyFilter
 }
 
-extend type Mutation @middleware(checks: ["auth:sanctum"]) {
+extend type Mutation {
     upsertProgram(input: UpsertProgramInput! @spread): Program! @upsert @can(ability: "update", find: "id")
     updateProgramModules(input: UpdateProgramModulesInput @spread): Program! @update @can(ability: "update", find: "id")
     duplicateProgramModules(input: DuplicateProgramModulesInput @spread): Program! @can(ability: "update", find: "id") @field(resolver: "App\\GraphQL\\Resolvers\\DuplicateTemplateModulesResolver@resolve")
@@ -42,7 +42,6 @@ type Program {
     can_invite: Boolean
     is_public: Boolean
     dynamic_fields: String
-    dynamic_fields_data: String
 
     pivot: ModulePivot
 
@@ -69,7 +68,6 @@ input UpsertProgramInput {
     can_invite: Boolean
     is_public: Boolean
     dynamic_fields: String
-    dynamic_fields_data: String
 
     programModules: ModulesBelongsToManyPrograms
     tags: ItemMorphsToManyTags

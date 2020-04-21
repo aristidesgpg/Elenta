@@ -37,7 +37,7 @@ export const LoadingContainer = (props) => {
   if (errors.length > 0) return (
     <Container className="loading-container">
       <div className="wrapper">
-        <div className="overlay" style={{background: "red"}}>
+        <div className="overlay" style={{background: "red", opacity: 0.9}}>
           {
             errors.map(e => {
               return <p key={e}>{e}</p>

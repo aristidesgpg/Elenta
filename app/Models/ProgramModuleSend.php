@@ -61,6 +61,8 @@ use Illuminate\Support\Facades\Mail;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ProgramModuleSend withoutTrashed()
  * @mixin \Eloquent
  * @property-read \App\Models\LearnerProfile $learner
+ * @property string|null $last_reminded_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramModuleSend whereLastRemindedAt($value)
  */
 class ProgramModuleSend extends BaseModel
 {

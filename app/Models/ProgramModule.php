@@ -27,7 +27,6 @@ use Illuminate\Support\Facades\Mail;
  * @property-read \App\Models\Program|null $program
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ModuleReminder[] $reminders
  * @property-read int|null $reminders_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProgramModuleSend[] $sends
  * @property-read int|null $sends_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ModuleTrigger[] $triggers
  * @property-read int|null $triggers_count
@@ -48,6 +47,7 @@ use Illuminate\Support\Facades\Mail;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ProgramModule withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ProgramModule withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \App\Models\ProgramModuleSend $send
  */
 class ProgramModule extends BasePivot
 {
