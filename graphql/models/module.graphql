@@ -19,8 +19,8 @@ input UpsertModuleInput {
 
     programs: ModuleBelongsToManyPrograms
     templates: ModuleBelongsToManyTemplates
-    reminders: ModuleHasManyReminders
-    triggers: ModuleHasManyTriggers
+    reminder: ModuleHasOneReminder
+    trigger: ModuleHasOneTrigger
 }
 
 input ModuleBelongsToManyPrograms {
@@ -35,12 +35,12 @@ input ModuleBelongsToConsultantProfile {
     connect: ID!
 }
 
-input ModuleHasManyReminders {
-    upsert: [UpsertModuleReminderInput!]
+input ModuleHasOneReminder {
+    upsert: UpsertModuleReminderInput!
 }
 
-input ModuleHasManyTriggers {
-    upsert: [UpsertModuleTriggerInput!]
+input ModuleHasOneTrigger {
+    upsert: UpsertModuleTriggerInput!
 }
 
 type Module {
@@ -59,10 +59,10 @@ type Module {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    templates: [Template] @viewPolicyFilter
-    programs: [Program] @viewPolicyFilter
-    reminders: [ModuleReminder] @viewPolicyFilter
-    triggers: [ModuleTrigger] @viewPolicyFilter
+    templates: [Template]
+    programs: [Program]
+    reminder: ModuleReminder
+    trigger: ModuleTrigger
 }
 
 type ModulePivot {

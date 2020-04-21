@@ -20,14 +20,14 @@ export const GET_TEMPLATE = gql`
           folder
           order
         }
-        reminders {
+        reminder {
           id
           subject
           message
           frequency
           max_reminders
         }
-        triggers {
+        trigger {
           id
           start_timestamp
           start_timestamp_field
@@ -82,14 +82,14 @@ export const UPDATE_TEMPLATE_MODULES = gql`
           folder
           order
         }
-        reminders {
+        reminder {
           id
           subject
           message
           frequency
           max_reminders
         }
-        triggers {
+        trigger {
           id
           start_timestamp
           start_timestamp_field
@@ -116,14 +116,14 @@ export const DUPLICATE_TEMPLATE_MODULES = gql`
           folder
           order
         }
-        reminders {
+        reminder {
           id
           subject
           message
           frequency
           max_reminders
         }
-        triggers {
+        trigger {
           id
           start_timestamp
           start_timestamp_field
@@ -150,14 +150,14 @@ export const DUPLICATE_PROGRAM_MODULES = gql`
           folder
           order
         }
-        reminders {
+        reminder {
           id
           subject
           message
           frequency
           max_reminders
         }
-        triggers {
+        trigger {
           id
           start_timestamp
           start_timestamp_field
@@ -184,14 +184,14 @@ export const UPDATE_PROGRAM_MODULES = gql`
           folder
           order
         }
-        reminders {
+        reminder {
           id
           subject
           message
           frequency
           max_reminders
         }
-        triggers {
+        trigger {
           id
           start_timestamp
           start_timestamp_field
@@ -281,14 +281,14 @@ export const GET_PROGRAM = gql`
           order
         }
 
-        reminders {
+        reminder {
           id
           subject
           message
           frequency
           max_reminders
         }
-        triggers {
+        trigger {
           id
           start_timestamp
           start_timestamp_field
@@ -393,14 +393,14 @@ export const UPSERT_MODULE = gql`
           order
         }
       }
-      reminders {
+      reminder {
         id
         subject
         message
         frequency
         max_reminders
       }
-      triggers {
+      trigger {
         id
         start_timestamp
         start_timestamp_field

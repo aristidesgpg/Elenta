@@ -24,7 +24,7 @@ export const ProgramList = ({programs}) => {
     );
   } else {
     return <Alert variant="info">
-      It looks like you don't have any Programs yet, start by creating one below
+      It looks like you don't have any Programs yet, start by creating one
       <Link to="/program/settings/new"> here</Link>
     </Alert>
   }

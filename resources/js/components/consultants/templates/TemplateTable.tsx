@@ -17,6 +17,7 @@ export const TemplateTable = ({templates}) => {
 
     let tableData = templates.map(t => {
       return {
+        'id': t.id,
         'title': <Link to={`/template/content/${t.id}`}>{t.title}</Link>,
         'is_public': t.is_public,
         'can_request': t.can_request
@@ -27,8 +28,8 @@ export const TemplateTable = ({templates}) => {
   } else {
     return (
       <Alert variant="info">
-        It looks like you don't have any Templates yet, start by creating one below
-        <Link to="/template/settings/new"><Button >Create Template</Button></Link>
+        It looks like you don't have any Templates yet, start by creating one
+        <Link to="/template/settings/new"> here</Link>
       </Alert>
     );
   }
