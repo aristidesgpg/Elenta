@@ -89,6 +89,12 @@ body {
 .panel-body{
       
 }
+
+.preview-title {
+    display: inline-block;  
+    margin-bottom: 10px;    
+}
+
 /***background-color: lightyellow;  **/
 .btn-toolbar {
    float: right;
@@ -118,7 +124,5 @@ body {
     text-align: center;
 }
 
-.mediaMax{
-    max-width: 300px;
-    max-height: 300px;
-}
+
+
