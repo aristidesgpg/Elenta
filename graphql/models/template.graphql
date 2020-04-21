@@ -66,8 +66,8 @@ type Template {
 
     pivot: TemplateModulePivot
 
-    templateModules: [TemplateModule] @viewPolicyFilter @hasMany @softDeletes
-    modules: [Module] @viewPolicyFilter @belongsToMany
+    templateModules: [TemplateModule] @viewPolicyFilter @softDeletes
+    modules: [Module] @viewPolicyFilter
     requests: [TemplateRequest] @viewPolicyFilter
     programs: [Program] @viewPolicyFilter
 }

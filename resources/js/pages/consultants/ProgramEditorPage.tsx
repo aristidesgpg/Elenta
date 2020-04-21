@@ -123,9 +123,6 @@ export const ProgramEditorPage = () => {
           <Nav.Item>
             <Nav.Link eventKey="invites">Invites</Nav.Link>
           </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="results">Results</Nav.Link>
-          </Nav.Item>
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="modules" title="Content">
@@ -150,9 +147,6 @@ export const ProgramEditorPage = () => {
             <ProgramInviteTable invites={program ? program.invites : []} />
             <h3>Invite by Email</h3>
             <ProgramInviteTool program={program}/>
-          </Tab.Pane>
-          <Tab.Pane eventKey="results" title="Results">
-            test
           </Tab.Pane>
         </Tab.Content>
       </Tab.Container>

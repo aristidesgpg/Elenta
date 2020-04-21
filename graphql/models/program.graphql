@@ -50,8 +50,8 @@ type Program {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    programModules: [ProgramModule] @hasMany @softDeletes @viewPolicyFilter
-    modules: [Module] @belongsToMany @viewPolicyFilter
+    programModules: [ProgramModule] @softDeletes @viewPolicyFilter
+    modules: [Module] @viewPolicyFilter
     learners: [LearnerProfile] @viewPolicyFilter
     invites: [ProgramInvite] @viewPolicyFilter
 }
