@@ -20,9 +20,10 @@ import ProgramInviteTable from "../../components/consultants/programs/ProgramInv
 
 export const ProgramEditorPage = () => {
   let {id} = useParams();
-
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
+
   const [program, setProgram] = useState(null);
+
   const {loading, error, data} = useQuery(GET_PROGRAM, {variables: {id}});
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
   const [updateProgramModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_PROGRAM_MODULES);
@@ -140,7 +141,9 @@ export const ProgramEditorPage = () => {
             />
           </Tab.Pane>
           <Tab.Pane eventKey="learners" title="Learners">
-            <ProgramLearnerTable program={program}/>
+            {program &&
+              <ProgramLearnerTable program={program}/>
+            }
           </Tab.Pane>
           <Tab.Pane eventKey="invites" title="Invites">
             <h3>Invites</h3>

@@ -68,6 +68,7 @@ const defaultDynamicFields = {
 };
 
 export const TemplateSettingsPage = () => {
+  let history = useHistory();
   let {id} = useParams();
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
@@ -103,6 +104,9 @@ export const TemplateSettingsPage = () => {
   useEffect(() => {
     if (mutationData) {
       toastContext.addToast({header: "Success!", body: "Saved"});
+      if (id == "new") {
+        history.push(`/template/content/${mutationData.upsertTemplate.id}`);
+      }
     }
   }, [mutationData]);
 
@@ -117,7 +121,7 @@ export const TemplateSettingsPage = () => {
     runMutation({
         variables: {
           input: immutableMerge(
-            _.pick(formState, ['id', 'title', 'can_request', 'is_public', 'dynamic_fields']),
+            _.pick(formState, ['id', 'title', 'description', 'can_request', 'is_public', 'dynamic_fields']),
             {
               id: id == "new" ? null : id,
               dynamic_fields: JSON.stringify(formState.dynamic_fields),
