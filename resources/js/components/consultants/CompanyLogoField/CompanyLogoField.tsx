@@ -7,21 +7,21 @@ export const CompanyLogoField = (props) => {
   const clearbitDomainEndpoint = "https://company.clearbit.com/v1/domains/find?name=";
   const clearbitAPIKey = process.env.CLEARBIT_API_KEY;
 
-  const onFormChange = (e) => {
-    e.target.name === 'companyLogoUrl' ? setHasCustomUrl(true) : setHasCustomUrl(false);
+  const handleOnChange = (e) => {
+    e.target.name === 'company_logo_url' ? setHasCustomUrl(true) : setHasCustomUrl(false);
     const tempState = {
-      ...props.companyAttributes,
+      ...props.formData,
       [e.target.name]: e.target.value
     };
-    props.setCompanyAttributes(tempState);
+    props.onChange(tempState);
   };
 
   const onCompanyNameBlur = () => {
-    fetchCompanyUrl(props.companyAttributes.companyName);
+    fetchCompanyUrl(props.formData.company_name);
   };
 
-  const fetchCompanyUrl = (companyName) => {
-    fetch(`${clearbitDomainEndpoint}${companyName}`, {
+  const fetchCompanyUrl = (company_name) => {
+    fetch(`${clearbitDomainEndpoint}${company_name}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${clearbitAPIKey}`
@@ -29,51 +29,48 @@ export const CompanyLogoField = (props) => {
     }).then((r) => {
       return r.json();
     }).then((r) => {
-      let companyLogoUrl = "";
+      let company_logo_url = "";
       if (r?.error?.type === 'unknown_record' && !hasCustomUrl) {
-        companyLogoUrl = ""
+        company_logo_url = ""
       }
       else if (!hasCustomUrl) {
-        companyLogoUrl = r.logo
+        company_logo_url = r.logo
       }
       else {
-        companyLogoUrl = props.companyAttributes.companyLogoUrl;
+        company_logo_url = props.formData.companyLogoUrl;
       }
       const tempState = {
-        ...props.companyAttributes,
-        companyLogoUrl
+        ...props.formData,
+        company_logo_url
       };
-      props.setCompanyAttributes(tempState)
+      props.onChange(tempState)
     })
   };
 
   return (
-    <>
-      <Form>
-        <Form.Group controlId="formCompanyName">
-          <Form.Label>Company Name</Form.Label>
-          <Form.Control
-            value={props.companyAttributes.companyName}
-            name="companyName"
-            onChange={onFormChange}
-            onBlur={onCompanyNameBlur}
-            placeholder="Enter the company name" />
-        </Form.Group>
-        <Form.Group controlId="formCompanyUrl">
-          <Form.Label>Company Logo URL</Form.Label>
-          <Form.Control
-            value={props.companyAttributes.companyLogoUrl}
-            name="companyLogoUrl"
-            onChange={onFormChange}
-            placeholder="Enter the company logo URL" />
-          <Form.Text className="text-muted">
-            This field will autofill if we can find a logo, otherwise please add your own.
-          </Form.Text>
-        </Form.Group>
-        {props.companyAttributes.companyLogoUrl &&
-        <img src={props.companyAttributes.companyLogoUrl}  width="200" height="200"/>}
-      </Form>
-    </>
+    <div>
+      <Form.Group controlId="company_name">
+        <Form.Label>Company Name</Form.Label>
+        <Form.Control
+          type="text"
+          value={props.formData.company_name}
+          name="company_name"
+          onChange={handleOnChange}
+          onBlur={onCompanyNameBlur}
+          placeholder="Enter the company name"/>
+      </Form.Group>
+      <Form.Group controlId="company_logo_url">
+        <Form.Label>Company Logo URL</Form.Label>
+        <Form.Control
+          type="text"
+          value={props.formData.company_logo_url}
+          name="company_logo_url"
+          onChange={handleOnChange}
+          placeholder="Enter the company logo URL" />
+      </Form.Group>
+      {props.formData.company_logo_url &&
+      <img src={props.formData.company_logo_url}  width="200px" height="200px"/>}
+    </div>
   );
 };
 

@@ -10,7 +10,7 @@ const widgets = {
   Video: VideoWidget,
 };
 
-export const ElentaJsonForm = ({schema, uiSchema, formData, onChange, children}) => {
+export const ElentaJsonForm = ({schema, uiSchema, formData, onChange, children, ...rest}) => {
   return (
     <JsonForm schema={schema}
               uiSchema={uiSchema}
@@ -21,6 +21,7 @@ export const ElentaJsonForm = ({schema, uiSchema, formData, onChange, children})
               }
               onChange={onChange}
               widgets={widgets}
+              {...rest}
     >
       {children}
     </JsonForm>
