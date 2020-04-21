@@ -21,17 +21,23 @@ interface State {
   formData: any;
   currentIndex: number;
   newKey: number;
+  enableCorAnswer: boolean;
 }
 
 interface Props {
-  schema: any,
-  uiSchema: any,
-  onSave: (schema: any, uiSchema: any) => void,
-  excludedFields?: string[],
-  tagList?: any
+  schema: any;
+  uiSchema: any;
+  onSave: (schema: any, uiSchema: any) => void;
+  excludedFields?: string[];
+  tagList?: any;
+  enableCorAnswer?: boolean;
 }
 
 export default class ElentaFormBuilder extends React.Component<Props, State> {
+
+  public static defaultProps = {
+    enableCorAnswer: false
+  };
 
   constructor(props: Props) {
     super(props);
@@ -42,7 +48,8 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
       uiSchema,
       formData: {},
       currentIndex: 0,
-      newKey: 0
+      newKey: 0,
+      enableCorAnswer: props.enableCorAnswer
     };
     DescriptionField.defaultProps = {updateFormDescription: this.updateFormDescription};
     TitleField.defaultProps = {updateFormTitle: this.updateFormTitle};
@@ -100,8 +107,13 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
     const name = `Question ${currentIndex}`;
     const _slug = slugify(name);
     const jsonSchema = clone(field.jsonSchema);
-    schema.properties[_slug] = {...jsonSchema, title: name};
+    const { title } = jsonSchema;
+    if(title != undefined)
+      schema.properties[_slug] = {...jsonSchema, title: name};
+    else
+      schema.properties[_slug] = {...jsonSchema};
     uiSchema[_slug] = clone(field.uiSchema);
+    uiSchema[_slug].label = field.label;
     uiSchema["ui:order"] = (uiSchema["ui:order"] || []).concat(_slug);
     let newKey = Math.random();
     return this.setState({schema, uiSchema, newKey});
@@ -216,16 +228,19 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
   //********  Render *******/
   render() {
     const createSliderWithTooltip = Slider.createSliderWithTooltip;
-    const {error, schema, newKey, uiSchema} = this.state;
+    const { enableCorAnswer, error, schema, newKey, uiSchema } = this.state;
     console.log("State", this.state);
     const registry = {
       ...getDefaultRegistry(),
+      settings:{
+        enableCorAnswer
+      },
       fields: {
         ...getDefaultRegistry().fields,
         SchemaField: EditableField,
         TitleField: TitleField,
         DescriptionField: DescriptionField,
-      },
+      },      
       //widgets:{...widgets,...getDefaultRegistry().widgets}
     };
     return (

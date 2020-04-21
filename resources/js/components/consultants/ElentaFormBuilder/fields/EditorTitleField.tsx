@@ -21,6 +21,9 @@ const EditorTitleField = (props: Props, state: any) => {
   
   let {id, title=""} = formData;
   let bShowStatic: boolean = false;
+  if(props.title == undefined || title == null){
+    return(<React.Fragment></React.Fragment>);
+  }
   //console.log("FormData", props);
   /*if(props.title != "Title"){
     bShowStatic = true;
@@ -32,6 +35,7 @@ const EditorTitleField = (props: Props, state: any) => {
       <legend id={id}>
         <RIEInput
           className="edit-in-place"
+          classEditing="edit-in-place-active"
           propName="title"
           value={title}
           change={onUpdate} />

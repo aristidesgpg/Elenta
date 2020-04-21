@@ -9,7 +9,7 @@ import {
   Image,
   Row
 } from "react-bootstrap";
-import {get} from "lodash";
+import _ from "lodash";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import NavbarToggle from "react-bootstrap/NavbarToggle";
 import ProfileDropdownItem from "./ProfileDropdownItem";
@@ -27,11 +27,11 @@ export const ElentaNav = () => {
   const location = useLocation();
   const history = useHistory();
   const client = useApolloClient();
-  const {data: {user}} = useQuery(CURRENT_USER);
-  const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
+  const user = _.get(useQuery(CURRENT_USER), 'data.user', undefined);
+  const userProfile = _.get(useQuery(CURRENT_USER_PROFILE), 'data.userProfile', undefined);
 
-  const consultantProfile = get(user, 'consultantProfile', null);
-  const learnerProfile = get(user, 'learnerProfile', null);
+  const consultantProfile = _.get(user, 'consultantProfile', null);
+  const learnerProfile = _.get(user, 'learnerProfile', null);
 
   const [runLearnerMutation, {loading: learnerMutationLoading, error: learnerMutationError, data: learnerMutationData}] = useMutation(CREATE_LEARNER_PROFILE);
   const [runConsultantMutation, {loading: consultantMutationLoading, error: consultantMutationError, data: consultantMutationData}] = useMutation(CREATE_CONSULTANT_PROFILE);

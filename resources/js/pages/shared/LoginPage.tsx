@@ -5,9 +5,9 @@ import {Redirect} from "react-router-dom";
 import LoginTabs from "../../components/shared/auth/LoginTabs";
 
 export const LoginPage = () => {
-  const {data: {user}} = useQuery(CURRENT_USER);
+  const data = useQuery(CURRENT_USER);
 
-  if (user) return (<Redirect to="/dashboard"/>);
+  if (data.data) return (<Redirect to="/dashboard"/>);
 
   return (
     <LoginTabs/>
