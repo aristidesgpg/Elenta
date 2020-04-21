@@ -15,6 +15,7 @@ import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
 import DTPicker from "../../components/consultants/ElentaFormBuilder/fields/DTPicker";
 import {immutableMerge} from "../../utils/utils";
+import CompanyLogoField from "../../components/consultants/CompanyLogoField/CompanyLogoField";
 
 const widgets = {RDP: DTPicker};
 
@@ -118,6 +119,10 @@ export const ProgramSettingsPage = () => {
   const [dynamicFields, setDynamicFields] = useState(defaultDynamicFields);
   const [formState, setFormState] = useState({
     template: null
+  });
+  const [companyAttributes, setCompanyAttributes] = useState({
+    "companyName": "",
+    "companyLogoUrl": ""
   });
 
   const [runTemplatesQuery, {loading: templatesQueryLoading, error: templatesQueryError, data: templatesQueryData}] = useLazyQuery(GET_TEMPLATES_BY_OWNER);
@@ -237,6 +242,8 @@ export const ProgramSettingsPage = () => {
               owner: {
                 connect: userProfile.id
               }
+              // company_name: companyAttributes.companyName,
+              // company_logo_url: companyAttributes.companyLogoUrl
             })
         }
       }
@@ -254,6 +261,7 @@ export const ProgramSettingsPage = () => {
                 onChange={handleChange}
                 widgets={widgets}
       >
+        {/*<CompanyLogoField companyAttributes={companyAttributes} setCompanyAttributes={setCompanyAttributes}/>*/}
         <hr/>
       </JsonForm>
       <JsonForm schema={dynamicFields.schema}

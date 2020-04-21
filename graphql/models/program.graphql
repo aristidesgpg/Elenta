@@ -42,6 +42,8 @@ type Program {
     can_invite: Boolean
     is_public: Boolean
     dynamic_fields: String
+    company_name: String
+    company_logo_url: String
 
     pivot: ModulePivot
 
@@ -67,6 +69,8 @@ input UpsertProgramInput {
     can_invite: Boolean
     is_public: Boolean
     dynamic_fields: String
+    company_name: String
+    company_logo_url: String
 
     programModules: ModulesBelongsToManyPrograms
 }

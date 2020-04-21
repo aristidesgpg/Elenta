@@ -262,6 +262,8 @@ export const GET_PROGRAM = gql`
       is_public
       dynamic_fields
       created_at
+      company_name
+      company_logo_url
       template {
         id
         title
@@ -359,6 +361,8 @@ export const UPSERT_PROGRAM = gql`
       can_invite
       is_public
       dynamic_fields
+      company_name
+      company_logo_url
     }
   }
 `;
