@@ -14,6 +14,7 @@ input UpsertTemplateInput {
     owner: ConsultantProfileBelongsTo
 
     title: String
+    description: String
     can_request: Boolean
     is_public: Boolean
     dynamic_fields: String
@@ -55,6 +56,7 @@ type Template {
     owner: ConsultantProfile!
 
     title: String!
+    description: String
     can_request: Boolean!
     is_public: Boolean!
     dynamic_fields: String
@@ -65,8 +67,8 @@ type Template {
 
     pivot: TemplateModulePivot
 
-    templateModules: [TemplateModule] @viewPolicyFilter @hasMany @softDeletes
-    modules: [Module] @viewPolicyFilter @belongsToMany
+    templateModules: [TemplateModule] @viewPolicyFilter @softDeletes
+    modules: [Module] @viewPolicyFilter
     requests: [TemplateRequest] @viewPolicyFilter
     programs: [Program] @viewPolicyFilter
     tags: [Tag]

@@ -34,7 +34,7 @@ export const ProgramCard = ({program}) => {
             </Col>
             <Col>
               <div className="text-muted">Learners</div>
-              <Card.Text>{program.learners.length}</Card.Text>
+              <Card.Text>{program.learners ? program.learners.length : 0}</Card.Text>
             </Col>
           </Row>
         </Container>

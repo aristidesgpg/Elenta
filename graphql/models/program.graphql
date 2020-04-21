@@ -3,7 +3,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    upsertProgram(input: UpsertProgramInput! @spread): Program! @upsert @can(ability: "update", find: "id")
+    upsertProgram(input: UpsertProgramInput! @spread): Program! @upsert # @can(ability: "update", find: "id")
     updateProgramModules(input: UpdateProgramModulesInput @spread): Program! @update @can(ability: "update", find: "id")
     duplicateProgramModules(input: DuplicateProgramModulesInput @spread): Program! @can(ability: "update", find: "id") @field(resolver: "App\\GraphQL\\Resolvers\\DuplicateTemplateModulesResolver@resolve")
 }
@@ -36,6 +36,7 @@ type Program {
     template: Template!
 
     title: String!
+    description: String
     format: ProgramFormat!
     max_learners: Int
     start_timestamp: DateTime
@@ -49,8 +50,8 @@ type Program {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    programModules: [ProgramModule] @hasMany @softDeletes @viewPolicyFilter
-    modules: [Module] @belongsToMany @viewPolicyFilter
+    programModules: [ProgramModule] @softDeletes @viewPolicyFilter
+    modules: [Module] @viewPolicyFilter
     learners: [LearnerProfile] @viewPolicyFilter
     invites: [ProgramInvite] @viewPolicyFilter
     tags: [Tag]
@@ -62,6 +63,7 @@ input UpsertProgramInput {
     template: ProgramBelongsToTemplate
 
     title: String
+    description: String
     format: ProgramFormat
     max_learners: Int
     start_timestamp: DateTime

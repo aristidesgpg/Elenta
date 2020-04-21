@@ -45,8 +45,8 @@ export const ModuleEditor =
 
     useEffect(() => {
       if (activeModule) {
-        setFormReminder(_.omit(activeModule.reminders[0], "__typename"));
-        setFormTrigger(_.omit(activeModule.triggers[0], "__typename"));
+        if (activeModule.reminder) setFormReminder(_.omit(activeModule.reminder, "__typename"));
+        if(activeModule.trigger) setFormTrigger(_.omit(activeModule.trigger, "__typename"));
         if (activeModule.content) setFormContent(JSON.parse(activeModule.content));
       }
     }, [activeModule]);
@@ -74,15 +74,11 @@ export const ModuleEditor =
             id: activeModule.id,
             title: activeModule.title,
             description: activeModule.description,
-            reminders: {
-              upsert: [
-                formReminder
-              ]
+            reminder: {
+              upsert: formReminder
             },
-            triggers: {
-              upsert: [
-                formTrigger
-              ]
+            trigger: {
+              upsert: formTrigger
             },
             content: JSON.stringify(formContent)
           }

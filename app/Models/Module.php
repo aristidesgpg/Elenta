@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -90,12 +90,13 @@ class Module extends BaseModel
             ->orderBy('template_modules.order', 'asc');
     }
 
-    public function reminders(): HasMany {
-        return $this->hasMany(ModuleReminder::class);
+    // Schema supports multiple of these, but we just use one for now
+    public function reminder(): HasOne {
+        return $this->hasOne(ModuleReminder::class);
     }
 
-    public function triggers(): HasMany {
-        return $this->hasMany(ModuleTrigger::class);
+    public function trigger(): HasOne {
+        return $this->hasOne(ModuleTrigger::class);
     }
 
     /**

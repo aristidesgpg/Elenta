@@ -4,8 +4,8 @@ type ModuleReminder {
 
     subject: String
     message: String
-    frequency: Int!
-    max_reminders: Int!
+    frequency: Int
+    max_reminders: Int
 
     created_at: DateTime!
     updated_at: DateTime!
