@@ -14,6 +14,7 @@ import Button from "react-bootstrap/Button";
 import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
 import DTPicker from "../../components/consultants/ElentaFormBuilder/fields/DTPicker";
+import {immutableMerge} from "../../utils/utils";
 
 const widgets = {RDP: DTPicker};
 
@@ -89,7 +90,7 @@ const hiddenUiSchema = {
     "ui:widget": "hidden"
   }
 };
-;
+
 const defaultDynamicFields = {
   schema: {
     type: "object",
@@ -106,7 +107,7 @@ export const ProgramSettingsPage = () => {
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
   const [uiSchemaState, setUiSchemaState] = useState(hiddenUiSchema);
-  const [schemaState, setSchemaState] = useState(_.merge({}, schema, {
+  const [schemaState, setSchemaState] = useState(immutableMerge(schema, {
     properties: {
       template: {
         readOnly: id !== "new"
@@ -114,8 +115,8 @@ export const ProgramSettingsPage = () => {
     }
   }));
 
+  const [dynamicFields, setDynamicFields] = useState(defaultDynamicFields);
   const [formState, setFormState] = useState({
-    dynamic_fields: defaultDynamicFields,
     template: null
   });
 
@@ -131,13 +132,13 @@ export const ProgramSettingsPage = () => {
     }
 
     if (templatesQueryData) {
-      setFormState(_.merge({}, formState, {
-        dynamic_fields: JSON.parse(templatesQueryData.getTemplatesByOwner[0].dynamic_fields),
+      setFormState(immutableMerge(formState, {
         template: templatesQueryData.getTemplatesByOwner[0].id
       }));
 
-      setSchemaState(_.merge(
-        {},
+      setDynamicFields(JSON.parse(templatesQueryData.getTemplatesByOwner[0].dynamic_fields));
+
+      setSchemaState(immutableMerge(
         schemaState,
         {
           properties: {
@@ -158,13 +159,7 @@ export const ProgramSettingsPage = () => {
     }
 
     if (programQueryData) {
-      let dynamicFields = JSON.parse(programQueryData.getProgram.dynamic_fields);
-      if (dynamicFields.schema === undefined) {
-        dynamicFields = defaultDynamicFields;
-      }
-
-      setSchemaState(_.merge(
-        {},
+      setSchemaState(immutableMerge(
         schemaState,
         {
           properties: {
@@ -177,18 +172,20 @@ export const ProgramSettingsPage = () => {
       ));
 
       if (["IN_PERSON", "VIRTUAL_ATTENDANCE"].includes(programQueryData.getProgram.format)) {
-        setUiSchemaState(_.merge({}, uiSchemaState, visibleUiSchema));
+        setUiSchemaState(immutableMerge(uiSchemaState, visibleUiSchema));
       } else {
-        setUiSchemaState(_.merge({}, uiSchemaState, hiddenUiSchema));
+        setUiSchemaState(immutableMerge(uiSchemaState, hiddenUiSchema));
       }
 
-      setFormState(_.merge({}, programQueryData.getProgram, {
-        template: programQueryData.getProgram.template.id,
-        dynamic_fields: {
-          schema: dynamicFields.schema,
-          uiSchema: dynamicFields.uiSchema,
-          formData: dynamicFields.formData
-        }
+      let df = JSON.parse(programQueryData.getProgram.dynamic_fields);
+      if (df.schema === undefined) {
+        setDynamicFields(defaultDynamicFields);
+      } else {
+        setDynamicFields(df);
+      }
+
+      setFormState(immutableMerge(programQueryData.getProgram, {
+        template: programQueryData.getProgram.template.id
       }))
     }
   }, [programQueryData]);
@@ -206,38 +203,37 @@ export const ProgramSettingsPage = () => {
   }
 
   const handleChange = (data) => {
-    let newState = _.merge({}, formState, data.formData);
-    if (currentTemplate()) newState.dynamic_fields = JSON.parse(currentTemplate().dynamic_fields);
+    let newState = immutableMerge(formState, data.formData);
+    if (currentTemplate() && id == "new") setDynamicFields(JSON.parse(currentTemplate().dynamic_fields));
 
     if (!_.isEqual(newState, formState)) {
       setFormState(newState);
       if (["IN_PERSON", "VIRTUAL_ATTENDANCE"].includes(newState.format)) {
-        setUiSchemaState(_.merge({}, uiSchemaState, visibleUiSchema));
+        setUiSchemaState(immutableMerge(uiSchemaState, visibleUiSchema));
       } else {
-        setUiSchemaState(_.merge({}, uiSchemaState, hiddenUiSchema));
+        setUiSchemaState(immutableMerge(uiSchemaState, hiddenUiSchema));
       }
     }
   };
 
   const handleDynamicChange = (f) => {
-    let newState = _.merge({}, formState, {dynamic_fields: {formData: f.formData}})
-    if (!_.isEqual(newState, formState)) {
-      setFormState(newState);
+    let newState = immutableMerge(dynamicFields, {formData: f.formData})
+    if (!_.isEqual(newState, dynamicFields)) {
+      setDynamicFields(newState);
     }
   }
 
   const handleSubmit = () => {
     runMutation({
         variables: {
-          input: _.merge(
-            {},
+          input: immutableMerge(
             _.pick(formState, ['title', 'format', 'is_public', 'can_invite', 'max_learners']),
             {
               id: id == "new" ? null : id,
               template: {
                 connect: formState.template
               },
-              dynamic_fields: JSON.stringify(formState.dynamic_fields),
+              dynamic_fields: JSON.stringify(dynamicFields),
               owner: {
                 connect: userProfile.id
               }
@@ -254,15 +250,19 @@ export const ProgramSettingsPage = () => {
     >
       <JsonForm schema={schemaState}
                 uiSchema={uiSchemaState}
-                formData={formState}
+                formData={_.pick(formState, Object.keys(schemaState.properties))}
                 onChange={handleChange}
                 widgets={widgets}
       >
         <hr/>
       </JsonForm>
-      <JsonForm schema={formState.dynamic_fields.schema}
-                uiSchema={formState.dynamic_fields.uiSchema}
-                formData={formState.dynamic_fields.formData}
+      <JsonForm schema={dynamicFields.schema}
+                uiSchema={dynamicFields.uiSchema}
+                formData={
+                  dynamicFields.formData ?
+                    dynamicFields.formData :
+                    Object.keys(dynamicFields.schema.properties).reduce((ac,a) => ({...ac,[a]:''}),{})
+                }
                 onChange={handleDynamicChange}
       >
         <br/>

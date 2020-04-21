@@ -1,5 +1,6 @@
 import S from "string";
 import * as moment from "moment";
+import _ from "lodash";
 
 export function slugify(string: string) {
   return S(string).slugify().replace("-", "_").s;
@@ -15,6 +16,11 @@ export function reorder(list:Array<any>, startIndex:number, endIndex:number){
 export function clone(obj: object) {
   return JSON.parse(JSON.stringify(obj));
 }
+
+export function immutableMerge(a, b) {
+  let n = _.cloneDeep(a);
+  return _.merge(n, b);
+};
 
 export function unique(array) {
   return Array.from(new Set(array));

@@ -10,6 +10,7 @@ import Button from "react-bootstrap/Button";
 import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
 import ElentaToast from "../../components/shared/ElentaToast/ElentaToast";
+import {immutableMerge} from "../../utils/utils";
 
 const schema = {
   type: "object",
@@ -82,7 +83,7 @@ export const TemplateSettingsPage = () => {
         dynamicFields = defaultDynamicFields;
       }
 
-      setFormState(_.merge({}, queryData.getTemplate, {
+      setFormState(immutableMerge(queryData.getTemplate, {
         dynamic_fields: {
           schema: dynamicFields.schema,
           uiSchema: dynamicFields.uiSchema
@@ -98,7 +99,7 @@ export const TemplateSettingsPage = () => {
   }, [mutationData]);
 
   const handleChange = (data) => {
-    let newState = _.merge({}, formState, data.formData);
+    let newState = immutableMerge(formState, data.formData);
     if (!_.isEqual(newState, formState)) {
       setFormState(newState);
     }
@@ -107,8 +108,7 @@ export const TemplateSettingsPage = () => {
   const handleSubmit = () => {
     runMutation({
         variables: {
-          input: _.merge(
-            {},
+          input: immutableMerge(
             _.pick(formState, ['id', 'title', 'can_request', 'is_public', 'dynamic_fields']),
             {
               id: id == "new" ? null : id,
@@ -140,7 +140,7 @@ export const TemplateSettingsPage = () => {
             schema: schema,
             uiSchema: uiSchema
           };
-          setFormState(_.merge({}, formState, {dynamic_fields: o}));
+          setFormState(immutableMerge(formState, {dynamic_fields: o}));
         }}
         excludedFields={['richtext', 'rank', 'slider', 'multiple-checkbox', 'radiobuttonlist', 'repeater']}
       />

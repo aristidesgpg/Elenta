@@ -13,7 +13,6 @@ import {ApolloProvider} from '@apollo/react-hooks';
 import ConsultantDashboard from "./pages/consultants/ConsultantDashboard";
 import PageContainer from "./components/hoc/PageContainer/PageContainer";
 import {setContext} from "apollo-link-context";
-import ProgramSettingsEditor from "./pages/consultants/ProgramSettingsEditor";
 import TemplateEditorPage from "./pages/consultants/TemplateEditorPage";
 import ProgramEditorPage from "./pages/consultants/ProgramEditorPage";
 import LoginCallbackPage from "./pages/shared/LoginCallbackPage";

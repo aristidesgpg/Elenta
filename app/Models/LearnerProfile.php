@@ -44,6 +44,8 @@ use Illuminate\Support\Facades\Auth;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProgramModule[] $programModules
  * @property-read int|null $program_modules_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProgramInvite[] $programInvites
+ * @property-read int|null $program_invites_count
  */
 class LearnerProfile extends BaseModel
 {

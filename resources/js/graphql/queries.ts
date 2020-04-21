@@ -231,6 +231,53 @@ export const UPDATE_PROGRAM_MODULES = gql`
   }
 `;
 
+export const LEARNER_GET_PROGRAM = gql`
+  query getProgram($id: ID!) {
+    getProgram(id: $id) {
+      id
+      title
+      format
+      max_learners
+      start_timestamp
+      can_invite
+      is_public
+      dynamic_fields
+      created_at
+      template {
+        id
+        title
+      }
+      programModules {
+        id
+        module {
+          id
+          title
+          description
+          content
+        }
+        send {
+          learner {
+            id
+          }
+          reason
+          channel
+          subject
+          message
+
+          send_timestamp
+          open_timestamp
+          click_timestamp
+          response_timestamp
+
+          response_feedback
+          response_rating
+          response_data
+        }
+      }
+    }
+  }
+`;
+
 export const GET_PROGRAM = gql`
   query getProgram($id: ID!) {
     getProgram(id: $id) {
@@ -242,7 +289,6 @@ export const GET_PROGRAM = gql`
       can_invite
       is_public
       dynamic_fields
-      dynamic_fields_data
       created_at
       template {
         id
@@ -341,7 +387,6 @@ export const UPSERT_PROGRAM = gql`
       can_invite
       is_public
       dynamic_fields
-      dynamic_fields_data
     }
   }
 `;

@@ -1,5 +1,5 @@
 extend type Query {
-    getProgram(id: ID! @eq): Program! @find @viewPolicyFilter
+    getProgram(id: ID! @eq): Program! @find #@viewPolicyFilter
 }
 
 extend type Mutation {
@@ -42,7 +42,6 @@ type Program {
     can_invite: Boolean
     is_public: Boolean
     dynamic_fields: String
-    dynamic_fields_data: String
 
     pivot: ModulePivot
 
@@ -68,7 +67,6 @@ input UpsertProgramInput {
     can_invite: Boolean
     is_public: Boolean
     dynamic_fields: String
-    dynamic_fields_data: String
 
     programModules: ModulesBelongsToManyPrograms
 }
