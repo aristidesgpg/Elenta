@@ -1,12 +1,10 @@
 import * as React from "react";
-import { Draggable, Droppable } from "react-drag-and-drop";
-//import Form from "react-jsonschema-form";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 import { ButtonToolbar, Button } from "react-bootstrap";
-import Slider, { Range } from "rc-slider";
-import 'rc-slider/assets/index.css';
 import Form from 'react-jsonschema-form-bs4';
 import debounce from 'lodash.debounce';
 import Modal from 'react-modal';
+import { reorder } from "../../../../utils/utils"
 import { TextField, RichTextWidget} from "./TextField";
 import EditorTitleField from "./EditorTitleField";
 import EditorDescField from "./EditorDescField";
@@ -15,6 +13,8 @@ import { RankField } from "./RankField";
 import { ImageWidget } from "./ImageWidget"
 import { VideoWidget } from "./VideoWidget"
 import RepeaterEditField from "./repeater/RepeaterEditField";
+import CustomFieldTemplate from "./CustomFieldTemplate";
+import SliderField from "./SliderField";
 
 //import {withTheme} from "@rjsf/core";
 Modal.setAppElement('#root')
@@ -216,17 +216,6 @@ export default class EditableField extends React.Component<any,any> {
     }
   }
 
-  handleDrop = (data) => {
-    const {name, swapFields, insertField} = this.props;
-    if ("moved-field" in data && data["moved-field"]) {
-      if (data["moved-field"] !== name) {
-        swapFields(data["moved-field"], name);
-      }
-    } else if ("field" in data && data.field) {
-      insertField(JSON.parse(data.field), name);
-    }
-  }
-
   handleChange = ({formData}) => {        
     const { uiType } = this.props.uiSchema;        
     if(uiType !== "repeater" && uiType !== "rank"){      
@@ -244,8 +233,7 @@ export default class EditableField extends React.Component<any,any> {
   }
 
 
-  render() {
-    const createSliderWithTooltip = Slider.createSliderWithTooltip;
+  render() {    
     const props = this.props;    
     const fields = {RichEditor:TextField,                                  
                     Rank: RankField,                    
@@ -253,7 +241,7 @@ export default class EditableField extends React.Component<any,any> {
     const widgets = {
         RichText: RichTextWidget,   
         RDP: DTPicker,
-        Range: createSliderWithTooltip(Slider),
+        Range: SliderField,
         Image: ImageWidget,
         Video: VideoWidget             
       };    
@@ -262,19 +250,29 @@ export default class EditableField extends React.Component<any,any> {
     const { uiType } = props.uiSchema;         
     
     return (      
-        <div className="container-fluid">
-            <Draggable type="moved-field" data={props.name}>              
-                <div className="row editable-field">
-                  <div className="col editfield-title">
-                    <i className="fas fa-grip-vertical"/>
-                    <strong>{uiSchema.label}</strong>
-                    <ButtonToolbar className="float-right">           
-                        <i className="fas fa-times-circle" onClick={this.handleDelete} style={{ cursor: "pointer" }}/>
-                    </ButtonToolbar>
-                  </div>              
-                </div>      
-            </Draggable>
-            <Droppable types={["field", "moved-field"]}  onDrop={this.handleDrop}>
+        <div className="container-fluid">            
+            <Droppable droppableId={props.name}>
+              
+            {(droppableProvided) => (
+              <div ref={droppableProvided.innerRef}>
+                <Draggable draggableId={props.name} index={0}>        
+                {(draggableProvided, draggableSnapshot) => (
+                  <div  ref={draggableProvided.innerRef}
+                  {...draggableProvided.draggableProps}
+                  {...draggableProvided.dragHandleProps}>
+                      <div className="row editable-field">
+                        <div className="col editfield-title">
+                          <i className="fas fa-grip-vertical"/>
+                          <strong>{uiSchema.label}</strong>
+                          <ButtonToolbar className="float-right">           
+                              <i className="fas fa-times-circle" onClick={this.handleDelete} style={{ cursor: "pointer" }}/>
+                          </ButtonToolbar>
+                        </div>                                    
+                      </div>      
+                      
+                  </div>                    
+                )}      
+                </Draggable>      
                 <div className="row editfield-body">
                   <div className="col-sm-6">                    
                     <strong className="preview-title">Preview</strong>                                                    
@@ -284,7 +282,9 @@ export default class EditableField extends React.Component<any,any> {
                           //idSchema={{$id: props.name}}
                           fields={{...fields}}
                           widgets={{...widgets}}
-                          onChange={this.handleChange}>
+                          onChange={this.handleChange}
+                          FieldTemplate={CustomFieldTemplate}
+                          >
                       <button type="submit" hidden>Submit</button>
                     </Form>                    
                   </div>
@@ -301,8 +301,11 @@ export default class EditableField extends React.Component<any,any> {
                                             widgets = {{...widgets}}
                                             onUpdate={this.handleUpdate}/>
                   } 
-                  </div>
-                </div> 
+                  </div>                  
+                </div>           
+                {droppableProvided.placeholder}
+              </div>         
+            )}                
             </Droppable>
         </div>                
     );

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { DragDropContext } from "react-beautiful-dnd";
 import SchemaField from "react-jsonschema-form-bs4/lib/components/fields/SchemaField";
 import {getDefaultRegistry} from "react-jsonschema-form/lib/utils";
 import {slugify, clone, unique} from "../../../utils/utils"
@@ -7,8 +8,6 @@ import EditableField from "./fields/EditableField";
 import TitleField from "./fields/TitleField";
 import DescriptionField from "./fields/DescriptionField";
 import {TextField, RichTextWidget} from "./fields/TextField";
-import Slider, {Range} from "rc-slider";
-import 'rc-slider/assets/index.css';
 import _ from "lodash";
 
 import "react-datetime/css/react-datetime.css";
@@ -225,9 +224,16 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
     this.props.onSave(schema, uiSchema);
   }
 
+  handleDrop = (result) => {
+    if (!result.destination) {
+      return;
+    }        
+    const { source, destination } = result;
+    this.swapFields(source.droppableId, destination.droppableId);
+  }
+
   //********  Render *******/
-  render() {
-    const createSliderWithTooltip = Slider.createSliderWithTooltip;
+  render() {    
     const { enableCorAnswer, error, schema, newKey, uiSchema } = this.state;
     console.log("State", this.state);
     const registry = {
@@ -247,10 +253,12 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
       <div className="container-fluid">
         {error ? <div className="alert alert-danger">{error}</div> : <div/>}
         <div className="rjsf builder-form">
-          <SchemaField key={newKey} {...this.state}
-                      schema={schema}
-                      registry={registry}
-                      onChange={this.onChange}/>
+          <DragDropContext onDragEnd={this.handleDrop}>
+            <SchemaField key={newKey} {...this.state}
+                          schema={schema}
+                          registry={registry}
+                          onChange={this.onChange}/>
+          </DragDropContext>          
         </div>
         <FormActions
             schema = {schema}
@@ -272,7 +280,7 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
     const widgets = {
       RichText: RichTextWidget,
       RDP: DTPicker,
-      Range: createSliderWithTooltip(Slider),
+      Range: Slider,
       Image: ImageWidget,
       Video: VideoWidget
     };*/

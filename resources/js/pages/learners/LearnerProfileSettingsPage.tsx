@@ -1,8 +1,8 @@
 import * as React from "react";
 import {
-  CURRENT_USER, CURRENT_USER_PROFILE,
-  GET_CONSULTANT_PROFILE,
-  UPDATE_CONSULTANT_PROFILE,
+  CURRENT_USER,
+  GET_LEARNER_PROFILE,
+  UPDATE_LEARNER_PROFILE,
 } from "../../graphql/queries";
 import {useApolloClient, useQuery} from "@apollo/react-hooks";
 import {get, pick} from "lodash";
@@ -11,9 +11,9 @@ import ElentaForm from "../../components/shared/ElentaForm/ElentaForm";
 import {validateEmail} from "../../utils/utils";
 import { useHistory } from "react-router-dom";
 
-const validate = ({profile: {mainData: {email}}, passwords: {old_password, password, password_confirmation}}, errors) => {
+const validate = ({profile: {userData: {email}}, passwords: {old_password, password, password_confirmation}}, errors) => {
   if (!validateEmail(email)) {
-    errors.profile.mainData.email.addError(`${email} is not a valid email.`);
+    errors.profile.userData.email.addError(`${email} is not a valid email.`);
   }
 
   if (old_password) {
@@ -37,7 +37,7 @@ const schema = {
       title: "",
       type: "object",
       properties: {
-        mainData: {
+        userData: {
           title: "",
           type: "object",
           properties: {
@@ -61,18 +61,18 @@ const schema = {
           }
         },
 
-        biography: {
+        profileData: {
           title: "",
           type: "object",
           properties: {
-            title: {
+            role: {
               type: "string",
-              title: "Title",
+              title: "Role",
               description: "",
             },
-            bio: {
+            tenure: {
               type: "string",
-              title: "Biography",
+              title: "Tenure",
               description: "",
             },
           }
@@ -115,7 +115,7 @@ const uiSchema = {
     "ui:widget": "hidden"
   },
   profile: {
-    mainData: {
+    userData: {
       name: {
         "ui:placeholder": "Enter your name",
       },
@@ -128,16 +128,12 @@ const uiSchema = {
         }
       },
     },
-    biography: {
-      title: {
-        "ui:placeholder": "Enter your profile name",
+    profileData: {
+      role: {
+        "ui:placeholder": "Enter your role",
       },
-      bio: {
-        "ui:widget": "textarea",
-        "ui:placeholder": "Enter your biography",
-        "ui:options": {
-          rows: 10
-        }
+      tenure: {
+        "ui:placeholder": "Enter your tenure",
       }
     }
   },
@@ -159,31 +155,31 @@ const uiSchema = {
 
 export const LearnerProfileSettingsPage = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
-  const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
   const client = useApolloClient();
   const history = useHistory();
 
-  const {loading, error, data} = useQuery(GET_CONSULTANT_PROFILE, {
+  const {loading, error, data} = useQuery(GET_LEARNER_PROFILE, {
     variables: {user_id: user.id},
   });
 
-  const consultantProfile = get(data, 'getConsultantProfile', {});
+  const learnerProfile = get(data, 'getLearnerProfile', {});
 
-  schema.properties.profile.properties.mainData.properties.picture_url["picture_url"] = consultantProfile.picture_url || null;
-  schema.properties.profile.properties.mainData.properties.name["default"] = user.name;
-  schema.properties.profile.properties.biography.properties.title["default"] = consultantProfile.title;
-  schema.properties.profile.properties.biography.properties.bio["default"] = consultantProfile.bio || "";
+  schema.properties.profile.properties.userData.properties.picture_url["picture_url"] = learnerProfile.picture_url || null;
+  schema.properties.profile.properties.userData.properties.name["default"] = user.name;
+  schema.properties.profile.properties.profileData.properties.role["default"] = learnerProfile.role;
+  schema.properties.profile.properties.profileData.properties.tenure["default"] = learnerProfile.tenure || "";
 
-  schema.properties.profile.properties.mainData.properties.email["default"] = user.email;
+  schema.properties.profile.properties.userData.properties.email["default"] = user.email;
 
   return <LoadingContainer loading={loading} error={error}>
     <ElentaForm
       schema={schema}
       uiSchema={uiSchema}
-      mutation={UPDATE_CONSULTANT_PROFILE}
+      mutation={UPDATE_LEARNER_PROFILE}
       mutationVars={
         {
-          id: user.id
+          id: learnerProfile.id,
+          user_id: user.id
         }
       }
       mutationTransform={(d) => {
@@ -204,10 +200,10 @@ export const LearnerProfileSettingsPage = () => {
       }}
       validate={validate}
       onSuccess={(data) => {
-        const userProfile = get(data, 'updateConsultantProfile', null);
+        const userProfile = get(data, 'updateLearnerProfile', null);
         client.writeData({
           data: {
-            userProfile
+            userProfile: {...userProfile, type: "learnerProfile"}
           }
         });
         history.push('/dashboard');

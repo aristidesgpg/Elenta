@@ -7,10 +7,11 @@ import {createHttpLink} from 'apollo-link-http';
 import {ApolloProvider} from '@apollo/react-hooks';
 
 import {setContext} from "apollo-link-context";
-import {CURRENT_USER_PROFILE, GET_ME} from "./graphql/queries";
+import {GET_ME} from "./graphql/queries";
 import LoadingContainer from "./components/hoc/LoadingContainer/LoadingContainer";
 import Routes from "./Routes";
-import LoginRoutes from "./LoginRoutes";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import FormSample from "./components/consultants/ElentaFormBuilder/FormSample";
 
 const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"
@@ -50,27 +51,41 @@ export const ElentaClient = new ApolloClient({
 export const App = () => {
   const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
-    (async function anyNameFunction() {
-      const {data} = await ElentaClient.query({query: GET_ME});
+    if (token) {
+      (async () => {
+        const {data} = await ElentaClient.query({query: GET_ME});
 
-      const consultantProfile = get(data, 'me.consultantProfile', null);
-      const learnerProfile = get(data, 'me.learnerProfile', null);
-      const user = get(data, 'me', null);
+        const consultantProfile = get(data, 'me.consultantProfile', null);
+        const learnerProfile = get(data, 'me.learnerProfile', null);
+
+        const user = get(data, 'me', null);
+        const userProfile = consultantProfile
+          ? {...consultantProfile, type: "consultantProfile"}
+          : {...learnerProfile, type: "learnerProfile"};
+
+        ElentaClient.writeData({
+          data: {
+            user,
+            userProfile,
+          }
+        });
+        setLoading(false);
+      })();
+    } else {
       ElentaClient.writeData({
         data: {
-          user,
-          userProfile: consultantProfile ? {...consultantProfile, type: "consultant"} : {...learnerProfile, type: "learner"}
+          user: null,
+          userProfile: null,
         }
       });
-
       setLoading(!loading);
-    })();
+    }
   }, [token]);
 
   return (
     <ApolloProvider client={ElentaClient}>
       {loading
-        ? <LoginRoutes />
+        ? <LoadingContainer loading={loading}/>
         : <Routes/>
       }
     </ApolloProvider>
