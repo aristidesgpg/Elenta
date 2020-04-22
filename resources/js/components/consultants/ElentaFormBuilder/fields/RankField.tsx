@@ -1,5 +1,4 @@
 import * as React from 'react';
-//import { Draggable, Droppable } from "react-drag-and-drop";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { reorder } from "../../../../utils/utils"
 import './css/fields.css';
@@ -35,9 +34,7 @@ export class RankField extends  React.Component<any,any>{
         const {formData, schema} = this.state;
         return (
         <div>
-          <div className="form-group">
-            <label className="control-label">{schema.title}</label>
-            <p className="field-description">{schema.description}</p>
+          <div className="form-group">            
               <DragDropContext onDragEnd={this.handleDrop}>
                 <Droppable droppableId="droppable">
                   {(droppableProvided) => (
