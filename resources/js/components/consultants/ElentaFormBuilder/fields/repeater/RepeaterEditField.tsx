@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Draggable, Droppable } from "react-drag-and-drop";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { pickKeys, shouldHandleDoubleClick } from "../EditableField";
 import { ButtonToolbar, Button } from "react-bootstrap";
 import SchemaField from "react-jsonschema-form-bs4/lib/components/fields/SchemaField";
@@ -10,8 +10,7 @@ import EditorTitleField from "../EditorTitleField";
 import EditorDescField from "../EditorDescField";
 import {Dropdown}  from "react-bootstrap";
 import config from "../../../../../config";
-import {slugify, clone, unique} from "../../../../../utils/utils"
-import { networkInterfaces } from "os";
+import {slugify, clone, reorder} from "../../../../../utils/utils"
 
 export default class RepeaterEditField extends React.Component<any,any> {
     public static defaultProps = {
@@ -122,11 +121,10 @@ export default class RepeaterEditField extends React.Component<any,any> {
 
   swapFields = (source, target) => {
     const { uiSchema, editedSchema } = this.state;
-    const order = uiSchema["ui:order"];
+    let order = uiSchema["ui:order"];
     const idxSource = order.indexOf(source);
     const idxTarget = order.indexOf(target);
-    order[idxSource] = target;
-    order[idxTarget] = source;
+    order = reorder(order,idxSource,idxTarget);    
     let newKey = Math.random();
 
     let schemaProperties = {};
@@ -134,6 +132,7 @@ export default class RepeaterEditField extends React.Component<any,any> {
       const name = order[i];
       schemaProperties[name] = editedSchema.items.properties[name];
     }
+    uiSchema["ui:order"] = order;
     editedSchema.items.properties = schemaProperties;
     this.setState({ uiSchema, newKey, editedSchema });
     this.onChangeDebounced({ formData: editedSchema });
@@ -144,6 +143,14 @@ export default class RepeaterEditField extends React.Component<any,any> {
     editedSchema.maxItems = Math.floor(event.target.value);
     this.setState({ editedSchema });
     this.onChangeDebounced({ formData: editedSchema });
+  }
+
+  handleDrop = (result) => {
+    if (!result.destination) {
+      return;
+    }    
+    const { source, destination } = result;
+    this.swapFields(source.droppableId, destination.droppableId);
   }
 
   render() {
@@ -175,14 +182,16 @@ export default class RepeaterEditField extends React.Component<any,any> {
             <div className="panel-body col-12">
                 <EditorTitleField title= {formData.title} updateTitle= { this.onUpdateTitleDesc } getFormData={ this.getFormData }/>
                 <EditorDescField  description= {formData.description} updateDescription={ this.onUpdateTitleDesc } getFormData={ this.getFormData }/>
-                <SchemaField
-                            key = {newKey}
-                            registry= { registry }
-                            schema= { schema }
-                            uiSchema= { uiSchema }
-                            onChange= { this.onChange }
-                           >
-                </SchemaField>
+                <DragDropContext onDragEnd={this.handleDrop}>
+                  <SchemaField
+                              key = {newKey}
+                              registry= { registry }
+                              schema= { schema }
+                              uiSchema= { uiSchema }
+                              onChange= { this.onChange }
+                            >
+                  </SchemaField>
+                </DragDropContext>                
                 <div className="form-group field field-number">
                     <label >Max Items</label>
                     <input className="form-control" type="number" step="1" value={editedSchema.maxItems} onChange={this.onChangeMaxItem}></input>
@@ -215,25 +224,35 @@ function DraggableFieldContainer(props) {
     const {
       children,
       dragData,
-      onDelete,
-      onDrop
+      onDelete
     } = props;
     return (
-      <Draggable type="moved-subfield" data={dragData}>
-        <Droppable types={["moved-subfield"]}
-          onDrop={onDrop}>
-          <div className="row editable-field">
-            <div className="col-sm-9">
-              {children}
+        <Droppable droppableId={dragData}>
+          {(droppableProvided) => (
+            <div ref={droppableProvided.innerRef}>
+                <Draggable draggableId={dragData} index={0}>
+                {(draggableProvided, draggableSnapshot) => (
+                    <div
+                      ref={draggableProvided.innerRef}
+                      {...draggableProvided.draggableProps}
+                      {...draggableProvided.dragHandleProps}
+                      className="row editable-field subfield-item"
+                    >
+                      <div className="col-sm-9">
+                        {children}
+                      </div>
+                      <div className="col-sm-3 editable-field-actions">
+                          <Button variant="danger" onClick={onDelete}>
+                            <i className="fas fa-trash-alt"/>
+                          </Button>
+                      </div>
+                    </div>
+                )}                  
+                </Draggable>                
+                {droppableProvided.placeholder}
             </div>
-            <div className="col-sm-3 editable-field-actions">
-              <Button variant="danger" onClick={onDelete}>
-                <i className="fas fa-trash-alt"/>
-              </Button>
-            </div>
-          </div>
+            )}
         </Droppable>
-      </Draggable>
     );
 }
 
@@ -253,15 +272,6 @@ export class SubEditableField extends React.Component<any,any> {
         event.preventDefault();
         if (confirm("Are you sure you want to delete this field?")) {
             this.props.registry.removeField(this.props.name);
-        }
-    }
-
-    handleDrop = (data) => {
-        const {name} = this.props;
-        if ("moved-subfield" in data && data["moved-subfield"]) {
-        if (data["moved-subfield"] !== name) {
-            this.props.registry.swapFields(data["moved-subfield"], name);
-        }
         }
     }
 
@@ -297,8 +307,7 @@ export class SubEditableField extends React.Component<any,any> {
                     draggableType="moved-subfield"
                     droppableTypes={["moved-subfield"]}
                     dragData={name}
-                    onDelete={this.handleDelete}
-                    onDrop={this.handleDrop}>
+                    onDelete={this.handleDelete}>                    
                     <EditorTitleField title ={formData.title} updateTitle= { this.onUpdateTitleDesc } getFormData={ this.getFormData }/>
                     <EditorDescField  description={formData.description} updateDescription={ this.onUpdateTitleDesc } getFormData={ this.getFormData }/>
                     <Form {...this.props}
