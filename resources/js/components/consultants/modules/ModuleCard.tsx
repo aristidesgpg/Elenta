@@ -2,17 +2,24 @@ import * as React from "react";
 import {Button} from "react-bootstrap";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 
-export const ModuleCard = ({
-                             module, isActive, setActiveModule, duplicateModules,
-                             deleteModules, children = null, renameFolder = null
-                           }) => {
+export const ModuleCard = (props) => {
+  const {
+    item, onCollapse, onExpand, module, isActive,
+    setActiveModule, duplicateModules, deleteModules, renameFolder = null
+  } = props;
   return (
     <ListGroupItem as="li"
-                   data-id={module.id}
+                   data-id={item.id}
                    action active={isActive} onClick={() => setActiveModule(module)}>
       <div className="d-flex justify-content-between">
-        <span onClick={() => (module.isFolder && renameFolder) ? renameFolder(module) : () => null}>
-        {module.title}
+        <span onClick={() => (item.isFolder && renameFolder) ? renameFolder(module) : () => null}>
+           {item.data.name}
+
+          {item.hasChildren && (
+            <div onClick={() => (item.isExpanded ? onCollapse() : onExpand())}>
+              {item.isExpanded ? "-" : "+"}
+            </div>
+          )}
         </span>
 
         <div className="actions">
@@ -26,10 +33,8 @@ export const ModuleCard = ({
           </Button>
         </div>
       </div>
-
-      {children}
     </ListGroupItem>
-  )
+  );
 };
 
 export default ModuleCard;
