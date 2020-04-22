@@ -11,6 +11,7 @@ import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
 import ElentaToast from "../../components/shared/ElentaToast/ElentaToast";
 import {immutableMerge} from "../../utils/utils";
+import Tags, {mutateTagData, tagField, tagSchema, tagUiSchema} from "../../components/tags/Tags";
 
 const schema = {
   type: "object",
@@ -41,7 +42,8 @@ const schema = {
     },
     dynamic_fields: {
       type: "string"
-    }
+    },
+    ...tagSchema
   }
 };
 
@@ -54,7 +56,11 @@ const uiSchema = {
   },
   dynamic_fields: {
     "ui:widget": "hidden"
-  }
+  },
+  ...tagUiSchema
+  // tags: {
+  //   "ui:field": "tags"
+  // }
 };
 
 const defaultDynamicFields = {
@@ -65,6 +71,10 @@ const defaultDynamicFields = {
   uiSchema: {
     "ui:order": []
   }
+};
+
+const customFields = {
+  ...tagField
 };
 
 export const TemplateSettingsPage = () => {
@@ -127,7 +137,8 @@ export const TemplateSettingsPage = () => {
               dynamic_fields: JSON.stringify(formState.dynamic_fields),
               owner: {
                 connect: userProfile.id
-              }
+              },
+              tags: mutateTagData(_.result(formState, 'tags'))
             })
         }
       }
@@ -140,6 +151,7 @@ export const TemplateSettingsPage = () => {
                 uiSchema={uiSchema}
                 formData={formState}
                 onChange={handleChange}
+                fields={customFields}
       >
         <br/>
       </JsonForm>

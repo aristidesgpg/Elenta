@@ -7,6 +7,9 @@ import LoadingContainer from "../hoc/LoadingContainer/LoadingContainer";
 import {Typeahead} from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
+
+
+
 export const Tags = (props) => {
   const {loading: queryLoading, error: queryError, data: queryData} = useQuery(GET_ALL_TAGS);
   const [tagOptions, setTagOptions] = useState([]);
@@ -24,18 +27,17 @@ export const Tags = (props) => {
   }
 
   const handleOnChange = (data) => {
-    // change the state to include the chosen tag
-    // pass the state back up to parent component
     const tempState = [
       ...data
     ];
-    props.setTags(tempState);
+    props.onChange(tempState);
     console.log("changing")
   };
 
   return (
     <LoadingContainer loading={[queryLoading]} error={[queryError]}>
       <Typeahead
+        id="tagsForm"
         multiple={true}
         onChange={handleOnChange}
         options={tagOptions}
@@ -43,6 +45,35 @@ export const Tags = (props) => {
 
     </LoadingContainer>
   )
+};
+
+export const tagSchema = {
+  tags: {
+    type: "array",
+    title: "Tags",
+    items: {
+      type: "string"
+    }
+  }
+};
+
+export const tagUiSchema = {
+  tags: {
+    "ui:field": "tags"
+  }
+};
+
+export const tagField = {
+  tags: Tags
+};
+
+export const mutateTagData = (tagsState) => {
+  const tags = tagsState === undefined ? [] : {connect: tagsState.map((tag) => {
+      return {
+        id: tag.id
+      }
+    })};
+  return tags;
 };
 
 export default Tags;
