@@ -9,7 +9,7 @@ import {
   Image,
   Row
 } from "react-bootstrap";
-import _ from "lodash";
+import {get} from "lodash";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import NavbarToggle from "react-bootstrap/NavbarToggle";
 import ProfileDropdownItem from "./ProfileDropdownItem";
@@ -27,11 +27,11 @@ export const ElentaNav = () => {
   const location = useLocation();
   const history = useHistory();
   const client = useApolloClient();
-  const user = _.get(useQuery(CURRENT_USER), 'data.user', undefined);
-  const userProfile = _.get(useQuery(CURRENT_USER_PROFILE), 'data.userProfile', undefined);
+  const {data: {user}} = useQuery(CURRENT_USER);
+  const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
-  const consultantProfile = _.get(user, 'consultantProfile', null);
-  const learnerProfile = _.get(user, 'learnerProfile', null);
+  const consultantProfile = get(user, 'consultantProfile', null);
+  const learnerProfile = get(user, 'learnerProfile', null);
 
   const [runLearnerMutation, {loading: learnerMutationLoading, error: learnerMutationError, data: learnerMutationData}] = useMutation(CREATE_LEARNER_PROFILE);
   const [runConsultantMutation, {loading: consultantMutationLoading, error: consultantMutationError, data: consultantMutationData}] = useMutation(CREATE_CONSULTANT_PROFILE);
@@ -110,13 +110,13 @@ export const ElentaNav = () => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-
     axios.post('/logout')
       .then(function (response) {
+        localStorage.removeItem('token');
         window.location.reload();
       })
       .catch(function (error) {
+        localStorage.removeItem('token');
         window.location.reload();
       });
   };
@@ -126,7 +126,7 @@ export const ElentaNav = () => {
       <Row>
         <Navbar bg="light" fixed="top">
           <NavbarBrand>
-            <Link to="/dashboard">
+            <Link to={user ? "/dashboard" : "/"}>
               <Image src="/images/logo.png" alt="logo" style={{height: '30px'}}/>
             </Link>
           </NavbarBrand>
@@ -149,7 +149,7 @@ export const ElentaNav = () => {
                     {
                       consultantProfile
                         ? <ProfileDropdownItem key={consultantProfile.id}
-                                               onClick={() => selectProfile({...consultantProfile, type: "consultant"})}
+                                               onClick={() => selectProfile({...consultantProfile, type: "consultantProfile"})}
                                                profile={consultantProfile}/>
                         : <Dropdown.Item onClick={() => createProfile("consultant")}>
                           Create Consultant Profile
@@ -158,7 +158,7 @@ export const ElentaNav = () => {
                     {
                       learnerProfile
                         ? <ProfileDropdownItem key={learnerProfile.id}
-                                               onClick={() => selectProfile({...learnerProfile, type: "learner"})}
+                                               onClick={() => selectProfile({...learnerProfile, type: "learnerProfile"})}
                                                profile={learnerProfile}/>
                         : <Dropdown.Item onClick={() => createProfile("learner")}>
                           Create Learner Profile

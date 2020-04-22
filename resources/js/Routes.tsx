@@ -18,6 +18,7 @@ import {CURRENT_USER_PROFILE} from "./graphql/queries";
 import ConsultantProfileSettingsPage from "./pages/consultants/ConsultantProfileSettingsPage";
 import LearnerProfileSettingsPage from "./pages/learners/LearnerProfileSettingsPage";
 import LearnerDashboard from "./pages/learners/LearnerDashboard";
+import NotFoundPage from "./pages/shared/NotFoundPage";
 
 const Routes = () => {
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
@@ -31,7 +32,7 @@ const Routes = () => {
           <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
           <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
           {
-            userProfile.type === "learner" &&
+            userProfile && userProfile.type === "learnerProfile" &&
               <>
                 <Route exact={true} path="/program/respond/:id" component={ProgramLearnerPage}/>
                 <PrivateRoute exact={true} path="/dashboard" component={LearnerDashboard}/>
@@ -39,7 +40,7 @@ const Routes = () => {
               </>
           }
           {
-            userProfile.type === "consultant" &&
+            userProfile && userProfile.type === "consultantProfile" &&
             <>
               <PrivateRoute exact={true} path="/dashboard" component={ConsultantDashboard}/>
               <PrivateRoute exact={true} path="/preferences" component={ConsultantProfileSettingsPage}/>
@@ -50,6 +51,7 @@ const Routes = () => {
               <PrivateRoute exact={true} path="/program/content/:id" component={ProgramEditorPage}/>
             </>
           }
+          <Route component={NotFoundPage} />
         </Switch>
       </PageContainer>
     </BrowserRouter>

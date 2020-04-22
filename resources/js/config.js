@@ -68,10 +68,14 @@ export default {
         type: "number",
         title: "Edit me",
         description: "Enter some description",
-        minimum: 0,
-        maximum: 100,
-        multipleOf: 1,
+        min: 0,
+        max: 100,
+        step: 1,
         count:1,
+        marks:{
+          0:'0',
+          100:'100'
+        }
       },
       uiSchema: {
         uiType: "slider",
@@ -80,9 +84,9 @@ export default {
           type: "object",
           properties: {
             required: {type: "boolean", "title":"Required"},
-            minimum:{ type: "number", title:"Minimum", default:0 },
-            maximum:{ type: "number", title:"Maximum", default:100 },
-            multipleOf:{ type: "number", title:"Step", default: 1 },
+            min:{ type: "number", title:"Minimum", default:0 },
+            max:{ type: "number", title:"Maximum", default:100 },
+            step:{ type: "number", title:"Step", default: 1 },
           }
         },
         editUISchema:{},
@@ -286,7 +290,9 @@ export default {
       label: "Date",
       jsonSchema: {
         type: "integer",
-        format: "date-time",
+        format: "date",
+        dateFormat: true,
+        timeFormat: false,
         title: "Edit me",
         description:"Enter some description"
       },
@@ -297,6 +303,8 @@ export default {
           type: "object",
           properties: {
             required: {type: "boolean", "title":"Required"},
+            dateFormat: {type:"boolean","title":"Show Date"},
+            timeFormat: {type:"boolean","title":"Show Time"},
           }
         },
         editUISchema:{}
