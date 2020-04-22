@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {Form} from "react-bootstrap";
 
 export const CompanyLogoField = (props) => {
-  const [hasCustomUrl, setHasCustomUrl] = useState(false)
+  const [hasCustomUrl, setHasCustomUrl] = useState(false);
   const clearbitDomainEndpoint = "https://company.clearbit.com/v1/domains/find?name=";
   const clearbitAPIKey = process.env.CLEARBIT_API_KEY;
 

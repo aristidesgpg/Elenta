@@ -15,6 +15,7 @@ import {ToastContext} from "../../contexts/ToastContext";
 import {immutableMerge} from "../../utils/utils";
 import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
 import CompanyLogoField from "../../components/consultants/CompanyLogoField/CompanyLogoField";
+import {mutateTagData, tagField, tagSchema, tagUiSchema} from "../../components/tags/Tags";
 
 const schema = {
   type: "object",
@@ -79,14 +80,16 @@ const schema = {
           type: "string",
         }
       }
-    }
+    },
+    ...tagSchema
   }
 };
 
 const consistentUiSchema = {
   company_attributes: {
     "ui:field": "companyLogoField"
-  }
+  },
+  ...tagUiSchema
 }
 
 const visibleUiSchema = {
@@ -130,7 +133,8 @@ const defaultDynamicFields = {
 };
 
 const customFields = {
-  companyLogoField: CompanyLogoField
+  companyLogoField: CompanyLogoField,
+  ...tagField
 }
 
 export const ProgramSettingsPage = () => {
@@ -276,7 +280,8 @@ export const ProgramSettingsPage = () => {
                 connect: userProfile.id
               },
               company_name: _.result(formState, 'company_attributes.company_name'),
-              company_logo_url: _.result(formState, 'company_attributes.company_logo_url')
+              company_logo_url: _.result(formState, 'company_attributes.company_logo_url'),
+              tags: mutateTagData(_.result(formState, 'tags'))
             })
         }
       }

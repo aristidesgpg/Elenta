@@ -370,7 +370,7 @@ export const UPSERT_PROGRAM = gql`
       can_invite
       is_public
       dynamic_fields
-      tags
+#      tags
       company_name
       company_logo_url
     }
@@ -417,7 +417,7 @@ export const UPSERT_MODULE = gql`
         frequency
         max_sends
       }
-      tags
+#      tags
     }
   }
 `;

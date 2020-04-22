@@ -11,7 +11,7 @@ import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
 import ElentaToast from "../../components/shared/ElentaToast/ElentaToast";
 import {immutableMerge} from "../../utils/utils";
-import Tags, {mutateTagData, tagField, tagSchema, tagUiSchema} from "../../components/tags/Tags";
+import {mutateTagData, tagField, tagSchema, tagUiSchema} from "../../components/tags/Tags";
 
 const schema = {
   type: "object",
@@ -58,9 +58,6 @@ const uiSchema = {
     "ui:widget": "hidden"
   },
   ...tagUiSchema
-  // tags: {
-  //   "ui:field": "tags"
-  // }
 };
 
 const defaultDynamicFields = {

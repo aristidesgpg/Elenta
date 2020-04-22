@@ -6,9 +6,7 @@ import {useEffect, useState} from "react";
 import LoadingContainer from "../hoc/LoadingContainer/LoadingContainer";
 import {Typeahead} from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-
-
-
+import {Form} from "react-bootstrap";
 
 export const Tags = (props) => {
   const {loading: queryLoading, error: queryError, data: queryData} = useQuery(GET_ALL_TAGS);
@@ -23,24 +21,21 @@ export const Tags = (props) => {
         "label": tag.name
       }
     }));
-    console.log(queryData.tags)
   }
 
   const handleOnChange = (data) => {
-    const tempState = [
-      ...data
-    ];
-    props.onChange(tempState);
-    console.log("changing")
+    props.onChange(data);
   };
 
   return (
     <LoadingContainer loading={[queryLoading]} error={[queryError]}>
+      <Form.Label>Tags</Form.Label>
       <Typeahead
         id="tagsForm"
         multiple={true}
         onChange={handleOnChange}
         options={tagOptions}
+        placeholder="Choose some tags"
       />
 
     </LoadingContainer>
