@@ -14,6 +14,7 @@ import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
 import {immutableMerge} from "../../utils/utils";
 import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
+import CompanyLogoField from "../../components/consultants/CompanyLogoField/CompanyLogoField";
 
 const schema = {
   type: "object",
@@ -65,9 +66,28 @@ const schema = {
       type: "boolean",
       title: "Listed publicly",
       default: false
+    },
+    company_attributes: {
+      type: "object",
+      properties: {
+        company_name: {
+          title: "Company Name",
+          type: "string",
+        },
+        company_logo_url: {
+          title: "Company Logo Url",
+          type: "string",
+        }
+      }
     }
   }
 };
+
+const consistentUiSchema = {
+  company_attributes: {
+    "ui:field": "companyLogoField"
+  }
+}
 
 const visibleUiSchema = {
   id: {
@@ -81,7 +101,8 @@ const visibleUiSchema = {
   },
   max_learners: {
     "ui:widget": "updown"
-  }
+  },
+  ...consistentUiSchema
 };
 
 const hiddenUiSchema = {
@@ -93,7 +114,8 @@ const hiddenUiSchema = {
   },
   max_learners: {
     "ui:widget": "hidden"
-  }
+  },
+  ...consistentUiSchema
 };
 
 const defaultDynamicFields = {
@@ -106,6 +128,10 @@ const defaultDynamicFields = {
   },
   formData: {}
 };
+
+const customFields = {
+  companyLogoField: CompanyLogoField
+}
 
 export const ProgramSettingsPage = () => {
   let history = useHistory();
@@ -248,7 +274,9 @@ export const ProgramSettingsPage = () => {
               dynamic_fields: JSON.stringify(dynamicFields),
               owner: {
                 connect: userProfile.id
-              }
+              },
+              company_name: _.result(formState, 'company_attributes.company_name'),
+              company_logo_url: _.result(formState, 'company_attributes.company_logo_url')
             })
         }
       }
@@ -264,6 +292,7 @@ export const ProgramSettingsPage = () => {
                       uiSchema={uiSchemaState}
                       formData={_.pick(formState, Object.keys(schemaState.properties))}
                       onChange={handleChange}
+                      fields={customFields}
       >
         <hr/>
       </ElentaJsonForm>

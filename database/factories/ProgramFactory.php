@@ -39,5 +39,6 @@ $factory->define(Program::class, function (Faker $faker) {
         'is_public' => $faker->boolean(),
         'format' => $format,
         'dynamic_fields' => '{}',
+//        'dynamic_fields_data' => '{}', //TODO: Sample JSON data
     ], $format_params);
 });

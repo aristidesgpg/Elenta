@@ -29,6 +29,8 @@ class CreateProgramsTable extends Migration
             $table->boolean('can_invite')->default(true);
             $table->boolean('is_public')->default(false);
             $table->jsonb('dynamic_fields')->nullable();
+            $table->string('company_name')->nullable();
+            $table->string('company_logo_url')->nullable();
 
             // TODO: add venue, calendar details,  etc.
 
