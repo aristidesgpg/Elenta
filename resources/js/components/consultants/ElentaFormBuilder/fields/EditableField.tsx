@@ -1,8 +1,6 @@
 import * as React from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { ButtonToolbar, Button } from "react-bootstrap";
-import Slider from "rc-slider";
-import 'rc-slider/assets/index.css';
 import Form from 'react-jsonschema-form-bs4';
 import debounce from 'lodash.debounce';
 import Modal from 'react-modal';
@@ -16,6 +14,7 @@ import { ImageWidget } from "./ImageWidget"
 import { VideoWidget } from "./VideoWidget"
 import RepeaterEditField from "./repeater/RepeaterEditField";
 import CustomFieldTemplate from "./CustomFieldTemplate";
+import SliderField from "./SliderField";
 
 //import {withTheme} from "@rjsf/core";
 Modal.setAppElement('#root')
@@ -234,8 +233,7 @@ export default class EditableField extends React.Component<any,any> {
   }
 
 
-  render() {
-    const createSliderWithTooltip = Slider.createSliderWithTooltip;
+  render() {    
     const props = this.props;    
     const fields = {RichEditor:TextField,                                  
                     Rank: RankField,                    
@@ -243,7 +241,7 @@ export default class EditableField extends React.Component<any,any> {
     const widgets = {
         RichText: RichTextWidget,   
         RDP: DTPicker,
-        Range: createSliderWithTooltip(Slider),
+        Range: SliderField,
         Image: ImageWidget,
         Video: VideoWidget             
       };    
@@ -271,39 +269,40 @@ export default class EditableField extends React.Component<any,any> {
                           </ButtonToolbar>
                         </div>                                    
                       </div>      
-                      <div className="row editfield-body">
-                        <div className="col-sm-6">                    
-                          <strong className="preview-title">Preview</strong>                                                    
-                          <Form {...props}                              
-                                schema={schema}
-                                uiSchema={uiSchema}
-                                //idSchema={{$id: props.name}}
-                                fields={{...fields}}
-                                widgets={{...widgets}}
-                                onChange={this.handleChange}
-                                FieldTemplate={CustomFieldTemplate}
-                                >
-                            <button type="submit" hidden>Submit</button>
-                          </Form>                    
-                        </div>
-                        <div className="col-sm-6">       
-                        { uiType === "repeater" && <RepeaterEditField {...props}                     
-                                                  fields = {{...fields}}
-                                                  widgets = {{...widgets}}                                      
-                                                  onUpdate={this.handleUpdate}/>
-                        }     
-                        { uiType !== "repeater" && <FieldPropertiesEditor
-                                                  {...props}                
-                                                  settings={registry.settings}     
-                                                  fields = {{...fields}}
-                                                  widgets = {{...widgets}}
-                                                  onUpdate={this.handleUpdate}/>
-                        } 
-                        </div>                  
-                      </div> 
+                      
                   </div>                    
                 )}      
-                </Draggable>                
+                </Draggable>      
+                <div className="row editfield-body">
+                  <div className="col-sm-6">                    
+                    <strong className="preview-title">Preview</strong>                                                    
+                    <Form {...props}                              
+                          schema={schema}
+                          uiSchema={uiSchema}
+                          //idSchema={{$id: props.name}}
+                          fields={{...fields}}
+                          widgets={{...widgets}}
+                          onChange={this.handleChange}
+                          FieldTemplate={CustomFieldTemplate}
+                          >
+                      <button type="submit" hidden>Submit</button>
+                    </Form>                    
+                  </div>
+                  <div className="col-sm-6">       
+                  { uiType === "repeater" && <RepeaterEditField {...props}                     
+                                            fields = {{...fields}}
+                                            widgets = {{...widgets}}                                      
+                                            onUpdate={this.handleUpdate}/>
+                  }     
+                  { uiType !== "repeater" && <FieldPropertiesEditor
+                                            {...props}                
+                                            settings={registry.settings}     
+                                            fields = {{...fields}}
+                                            widgets = {{...widgets}}
+                                            onUpdate={this.handleUpdate}/>
+                  } 
+                  </div>                  
+                </div>           
                 {droppableProvided.placeholder}
               </div>         
             )}                

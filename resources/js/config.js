@@ -70,12 +70,7 @@ export default {
         description: "Enter some description",
         min: 0,
         max: 100,
-        step: 1,
-        count:1,
-        marks:{
-          0:'0',
-          100:'100'
-        }
+        step: 1,        
       },
       uiSchema: {
         uiType: "slider",
