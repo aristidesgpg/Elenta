@@ -4,7 +4,7 @@ extend type Query {
 
 extend type Mutation {
     createLearnerProfile(input: CreateLearnerProfileInput @spread): LearnerProfile! @create
-    updateLearnerProfile(input: UpdateLearnerProfileInput @spread): LearnerProfile! @update
+    updateLearnerProfile(input: UpdateLearnerProfileInput @spread): LearnerProfile! @updateLearnerProfile @field(resolver: "App\\GraphQL\\Resolvers\\UpdateLearnerProfileResolver@resolve")
 }
 
 input CreateLearnerProfileInput {
@@ -19,9 +19,18 @@ input CreateLearnerProfileBelongsTo {
 }
 
 input UpdateLearnerProfileInput {
+    id: ID!
+    user_id: ID!
     picture_url: String
     role: String
     tenure: String
+
+    name: String
+    email: String @rules(apply: ["email"])
+
+    old_password: String
+    password: String
+    password_confirmation: String
 }
 
 type LearnerProfile {

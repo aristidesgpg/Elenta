@@ -1,8 +1,7 @@
 import * as React from "react";
 import {ModuleTrigger} from "../../../graphql/graphql-generated";
 import JsonForm from "react-jsonschema-form";
-import {useState} from "react";
-import _ from "lodash";
+import ElentaJsonForm from "../../shared/ElentaJsonForm/ElentaJsonForm";
 
 const schema = {
   title: "Module Triggers",
@@ -15,6 +14,7 @@ const schema = {
     start_timestamp: {
       type: "string",
       title: "Start Time",
+      format: "date-time",
       default: ""
     },
     start_timestamp_field: {
@@ -38,9 +38,12 @@ const uiSchema = {
   id: {
     "ui:widget": "hidden"
   },
-  //TODO
+  // TODO: Allow reference to previous field
   start_timestamp_field: {
     "ui:widget": "hidden"
+  },
+  start_timestamp: {
+    "ui:widget": "RDP"
   }
 };
 
@@ -50,14 +53,14 @@ export const ModuleTriggerEditor: React.FunctionComponent<ModuleTriggerEditorPro
      onChange
    }) => {
     return (
-      <JsonForm
+      <ElentaJsonForm
         schema={schema}
         uiSchema={uiSchema}
         formData={trigger}
         onChange={onChange}
       >
         <br/>
-      </JsonForm>
+      </ElentaJsonForm>
     );
   };
 

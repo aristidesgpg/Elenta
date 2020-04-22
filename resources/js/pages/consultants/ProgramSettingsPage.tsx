@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useHistory} from "react-router-dom";
 import {
   CURRENT_USER_PROFILE,
   GET_PROGRAM,
@@ -9,14 +9,11 @@ import {
 import {useLazyQuery, useMutation, useQuery} from "@apollo/react-hooks";
 import {useContext, useEffect, useState} from "react";
 import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
-import JsonForm from "react-jsonschema-form";
 import Button from "react-bootstrap/Button";
 import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
-import DTPicker from "../../components/consultants/ElentaFormBuilder/fields/DTPicker";
 import {immutableMerge} from "../../utils/utils";
-
-const widgets = {RDP: DTPicker};
+import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
 
 const schema = {
   type: "object",
@@ -29,6 +26,11 @@ const schema = {
       type: "string",
       title: "Title",
       default: "New Program"
+    },
+    description: {
+      type: "string",
+      title: "Description",
+      default: "Program Description"
     },
     template: {
       type: "string",
@@ -71,6 +73,9 @@ const visibleUiSchema = {
   id: {
     "ui:widget": "hidden"
   },
+  description: {
+    "ui:widget": "textarea"
+  },
   start_timestamp: {
     "ui:widget": "RDP"
   },
@@ -103,6 +108,7 @@ const defaultDynamicFields = {
 };
 
 export const ProgramSettingsPage = () => {
+  let history = useHistory();
   let {id} = useParams();
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
@@ -193,18 +199,24 @@ export const ProgramSettingsPage = () => {
   useEffect(() => {
     if (mutationData) {
       toastContext.addToast({header: "Success!", body: "Saved"});
+      if (id == "new") {
+        history.push(`/program/content/${mutationData.upsertProgram.id}`);
+      }
     }
   }, [mutationData]);
 
-  const currentTemplate = () => {
-    if (templatesQueryData && formState.template) {
-      return templatesQueryData.getTemplatesByOwner.filter(t => t.id === formState.template)[0]
+  const findTemplate = (template_id) => {
+    if (templatesQueryData) {
+      return templatesQueryData.getTemplatesByOwner.filter(t => t.id === template_id)[0]
     }
   }
 
   const handleChange = (data) => {
     let newState = immutableMerge(formState, data.formData);
-    if (currentTemplate() && id == "new") setDynamicFields(JSON.parse(currentTemplate().dynamic_fields));
+
+    if ((id == "new") && (data.formData.template != formState.template)) {
+      setDynamicFields(JSON.parse(findTemplate(data.formData.template).dynamic_fields));
+    }
 
     if (!_.isEqual(newState, formState)) {
       setFormState(newState);
@@ -227,7 +239,7 @@ export const ProgramSettingsPage = () => {
     runMutation({
         variables: {
           input: immutableMerge(
-            _.pick(formState, ['title', 'format', 'is_public', 'can_invite', 'max_learners']),
+            _.pick(formState, ['title', 'description', 'format', 'is_public', 'can_invite', 'max_learners']),
             {
               id: id == "new" ? null : id,
               template: {
@@ -248,25 +260,20 @@ export const ProgramSettingsPage = () => {
       loading={[mutationLoading, templatesQueryLoading, programQueryLoading]}
       error={[mutationError, templatesQueryError, programQueryError]}
     >
-      <JsonForm schema={schemaState}
-                uiSchema={uiSchemaState}
-                formData={_.pick(formState, Object.keys(schemaState.properties))}
-                onChange={handleChange}
-                widgets={widgets}
+      <ElentaJsonForm schema={schemaState}
+                      uiSchema={uiSchemaState}
+                      formData={_.pick(formState, Object.keys(schemaState.properties))}
+                      onChange={handleChange}
       >
         <hr/>
-      </JsonForm>
-      <JsonForm schema={dynamicFields.schema}
-                uiSchema={dynamicFields.uiSchema}
-                formData={
-                  dynamicFields.formData ?
-                    dynamicFields.formData :
-                    Object.keys(dynamicFields.schema.properties).reduce((ac,a) => ({...ac,[a]:''}),{})
-                }
-                onChange={handleDynamicChange}
+      </ElentaJsonForm>
+      <ElentaJsonForm schema={dynamicFields.schema}
+                      uiSchema={dynamicFields.uiSchema}
+                      formData={dynamicFields.formData}
+                      onChange={handleDynamicChange}
       >
         <br/>
-      </JsonForm>
+      </ElentaJsonForm>
       <Button onClick={handleSubmit}>Submit</Button>
     </LoadingContainer>
   );

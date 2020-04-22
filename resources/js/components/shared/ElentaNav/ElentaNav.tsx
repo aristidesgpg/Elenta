@@ -110,13 +110,13 @@ export const ElentaNav = () => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-
     axios.post('/logout')
       .then(function (response) {
+        localStorage.removeItem('token');
         window.location.reload();
       })
       .catch(function (error) {
+        localStorage.removeItem('token');
         window.location.reload();
       });
   };
@@ -126,7 +126,7 @@ export const ElentaNav = () => {
       <Row>
         <Navbar bg="light" fixed="top">
           <NavbarBrand>
-            <Link to="/dashboard">
+            <Link to={user ? "/dashboard" : "/"}>
               <Image src="/images/logo.png" alt="logo" style={{height: '30px'}}/>
             </Link>
           </NavbarBrand>
@@ -149,7 +149,7 @@ export const ElentaNav = () => {
                     {
                       consultantProfile
                         ? <ProfileDropdownItem key={consultantProfile.id}
-                                               onClick={() => selectProfile({...consultantProfile, type: "consultant"})}
+                                               onClick={() => selectProfile({...consultantProfile, type: "consultantProfile"})}
                                                profile={consultantProfile}/>
                         : <Dropdown.Item onClick={() => createProfile("consultant")}>
                           Create Consultant Profile
@@ -158,7 +158,7 @@ export const ElentaNav = () => {
                     {
                       learnerProfile
                         ? <ProfileDropdownItem key={learnerProfile.id}
-                                               onClick={() => selectProfile({...learnerProfile, type: "learner"})}
+                                               onClick={() => selectProfile({...learnerProfile, type: "learnerProfile"})}
                                                profile={learnerProfile}/>
                         : <Dropdown.Item onClick={() => createProfile("learner")}>
                           Create Learner Profile

@@ -18,11 +18,8 @@ import {CURRENT_USER_PROFILE} from "./graphql/queries";
 import ConsultantProfileSettingsPage from "./pages/consultants/ConsultantProfileSettingsPage";
 import LearnerProfileSettingsPage from "./pages/learners/LearnerProfileSettingsPage";
 import LearnerDashboard from "./pages/learners/LearnerDashboard";
-import NotFoundPage from "./pages/shared/NotFoundPage";
 
-const Routes = () => {
-  const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
-
+const LoginRoutes = () => {
   return (
     <BrowserRouter>
       <PageContainer>
@@ -31,31 +28,10 @@ const Routes = () => {
           <Route exact={true} path="/login" component={LoginPage}/>
           <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
           <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
-          {
-            userProfile && userProfile.type === "learnerProfile" &&
-              <>
-                <Route exact={true} path="/program/respond/:id" component={ProgramLearnerPage}/>
-                <PrivateRoute exact={true} path="/dashboard" component={LearnerDashboard}/>
-                <PrivateRoute exact={true} path="/preferences" component={LearnerProfileSettingsPage}/>
-              </>
-          }
-          {
-            userProfile && userProfile.type === "consultantProfile" &&
-            <>
-              <PrivateRoute exact={true} path="/dashboard" component={ConsultantDashboard}/>
-              <PrivateRoute exact={true} path="/preferences" component={ConsultantProfileSettingsPage}/>
-
-              <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsPage}/>
-              <PrivateRoute exact={true} path="/template/settings/:id" component={TemplateSettingsPage}/>
-              <PrivateRoute exact={true} path="/template/content/:id" component={TemplateEditorPage}/>
-              <PrivateRoute exact={true} path="/program/content/:id" component={ProgramEditorPage}/>
-            </>
-          }
-          <Route component={NotFoundPage} />
         </Switch>
       </PageContainer>
     </BrowserRouter>
   )
 };
 
-export default Routes;
+export default LoginRoutes;
