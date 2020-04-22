@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
-import {mutateTree} from "@atlaskit/tree";
+import {mutateTree, TreeData} from "@atlaskit/tree";
 import ModuleCard from "./ModuleCard";
 import RenameFolderModal from "./RenameFolderModal";
 import List from "./List";
@@ -24,13 +24,12 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
     const [state, setState] = useState({
       items: [],
     });
-    const [tree, setTree] = useState({
+    const [tree, setTree] = useState<TreeData>({
       rootId: "root-list",
       items: {
         "root-list": {
           id: "root-list",
           hasChildren: true,
-          isFolder: false,
           isExpanded: false,
           isChildrenLoading: false,
           data: {
