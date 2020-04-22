@@ -61,6 +61,10 @@ p.field-description{
     cursor: move;
 }
 
+.subfield-item:hover {    
+    cursor: move;
+}
+
 .mediaMax{
     max-width: 100%;
     max-height: 500px;
@@ -71,4 +75,26 @@ p.field-description{
     margin-bottom: 10px;
     margin-top: 10px
 }
+
+
+.slider-labels .rangeslider-horizontal .rangeslider__handle{
+        width: 20px;
+        height: 20px;
+        border-radius: 20px;
+        text-align: center;
+        font-size: 0.5em;
+}
+
+.slider-labels .rangeslider-horizontal .rangeslider__handle:after{
+  position: initial;
+}
+
+.slider-labels .rangeslider-horizontal .rangeslider__label {
+    top: 18px;    
+}
+
+.slider-labels .rangeslider-horizontal .rangeslider__fill {
+  background-color: #1E88E5;
+}
+
 
