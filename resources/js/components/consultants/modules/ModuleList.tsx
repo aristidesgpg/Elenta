@@ -47,8 +47,6 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
     useEffect(() => {
       const newTree = modules.sort((a, b) => parseInt(a.pivot.order) - parseInt(b.pivot.order))
         .reduce((acc, module) => {
-          acc.items["root-list"].children.push(module.id);
-
           const folder = module.pivot.folder;
           if (folder !== null) {
             const folderItem = acc.items[folder];
@@ -56,6 +54,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
             if (folderItem) {
               acc.items[folder].children.push(module.id);
             } else {
+              acc.items["root-list"].children.push(module.id);
               acc.items["root-list"].children.push(folder);
               acc.items[folder] = {
                 id: folder,
@@ -70,6 +69,8 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
                 children: [module.id]
               }
             }
+          } else {
+            acc.items["root-list"].children.push(module.id);
           }
           acc.items[module.id] = {
             id: module.id,
