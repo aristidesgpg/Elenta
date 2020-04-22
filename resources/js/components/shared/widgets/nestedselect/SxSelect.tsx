@@ -110,7 +110,7 @@ class SxSelect extends React.Component<Props, any> {
               {list.map((item) => (
 
                 <li
-                  className={selectedItems.includes(item) ? 'sxSelected ' + "sxListItemSelected" : "sxListItem"}
+                  className={"sxListItem"}
                   key={item.val}
                   onMouseEnter={() => {
                     this.handleMouseEnter(item)
