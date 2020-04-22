@@ -58,6 +58,7 @@ export const tagUiSchema = {
   }
 };
 
+// move to elenta json form
 export const tagField = {
   tags: Tags
 };

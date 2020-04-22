@@ -4,6 +4,8 @@ import DTPicker from "../../consultants/ElentaFormBuilder/fields/DTPicker";
 import {ImageWidget} from "../../consultants/ElentaFormBuilder/fields/ImageWidget";
 import {VideoWidget} from "../../consultants/ElentaFormBuilder/fields/VideoWidget";
 
+// remove line 61 from tags.tsx to here
+
 const widgets = {
   RDP: DTPicker,
   Image: ImageWidget,

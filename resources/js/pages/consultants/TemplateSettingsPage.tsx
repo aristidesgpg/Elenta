@@ -74,6 +74,7 @@ const customFields = {
   ...tagField
 };
 
+// TODO: change tag name to tag label
 export const TemplateSettingsPage = () => {
   let history = useHistory();
   let {id} = useParams();

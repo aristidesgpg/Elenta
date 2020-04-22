@@ -67,7 +67,10 @@ export const UPSERT_TEMPLATE = gql`
       can_request
       is_public
       dynamic_fields
-#      tags
+      tags {
+        id
+        name
+      }
     }
   }
 `;
