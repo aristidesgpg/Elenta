@@ -43,7 +43,7 @@ export const GET_TEMPLATE = gql`
       }
       tags {
         id
-        name
+        label
       }
     }
   }
@@ -69,7 +69,7 @@ export const UPSERT_TEMPLATE = gql`
       dynamic_fields
       tags {
         id
-        name
+        label
       }
     }
   }
@@ -342,7 +342,7 @@ export const GET_PROGRAM = gql`
       }
       tags {
         id
-        name
+        label
       }
       invites {
         email
@@ -373,7 +373,10 @@ export const UPSERT_PROGRAM = gql`
       can_invite
       is_public
       dynamic_fields
-#      tags
+      tags {
+        id
+        label
+      }
       company_name
       company_logo_url
     }
@@ -420,7 +423,10 @@ export const UPSERT_MODULE = gql`
         frequency
         max_sends
       }
-#      tags
+      tags {
+        id
+        label
+      }
     }
   }
 `;
@@ -451,7 +457,7 @@ export const GET_ALL_TAGS = gql`
     query tags {
       tags {
         id
-        name
+        label
         created_at
       }
     }

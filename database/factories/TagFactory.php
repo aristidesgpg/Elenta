@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Tag::class, function (Faker $faker) {
     return [
-        'name' => $faker->unique()->text($maxNbChars = 10)
+        'label' => $faker->unique()->text($maxNbChars = 10)
     ];
 });
 

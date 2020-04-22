@@ -6,7 +6,7 @@ extend type Query {
 
 type Tag {
     id: ID!
-    name: String!
+    label: String!
     taggable: [Taggable]
 
     created_at: DateTime!

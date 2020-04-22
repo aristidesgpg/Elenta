@@ -11,14 +11,17 @@ import {Form} from "react-bootstrap";
 export const Tags = (props) => {
   const {loading: queryLoading, error: queryError, data: queryData} = useQuery(GET_ALL_TAGS);
   const [tagOptions, setTagOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([{"id": "1", "label": "Dolor."}]);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [loadSelected, setLoadSelected] = useState(false);
 
   if (!queryLoading && isFirstLoad) {
-    setIsFirstLoad(false)
+    setIsFirstLoad(false);
+    // setSelectedOptions(props.formData)
     setTagOptions(queryData.tags.map((tag) =>  {
       return {
         "id": tag.id,
-        "label": tag.name
+        "label": tag.label
       }
     }));
   }
@@ -34,6 +37,7 @@ export const Tags = (props) => {
         id="tagsForm"
         multiple={true}
         onChange={handleOnChange}
+        selected={props.formData}
         options={tagOptions}
         placeholder="Choose some tags"
       />
@@ -58,13 +62,9 @@ export const tagUiSchema = {
   }
 };
 
-// move to elenta json form
-export const tagField = {
-  tags: Tags
-};
 
 export const mutateTagData = (tagsState) => {
-  const tags = tagsState === undefined ? [] : {connect: tagsState.map((tag) => {
+  const tags = tagsState === undefined ? [] : {sync: tagsState.map((tag) => {
       return {
         id: tag.id
       }

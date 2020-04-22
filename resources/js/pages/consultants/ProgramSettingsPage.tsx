@@ -15,7 +15,8 @@ import {ToastContext} from "../../contexts/ToastContext";
 import {immutableMerge} from "../../utils/utils";
 import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
 import CompanyLogoField from "../../components/consultants/CompanyLogoField/CompanyLogoField";
-import {mutateTagData, tagField, tagSchema, tagUiSchema} from "../../components/tags/Tags";
+import {mutateTagData, tagSchema, tagUiSchema} from "../../components/tags/Tags";
+import {fields} from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
 
 const schema = {
   type: "object",
@@ -134,7 +135,7 @@ const defaultDynamicFields = {
 
 const customFields = {
   companyLogoField: CompanyLogoField,
-  ...tagField
+  tags: fields.tags
 }
 
 export const ProgramSettingsPage = () => {

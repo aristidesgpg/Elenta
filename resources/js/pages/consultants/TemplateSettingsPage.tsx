@@ -11,7 +11,8 @@ import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
 import ElentaToast from "../../components/shared/ElentaToast/ElentaToast";
 import {immutableMerge} from "../../utils/utils";
-import {mutateTagData, tagField, tagSchema, tagUiSchema} from "../../components/tags/Tags";
+import {mutateTagData, tagSchema, tagUiSchema} from "../../components/tags/Tags";
+import {fields} from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
 
 const schema = {
   type: "object",
@@ -71,7 +72,7 @@ const defaultDynamicFields = {
 };
 
 const customFields = {
-  ...tagField
+  tags: fields.tags
 };
 
 // TODO: change tag name to tag label
