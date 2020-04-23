@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\ConsultantProfile;
 use App\Models\LearnerProfile;
 use App\Models\Program;
 use App\Models\User;
@@ -95,5 +96,13 @@ class LearnerProfilePolicy
     public function forceDelete(User $user, LearnerProfile $learnerProfile)
     {
         return $user->id == $learnerProfile->user_id;
+    }
+
+    public function upsert(User $user, array $args) {
+        if ($args['id']) {
+            return $user->can('update', LearnerProfile::find($args['id']));
+        } else {
+            return $user->can('create');
+        }
     }
 }

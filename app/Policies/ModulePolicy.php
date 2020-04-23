@@ -104,4 +104,12 @@ class ModulePolicy
     {
         return $user->id == $module->owner->user_id;
     }
+
+    public function upsert(User $user, array $args) {
+        if ($args['id']) {
+            return $user->can('update', Module::find($args['id']));
+        } else {
+            return $user->can('create');
+        }
+    }
 }

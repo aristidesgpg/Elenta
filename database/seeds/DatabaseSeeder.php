@@ -53,7 +53,8 @@ class DatabaseSeeder extends Seeder
 
         factory(ProgramLearner::class, 50)->create();
         factory(TemplateRequest::class, 200)->create();
-        factory(ProgramInvite::class, 200)->create();
+        // Don't seed because it sends emails
+        // factory(ProgramInvite::class, 200)->create();
         factory(Tag::class, 10)->create();
         factory(Taggable::class, 10)->create();
     }

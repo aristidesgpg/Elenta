@@ -2,13 +2,14 @@
 
 namespace App\Policies;
 
+use App\Models\Module;
 use App\Models\ModuleTrigger;
+use App\Models\ProgramModule;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ModuleTriggerPolicy
 {
-
     use HandlesAuthorization;
 
     /**
@@ -91,5 +92,13 @@ class ModuleTriggerPolicy
     public function forceDelete(User $user, ModuleTrigger $moduleTrigger)
     {
         return $user->id == $moduleTrigger->module->owner->user_id;
+    }
+
+    public function upsert(User $user, array $args) {
+        if ($args['id']) {
+            return $user->can('update', ModuleTrigger::find($args['id']));
+        } else {
+            return $user->can('create');
+        }
     }
 }

@@ -5,8 +5,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
 import {CURRENT_USER, GET_LEARNER_PROFILE} from "../../graphql/queries";
-import LearnerProgramList from "../../components/learners/ProgramList/LearnerProgramList";
-import LearnerProgramInviteList from "../../components/learners/ProgramInviteList/LearnerProgramInviteList";
+import ProgramList from "../../components/learners/ProgramList/ProgramList";
+import ProgramInviteList from "../../components/learners/ProgramInviteList/ProgramInviteList";
 
 export const LearnerDashboard = () => {
   const {data: {user}} = useQuery(CURRENT_USER);
@@ -19,7 +19,7 @@ export const LearnerDashboard = () => {
     <LoadingContainer loading={loading} error={error}>
       {data &&
       <div>
-        {data.getLearnerProfile.programs.length > 0 &&
+        {data.getLearnerProfile.programs &&
         <Container className="pb-4">
           <Row>
             <Col md={6}>
@@ -27,7 +27,7 @@ export const LearnerDashboard = () => {
             </Col>
           </Row>
           <hr/>
-          <LearnerProgramList
+          <ProgramList
             programs={data.getLearnerProfile.programs}
           />
         </Container>
@@ -40,7 +40,7 @@ export const LearnerDashboard = () => {
             </Col>
           </Row>
           <hr/>
-          <LearnerProgramInviteList
+          <ProgramInviteList
             invites={data.getLearnerProfile.programInvites}
           />
         </Container>

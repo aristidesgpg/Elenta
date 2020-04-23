@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Program;
+use App\Models\ProgramInvite;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -32,7 +33,10 @@ class ProgramPolicy
     {
         return $program->is_public
             || $user->id == $program->owner->user_id
-            || $program->learners->pluck('user_id')->contains($user->id);
+            || $program->learners->pluck('user_id')->contains($user->id)
+            || $program->invites->flatMap(function(ProgramInvite $i) {
+                return $i->learner->user;
+            })->pluck('user_id')->contains($user->id);
     }
 
     /**
@@ -92,5 +96,13 @@ class ProgramPolicy
     public function forceDelete(User $user, Program $program)
     {
         return $user->id == $program->owner->user_id;
+    }
+
+    public function upsert(User $user, array $args) {
+        if ($args['id']) {
+            return $user->can('update', Program::find($args['id']));
+        } else {
+            return $user->can('create');
+        }
     }
 }

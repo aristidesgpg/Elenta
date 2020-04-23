@@ -5,11 +5,11 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 type Query {
-    users: [User!]! @all #@viewPolicyFilter
+    users: [User!]! @all @viewPolicyFilter
 }
 
 extend type Query {
-    getUser(id: ID! @eq): User! @find
+    getUser(id: ID! @eq): User! @find @viewPolicyFilter
     me: User @auth
 }
 

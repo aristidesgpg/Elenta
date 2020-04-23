@@ -2,7 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\Program;
 use App\Models\ProgramLearner;
+use App\Models\ProgramModule;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -95,5 +97,13 @@ class ProgramLearnerPolicy
     {
         return $user->id == $programLearner->learner->user_id
             || $programLearner->program()->with('owner')->pluck('id')->contains($user->id);
+    }
+
+    public function upsert(User $user, array $args) {
+        if ($args['id']) {
+            return $user->can('update', ProgramLearner::find($args['id']));
+        } else {
+            return $user->can('create');
+        }
     }
 }

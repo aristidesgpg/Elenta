@@ -19,6 +19,7 @@ import ConsultantProfileSettingsPage from "./pages/consultants/ConsultantProfile
 import LearnerProfileSettingsPage from "./pages/learners/LearnerProfileSettingsPage";
 import LearnerDashboard from "./pages/learners/LearnerDashboard";
 import NotFoundPage from "./pages/shared/NotFoundPage";
+import ProgramEnrolPage from "./components/learners/ProgramEnrolPage";
 
 const Routes = () => {
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
@@ -27,16 +28,17 @@ const Routes = () => {
     <BrowserRouter>
       <PageContainer>
         <Switch>
-          <Route exact={true} path="/" component={FormSample}/>
-          <Route exact={true} path="/login" component={LoginPage}/>
+          <Route exact={true} path="/" component={LoginPage}/>
           <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
           <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
+          <Route exact={true} path="/formsample" component={FormSample}/>
           {
             userProfile && userProfile.type === "learnerProfile" &&
               <>
-                <Route exact={true} path="/program/respond/:id" component={ProgramLearnerPage}/>
                 <PrivateRoute exact={true} path="/dashboard" component={LearnerDashboard}/>
                 <PrivateRoute exact={true} path="/preferences" component={LearnerProfileSettingsPage}/>
+                <PrivateRoute exact={true} path="/program/enrol/:id" component={ProgramEnrolPage}/>
+                <PrivateRoute exact={true} path="/program/respond/:id" component={ProgramLearnerPage}/>
               </>
           }
           {
