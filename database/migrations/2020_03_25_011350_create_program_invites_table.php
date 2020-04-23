@@ -18,6 +18,7 @@ class CreateProgramInvitesTable extends Migration
             $table->uuid('program_id');
             $table->uuid('user_id');
             $table->uuid('learner_profile_id')->nullable();
+            $table->uuid('recipient_list_id');
 
             $table->string('email');
             $table->string('message')->nullable();
@@ -27,6 +28,7 @@ class CreateProgramInvitesTable extends Migration
 
             $table->foreign('program_id')->references('id')->on('programs');
             $table->foreign('learner_profile_id')->references('id')->on('learner_profiles');
+            $table->foreign('recipient_list_id')->references('id')->on('recipient_lists');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

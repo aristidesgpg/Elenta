@@ -1,5 +1,5 @@
 import * as React from "react";
-import JsonForm from "react-jsonschema-form";
+import JsonForm from "react-jsonschema-form-bs4";
 import DTPicker from "../../consultants/ElentaFormBuilder/fields/DTPicker";
 import {ImageWidget} from "../../consultants/ElentaFormBuilder/fields/ImageWidget";
 import {VideoWidget} from "../../consultants/ElentaFormBuilder/fields/VideoWidget";

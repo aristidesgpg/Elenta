@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Mail\ProgramModuleMailer;
 use App\Mail\ProgramModuleTriggerMail;
+use App\RecipientList;
 use Grosv\LaravelPasswordlessLogin\LoginUrl;
 use Grosv\LaravelPasswordlessLogin\PasswordlessLogin;
 use Illuminate\Database\Eloquent\Model;
@@ -105,6 +106,10 @@ class ProgramModuleSend extends BaseModel
         if (!$this->send_timestamp) {
             Mail::to($this->learner->user->email)->send(new ProgramModuleTriggerMail($this->programModule));
         }
+    }
+
+    public function recipientList(): BelongsTo {
+        return $this->belongsTo(RecipientList::class);
     }
 
     public function respondUrl() {

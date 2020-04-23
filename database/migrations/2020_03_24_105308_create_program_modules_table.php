@@ -15,8 +15,9 @@ class CreateProgramModulesTable extends Migration
     {
         Schema::create('program_modules', function (Blueprint $table) {
             $table->id();
-            $table->uuid('program_id')->nullable();
-            $table->uuid('module_id')->nullable();
+            $table->uuid('program_id');
+            $table->uuid('module_id');
+            $table->uuid('recipient_list_id');
 
             $table->string('folder')->nullable();
             $table->integer('order')->nullable();
@@ -26,6 +27,7 @@ class CreateProgramModulesTable extends Migration
 
             $table->foreign('program_id')->references('id')->on('programs');
             $table->foreign('module_id')->references('id')->on('modules');
+            $table->foreign('recipient_list_id')->references('id')->on('recipient_lists');
         });
     }
 

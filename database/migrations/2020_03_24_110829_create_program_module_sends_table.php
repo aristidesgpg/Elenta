@@ -18,6 +18,7 @@ class CreateProgramModuleSendsTable extends Migration
             $table->uuid('id')->primary();
             $table->bigInteger('program_module_id');
             $table->uuid('learner_profile_id');
+            $table->uuid('recipient_list_id');
 
             $table->enum('reason', ProgramModuleSend::REASONS);
             $table->enum('channel', ProgramModuleSend::CHANNELS);
@@ -40,6 +41,7 @@ class CreateProgramModuleSendsTable extends Migration
 
             $table->foreign('program_module_id')->references('id')->on('program_modules');
             $table->foreign('learner_profile_id')->references('id')->on('learner_profiles');
+            $table->foreign('recipient_list_id')->references('id')->on('recipient_lists');
             $table->unique(['program_module_id', 'learner_profile_id']);
         });
     }

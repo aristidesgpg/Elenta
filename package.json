@@ -88,6 +88,7 @@
   "react-player": "^1.15.3",
   "react-rangeslider": "^2.2.0",
   "react-router-dom": "latest",
+  "react-select": "^3.1.0",
   "react-sortablejs": "^1.5.1",
   "riek": "^1.0.2",
   "sortablejs": "^1.10.2",

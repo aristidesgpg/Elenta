@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Mail\ProgramModuleMailer;
+use App\RecipientList;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -125,6 +126,10 @@ class ProgramModule extends BasePivot
     public function send(): HasOne
     {
         return $this->hasOne(ProgramModuleSend::class, 'program_module_id');
+    }
+
+    public function recipientList(): BelongsTo {
+        return $this->belongsTo(RecipientList::class);
     }
 
     public function sendModule(LearnerProfile $l, string $reason, string $channel, string $subject = "", string $message = "")

@@ -54,7 +54,7 @@ class ProgramInvite extends BaseModel
     {
         parent::boot();
         static::saved(function (ProgramInvite $pi) {
-            $pi->send();
+            $pi->sendInvite();
         });
     }
 
@@ -70,7 +70,11 @@ class ProgramInvite extends BaseModel
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function send() {
+    public function programModule(): BelongsTo {
+        return $this->belongsTo(ProgramModule::class);
+    }
+
+    public function sendInvite() {
         Mail::to($this->creator->email)->send(new ProgramInviteMail($this));
     }
 }
