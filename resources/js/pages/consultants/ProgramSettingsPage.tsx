@@ -82,24 +82,64 @@ const schema = {
         }
       }
     },
+    recipient_lists: {
+      type: "array",
+      title: "Recipient Lists",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string"
+          },
+          name: {
+            type: "string",
+            title: "Name"
+          },
+          channel: {
+            type: "string",
+            title: "Channel",
+            default: "EMAIL",
+            enum: ["EMAIL"],
+            enumNames: ["Email"]
+          },
+          max_recipients: {
+            type: "integer",
+            default: 100,
+            title: "Max Recipients"
+          }
+        }
+      }
+    },
     ...tagSchema
   }
 };
 
 const consistentUiSchema = {
+  id: {
+    "ui:widget": "hidden"
+  },
+  description: {
+    "ui:widget": "textarea",
+    "ui:options": {
+      rows: 3
+    }
+  },
   company_attributes: {
     "ui:field": "companyLogoField"
+  },
+  // TODO: We need a custom ArrayFieldTemplate to render this nicely,
+  // and hide the ID
+  recipient_lists: {
+    "ui:options": {
+      addable: true,
+      orderable: false,
+      removable: true
+    }
   },
   ...tagUiSchema
 }
 
 const visibleUiSchema = {
-  id: {
-    "ui:widget": "hidden"
-  },
-  description: {
-    "ui:widget": "textarea"
-  },
   start_timestamp: {
     "ui:widget": "RDP"
   },
@@ -110,9 +150,6 @@ const visibleUiSchema = {
 };
 
 const hiddenUiSchema = {
-  id: {
-    "ui:widget": "hidden"
-  },
   start_timestamp: {
     "ui:widget": "hidden"
   },
@@ -221,7 +258,8 @@ export const ProgramSettingsPage = () => {
         setDynamicFields(df);
       }
       setFormState(immutableMerge(programQueryData.getProgram, {
-        template: programQueryData.getProgram.template.id
+        template: programQueryData.getProgram.template.id,
+        recipient_lists: programQueryData.getProgram.recipientLists
       }))
     }
   }, [programQueryData]);
@@ -281,7 +319,14 @@ export const ProgramSettingsPage = () => {
               },
               company_name: _.result(formState, 'company_attributes.company_name'),
               company_logo_url: _.result(formState, 'company_attributes.company_logo_url'),
-              tags: mutateTagData(_.result(formState, 'tags'))
+              tags: mutateTagData(_.result(formState, 'tags')),
+              recipientLists: {
+                upsert: _.result(formState, 'recipient_lists').map(rl => {
+                  return {
+                  ..._.omit(rl, '__typename')
+                  }
+                })
+              }
             })
         }
       }

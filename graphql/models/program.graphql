@@ -54,6 +54,7 @@ type Program {
     updated_at: DateTime!
     deleted_at: DateTime!
 
+    recipientLists: [RecipientList]
     programModules: [ProgramModule] @softDeletes
     modules: [Module]
     learners: [LearnerProfile]
@@ -77,8 +78,13 @@ input UpsertProgramInput {
     company_name: String
     company_logo_url: String
 
+    recipientLists: ProgramHasManyRecipientLists
     programModules: ModulesBelongsToManyPrograms
     tags: ItemMorphsToManyTags
+}
+
+input ProgramHasManyRecipientLists {
+    upsert: [UpsertRecipientListInput]
 }
 
 input ProgramBelongsToTemplate {

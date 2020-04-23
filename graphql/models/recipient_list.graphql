@@ -1,0 +1,26 @@
+type RecipientList {
+    id: ID!
+    program: Program
+
+    name: String!
+    channel: String!
+    max_recipients: Int
+
+    created_at: DateTime!
+    updated_at: DateTime!
+    deleted_at: DateTime!
+}
+
+input UpsertRecipientListInput {
+    id: ID
+
+    program: RecipientListBelongsToProgram
+
+    name: String
+    channel: String
+    max_recipients: Int
+}
+
+input RecipientListBelongsToProgram {
+    connect: ID!
+}

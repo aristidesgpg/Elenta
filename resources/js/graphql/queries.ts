@@ -308,6 +308,12 @@ export const GET_PROGRAM = gql`
           max_sends
         }
       }
+      recipientLists {
+        id
+        name
+        channel
+        max_recipients
+      }
       programModules {
         id
         module_variables
