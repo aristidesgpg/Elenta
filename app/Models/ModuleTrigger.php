@@ -48,6 +48,10 @@ class ModuleTrigger extends BaseModel
 
     protected $guarded = [];
 
+    protected $casts = [
+        'start_timestamp' => 'datetime',
+    ];
+
     public function module(): BelongsTo {
         return $this->belongsTo(Module::class);
     }

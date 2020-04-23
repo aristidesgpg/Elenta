@@ -78,12 +78,15 @@ type TemplateModulePivot {
     order: String
 }
 
+
 type TemplateModule {
     id: ID!
     module: Module
 
     folder: String
     order: Int!
+
+    module_variables: String
 
     created_at: DateTime!
     updated_at: DateTime!

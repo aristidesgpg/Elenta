@@ -10,6 +10,10 @@ export const GET_TEMPLATE = gql`
       is_public
       dynamic_fields
       created_at
+      templateModules {
+        id
+        module_variables
+      }
       modules {
         id
         title
@@ -296,6 +300,7 @@ export const GET_PROGRAM = gql`
       }
       programModules {
         id
+        module_variables
         module {
           id
           title
@@ -479,6 +484,7 @@ export const CREATE_CONSULTANT_PROFILE = gql`
         start_timestamp
         can_invite
         is_public
+        progress
         programModules {
           id
           module {
@@ -536,6 +542,7 @@ export const CREATE_LEARNER_PROFILE = gql`
         start_timestamp
         can_invite
         is_public
+        progress
         programModules {
           id
           module {
@@ -587,6 +594,7 @@ export const GET_LEARNER_PROFILE = gql`
         start_timestamp
         can_invite
         is_public
+        progress
         programModules {
           id
           module {
@@ -638,6 +646,7 @@ export const UPDATE_LEARNER_PROFILE = gql`
         start_timestamp
         can_invite
         is_public
+        progress
         programModules {
           id
           module {
@@ -682,6 +691,7 @@ export const GET_CONSULTANT_PROFILE = gql`
         start_timestamp
         can_invite
         is_public
+        progress
         programModules {
           id
           module {
@@ -732,6 +742,7 @@ export const UPDATE_CONSULTANT_PROFILE = gql`
         start_timestamp
         can_invite
         is_public
+        progress
         programModules {
           id
           module {

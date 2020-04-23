@@ -29,18 +29,17 @@ export const ProgramCard = ({program}) => {
               <Card.Text>{formatDate(program.start_timestamp)}</Card.Text>
             </Col>
             <Col>
-              <div className="text-muted">End Date</div>
-              <Card.Text>{formatDate(program.start_timestamp)}</Card.Text>
-            </Col>
-            <Col>
               <div className="text-muted">Learners</div>
-              <Card.Text>{program.learners ? program.learners.length : 0}</Card.Text>
+              <Card.Text>
+                {program.learners ? program.learners.length : 0}
+                {program.format == 'SELF_DIRECTED' ? "" : `/${program.max_learners}`}
+              </Card.Text>
             </Col>
           </Row>
         </Container>
         <Container className="pl-0 pr-0 pb-3">
           <div className="text-muted">Progress</div>
-          <ProgressBar now={60} label={"60%"}/>
+          <ProgressBar now={Math.round(program.progress*100)} label={`${Math.round(program.progress)}%`}/>
         </Container>
       </Card.Body>
     </Card>

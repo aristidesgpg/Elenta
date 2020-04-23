@@ -60,12 +60,20 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Program withoutTrashed()
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Program whereCanInvite($value)
+ * @property string $description
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Program whereDescription($value)
  */
 class Program extends BaseModel {
     use SoftDeletes;
     use UsesUuid;
 
     protected $guarded = [];
+    protected $appends = ['progress'];
+
+    public function getProgressAttribute() {
+        $pms = $this->programModules()->count();
+        return $pms ? $this->programModules()->whereHas('send')->count()/$pms : 0;
+    }
 
     public function owner(): BelongsTo {
         return $this->belongsTo(ConsultantProfile::class, 'consultant_profile_id');

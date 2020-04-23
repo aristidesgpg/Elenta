@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -48,6 +49,7 @@ use Illuminate\Support\Facades\Mail;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ProgramModule withoutTrashed()
  * @mixin \Eloquent
  * @property-read \App\Models\ProgramModuleSend $send
+ * @property-read mixed $module_variables
  */
 class ProgramModule extends BasePivot
 {
@@ -55,6 +57,7 @@ class ProgramModule extends BasePivot
 
     protected $table = "program_modules";
     protected $guarded = [];
+    protected $appends = ['module_variables'];
     protected $attributes = [
         'folder' => '',
         'order' => 0
@@ -77,6 +80,36 @@ class ProgramModule extends BasePivot
                 $programModule->order = $amount['m'] == null ? 0 : $amount['m'] + 1;
             }
         });
+    }
+
+    /**
+     * Return a list of variables that can be used in the conditions
+     * or text fields of the associated module. These are the input fields
+     * from other modules in the same program, which have been sent before this one.
+     */
+    public function getModuleVariablesAttribute() {
+        return "{}";
+        $result = [];
+        /** @var ProgramModule $this_pm */
+        $this_pm = $this;
+        // TODO: add filter for programs that are running after
+        $this->program->programModules->filter(function(ProgramModule $pm) use ($this_pm) {
+            return Carbon::parse($pm->module->trigger->start_timestamp)->lte($this_pm->start_timestamp);
+        })->each(function (ProgramModule $pm) use ($result) {
+                $content = json_decode($pm->module->content);
+                // TODO: make sure input fields, get type of input field, get possible values for input field
+                if ($schema = $content['schema']) {
+                    foreach ($schema['properties'] as $field => $props) {
+                        $result[] = [
+                            'program_module_id' => $pm->id,
+                            'field_name' => $field,
+                            'type' => $props['type'],
+                            'available_values' => ['a', 'b']
+                        ];
+                    }
+                }
+            });
+        return $result;
     }
 
     public function program(): BelongsTo

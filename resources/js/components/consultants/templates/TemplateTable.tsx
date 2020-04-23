@@ -19,8 +19,8 @@ export const TemplateTable = ({templates}) => {
       return {
         'id': t.id,
         'title': <Link to={`/template/content/${t.id}`}>{t.title}</Link>,
-        'is_public': t.is_public,
-        'can_request': t.can_request
+        'is_public': t.is_public ? "Yes" : "No",
+        'can_request': t.can_request ? "Yes" : "No"
       };
     });
 

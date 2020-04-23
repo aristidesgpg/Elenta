@@ -44,6 +44,8 @@ type Program {
     is_public: Boolean
     dynamic_fields: String
 
+    progress: Float
+
     pivot: ModulePivot
 
     created_at: DateTime!
@@ -103,6 +105,8 @@ type ProgramModule {
     created_at: DateTime!
     updated_at: DateTime!
     deleted_at: DateTime!
+
+    module_variables: String
 
     reminders: [ModuleReminder] @viewPolicyFilter
     triggers: [ModuleTrigger] @viewPolicyFilter
