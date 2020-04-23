@@ -19,8 +19,18 @@ export function clone(obj: object) {
 
 export function immutableMerge(a, b) {
   let n = _.cloneDeep(a);
-  return _.merge(n, b);
+  return _.mergeWith(n, b, mergeCustomiser);
 };
+
+// currently hardcoded to handle only empty tags array
+// if a or b is not an array that holds tags, it just returns the normal merged function
+function mergeCustomiser(a, b) {
+  if (Array.isArray(b) && b[0]?.__typename === 'Tag' ||
+    Array.isArray(a) && a[0]?.__typename == 'Tag') {
+    return b;
+  }
+  return;
+}
 
 export function unique(array) {
   return Array.from(new Set(array));

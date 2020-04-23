@@ -220,15 +220,7 @@ export const ProgramSettingsPage = () => {
       } else {
         setDynamicFields(df);
       }
-
-      // TODO: probably can write this out better
-      //       the tags had an extra property __typename that
-      //       was screwing with typeahead (which did not have this property)
-      //       Also seen in TemplateSettingsPage as well
-      let queryDataProgram = programQueryData.getProgram;
-      queryDataProgram.tags = queryDataProgram.tags.map((tag) => _.omit(tag, '__typename'));
-
-      setFormState(immutableMerge(queryDataProgram, {
+      setFormState(immutableMerge(programQueryData.getProgram, {
         template: programQueryData.getProgram.template.id
       }))
     }

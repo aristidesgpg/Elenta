@@ -18,7 +18,8 @@ export const Tags = (props) => {
     setTagOptions(queryData.tags.map((tag) => {
       return {
         id: tag.id,
-        label: tag.label
+        label: tag.label,
+        __typename: "Tag"
       }
     }));
   }

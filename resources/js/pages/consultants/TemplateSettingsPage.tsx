@@ -100,13 +100,7 @@ export const TemplateSettingsPage = () => {
       if (dynamicFields.schema === undefined) {
         dynamicFields = defaultDynamicFields;
       }
-      // TODO: probably can write this out better
-      //       the tags had an extra property __typename that
-      //       was screwing with typeahead (which did not have this property)
-      //       Also seen in ProgramSettingsPage as well
-      let queryDataTemplate = queryData.getTemplate;
-      queryDataTemplate.tags = queryDataTemplate.tags.map((tag) => _.omit(tag, '__typename'));
-      setFormState(immutableMerge(queryDataTemplate, {
+      setFormState(immutableMerge(queryData.getTemplate, {
         dynamic_fields: {
           schema: dynamicFields.schema,
           uiSchema: dynamicFields.uiSchema
