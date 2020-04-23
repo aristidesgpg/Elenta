@@ -26,37 +26,23 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
     });
     const [tree, setTree] = useState<TreeData>({
       rootId: "root-list",
-      items: {
-        "root-list": {
-          id: "root-list",
-          hasChildren: true,
-          isExpanded: false,
-          isChildrenLoading: false,
-          data: {
-            name: "",
-            isFolder: false,
-            id: "root-list"
-          },
-          children: []
-        },
-      }
+      items: {}
     });
     const [showModal, setShowModal] = useState(false);
     const [editableFolder, setEditableFolder] = useState(null);
 
     useEffect(() => {
-      const newTree = modules.sort((a, b) => parseInt(a.pivot.order) - parseInt(b.pivot.order))
+      const newItems = modules.sort((a, b) => parseInt(a.pivot.order) - parseInt(b.pivot.order))
         .reduce((acc, module) => {
           const folder = module.pivot.folder;
           if (folder !== null) {
-            const folderItem = acc.items[folder];
+            const folderItem = acc[folder];
 
             if (folderItem) {
-              acc.items[folder].children.push(module.id);
+              acc[folder].children.push(module.id);
             } else {
-              acc.items["root-list"].children.push(module.id);
-              acc.items["root-list"].children.push(folder);
-              acc.items[folder] = {
+              acc["root-list"].children.push(folder);
+              acc[folder] = {
                 id: folder,
                 hasChildren: true,
                 isExpanded: false,
@@ -71,9 +57,9 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
               }
             }
           } else {
-            acc.items["root-list"].children.push(module.id);
+            acc["root-list"].children.push(module.id);
           }
-          acc.items[module.id] = {
+          acc[module.id] = {
             id: module.id,
             hasChildren: false,
             isExpanded: false,
@@ -86,34 +72,33 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
             },
             children: []
           };
-          console.log(acc);
           return acc;
-        }, {...tree});
-      setTree(newTree);
-      const items = modules.sort((a, b) => parseInt(a.pivot.order) - parseInt(b.pivot.order))
-        .reduce((acc, module) => {
-          const folder = module.pivot.folder;
-          if (folder !== null) {
-            const folderIndex = acc.findIndex(m => m.id === folder);
-
-            if (folderIndex >= 0) {
-              acc[folderIndex].modules.push(module);
-            } else {
-              acc.push({id: folder, title: folder, isFolder: true, modules: [module]});
-            }
-          } else {
-            acc.push(module);
+        }, {
+          "root-list": {
+            id: "root-list",
+            hasChildren: true,
+            isExpanded: false,
+            isChildrenLoading: false,
+            data: {
+              name: "",
+              isFolder: false,
+              id: "root-list"
+            },
+            children: []
           }
-          return acc;
-        }, []);
-
-      setState({items});
+        });
+      const newTree = {...tree, items: newItems};
+      setTree(newTree);
     }, [modules]);
 
-    const saveOrder = (items) => {
+    const saveOrder = (newTree) => {
       let order = 1;
-      const modules = items.reduce((acc, item) => {
-        const itemModules = extractModules(item);
+      const {items} = newTree;
+
+
+      const modules = items["root-list"].children.reduce((acc, item) => {
+        const itemModules = extractModules(items[item]);
+
         return [...acc, ...itemModules.map(module => {
           return {...module.pivot, order: order++};
         })];
@@ -122,6 +107,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       saveModulesOrder(modules);
     };
 
+    //TODO fix rename folder
     const renameFolder = ({id, folder}) => {
       const updatedItems = [...state.items];
       const folderIndex = updatedItems.findIndex(m => m.id === id);
@@ -141,52 +127,31 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       saveOrder(updatedItems);
     };
 
-    // const extractModules = (item) => {
-    //   return item.isFolder
-    //     ? [...item.modules.map(module => {
-    //       return {
-    //         id: module.id,
-    //         pivot: {
-    //           id: module.pivot.id,
-    //           folder: item.title
-    //         }
-    //       };
-    //     })]
-    //     : [{
-    //       id: item.id,
-    //       pivot: {
-    //         id: item.pivot.id,
-    //         folder: ''
-    //       }
-    //     }];
-    // };
-
-  const extractModules = (item) => {
-    return item.data.isFolder
-      ? [...item.children.map(module => {
-        return {
-          id: module,
+    const extractModules = (item) => {
+      return item.data.isFolder
+        ? [...item.children.map(module => {
+          return {
+            id: module,
+            pivot: {
+              id: item.data.pivot.id,
+              folder: item.data.name
+            }
+          };
+        })]
+        : [{
+          id: item.id,
           pivot: {
             id: item.data.pivot.id,
-            folder: item.data.name
+            folder: ''
           }
-        };
-      })]
-      : [{
-        id: module,
-        pivot: {
-          id: item.data.pivot.id,
-          folder: ''
-        }
-      }];
-  };
+        }];
+    };
 
     const duplicateModulesHandler = (item) => {
       duplicateModules([...extractModules(item).map(module => module.id)]);
     };
 
     const deleteModulesHandler = (item) => {
-      console.log(item)
       deleteModules([...extractModules(item).map(module => module.pivot.id)]);
     };
 
@@ -219,7 +184,11 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       newDestTree.items[removedItemId] = movingItem;
       childItems.forEach(item => (newDestTree.items[item.id] = item));
 
+      const destinationItem = newDestTree.items[destinationPosition.parentId];
+      newDestTree.items[removedItemId].data.pivot.folder = destinationItem.data.isFolder ? destinationPosition.parentId : "";
+
       setTree(newDestTree);
+      saveOrder(newDestTree);
     };
 
     const getAllItemChildren = (tree, itemId) => {

@@ -48,6 +48,12 @@ const List = (props) => {
     return tree;
   };
 
+  const onBeforeDragStart = (result) => {
+    const finalTree = closeParentIfNeeded(tree, result.draggableId);
+    const newFlattenedTree = flattenTree(finalTree);
+    setFlattenedTree(newFlattenedTree);
+  };
+
   const onDragStart = result => {
     const {onDragStart} = props;
     dragState = {
@@ -97,7 +103,7 @@ const List = (props) => {
   };
 
   const onDragEnd = result => {
-    const {onDragEnd : onDragEndRoot} = props;
+    const {onDragEnd: onDragEndRoot} = props;
     expandTimer.stop();
     const finalDragState = {
       ...dragState,
@@ -251,9 +257,9 @@ const List = (props) => {
   const renderDraggableItem = flatItem => (provided, snapshot) => {
     const {renderItem, onExpand, onCollapse, offsetPerLevel} = props;
     const currentPath = calculateEffectivePath(flatItem, snapshot);
-       return (
+    return (
       <TreeItem
-        key={flatItem.item.id}
+        key={`${flatItem.item.id}-${flatItem.item.data.pivot.id}`}
         item={flatItem.item}
         path={currentPath}
         onExpand={onExpand}
@@ -274,6 +280,7 @@ const List = (props) => {
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       onDragUpdate={onDragUpdate}
+      onBeforeCapture={onBeforeDragStart}
     >
       <div key={listId}>
         <Droppable
