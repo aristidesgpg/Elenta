@@ -50,6 +50,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read int|null $reminders_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ModuleTrigger[] $triggers
  * @property-read int|null $triggers_count
+ * @property-read \App\Models\ModuleReminder $reminder
+ * @property-read \App\Models\ModuleTrigger $trigger
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
  * @property-read int|null $tags_count
  */

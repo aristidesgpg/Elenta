@@ -128,7 +128,7 @@ export const ModuleEditor =
               <Col md={9}>
                 <Form>
                   <Form.Group>
-                    <Form.Label>Title: </Form.Label>
+                    <h5>Title</h5>
                     <RIEInput
                       value={activeModule ? activeModule.title : ""}
                       change={updateModuleList}
@@ -136,7 +136,7 @@ export const ModuleEditor =
                     />
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>Description: </Form.Label>
+                    <h5>Description</h5>
                     <RIETextArea
                       value={activeModule ? activeModule.description || "" : ""}
                       change={updateModuleList}

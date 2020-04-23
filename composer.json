@@ -27,7 +27,8 @@
         "nuwave/lighthouse": "^4.11",
         "pusher/pusher-php-server": "^4.1",
         "barryvdh/laravel-ide-helper": "^2.6",
-        "laravel/telescope": "^3.2"
+        "laravel/telescope": "^3.2",
+        "ext-json": "*"
     },
     "require-dev": {
         "beyondcode/laravel-er-diagram-generator": "^1.4",

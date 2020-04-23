@@ -16,7 +16,6 @@ import RepeaterEditField from "./repeater/RepeaterEditField";
 import CustomFieldTemplate from "./CustomFieldTemplate";
 import SliderField from "./SliderField";
 
-import {withTheme} from "@rjsf/core";
 Modal.setAppElement('#root')
 
 export function pickKeys(source, target, excludedKeys) {

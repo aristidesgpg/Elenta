@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Signifly\PivotEvents\HasPivotEvents;
 
@@ -50,6 +51,7 @@ class TemplateModule extends BasePivot
     ];
     protected $table = "template_modules";
     protected $guarded = [];
+    protected $appends = ['module_variables'];
     protected $attributes = [
         'folder' => '',
         'order' => 0
@@ -72,6 +74,36 @@ class TemplateModule extends BasePivot
                 $templateModule->order = $amount['m'] == null ? 0 : $amount['m'] + 1;
             }
         });
+    }
+
+    /**
+     * Return a list of variables that can be used in the conditions
+     * or text fields of the associated module. These are the input fields
+     * from other modules in the same template, which have been sent before this one.
+     */
+    public function getModuleVariablesAttribute() {
+        return "{}";
+        $result = [];
+        /** @var TemplateModule $this_tm */
+        $this_tm = $this;
+        // TODO: add filter for templates that are running after
+        $this->template->templateModules->filter(function(TemplateModule $tm) use ($this_tm) {
+            return Carbon::parse($tm->module->trigger->start_timestamp)->lte($this_tm->start_timestamp);
+        })->each(function (TemplateModule $tm) use ($result) {
+            $content = json_decode($tm->module->content);
+            // TODO: make sure input fields, get type of input field, get possible values for input field
+            if ($schema = $content['schema']) {
+                foreach ($schema['properties'] as $field => $props) {
+                    $result[] = [
+                        'template_module_id' => $tm->id,
+                        'field_name' => $field,
+                        'type' => $props['type'],
+                        'available_values' => ['a', 'b']
+                    ];
+                }
+            }
+        });
+        return $result;
     }
 
     public function module(): BelongsTo {

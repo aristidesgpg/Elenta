@@ -47,6 +47,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateModule[] $templateModules
  * @property-read int|null $template_modules_count
+ * @property string $description
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Template whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Template whereDynamicFields($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
  * @property-read int|null $tags_count
  */

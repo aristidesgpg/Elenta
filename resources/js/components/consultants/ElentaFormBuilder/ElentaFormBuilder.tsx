@@ -7,7 +7,7 @@ import FormActions from "./FormActions";
 import EditableField from "./fields/EditableField";
 import TitleField from "./fields/TitleField";
 import DescriptionField from "./fields/DescriptionField";
-import {TextField, RichTextWidget} from "./fields/TextField";
+import { TextField } from "./fields/TextField";
 import _ from "lodash";
 
 import "react-datetime/css/react-datetime.css";
