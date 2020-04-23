@@ -4,7 +4,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    upsertTemplate(input: UpsertTemplateInput! @spread): Template! @upsert #@can(ability: "update", find: "id")
+    upsertTemplate(input: UpsertTemplateInput! @spread): Template! @upsert @can(ability: "update", find: "id")
     updateTemplateModules(input: UpdateTemplateModulesInput @spread): Template! @update @can(ability: "update", find: "id")
     duplicateTemplateModules(input: DuplicateTemplateModulesInput @spread): Template! @can(ability: "update", find: "id") @field(resolver: "App\\GraphQL\\Resolvers\\DuplicateTemplateModulesResolver@resolve")
 }
