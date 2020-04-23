@@ -102,7 +102,7 @@ class LearnerProfilePolicy
         if ($args['id']) {
             return $user->can('update', LearnerProfile::find($args['id']));
         } else {
-            return $user->can('create');
+            return $user->can('create', LearnerProfile::class);
         }
     }
 }

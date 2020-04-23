@@ -96,7 +96,7 @@ class TemplateModulePolicy
         if ($args['id']) {
             return $user->can('update', TemplateModule::find($args['id']));
         } else {
-            return $user->can('create');
+            return $user->can('create', TemplateModule::class);
         }
     }
 }

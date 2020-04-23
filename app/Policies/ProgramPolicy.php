@@ -102,7 +102,7 @@ class ProgramPolicy
         if ($args['id']) {
             return $user->can('update', Program::find($args['id']));
         } else {
-            return $user->can('create');
+            return $user->can('create', Program::class);
         }
     }
 }

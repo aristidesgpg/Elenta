@@ -22,6 +22,7 @@ import {
   CURRENT_USER_PROFILE,
 } from "../../../graphql/queries";
 import './ElentaNav.scss';
+import {ElentaCachePersistor, ElentaClient} from "../../../app";
 
 export const ElentaNav = () => {
   const location = useLocation();
@@ -111,11 +112,19 @@ export const ElentaNav = () => {
     axios.post('/logout')
       .then(function (response) {
         localStorage.removeItem('token');
-        window.location.reload();
+        (async () => {
+          await ElentaClient.clearStore();
+          await ElentaCachePersistor.purge()
+        })();
+        window.location.replace('/');
       })
       .catch(function (error) {
         localStorage.removeItem('token');
-        window.location.reload();
+        (async () => {
+          await ElentaClient.clearStore();
+          await ElentaCachePersistor.purge()
+        })();
+        window.location.replace('/');
       });
   };
 

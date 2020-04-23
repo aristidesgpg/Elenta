@@ -98,7 +98,7 @@ class ProgramModulePolicy
         if ($args['id']) {
             return $user->can('update', ProgramModule::find($args['id']));
         } else {
-            return $user->can('create');
+            return $user->can('create', ProgramModule::class);
         }
     }
 }

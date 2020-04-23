@@ -98,7 +98,7 @@ class ProgramModuleSendPolicy
         if ($args['id']) {
             return $user->can('update', ProgramModuleSend::find($args['id']));
         } else {
-            return $user->can('create');
+            return $user->can('create', ProgramModuleSend::class);
         }
     }
 }

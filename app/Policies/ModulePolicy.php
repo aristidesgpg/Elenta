@@ -109,7 +109,7 @@ class ModulePolicy
         if ($args['id']) {
             return $user->can('update', Module::find($args['id']));
         } else {
-            return $user->can('create');
+            return $user->can('create', Module::class);
         }
     }
 }

@@ -8,6 +8,7 @@ import {Typeahead} from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import {Form} from "react-bootstrap";
 
+// TODO: Change to use react-select
 export const Tags = (props) => {
   const {loading: queryLoading, error: queryError, data: queryData} = useQuery(GET_ALL_TAGS);
   const [tagOptions, setTagOptions] = useState([]);
@@ -29,7 +30,7 @@ export const Tags = (props) => {
   };
 
   return (
-    <LoadingContainer loading={[queryLoading]} error={[queryError]}>
+    <div>
       <Form.Label>Tags</Form.Label>
       <Typeahead
         id="tagsForm"
@@ -39,8 +40,7 @@ export const Tags = (props) => {
         options={tagOptions}
         placeholder="Choose some tags"
       />
-
-    </LoadingContainer>
+    </div>
   )
 };
 

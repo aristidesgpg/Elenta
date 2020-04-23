@@ -103,7 +103,7 @@ class ProgramLearnerPolicy
         if ($args['id']) {
             return $user->can('update', ProgramLearner::find($args['id']));
         } else {
-            return $user->can('create');
+            return $user->can('create', ProgramLearner::class);
         }
     }
 }

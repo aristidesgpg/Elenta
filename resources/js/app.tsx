@@ -3,7 +3,7 @@ import {get} from "lodash";
 
 import ApolloClient from 'apollo-client';
 import {defaultDataIdFromObject, InMemoryCache} from 'apollo-cache-inmemory';
-import {persistCache} from 'apollo-cache-persist'
+import {CachePersistor} from 'apollo-cache-persist'
 import {createHttpLink} from 'apollo-link-http';
 import {ApolloProvider, useQuery} from '@apollo/react-hooks';
 
@@ -43,12 +43,10 @@ const cache = new InMemoryCache({
   }
 });
 
-(async () => {
-  await persistCache({
-    cache,
-    storage: window.localStorage,
-  })
-})();
+export const ElentaCachePersistor = new CachePersistor({
+  cache,
+  storage: window.localStorage,
+});
 
 export const ElentaClient = new ApolloClient({
   link: authLink.concat(httpLink),
@@ -75,9 +73,9 @@ export const App = () => {
     if (token) {
       (async () => {
         const {data} = await ElentaClient.query({query: GET_ME});
-        const {data: {userProfile}} = await ElentaClient.query({query: CURRENT_USER_PROFILE});
+        const {data: userProfileData} = await ElentaClient.query({query: CURRENT_USER_PROFILE});
 
-        if (!userProfile) {
+        if (!userProfileData || !userProfileData.userProfile) {
           const consultantProfile = get(data, 'me.consultantProfile', null);
           const learnerProfile = get(data, 'me.learnerProfile', null);
 

@@ -41,7 +41,7 @@ export const CompanyLogoField = (props) => {
       }
       const tempState = {
         ...props.formData,
-        company_logo_url
+        company_logo_url: `${company_logo_url}?size=500`
       };
       props.onChange(tempState)
     })
@@ -69,7 +69,7 @@ export const CompanyLogoField = (props) => {
           placeholder="Enter the company logo URL" />
       </Form.Group>
       {props.formData.company_logo_url &&
-      <img src={props.formData.company_logo_url}  width="100px" height="100px"/>}
+      <img src={props.formData.company_logo_url} height="30px"/>}
     </div>
   );
 };
