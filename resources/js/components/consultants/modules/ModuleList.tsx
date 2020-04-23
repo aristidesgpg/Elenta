@@ -34,6 +34,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
           isChildrenLoading: false,
           data: {
             name: "",
+            isFolder: false,
             id: "root-list"
           },
           children: []
@@ -58,12 +59,13 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
               acc.items[folder] = {
                 id: folder,
                 hasChildren: true,
-                isFolder: true,
                 isExpanded: false,
                 isChildrenLoading: false,
                 data: {
+                  isFolder: true,
                   name: folder,
-                  id: folder
+                  id: folder,
+                  pivot: module.pivot
                 },
                 children: [module.id]
               }
@@ -74,15 +76,17 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
           acc.items[module.id] = {
             id: module.id,
             hasChildren: false,
-            isFolder: false,
             isExpanded: false,
             isChildrenLoading: false,
             data: {
+              isFolder: false,
               name: module.title,
-              id: module.id
+              id: module.id,
+              pivot: module.pivot
             },
             children: []
           };
+          console.log(acc);
           return acc;
         }, {...tree});
       setTree(newTree);
@@ -137,31 +141,52 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       saveOrder(updatedItems);
     };
 
-    const extractModules = (item) => {
-      return item.isFolder
-        ? [...item.modules.map(module => {
-          return {
-            id: module.id,
-            pivot: {
-              id: module.pivot.id,
-              folder: item.title
-            }
-          };
-        })]
-        : [{
-          id: item.id,
+    // const extractModules = (item) => {
+    //   return item.isFolder
+    //     ? [...item.modules.map(module => {
+    //       return {
+    //         id: module.id,
+    //         pivot: {
+    //           id: module.pivot.id,
+    //           folder: item.title
+    //         }
+    //       };
+    //     })]
+    //     : [{
+    //       id: item.id,
+    //       pivot: {
+    //         id: item.pivot.id,
+    //         folder: ''
+    //       }
+    //     }];
+    // };
+
+  const extractModules = (item) => {
+    return item.data.isFolder
+      ? [...item.children.map(module => {
+        return {
+          id: module,
           pivot: {
-            id: item.pivot.id,
-            folder: ''
+            id: item.data.pivot.id,
+            folder: item.data.name
           }
-        }];
-    };
+        };
+      })]
+      : [{
+        id: module,
+        pivot: {
+          id: item.data.pivot.id,
+          folder: ''
+        }
+      }];
+  };
 
     const duplicateModulesHandler = (item) => {
       duplicateModules([...extractModules(item).map(module => module.id)]);
     };
 
     const deleteModulesHandler = (item) => {
+      console.log(item)
       deleteModules([...extractModules(item).map(module => module.pivot.id)]);
     };
 
@@ -288,7 +313,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
           onDragEnd={onDragEnd}
           offsetPerLevel={16}
           isDragEnabled
-          isNestingEnabled
+          isNestingEnabled={true}
         />
         <RenameFolderModal show={showModal}
                            onClose={setShowModal}

@@ -36,7 +36,7 @@ body {
 .editable-field label:hover {
     cursor: move;
 }
-  
+
 .editable-field-actions {
     text-align: right;
     padding-left: 0;
@@ -46,7 +46,7 @@ body {
     margin-left: .5em;
 }
 
-.editable-field-actions .btn {    
+.editable-field-actions .btn {
     margin-left: 6px;
 }
 
@@ -65,16 +65,16 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
     padding-right: 0px!important;
-    padding-left: 0px!important;     
+    padding-left: 0px!important;
 }
 
 .editfield-title strong{
-    margin-left: 5px;    
+    margin-left: 5px;
 }
 
 .editfield-body{
     border: 1px dashed #ccc;
-    padding-top: 10px;    
+    padding-top: 10px;
 }
 
 .panel-heading
@@ -83,16 +83,16 @@ body {
 }
 
 .panel-heading .panel-title {
-    display: inline-block;      
+    display: inline-block;
 }
 
 .panel-body{
-      
+
 }
 
 .preview-title {
-    display: inline-block;  
-    margin-bottom: 10px;    
+    display: inline-block;
+    margin-bottom: 10px;
 }
 
 /***background-color: lightyellow;  **/
@@ -124,5 +124,8 @@ body {
     text-align: center;
 }
 
+.module-folder-expand:hover{
+    opacity: 0.3;
+}
 
 

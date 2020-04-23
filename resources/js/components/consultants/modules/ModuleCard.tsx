@@ -10,27 +10,44 @@ export const ModuleCard = (props) => {
   return (
     <ListGroupItem as="li"
                    data-id={item.id}
-                   action active={isActive} onClick={() => setActiveModule(module)}>
+                   action active={isActive} onClick={() => setActiveModule(item)}>
       <div className="d-flex justify-content-between">
-        <span onClick={() => (item.isFolder && renameFolder) ? renameFolder(module) : () => null}>
+        <div>
+          <div>
+           <span onClick={() => (item.isFolder && renameFolder) ? renameFolder(item) : () => null}>
            {item.data.name}
+           </span>
+          </div>
+          {item.hasChildren &&
+          <div>
+            <span>
+              {item.children.length} Modules
+            </span>
+          </div>
+          }
+        </div>
 
+        <div className="actions d-flex flex-column align-items-end">
+          <div className="mb-2">
+            <Button variant="outline-dark" size="sm"
+                    onClick={() => duplicateModules(item)}>
+              <i className="fas fa-copy"/>
+            </Button>
+            <Button variant="outline-dark" size="sm"
+                    onClick={() => deleteModules(item)}>
+              <i className="fas fa-trash"/>
+            </Button>
+          </div>
           {item.hasChildren && (
-            <div onClick={() => (item.isExpanded ? onCollapse() : onExpand())}>
-              {item.isExpanded ? "-" : "+"}
-            </div>
+            <span
+              className="module-folder-expand mr-2"
+              onClick={() => (item.isExpanded ? onCollapse() : onExpand())}>
+              {item.isExpanded
+                ? <i className="fas fa-minus"/>
+                : <i className="fas fa-chevron-down"/>
+              }
+            </span>
           )}
-        </span>
-
-        <div className="actions">
-          <Button variant="outline-dark" size="sm"
-                  onClick={() => duplicateModules(module)}>
-            <i className="fas fa-copy"/>
-          </Button>
-          <Button variant="outline-dark" size="sm"
-                  onClick={() => deleteModules(module)}>
-            <i className="fas fa-trash"/>
-          </Button>
         </div>
       </div>
     </ListGroupItem>

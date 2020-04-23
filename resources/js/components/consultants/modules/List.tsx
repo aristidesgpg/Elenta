@@ -97,7 +97,7 @@ const List = (props) => {
   };
 
   const onDragEnd = result => {
-    const {onDragEnd} = props;
+    const {onDragEnd : onDragEndRoot} = props;
     expandTimer.stop();
     const finalDragState = {
       ...dragState,
@@ -128,8 +128,12 @@ const List = (props) => {
         destFlatTree,
         finalDragState
         );
-    onDragEnd(sourcePosition, destinationPosition);
-    dragState = null;
+    //Nesting only into folders
+    const destinationItemTree = tree.items[destinationPosition.parentId];
+    if (destinationItemTree.data.isFolder || destinationPosition.parentId === 'root-list') {
+      onDragEndRoot(sourcePosition, destinationPosition);
+      dragState = null;
+    }
   };
 
   const onPointerMove = () => {
@@ -247,10 +251,7 @@ const List = (props) => {
   const renderDraggableItem = flatItem => (provided, snapshot) => {
     const {renderItem, onExpand, onCollapse, offsetPerLevel} = props;
     const currentPath = calculateEffectivePath(flatItem, snapshot);
-    if (snapshot.isDropAnimating) {
-      onDropAnimating();
-    }
-    return (
+       return (
       <TreeItem
         key={flatItem.item.id}
         item={flatItem.item}
