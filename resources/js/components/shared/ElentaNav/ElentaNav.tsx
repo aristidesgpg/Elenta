@@ -69,9 +69,7 @@ export const ElentaNav = () => {
   };
 
   const redirectToProfile = () => {
-    if (location.pathname.indexOf("/preferences", 0) === -1) {
-      history.push("/preferences");
-    }
+    history.push("/dashboard");
   };
 
   const createProfile = (accountType) => {

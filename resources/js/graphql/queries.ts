@@ -519,6 +519,14 @@ export const CREATE_CONSULTANT_PROFILE = gql`
   }
 `;
 
+export const CREATE_PROGRAM_LEARNER = gql`
+  mutation createProgramLearner($input : CreateProgramLearnerInput!) {
+    createProgramLearner(input: $input) {
+      id
+    }
+  }
+`;
+
 export const CREATE_LEARNER_PROFILE = gql`
   mutation createLearnerProfile($input: CreateLearnerProfileInput!) {
     createLearnerProfile(input: $input) {
@@ -571,6 +579,8 @@ export const CREATE_LEARNER_PROFILE = gql`
   }
 `;
 
+// TODO: Hide invites that have been accepted by adding ProgramLearner relation
+// on invites and checking if it exists
 export const GET_LEARNER_PROFILE = gql`
   query getLearnerProfile($user_id : ID!) {
     getLearnerProfile(user_id: $user_id) {
@@ -583,6 +593,7 @@ export const GET_LEARNER_PROFILE = gql`
         program {
           id
           title
+          format
           start_timestamp
         }
       }

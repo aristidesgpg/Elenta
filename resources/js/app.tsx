@@ -3,11 +3,12 @@ import {get} from "lodash";
 
 import ApolloClient from 'apollo-client';
 import {defaultDataIdFromObject, InMemoryCache} from 'apollo-cache-inmemory';
+import {persistCache} from 'apollo-cache-persist'
 import {createHttpLink} from 'apollo-link-http';
-import {ApolloProvider} from '@apollo/react-hooks';
+import {ApolloProvider, useQuery} from '@apollo/react-hooks';
 
 import {setContext} from "apollo-link-context";
-import {GET_ME} from "./graphql/queries";
+import {CURRENT_USER_PROFILE, GET_ME} from "./graphql/queries";
 import LoadingContainer from "./components/hoc/LoadingContainer/LoadingContainer";
 import Routes from "./Routes";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
@@ -42,10 +43,30 @@ const cache = new InMemoryCache({
   }
 });
 
+(async () => {
+  await persistCache({
+    cache,
+    storage: window.localStorage,
+  })
+})();
+
 export const ElentaClient = new ApolloClient({
   link: authLink.concat(httpLink),
   cache,
-  resolvers: {}
+  resolvers: {},
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'cache-and-network',
+      errorPolicy: 'all',
+    },
+    query: {
+      fetchPolicy: 'cache-first',
+      errorPolicy: 'all',
+    },
+    mutate: {
+      errorPolicy: 'all',
+    }
+  },
 });
 
 export const App = () => {
@@ -54,21 +75,25 @@ export const App = () => {
     if (token) {
       (async () => {
         const {data} = await ElentaClient.query({query: GET_ME});
+        const {data: {userProfile}} = await ElentaClient.query({query: CURRENT_USER_PROFILE});
 
-        const consultantProfile = get(data, 'me.consultantProfile', null);
-        const learnerProfile = get(data, 'me.learnerProfile', null);
+        if (!userProfile) {
+          const consultantProfile = get(data, 'me.consultantProfile', null);
+          const learnerProfile = get(data, 'me.learnerProfile', null);
 
-        const user = get(data, 'me', null);
-        const userProfile = consultantProfile
-          ? {...consultantProfile, type: "consultantProfile"}
-          : {...learnerProfile, type: "learnerProfile"};
+          const user = get(data, 'me', null);
+          const userProfile = consultantProfile
+            ? {...consultantProfile, type: "consultantProfile"}
+            : {...learnerProfile, type: "learnerProfile"};
 
-        ElentaClient.writeData({
-          data: {
-            user,
-            userProfile,
-          }
-        });
+          ElentaClient.writeData({
+            data: {
+              user,
+              userProfile,
+            }
+          });
+        }
+
         setLoading(false);
       })();
     } else {

@@ -59,6 +59,7 @@
   "@welldone-software/why-did-you-render": "^4.1.0-alpha.1",
   "apollo-boost": "^0.4.7",
   "apollo-cache-inmemory": "^1.6.5",
+  "apollo-cache-persist": "^0.1.1",
   "apollo-link-context": "^1.0.19",
   "apollo-link-http": "^1.5.16",
   "babel-plugin-macros": "^2.8.0",

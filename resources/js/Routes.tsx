@@ -19,6 +19,7 @@ import ConsultantProfileSettingsPage from "./pages/consultants/ConsultantProfile
 import LearnerProfileSettingsPage from "./pages/learners/LearnerProfileSettingsPage";
 import LearnerDashboard from "./pages/learners/LearnerDashboard";
 import NotFoundPage from "./pages/shared/NotFoundPage";
+import ProgramEnrolPage from "./components/learners/ProgramEnrolPage";
 
 const Routes = () => {
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
@@ -34,9 +35,10 @@ const Routes = () => {
           {
             userProfile && userProfile.type === "learnerProfile" &&
               <>
-                <Route exact={true} path="/program/respond/:id" component={ProgramLearnerPage}/>
                 <PrivateRoute exact={true} path="/dashboard" component={LearnerDashboard}/>
                 <PrivateRoute exact={true} path="/preferences" component={LearnerProfileSettingsPage}/>
+                <PrivateRoute exact={true} path="/program/enrol/:id" component={ProgramEnrolPage}/>
+                <PrivateRoute exact={true} path="/program/respond/:id" component={ProgramLearnerPage}/>
               </>
           }
           {

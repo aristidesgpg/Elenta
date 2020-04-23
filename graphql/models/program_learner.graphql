@@ -1,3 +1,11 @@
+extend type Mutation {
+    createProgramLearner(input: CreateProgramLearnerInput! @spread): ProgramLearner! @field(resolver: "App\\GraphQL\\Resolvers\\CreateProgramLearnerResolver@resolve")
+}
+
+input CreateProgramLearnerInput {
+    program_id: ID!
+}
+
 type ProgramLearner {
     id: ID!
     program: Program!

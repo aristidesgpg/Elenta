@@ -31,11 +31,9 @@ class CreateProgramInvitesResolver
                 'program_id' => $input['program']['connect'],
                 'user_id' => Auth::user()->id
             ]);
-            // TODO: Emails need to be at a profile level if they're at different companies
-            // Make consultant/learner profiles 1-1 relationship
             if ($existing_user = User::whereEmail($input['email'])->first()) {
                 if ($existing_user->learnerProfile) {
-                    $invite->learner_profile_id = $existing_user->learnerProfile[0]->id;
+                    $invite->learner_profile_id = $existing_user->learnerProfile->id;
                 }
             }
             $invite->save();
