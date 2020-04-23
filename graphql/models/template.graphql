@@ -1,9 +1,9 @@
-extend type Query @middleware(checks: ["auth:sanctum"]) {
+extend type Query {
     getTemplate(id: ID! @eq): Template! @find
     getTemplatesByOwner(consultant_profile_id: ID! @eq(key: "consultant_profile_id")): [Template!]! @all
 }
 
-extend type Mutation @middleware(checks: ["auth:sanctum"]) {
+extend type Mutation {
     upsertTemplate(input: UpsertTemplateInput! @spread): Template! @upsert #@can(ability: "update", find: "id")
     updateTemplateModules(input: UpdateTemplateModulesInput @spread): Template! @update @can(ability: "update", find: "id")
     duplicateTemplateModules(input: DuplicateTemplateModulesInput @spread): Template! @can(ability: "update", find: "id") @field(resolver: "App\\GraphQL\\Resolvers\\DuplicateTemplateModulesResolver@resolve")
