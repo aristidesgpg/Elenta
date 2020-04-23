@@ -11,7 +11,9 @@ import "./ProgramCard.scss";
 // TODO pull styles out in CSS and/or other components
 export const ProgramCard = ({program}) => {
   return (
-    <Card className="program-card">
+    <Card className="program-card" style={{
+      maxWidth: "23rem"
+    }}>
       <Card.Header>
         <Link to={`/program/respond/${program.id}`}>{program.title}</Link>
       </Card.Header>
@@ -28,15 +30,7 @@ export const ProgramCard = ({program}) => {
               <div className="text-muted">Start Date</div>
               <Card.Text>{formatDate(program.start_timestamp)}</Card.Text>
             </Col>
-            <Col>
-              <div className="text-muted">End Date</div>
-              <Card.Text>{formatDate(program.start_timestamp)}</Card.Text>
-            </Col>
           </Row>
-        </Container>
-        <Container className="pl-0 pr-0 pb-3">
-          <div className="text-muted">Progress</div>
-          <ProgressBar now={60} label={"60%"}/>
         </Container>
       </Card.Body>
     </Card>

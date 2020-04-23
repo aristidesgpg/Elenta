@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\LearnerProfile;
 use App\Models\Template;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -91,5 +92,13 @@ class TemplatePolicy
     public function forceDelete(User $user, Template $template)
     {
         return $user->id == $template->owner->user_id;
+    }
+
+    public function upsert(User $user, array $args) {
+        if ($args['id']) {
+            return $user->can('update', Template::find($args['id']));
+        } else {
+            return $user->can('create');
+        }
     }
 }

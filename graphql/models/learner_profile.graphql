@@ -45,7 +45,7 @@ type LearnerProfile {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    programs: [Program] #@viewPolicyFilter
-    programModules: [ProgramModule] @viewPolicyFilter
-    programInvites: [ProgramInvite] #@viewPolicyFilter
+    programs: [Program]
+    programModules: [ProgramModule]
+    programInvites: [ProgramInvite]
 }

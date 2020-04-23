@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\ProgramModule;
+use App\Models\ProgramModuleSend;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -91,5 +92,13 @@ class ProgramModulePolicy
     public function forceDelete(User $user, ProgramModule $programModule)
     {
         return $user->id == $programModule->program->owner->user_id;
+    }
+
+    public function upsert(User $user, array $args) {
+        if ($args['id']) {
+            return $user->can('update', ProgramModule::find($args['id']));
+        } else {
+            return $user->can('create');
+        }
     }
 }

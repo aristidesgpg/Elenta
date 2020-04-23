@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\ModuleReminder;
+use App\Models\ModuleTrigger;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -90,5 +91,13 @@ class ModuleReminderPolicy
     public function forceDelete(User $user, ModuleReminder $moduleReminder)
     {
         return $user->id == $moduleReminder->module->owner->user_id;
+    }
+
+    public function upsert(User $user, array $args) {
+        if ($args['id']) {
+            return $user->can('update', ModuleReminder::find($args['id']));
+        } else {
+            return $user->can('create');
+        }
     }
 }

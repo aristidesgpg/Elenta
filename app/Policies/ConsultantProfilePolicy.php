@@ -3,7 +3,9 @@
 namespace App\Models\Policies;
 
 use App\Models\ConsultantProfile;
+use App\Models\Program;
 use App\Models\User;
+use App\Policies\UpsertPolicy;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ConsultantProfilePolicy {
@@ -83,5 +85,13 @@ class ConsultantProfilePolicy {
      */
     public function forceDelete(User $user, ConsultantProfile $consultantProfile) {
         return $user->id == $consultantProfile->user_id;
+    }
+
+    public function upsert(User $user, array $args) {
+        if ($args['id']) {
+            return $user->can('update', ConsultantProfile::find($args['id']));
+        } else {
+            return $user->can('create');
+        }
     }
 }

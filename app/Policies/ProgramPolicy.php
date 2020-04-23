@@ -97,4 +97,12 @@ class ProgramPolicy
     {
         return $user->id == $program->owner->user_id;
     }
+
+    public function upsert(User $user, array $args) {
+        if ($args['id']) {
+            return $user->can('update', Program::find($args['id']));
+        } else {
+            return $user->can('create');
+        }
+    }
 }

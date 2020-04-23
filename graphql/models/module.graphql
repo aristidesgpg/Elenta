@@ -1,5 +1,5 @@
 extend type Mutation {
-    upsertModule(input: UpsertModuleInput @spread): Module! @upsert
+    upsertModule(input: UpsertModuleInput @spread): Module! @upsert @can(ability:"upsert", injectArgs:"true")
     deleteModule(id: ID!): Module @delete
 }
 
