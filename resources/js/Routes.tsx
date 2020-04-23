@@ -28,10 +28,10 @@ const Routes = () => {
     <BrowserRouter>
       <PageContainer>
         <Switch>
-          <Route exact={true} path="/" component={FormSample}/>
-          <Route exact={true} path="/login" component={LoginPage}/>
+          <Route exact={true} path="/" component={LoginPage}/>
           <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
           <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
+          <Route exact={true} path="/formsample" component={FormSample}/>
           {
             userProfile && userProfile.type === "learnerProfile" &&
               <>
