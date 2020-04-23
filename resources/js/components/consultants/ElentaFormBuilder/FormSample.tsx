@@ -1,6 +1,7 @@
 
 import * as React from "react";
 import ElentaFormBuilder from "./ElentaFormBuilder";
+import JsonForm from 'react-jsonschema-form-bs4';
 
 export default class SampleFormEditor extends React.Component<any, any>{
     constructor(props: any) {
@@ -11,6 +12,7 @@ export default class SampleFormEditor extends React.Component<any, any>{
               properties: {}
             },
             uiSchema: {
+              "ui:field": "FormBuilder",
               "ui:order": []
             }
         };
@@ -43,6 +45,14 @@ export default class SampleFormEditor extends React.Component<any, any>{
 
     render() {
         const { schema, uiSchema } = this.state;
+        /*const fields = { FormBuilder:ElentaFormBuilder };
+        return (<JsonForm
+        schema={schema}
+        uiSchema={uiSchema}
+        //idSchema={{$id: props.name}}
+        fields={{...fields}}                        
+        >        
+        </JsonForm> );*/
         return <ElentaFormBuilder schema={schema}
                                 uiSchema={uiSchema} 
                                 enableCorAnswer = {true}

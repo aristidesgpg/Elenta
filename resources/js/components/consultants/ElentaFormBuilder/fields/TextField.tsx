@@ -124,22 +124,29 @@ interface TagOptionProps{
 
 class TagOption extends React.Component<any, any> {
 
-onSelectChange = (item)=>{
-  const { editorState, onChange } = this.props;
-  const contentState = Modifier.replaceText(
-    editorState.getCurrentContent(),
-    editorState.getSelection(),
-    `#${item.parentVal}:#${item.val}`,
-    editorState.getCurrentInlineStyle(),
-  );
-  onChange(EditorState.push(editorState, contentState, 'insert-characters'));
-}
+  onSelectChange = (item)=>{
+    const { editorState, onChange, tagList } = this.props;
+    const arrFiltered = tagList.filter((listItem)=>{
+      return listItem.val == item.parentVal
+    });
+    let parentLabel = `${item.parentVal}`
+    if(arrFiltered.length > 0){
+      parentLabel = arrFiltered[0].label;
+    }
+    const contentState = Modifier.replaceText(
+      editorState.getCurrentContent(),
+      editorState.getSelection(),
+      `{{${parentLabel}:${item.label}}}`,
+      editorState.getCurrentInlineStyle(),
+    );
+    onChange(EditorState.push(editorState, contentState, 'insert-characters'));
+  }
 
-render() {
-  return (
-      <SxSelect
-        placeholder="Form/Question" list={this.props.tagList}
-        onSelectChange={this.onSelectChange}/>
-  );
-}
+  render() {
+    return (
+        <SxSelect
+          placeholder="Form/Question" list={this.props.tagList}
+          onSelectChange={this.onSelectChange}/>
+    );
+  }
 }
