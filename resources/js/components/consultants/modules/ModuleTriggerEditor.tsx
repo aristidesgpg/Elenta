@@ -5,7 +5,7 @@ import ElentaJsonForm from "../../shared/ElentaJsonForm/ElentaJsonForm";
 const schema = {
   title: "Module Triggers",
   type: "object",
-  required: ["frequency", "max_reminders"],
+  required: ["frequency", "max_sends"],
   properties: {
     id: {
       type: "string"
@@ -14,11 +14,13 @@ const schema = {
       type: "string",
       title: "Start Time",
       format: "date-time",
-      default: ""
+      default: "2020-06-01 12:00:00"
     },
     start_timestamp_field: {
       type: "string",
       title: "Start Timestamp Field",
+      enum: ["ENROL_TIME", "CHOOSE_TIME"],
+      enumNames: ["Enrol Time", "Choose a Time"]
     },
     frequency: {
       type: "integer",
@@ -34,6 +36,13 @@ const schema = {
 };
 
 const uiSchema = {
+  "ui:layout": [
+    {
+      start_timestamp: {md: 4},
+      frequency: {md: 4},
+      max_sends: {md: 4}
+    }
+  ],
   id: {
     "ui:widget": "hidden"
   },

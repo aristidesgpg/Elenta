@@ -2,6 +2,7 @@ import * as React from "react";
 import {ModuleReminder} from "../../../graphql/graphql-generated";
 import JsonForm from "react-jsonschema-form";
 import {useState} from "react";
+import ElentaJsonForm from "../../shared/ElentaJsonForm/ElentaJsonForm";
 
 const schema = {
   title: "Module Reminders",
@@ -11,14 +12,6 @@ const schema = {
     id: {
       type: "string"
     },
-    subject: {
-      type: "string",
-      title: "Subject",
-    },
-    message: {
-      type: "string",
-      title: "Message",
-    },
     frequency: {
       type: "integer",
       title: "Frequency (days)",
@@ -26,13 +19,19 @@ const schema = {
     },
     max_reminders: {
       type: "integer",
-      title: "Max Reminder",
+      title: "Max Reminders",
       default: 3
     }
   }
 };
 
 const uiSchema = {
+  "ui:layout": [
+    {
+      frequency: {md: 6},
+      max_reminders: {md: 6}
+    }
+  ],
   id: {
     "ui:widget": "hidden"
   }
@@ -45,14 +44,14 @@ export const ModuleReminderEditor: React.FunctionComponent<ModuleReminderEditorP
    }) => {
 
     return (
-      <JsonForm
+      <ElentaJsonForm
         schema={schema}
         uiSchema={uiSchema}
         formData={reminder}
         onChange={onChange}
       >
         <br/>
-      </JsonForm>
+      </ElentaJsonForm>
     );
   };
 

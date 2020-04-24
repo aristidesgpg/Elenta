@@ -17,18 +17,14 @@ export const ModuleSettingsEditor =
       //TODO: Add filter conditions
       <Container>
         <Row>
-          <Col md={6}>
-            <ModuleTriggerEditor
-              trigger={trigger}
-              onChange={({formData}) => setFormTrigger(formData)}
-            />
-          </Col>
-          <Col md={6}>
-            <ModuleReminderEditor
-              reminder={reminder}
-              onChange={({formData}) => setFormReminder(formData)}
-            />
-          </Col>
+          <ModuleTriggerEditor
+            trigger={trigger}
+            onChange={({formData}) => setFormTrigger(formData)}
+          />
+          <ModuleReminderEditor
+            reminder={reminder}
+            onChange={({formData}) => setFormReminder(formData)}
+          />
         </Row>
       </Container>
     );
