@@ -15,6 +15,7 @@ import { VideoWidget } from "./VideoWidget"
 import RepeaterEditField from "./repeater/RepeaterEditField";
 import CustomFieldTemplate from "./CustomFieldTemplate";
 import SliderField from "./SliderField";
+import LayoutField from '../../../shared/ElentaJsonForm/LayoutField';
 
 Modal.setAppElement('#root')
 
@@ -236,6 +237,7 @@ export default class EditableField extends React.Component<any,any> {
     const props = this.props;
     const fields = {RichEditor:TextField,
                     Rank: RankField,
+                    layout: LayoutField
                     };
     const widgets = {
         RichText: RichTextWidget,
