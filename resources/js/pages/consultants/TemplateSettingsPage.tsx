@@ -47,6 +47,16 @@ const schema = {
 };
 
 const uiSchema = {
+  'ui:layout': [
+    {
+      title: { md: 6 },
+      description: { md: 6 }
+    },
+    {
+      can_request: {md: 2},
+      is_public: {md: 2},
+    }
+  ],
   id: {
     "ui:widget": "hidden"
   },
@@ -69,7 +79,6 @@ const defaultDynamicFields = {
   }
 };
 
-// TODO: change tag name to tag label
 export const TemplateSettingsPage = () => {
   let history = useHistory();
   let {id} = useParams();
