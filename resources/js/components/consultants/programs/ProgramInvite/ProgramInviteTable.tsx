@@ -2,23 +2,32 @@ import * as React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import {formatDate} from "../../../../utils/utils";
+import Alert from "react-bootstrap/Alert";
+import {Link} from "react-router-dom";
 
 export const ProgramInviteTable = ({invites}) => {
-  const columns = [
-    {dataField: "email", text: "Email"},
-    {dataField: "invited_at", text: "Sent"},
-    {dataField: "enrolled", text: "Enrolled"}
-  ];
+  if (invites?.length > 0) {
+    const columns = [
+      {dataField: "email", text: "Email"},
+      {dataField: "invited_at", text: "Sent"},
+      {dataField: "enrolled", text: "Enrolled"}
+    ];
 
-  let tableData = invites.map(i => {
-    return {
-      email: i.email,
-      invited_at: formatDate(i.created_at),
-      enrolled: (i.learner && i.learner.id) ? "Yes" : "No"
-    };
-  });
+    let tableData = invites.map(i => {
+      return {
+        email: i.email,
+        invited_at: formatDate(i.created_at),
+        enrolled: (i.learner && i.learner.id) ? "Yes" : "No"
+      };
+    });
+    return <BootstrapTable keyField='id' data={tableData} columns={columns}/>
+  }
+  else {
+    return <Alert variant="info">
+      It looks like you don't have any invites yet, start by inviting one below
+    </Alert>
+  }
 
-  return <BootstrapTable keyField='id' data={tableData} columns={columns}/>
 };
 
 export default ProgramInviteTable;
