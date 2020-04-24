@@ -1,29 +1,10 @@
 import React, {useState, useEffect} from "react";
-import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import {mutateTree, TreeData} from "@atlaskit/tree";
 import ModuleCard from "./ModuleCard";
 import RenameFolderModal from "./RenameFolderModal";
 import List from "./List";
 
-const sortableNodeToArray = (node) => {
-  const order = [];
-  const children = node.children;
-
-  for (let i = 0; i < children.length; i++) {
-    const el = children[i];
-
-    if (node) {
-      order.push(el.getAttribute('data-id'));
-    }
-  }
-
-  return order;
-};
-
 export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder, deleteModules, duplicateModules}) => {
-    const [state, setState] = useState({
-      items: [],
-    });
     const [tree, setTree] = useState<TreeData>({
       rootId: "root-list",
       items: {}
@@ -35,11 +16,12 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       const newItems = modules.sort((a, b) => parseInt(a.pivot.order) - parseInt(b.pivot.order))
         .reduce((acc, module) => {
           const folder = module.pivot.folder;
+          const moduleKey = `${module.id}:::${module.pivot.id}`
           if (folder !== null) {
             const folderItem = acc[folder];
 
             if (folderItem) {
-              acc[folder].children.push(module.id);
+              acc[folder].children.push(moduleKey);
             } else {
               acc["root-list"].children.push(folder);
               acc[folder] = {
@@ -53,19 +35,19 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
                   id: folder,
                   pivot: module.pivot
                 },
-                children: [module.id]
+                children: [moduleKey]
               }
             }
           } else {
-            acc["root-list"].children.push(module.id);
+            acc["root-list"].children.push(moduleKey);
           }
-          acc[module.id] = {
-            id: module.id,
+          acc[moduleKey] = {
+            id: moduleKey,
             hasChildren: false,
             isExpanded: false,
             isChildrenLoading: false,
             data: {
-              isFolder: false,
+              isFolder: !!module.isFolder,
               name: module.title,
               id: module.id,
               pivot: module.pivot
@@ -95,7 +77,6 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       let order = 1;
       const {items} = newTree;
 
-
       const modules = items["root-list"].children.reduce((acc, item) => {
         const itemModules = extractModules(items[item]);
 
@@ -107,39 +88,33 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       saveModulesOrder(modules);
     };
 
-    //TODO fix rename folder
     const renameFolder = ({id, folder}) => {
-      const updatedItems = [...state.items];
-      const folderIndex = updatedItems.findIndex(m => m.id === id);
+      const newTree = {...tree};
 
-      const title = updatedItems[folderIndex].title;
-      updatedItems[folderIndex].modules.map(module => {
-        const pivotFolder = module.pivot.folder;
-
-        if (pivotFolder && pivotFolder === id) {
-          module.pivot.folder = folder;
-        }
-        return module;
+      newTree.items[id].children.map(module => {
+        const child = newTree.items[module];
+        child.data.pivot.folder = folder;
       });
-      updatedItems[folderIndex].title = folder;
+      newTree.items[id].data.name = folder;
 
-      setState({items: updatedItems});
-      saveOrder(updatedItems);
+      setTree(newTree);
+      saveOrder(newTree);
     };
 
     const extractModules = (item) => {
       return item.data.isFolder
         ? [...item.children.map(module => {
+          const child = tree.items[module];
           return {
-            id: module,
+            id: child.data.id,
             pivot: {
-              id: item.data.pivot.id,
+              id: child.data.pivot.id,
               folder: item.data.name
             }
           };
         })]
         : [{
-          id: item.id,
+          id: item.data.id,
           pivot: {
             id: item.data.pivot.id,
             folder: ''
@@ -155,14 +130,12 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       deleteModules([...extractModules(item).map(module => module.pivot.id)]);
     };
 
-
     const onDragEnd = (sourcePosition, destinationPosition) => {
       if (!destinationPosition) {
         return;
       }
       const sourceTree = tree;
 
-      // removeItemFromTree actually just removes the itemId from parent item's children
       const {
         tree: newSourceTree,
         itemRemoved: removedItemId
@@ -266,7 +239,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
             duplicateModules={duplicateModulesHandler}
             deleteModules={deleteModulesHandler}
             isActive={activeModule ? item.id === activeModule.id : false}
-            setActiveModule={item.isFolder ? () => null : setActiveModule}
+            setActiveModule={item.data.isFolder ? () => null : setActiveModule}
           />
         </div>
       );

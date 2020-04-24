@@ -40,7 +40,7 @@ const RenameFolderModal = (props) => {
     if (editableFolder) {
       const newForm = {...formState};
       newForm.id = editableFolder.id;
-      newForm.folder = editableFolder.title;
+      newForm.folder = editableFolder.data.name;
       setFormState(newForm)
     }
   }, [editableFolder]);

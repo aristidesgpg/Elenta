@@ -12,8 +12,7 @@ import {
 import DelayedFunction from "@atlaskit/tree/dist/cjs/utils/delayed-function";
 import {
   getGraftDestinationPath,
-  calculateNewTreeFinalDropPositions
-} from "./utils"; // customised functions
+} from "./utils";
 
 const List = (props) => {
   const {
@@ -114,29 +113,19 @@ const List = (props) => {
     const destDroppableId = finalDragState.destination
       ? finalDragState.destination.droppableId
       : undefined;
-    const sourceTree = tree;
     const destTree = tree;
-    const sourceFlatTree = flattenedTree;
     const destFlatTree = flattenedTree;
     setDraggedItemId(null);
 
-    const {sourcePosition, destinationPosition} =
-      sourceTree === destTree || !destDroppableId
-        ? calculateFinalDropPositions(
-        sourceTree,
-        sourceFlatTree,
-        finalDragState
-        )
-        : calculateNewTreeFinalDropPositions(
-        sourceTree,
-        sourceFlatTree,
-        destTree,
-        destFlatTree,
-        finalDragState
-        );
+    const {sourcePosition, destinationPosition} = calculateFinalDropPositions(
+      destTree,
+      destFlatTree,
+      finalDragState
+    );
     //Nesting only into folders
-    const destinationItemTree = tree.items[destinationPosition.parentId];
-    if (destinationItemTree.data.isFolder || destinationPosition.parentId === 'root-list') {
+    const destinationItem = tree.items[destinationPosition.parentId];
+    const sourceItem = destFlatTree[result.source.index];
+    if (!(destinationItem.data.isFolder && sourceItem.item.data.isFolder) && (destinationItem.data.isFolder || destinationPosition.parentId === 'root-list')) {
       onDragEndRoot(sourcePosition, destinationPosition);
       dragState = null;
     }
@@ -313,5 +302,6 @@ const List = (props) => {
     </DragDropContext>
   );
 };
+
 
 export default List;

@@ -14,7 +14,7 @@ export const ModuleCard = (props) => {
       <div className="d-flex justify-content-between">
         <div>
           <div>
-           <span onClick={() => (item.isFolder && renameFolder) ? renameFolder(item) : () => null}>
+           <span onClick={() => (item.data.isFolder && renameFolder) ? renameFolder(item) : () => null}>
            {item.data.name}
            </span>
           </div>
