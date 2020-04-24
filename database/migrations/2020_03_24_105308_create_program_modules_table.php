@@ -17,7 +17,8 @@ class CreateProgramModulesTable extends Migration
             $table->id();
             $table->uuid('program_id');
             $table->uuid('module_id');
-            $table->uuid('recipient_list_id');
+            // TODO not nullable
+            $table->uuid('recipient_list_id')->nullable();
 
             $table->string('folder')->nullable();
             $table->integer('order')->nullable();

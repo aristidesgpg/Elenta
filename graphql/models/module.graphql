@@ -64,6 +64,7 @@ type Module {
     programs: [Program]
     reminder: ModuleReminder
     trigger: ModuleTrigger
+    tags: [Tag]
 }
 
 type ModulePivot {

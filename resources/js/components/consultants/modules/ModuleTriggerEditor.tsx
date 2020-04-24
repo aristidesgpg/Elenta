@@ -1,6 +1,5 @@
 import * as React from "react";
 import {ModuleTrigger} from "../../../graphql/graphql-generated";
-import JsonForm from "react-jsonschema-form";
 import ElentaJsonForm from "../../shared/ElentaJsonForm/ElentaJsonForm";
 
 const schema = {
