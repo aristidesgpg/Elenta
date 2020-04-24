@@ -74,6 +74,15 @@ class Program extends BaseModel {
     protected $guarded = [];
     protected $appends = ['progress'];
 
+    protected static function boot()
+    {
+        parent::boot();
+        // We link a new Program to all its Template's modules
+        static::created(function (Program $p) {
+            $p->modules()->sync($p->template->modules->pluck('id'));
+        });
+    }
+
     public function getProgressAttribute() {
         $pms = $this->programModules()->count();
         return $pms ? $this->programModules()->whereHas('send')->count()/$pms : 0;
