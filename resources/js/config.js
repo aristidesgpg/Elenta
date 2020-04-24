@@ -60,7 +60,9 @@ export default {
           'ui:field': 'layout',
           'ui:layout': [
             {
-              required: { md: 12},
+              required: { md: 12}
+            },
+            {
               minimum: { md: 4 },
               maximum: { md: 4 },
               multipleOf: { md: 4}
@@ -98,7 +100,9 @@ export default {
           'ui:field': 'layout',
           'ui:layout': [
             {
-              required: { md: 12},
+              required: { md: 12}
+            },
+            {
               min: { md: 4 },
               max: { md: 4 },
               step: { md: 4}

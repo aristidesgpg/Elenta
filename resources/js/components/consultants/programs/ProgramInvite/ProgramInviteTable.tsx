@@ -3,7 +3,6 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import {formatDate} from "../../../../utils/utils";
 import Alert from "react-bootstrap/Alert";
-import {Link} from "react-router-dom";
 
 export const ProgramInviteTable = ({invites}) => {
   if (invites?.length > 0) {
