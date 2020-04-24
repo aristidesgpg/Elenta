@@ -5,14 +5,12 @@ import {useLazyQuery, useMutation, useQuery} from "@apollo/react-hooks";
 import ElentaFormBuilder from "../../components/consultants/ElentaFormBuilder/ElentaFormBuilder";
 import {useContext, useEffect, useState} from "react";
 import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
-import JsonForm from "react-jsonschema-form-bs4";
 import Button from "react-bootstrap/Button";
 import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
-import ElentaToast from "../../components/shared/ElentaToast/ElentaToast";
 import {immutableMerge} from "../../utils/utils";
 import {mutateTagData, tagSchema, tagUiSchema} from "../../components/tags/Tags";
-import ElentaJsonForm, {fields} from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
+import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
 
 const schema = {
   type: "object",
@@ -69,10 +67,6 @@ const defaultDynamicFields = {
   uiSchema: {
     "ui:order": []
   }
-};
-
-const customFields = {
-  tags: fields.tags
 };
 
 // TODO: change tag name to tag label
@@ -149,7 +143,6 @@ export const TemplateSettingsPage = () => {
                       uiSchema={uiSchema}
                       formData={formState}
                       onChange={handleChange}
-                      fields={customFields}
       >
         <br/>
       </ElentaJsonForm>

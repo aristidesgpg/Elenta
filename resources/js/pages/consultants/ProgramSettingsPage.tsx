@@ -14,9 +14,7 @@ import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
 import {immutableMerge} from "../../utils/utils";
 import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
-import CompanyLogoField from "../../components/consultants/CompanyLogoField/CompanyLogoField";
 import {mutateTagData, tagSchema, tagUiSchema} from "../../components/tags/Tags";
-import {fields} from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
 
 const schema = {
   type: "object",
@@ -115,8 +113,33 @@ const schema = {
 };
 
 const consistentUiSchema = {
+  'ui:layout': [
+    {
+      title: { md: 6 },
+      template: { md: 6 }
+    },
+    {
+      format: {md: 6},
+      description: { md: 6 }
+    }, {
+      max_learners: {md: 6},
+      start_timestamp: {md: 6}
+    },
+    {
+      company_attributes: {md: 12}
+    },
+    {
+      recipient_lists: {md: 12}
+    },
+    {
+      can_invite: {md: 2},
+      is_public: {md: 2},
+    },
+  ],
   id: {
     "ui:widget": "hidden"
+  },
+  title: {
   },
   description: {
     "ui:widget": "textarea",
@@ -169,11 +192,6 @@ const defaultDynamicFields = {
   },
   formData: {}
 };
-
-const customFields = {
-  companyLogoField: CompanyLogoField,
-  tags: fields.tags
-}
 
 export const ProgramSettingsPage = () => {
   let history = useHistory();
@@ -342,7 +360,6 @@ export const ProgramSettingsPage = () => {
                       uiSchema={uiSchemaState}
                       formData={_.pick(formState, Object.keys(schemaState.properties))}
                       onChange={handleChange}
-                      fields={customFields}
       >
         <hr/>
       </ElentaJsonForm>

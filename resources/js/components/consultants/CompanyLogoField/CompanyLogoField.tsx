@@ -1,6 +1,8 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {Form} from "react-bootstrap";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 export const CompanyLogoField = (props) => {
   const [hasCustomUrl, setHasCustomUrl] = useState(false);
@@ -32,11 +34,9 @@ export const CompanyLogoField = (props) => {
       let company_logo_url = "";
       if (r?.error?.type === 'unknown_record' && !hasCustomUrl) {
         company_logo_url = ""
-      }
-      else if (!hasCustomUrl) {
+      } else if (!hasCustomUrl) {
         company_logo_url = r.logo
-      }
-      else {
+      } else {
         company_logo_url = props.formData.companyLogoUrl;
       }
       const tempState = {
@@ -49,27 +49,35 @@ export const CompanyLogoField = (props) => {
 
   return (
     <div>
-      <Form.Group controlId="company_name">
-        <Form.Label>Company Name</Form.Label>
-        <Form.Control
-          type="text"
-          value={props.formData.company_name}
-          name="company_name"
-          onChange={handleOnChange}
-          onBlur={onCompanyNameBlur}
-          placeholder="Enter the company name"/>
-      </Form.Group>
-      <Form.Group controlId="company_logo_url">
-        <Form.Label>Company Logo URL</Form.Label>
-        <Form.Control
-          type="text"
-          value={props.formData.company_logo_url}
-          name="company_logo_url"
-          onChange={handleOnChange}
-          placeholder="Enter the company logo URL" />
-      </Form.Group>
-      {props.formData.company_logo_url &&
-      <img src={props.formData.company_logo_url} height="30px"/>}
+      <Row>
+        <Col md={5}>
+          <Form.Group controlId="company_name">
+            <Form.Label>Company Name</Form.Label>
+            <Form.Control
+              type="text"
+              value={props.formData.company_name}
+              name="company_name"
+              onChange={handleOnChange}
+              onBlur={onCompanyNameBlur}
+              placeholder="Enter the company name"/>
+          </Form.Group>
+        </Col>
+        <Col md={5}>
+          <Form.Group controlId="company_logo_url">
+            <Form.Label>Company Logo URL</Form.Label>
+            <Form.Control
+              type="text"
+              value={props.formData.company_logo_url}
+              name="company_logo_url"
+              onChange={handleOnChange}
+              placeholder="Enter the company logo URL"/>
+          </Form.Group>
+        </Col>
+        <Col md={2}>
+          {props.formData.company_logo_url &&
+          <img src={props.formData.company_logo_url} height="30px"/>}
+        </Col>
+      </Row>
     </div>
   );
 };
