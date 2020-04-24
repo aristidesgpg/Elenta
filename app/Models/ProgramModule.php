@@ -79,6 +79,7 @@ class ProgramModule extends BasePivot
                     ->first()
                     ->toArray();
                 $programModule->order = $amount['m'] == null ? 0 : $amount['m'] + 1;
+                //$programModule->recipient_list_id = $programModule->program->default_recipient_list->id;
             }
         });
     }

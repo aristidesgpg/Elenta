@@ -106,7 +106,7 @@ class ModulePolicy
     }
 
     public function upsert(User $user, array $args) {
-        if ($args['id']) {
+        if (isset($args['id'])) {
             return $user->can('update', Module::find($args['id']));
         } else {
             return $user->can('create', Module::class);

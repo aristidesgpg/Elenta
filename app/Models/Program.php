@@ -128,4 +128,9 @@ class Program extends BaseModel {
     public function recipientLists(): HasMany {
         return $this->hasMany(RecipientList::class);
     }
+
+    // TODO: Add default option for user
+    public function getDefaultRecipientListAttribute() {
+        return $this->recipientLists[0];
+    }
 }
