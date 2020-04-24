@@ -15,6 +15,7 @@ import Form from "react-bootstrap/Form";
 import {RIEInput, RIETextArea} from "riek";
 import {Button} from "react-bootstrap";
 import {ToastContext} from "../../../contexts/ToastContext";
+import LoadingContainer from "../../hoc/LoadingContainer/LoadingContainer";
 
 export const ModuleEditor =
   ({
@@ -97,7 +98,7 @@ export const ModuleEditor =
     };
 
     return (
-      <Container className="pl-0 pr-0 pt-4">
+      <LoadingContainer loading={mutationLoading} error={mutationError} className="pl-0 pr-0 pt-4">
         <Row>
           <Col md={3}>
             <Button type="submit" onClick={addFolder} className="w-100">
@@ -172,7 +173,7 @@ export const ModuleEditor =
             </Tab.Container>
           </Col>
         </Row>
-      </Container>
+      </LoadingContainer>
     )
   };
 

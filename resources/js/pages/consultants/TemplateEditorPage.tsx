@@ -12,10 +12,11 @@ import {
 import Tab from "react-bootstrap/Tab";
 import ModuleEditor from "../../components/consultants/modules/ModuleEditor";
 import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import _ from "lodash";
 import Nav from "react-bootstrap/Nav";
 import TemplateRequestTable from "../../components/consultants/templates/TemplateRequestTable";
+import {ToastContext} from "../../contexts/ToastContext";
 
 export const TemplateEditorPage = () => {
   let {id} = useParams();
@@ -27,6 +28,8 @@ export const TemplateEditorPage = () => {
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
   const [updateTemplateModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_TEMPLATE_MODULES);
   const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError, data: duplicateMutationData}] = useMutation(DUPLICATE_TEMPLATE_MODULES);
+
+  const toastContext = useContext(ToastContext);
 
   const addModule = () => {
     runMutation({
@@ -42,6 +45,8 @@ export const TemplateEditorPage = () => {
           }
         }
       }
+    }).then(r => {
+      toastContext.addToast({header: "Success!", body: "Saved"});
     });
   };
 
@@ -68,6 +73,8 @@ export const TemplateEditorPage = () => {
           }
         }
       }
+    }).then(r => {
+      toastContext.addToast({header: "Success!", body: "Deleted"});
     });
   };
 
@@ -80,6 +87,8 @@ export const TemplateEditorPage = () => {
           modules
         }
       }
+    }).then(r => {
+      toastContext.addToast({header: "Success!", body: "Copied"});
     });
   };
 

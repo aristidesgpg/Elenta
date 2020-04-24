@@ -128,7 +128,7 @@ export const TemplateSettingsPage = () => {
     ).then(r => {
       toastContext.addToast({header: "Success!", body: "Saved"});
       if (id == "new") {
-        history.push(`/template/content/${mutationData.upsertTemplate.id}`);
+        history.push(`/template/content/${r.data.upsertTemplate.id}`);
       }
     });
   };

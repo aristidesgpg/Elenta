@@ -341,7 +341,7 @@ export const ProgramSettingsPage = () => {
     ).then(r => {
       toastContext.addToast({header: "Success!", body: "Saved"});
       if (id == "new") {
-        history.push(`/program/content/${mutationData.upsertProgram.id}`);
+        history.push(`/program/content/${r.data.upsertProgram.id}`);
       }
     });
   };
