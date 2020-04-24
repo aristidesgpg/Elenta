@@ -29,13 +29,13 @@ interface Props {
   fields?: any,
 }
 
+// TODO: pass option for button
 export const ElentaJsonForm: React.FunctionComponent<Props> =
   ({
      schema,
      uiSchema,
      formData,
      onChange,
-     children,
      widgets,
      fields,
      ...rest
@@ -62,7 +62,7 @@ export const ElentaJsonForm: React.FunctionComponent<Props> =
                 }}
                 {...rest}
       >
-        {children}
+        <br/>
       </JsonForm>
     );
   };

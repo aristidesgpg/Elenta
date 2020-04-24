@@ -108,9 +108,11 @@ export const TemplateEditorPage = () => {
   }, [mutationData, updateMutationData, duplicateMutationData]);
 
 
-  // TODO: Passing mutation* for the button here is a sloppy abstraction - need to clean it up
   return (
-    <LoadingContainer loading={loading} error={error}>
+    <LoadingContainer
+      loading={[updateMutationLoading, duplicateMutationLoading, loading]}
+      error={[updateMutationError, duplicateMutationMutationError, error]}
+    >
       <Tab.Container defaultActiveKey="modules" id="template-editor" transition={false}>
         <Nav variant="tabs" fill className="justify-content-center">
           <Nav.Item>
@@ -128,9 +130,6 @@ export const TemplateEditorPage = () => {
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}
               duplicateModules={duplicateModules}
-              buttonLoading={mutationLoading}
-              buttonError={mutationError}
-              buttonData={mutationData}
             />
           </Tab.Pane>
           <Tab.Pane eventKey="requests" title="Requests">

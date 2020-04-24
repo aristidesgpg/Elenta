@@ -29,7 +29,7 @@ class SendProgramModuleTriggers implements ShouldQueue
         $this->programModule->program->learners->each(function (LearnerProfile $l) {
             $sends = $this->programModule->sends()->where('learner_profile_id', $l->id)->get();
             // Assume only one trigger for now
-            $trigger = $this->programModule->module->triggers[0];
+            $trigger = $this->programModule->module->trigger;
 
             if ($sends->isEmpty()) {
                 $this->programModule->sendModule(

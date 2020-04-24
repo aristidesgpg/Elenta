@@ -103,15 +103,6 @@ export const TemplateSettingsPage = () => {
     }
   }, [queryData]);
 
-  useEffect(() => {
-    if (mutationData) {
-      toastContext.addToast({header: "Success!", body: "Saved"});
-      if (id == "new") {
-        history.push(`/template/content/${mutationData.upsertTemplate.id}`);
-      }
-    }
-  }, [mutationData]);
-
   const handleChange = (data) => {
     let newState = immutableMerge(formState, data.formData);
     if (!_.isEqual(newState, formState)) {
@@ -134,28 +125,35 @@ export const TemplateSettingsPage = () => {
             })
         }
       }
-    )
+    ).then(r => {
+      toastContext.addToast({header: "Success!", body: "Saved"});
+      if (id == "new") {
+        history.push(`/template/content/${mutationData.upsertTemplate.id}`);
+      }
+    });
   };
 
   return (
-    <LoadingContainer loading={[mutationLoading, queryLoading]} error={[mutationError, queryError]}>
+    <LoadingContainer
+      loading={[mutationLoading, queryLoading]}
+      error={[mutationError, queryError]}
+    >
       <ElentaJsonForm schema={schema}
                       uiSchema={uiSchema}
                       formData={formState}
                       onChange={handleChange}
-      >
-        <br/>
-      </ElentaJsonForm>
+      />
       <h3>Dynamic Fields</h3>
       <ElentaFormBuilder
         schema={formState.dynamic_fields.schema}
         uiSchema={formState.dynamic_fields.uiSchema}
         onSave={(schema: any, uiSchema: any) => {
-          let o = {
-            schema: schema,
-            uiSchema: uiSchema
-          };
-          setFormState(immutableMerge(formState, {dynamic_fields: o}));
+          setFormState(immutableMerge(formState, {
+            dynamic_fields: {
+              schema: schema,
+              uiSchema: uiSchema
+            }
+          }));
         }}
         excludedFields={['richtext', 'rank', 'slider', 'multiple-checkbox', 'radiobuttonlist', 'repeater']}
       />

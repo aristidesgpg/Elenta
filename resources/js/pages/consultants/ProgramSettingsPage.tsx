@@ -115,12 +115,12 @@ const schema = {
 const consistentUiSchema = {
   'ui:layout': [
     {
-      title: { md: 6 },
-      template: { md: 6 }
+      title: {md: 6},
+      template: {md: 6}
     },
     {
       format: {md: 6},
-      description: { md: 6 }
+      description: {md: 6}
     }, {
       max_learners: {md: 6},
       start_timestamp: {md: 6}
@@ -139,8 +139,7 @@ const consistentUiSchema = {
   id: {
     "ui:widget": "hidden"
   },
-  title: {
-  },
+  title: {},
   description: {
     "ui:widget": "textarea",
     "ui:options": {
@@ -282,15 +281,6 @@ export const ProgramSettingsPage = () => {
     }
   }, [programQueryData]);
 
-  useEffect(() => {
-    if (mutationData) {
-      toastContext.addToast({header: "Success!", body: "Saved"});
-      if (id == "new") {
-        history.push(`/program/content/${mutationData.upsertProgram.id}`);
-      }
-    }
-  }, [mutationData]);
-
   const findTemplate = (template_id) => {
     if (templatesQueryData) {
       return templatesQueryData.getTemplatesByOwner.filter(t => t.id === template_id)[0]
@@ -341,14 +331,19 @@ export const ProgramSettingsPage = () => {
               recipientLists: {
                 upsert: _.result(formState, 'recipient_lists').map(rl => {
                   return {
-                  ..._.omit(rl, '__typename')
+                    ..._.omit(rl, '__typename')
                   }
                 })
               }
             })
         }
       }
-    )
+    ).then(r => {
+      toastContext.addToast({header: "Success!", body: "Saved"});
+      if (id == "new") {
+        history.push(`/program/content/${mutationData.upsertProgram.id}`);
+      }
+    });
   };
 
   return (
@@ -360,16 +355,12 @@ export const ProgramSettingsPage = () => {
                       uiSchema={uiSchemaState}
                       formData={_.pick(formState, Object.keys(schemaState.properties))}
                       onChange={handleChange}
-      >
-        <hr/>
-      </ElentaJsonForm>
+      />
       <ElentaJsonForm schema={dynamicFields.schema}
                       uiSchema={dynamicFields.uiSchema}
                       formData={dynamicFields.formData}
                       onChange={handleDynamicChange}
-      >
-        <br/>
-      </ElentaJsonForm>
+      />
       <Button onClick={handleSubmit}>Submit</Button>
     </LoadingContainer>
   );

@@ -42,6 +42,6 @@ interface Props {
 
 ElentaToast.defaultProps = {
   delay: 5000,
-  autohide: false
+  autohide: true
 }
 export default ElentaToast;

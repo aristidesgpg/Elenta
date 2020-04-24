@@ -108,10 +108,11 @@ export const ProgramEditorPage = () => {
     }
   }, [mutationData, updateMutationData, duplicateMutationData]);
 
-  // TODO: Passing mutation* for the button here is a sloppy abstraction - need to clean it up
-  // TODO: Change this back to <Tab> without the <Nav>
   return (
-    <LoadingContainer loading={loading} error={error}>
+    <LoadingContainer
+      loading={[updateMutationLoading, duplicateMutationLoading, loading]}
+      error={[updateMutationError, duplicateMutationMutationError, error]}
+    >
       <Tab.Container defaultActiveKey="modules" id="program-editor" transition={false}>
         <Nav variant="tabs" fill className="justify-content-center">
           <Nav.Item>
@@ -132,9 +133,6 @@ export const ProgramEditorPage = () => {
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}
               duplicateModules={duplicateModules}
-              buttonLoading={mutationLoading}
-              buttonError={mutationError}
-              buttonData={mutationData}
             />
           </Tab.Pane>
           <Tab.Pane eventKey="learners" title="Learners">

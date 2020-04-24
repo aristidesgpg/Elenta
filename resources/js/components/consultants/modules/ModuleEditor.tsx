@@ -1,7 +1,7 @@
 import * as React from "react";
-import {useMutation, useQuery} from '@apollo/react-hooks';
+import {useMutation} from '@apollo/react-hooks';
 import ModuleList from "./ModuleList";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -9,12 +9,12 @@ import ElentaFormBuilder from "../ElentaFormBuilder/ElentaFormBuilder";
 import {UPSERT_MODULE} from "../../../graphql/queries";
 import ModuleSettingsEditor from "./ModuleSettingsEditor";
 import Tab from "react-bootstrap/Tab";
-import ElentaFormButton from "../../shared/ElentaForm/ElentaFormButton";
 import _ from "lodash";
 import Nav from "react-bootstrap/Nav";
 import Form from "react-bootstrap/Form";
 import {RIEInput, RIETextArea} from "riek";
 import {Button} from "react-bootstrap";
+import {ToastContext} from "../../../contexts/ToastContext";
 
 export const ModuleEditor =
   ({
@@ -22,10 +22,7 @@ export const ModuleEditor =
      addModule,
      saveModulesOrder,
      deleteModules,
-     duplicateModules,
-     buttonLoading,
-     buttonError,
-     buttonData
+     duplicateModules
    }) => {
     const [formContent, setFormContent] = useState({
       schema: {
@@ -43,19 +40,15 @@ export const ModuleEditor =
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
 
+    const toastContext = useContext(ToastContext);
+
     useEffect(() => {
       if (activeModule) {
         if (activeModule.reminder) setFormReminder(_.omit(activeModule.reminder, "__typename"));
-        if(activeModule.trigger) setFormTrigger(_.omit(activeModule.trigger, "__typename"));
+        if (activeModule.trigger) setFormTrigger(_.omit(activeModule.trigger, "__typename"));
         if (activeModule.content) setFormContent(JSON.parse(activeModule.content));
       }
     }, [activeModule]);
-
-    useEffect(() => {
-      if (buttonData) {
-        setActiveModule(buttonData.upsertModule);
-      }
-    }, [buttonData]);
 
     useEffect(() => {
       if (!_.isEqual(templateModules, modules)) {
@@ -83,6 +76,8 @@ export const ModuleEditor =
             content: JSON.stringify(formContent)
           }
         }
+      }).then(r => {
+        toastContext.addToast({header: "Success!", body: "Saved"});
       });
     };
 
@@ -115,13 +110,7 @@ export const ModuleEditor =
                         deleteModules={deleteModules}
                         duplicateModules={duplicateModules}
             />
-            <ElentaFormButton
-              onClick={addModule}
-              mutationLoading={buttonLoading}
-              mutationError={buttonError}
-              mutationData={buttonData}
-              title="Add Module"
-            />
+            <Button onClick={addModule}>Add Module</Button>
           </Col>
           <Col>
             <Row>
@@ -146,13 +135,7 @@ export const ModuleEditor =
                 </Form>
               </Col>
               <Col>
-                <ElentaFormButton
-                  title="Save Module"
-                  onClick={onSave}
-                  mutationLoading={mutationLoading}
-                  mutationError={mutationError}
-                  mutationData={mutationData}
-                />
+                <Button onClick={onSave}>Save Module</Button>
               </Col>
             </Row>
             <Tab.Container defaultActiveKey="content" id="module-editor" transition={false}>
@@ -170,11 +153,10 @@ export const ModuleEditor =
                     schema={formContent.schema}
                     uiSchema={formContent.uiSchema}
                     onSave={(schema, uiSchema) => {
-                      let o = {
+                      setFormContent({
                         schema: schema,
                         uiSchema: uiSchema
-                      };
-                      setFormContent(o);
+                      });
                     }}
                   />
                 </Tab.Pane>
