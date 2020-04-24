@@ -11,7 +11,7 @@ export default {
       icon: "font",
       label: "Rich text",
       jsonSchema: {
-        type: "string",        
+        type: "string",
         textValue:"\"<p>Text</p>\""
       },
       uiSchema: {
@@ -22,11 +22,11 @@ export default {
         "ui:widget":"RichText",
         editSchema: {
           type: "object",
-          properties: {            
+          properties: {
             textValue:{type: "string"}
-          }          
+          }
         },
-        editUISchema:{          
+        editUISchema:{
           "ui:field":"RichEditor"
         }
       },
@@ -56,7 +56,19 @@ export default {
             multipleOf:{ type: "number", title:"Step", default: 1 },
           }
         },
-        editUISchema:{},
+        editUISchema:{
+          'ui:field': 'layout',
+          'ui:layout': [
+            {
+              required: { md: 12}
+            },
+            {
+              minimum: { md: 4 },
+              maximum: { md: 4 },
+              multipleOf: { md: 4}
+            }
+          ],
+        },
       },
       formData: {}
     },
@@ -70,7 +82,7 @@ export default {
         description: "Enter some description",
         min: 0,
         max: 100,
-        step: 1,        
+        step: 1,
       },
       uiSchema: {
         uiType: "slider",
@@ -84,7 +96,19 @@ export default {
             step:{ type: "number", title:"Step", default: 1 },
           }
         },
-        editUISchema:{},
+        editUISchema:{
+          'ui:field': 'layout',
+          'ui:layout': [
+            {
+              required: { md: 12}
+            },
+            {
+              min: { md: 4 },
+              max: { md: 4 },
+              step: { md: 4}
+            }
+          ],
+        },
       },
       formData: {}
     },
@@ -302,7 +326,18 @@ export default {
             timeFormat: {type:"boolean","title":"Show Time"},
           }
         },
-        editUISchema:{}
+        editUISchema:{
+          'ui:field': 'layout',
+          'ui:layout': [
+            {
+              required: { md: 12 }
+            },
+            {
+              dateFormat: { md: 6 },
+              timeFormat: { md: 6 },
+            }
+          ],
+        }
       },
       formData: {}
     },

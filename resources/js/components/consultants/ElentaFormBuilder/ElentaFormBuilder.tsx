@@ -227,13 +227,13 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
   handleDrop = (result) => {
     if (!result.destination) {
       return;
-    }        
+    }
     const { source, destination } = result;
     this.swapFields(source.droppableId, destination.droppableId);
   }
 
   //********  Render *******/
-  render() {    
+  render() {
     const { enableCorAnswer, error, schema, newKey, uiSchema } = this.state;
     console.log("State", this.state);
     const registry = {
@@ -246,7 +246,7 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
         SchemaField: EditableField,
         TitleField: TitleField,
         DescriptionField: DescriptionField,
-      },      
+      },
       //widgets:{...widgets,...getDefaultRegistry().widgets}
     };
     return (
@@ -258,7 +258,7 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
                           schema={schema}
                           registry={registry}
                           onChange={this.onChange}/>
-          </DragDropContext>          
+          </DragDropContext>
         </div>
         <FormActions
             schema = {schema}
