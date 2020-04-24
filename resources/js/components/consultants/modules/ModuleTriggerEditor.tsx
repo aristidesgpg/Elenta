@@ -1,9 +1,10 @@
 import * as React from "react";
 import {ModuleTrigger} from "../../../graphql/graphql-generated";
 import ElentaJsonForm from "../../shared/ElentaJsonForm/ElentaJsonForm";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
 
 const schema = {
-  title: "Module Triggers",
   type: "object",
   required: ["frequency", "max_sends"],
   properties: {
@@ -61,14 +62,19 @@ export const ModuleTriggerEditor: React.FunctionComponent<ModuleTriggerEditorPro
      onChange
    }) => {
     return (
-      <ElentaJsonForm
-        schema={schema}
-        uiSchema={uiSchema}
-        formData={trigger}
-        onChange={onChange}
-      >
-        <br/>
-      </ElentaJsonForm>
+      <Container>
+        <Row>
+          <h5>Trigger</h5>
+        </Row>
+        <Row>
+          <ElentaJsonForm
+            schema={schema}
+            uiSchema={uiSchema}
+            formData={trigger}
+            onChange={onChange}
+          />
+        </Row>
+      </Container>
     );
   };
 

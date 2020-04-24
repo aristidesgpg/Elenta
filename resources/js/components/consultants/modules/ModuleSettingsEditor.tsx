@@ -3,6 +3,7 @@ import Container from "react-bootstrap/Container";
 import ModuleReminderEditor from "./ModuleReminderEditor";
 import ModuleTriggerEditor from "./ModuleTriggerEditor";
 import Row from "react-bootstrap/Row";
+import ModuleRecipientListEditor from "./ModuleRecipientListEditor";
 import Col from "react-bootstrap/Col";
 
 export const ModuleSettingsEditor =
@@ -10,21 +11,37 @@ export const ModuleSettingsEditor =
      reminder,
      trigger,
      setFormReminder,
-     setFormTrigger
+     setFormTrigger,
+     recipientLists,
+     recipientList,
+     setRecipientList
    }) => {
 
     return (
       //TODO: Add filter conditions
       <Container>
         <Row>
-          <ModuleTriggerEditor
-            trigger={trigger}
-            onChange={({formData}) => setFormTrigger(formData)}
-          />
-          <ModuleReminderEditor
-            reminder={reminder}
-            onChange={({formData}) => setFormReminder(formData)}
-          />
+          <Col>
+            <ModuleTriggerEditor
+              trigger={trigger}
+              onChange={({formData}) => setFormTrigger(formData)}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={4}>
+            <ModuleRecipientListEditor
+              recipientLists={recipientLists}
+              recipientList={recipientList}
+              onChange={formData => setRecipientList(recipientLists.filter(rl => rl.id == formData)[0])}
+            />
+          </Col>
+          <Col md={8}>
+            <ModuleReminderEditor
+              reminder={reminder}
+              onChange={({formData}) => setFormReminder(formData)}
+            />
+          </Col>
         </Row>
       </Container>
     );

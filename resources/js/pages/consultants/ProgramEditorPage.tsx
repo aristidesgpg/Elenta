@@ -7,7 +7,6 @@ import {
   UPDATE_PROGRAM_MODULES,
   UPSERT_MODULE
 } from "../../graphql/queries";
-import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import ModuleEditor from "../../components/consultants/modules/ModuleEditor";
 import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
@@ -88,6 +87,7 @@ export const ProgramEditorPage = () => {
     });
   };
 
+  // TODO: Move these into promise functions above
   useEffect(() => {
     if (mutationData) {
       let newState = _.cloneDeep(program);
@@ -127,22 +127,25 @@ export const ProgramEditorPage = () => {
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="modules" title="Content">
-            <ModuleEditor
-              modules={program ? program.modules : []}
-              addModule={addModule}
-              saveModulesOrder={saveModulesOrder}
-              deleteModules={deleteModules}
-              duplicateModules={duplicateModules}
-            />
+            {program &&
+              <ModuleEditor
+                modules={program ? program.modules : []}
+                addModule={addModule}
+                saveModulesOrder={saveModulesOrder}
+                deleteModules={deleteModules}
+                duplicateModules={duplicateModules}
+                recipientLists={program.recipientLists}
+              />
+            }
           </Tab.Pane>
           <Tab.Pane eventKey="learners" title="Learners">
             {program &&
-              <ProgramLearnerTable program={program}/>
+            <ProgramLearnerTable program={program}/>
             }
           </Tab.Pane>
           <Tab.Pane eventKey="invites" title="Invites">
             <h3>Invites</h3>
-            <ProgramInviteTable invites={program ? program.invites : []} />
+            <ProgramInviteTable invites={program ? program.invites : []}/>
             <h3>Invite by Email</h3>
             <ProgramInviteTool program={program}/>
           </Tab.Pane>

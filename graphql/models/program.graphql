@@ -123,5 +123,6 @@ type ProgramModule {
     reminders: [ModuleReminder]
     triggers: [ModuleTrigger]
     send: ProgramModuleSend
+    recipientList: RecipientList
 }
 

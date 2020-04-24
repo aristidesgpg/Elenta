@@ -321,6 +321,10 @@ export const GET_PROGRAM = gql`
           id
           title
         }
+        recipientList {
+          id
+          name
+        }
         send {
           learner {
             id

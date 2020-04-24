@@ -42,6 +42,34 @@ const schema = {
     dynamic_fields: {
       type: "string"
     },
+    recipient_lists: {
+      type: "array",
+      title: "Recipient Lists",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string"
+          },
+          name: {
+            type: "string",
+            title: "Name"
+          },
+          channel: {
+            type: "string",
+            title: "Channel",
+            default: "EMAIL",
+            enum: ["EMAIL"],
+            enumNames: ["Email"]
+          },
+          max_recipients: {
+            type: "integer",
+            default: 100,
+            title: "Max Recipients"
+          }
+        }
+      }
+    },
     ...tagSchema
   }
 };
@@ -121,7 +149,14 @@ export const TemplateSettingsPage = () => {
               owner: {
                 connect: userProfile.id
               },
-              tags: mutateTagData(_.result(formState, 'tags'))
+              tags: mutateTagData(_.result(formState, 'tags')),
+              recipientLists: {
+                upsert: _.result(formState, 'recipient_lists').map(rl => {
+                  return {
+                    ..._.omit(rl, '__typename')
+                  }
+                })
+              }
             })
         }
       }

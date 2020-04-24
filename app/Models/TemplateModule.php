@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\RecipientList;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -112,5 +113,9 @@ class TemplateModule extends BasePivot
 
     public function template(): BelongsTo {
         return $this->belongsTo(Template::class);
+    }
+
+    public function recipientList(): BelongsTo {
+        return $this->belongsTo(RecipientList::class);
     }
 }

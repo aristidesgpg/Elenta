@@ -96,6 +96,7 @@ export const TemplateEditorPage = () => {
     setTemplate(data.getTemplate);
   }
 
+  // TODO: Move these into promises .then()
   useEffect(() => {
     if (mutationData) {
       let newState = _.cloneDeep(template);
@@ -139,6 +140,7 @@ export const TemplateEditorPage = () => {
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}
               duplicateModules={duplicateModules}
+              recipientLists={template.recipientLists}
             />
           </Tab.Pane>
           <Tab.Pane eventKey="requests" title="Requests">

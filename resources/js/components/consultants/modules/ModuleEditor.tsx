@@ -23,7 +23,8 @@ export const ModuleEditor =
      addModule,
      saveModulesOrder,
      deleteModules,
-     duplicateModules
+     duplicateModules,
+     recipientLists
    }) => {
     const [formContent, setFormContent] = useState({
       schema: {
@@ -38,6 +39,7 @@ export const ModuleEditor =
     const [formTrigger, setFormTrigger] = useState(null);
     const [modules, setModules] = useState(templateModules);
     const [activeModule, setActiveModule] = useState(modules[0]);
+    const [recipientList, setRecipientList] = useState(null);
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
 
@@ -74,7 +76,10 @@ export const ModuleEditor =
             trigger: {
               upsert: formTrigger
             },
-            content: JSON.stringify(formContent)
+            content: JSON.stringify(formContent),
+            recipientList: {
+              connect: recipientList.id
+            }
           }
         }
       }).then(r => {
@@ -167,6 +172,9 @@ export const ModuleEditor =
                     trigger={formTrigger}
                     setFormReminder={setFormReminder}
                     setFormTrigger={setFormTrigger}
+                    recipientLists={recipientLists}
+                    recipientList={recipientList}
+                    setRecipientList={setRecipientList}
                   />
                 </Tab.Pane>
               </Tab.Content>

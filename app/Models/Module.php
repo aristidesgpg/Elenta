@@ -63,6 +63,27 @@ class Module extends BaseModel
 
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+        // Attach a Trigger and Reminder on create
+        static::created(function (Module $m) {
+            $trigger = new ModuleTrigger();
+            $trigger->fill([
+                'module_id' => $m->id,
+            ]);
+            $trigger->save();
+
+            $reminder = new ModuleReminder();
+            $reminder->fill([
+                'module_id' => $m->id,
+                'subject' => '[Reminder] Complete your module to stay up to date!',
+                'message' => "Looks like you missed a module in your Elenta course"
+            ]);
+            $reminder->save();
+        });
+    }
+
     public function owner(): BelongsTo {
         return $this->belongsTo(ConsultantProfile::class, 'consultant_profile_id');
     }

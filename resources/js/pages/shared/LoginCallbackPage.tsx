@@ -3,6 +3,7 @@ import {useQuery} from '@apollo/react-hooks';
 import {useParams, Redirect} from "react-router-dom";
 import {Container, Spinner} from "react-bootstrap";
 import {CURRENT_USER} from "../../graphql/queries";
+import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
 
 export const LoginCallbackPage = () => {
   const {token} = useParams();
@@ -19,9 +20,7 @@ export const LoginCallbackPage = () => {
   }, [token, storageToken]);
 
   return (
-    <Container>
-      <Spinner animation="border"/>
-    </Container>
+    <LoadingContainer loading={true}/>
   );
 };
 
