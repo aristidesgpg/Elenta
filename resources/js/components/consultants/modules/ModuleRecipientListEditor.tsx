@@ -14,7 +14,10 @@ export const ModuleRecipientListEditor =
       <div>
         <h5 style={{paddingBottom: "33px"}}>Recipient List</h5>
         <Select
-          value={recipientList && recipientList.id}
+          value={recipientList && {
+            value: recipientList.id,
+            label: recipientList.name
+          }}
           options={recipientLists.map(r => {
             return {
               value: r.id,

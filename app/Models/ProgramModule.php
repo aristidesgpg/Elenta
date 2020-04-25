@@ -51,6 +51,9 @@ use Illuminate\Support\Facades\Mail;
  * @mixin \Eloquent
  * @property-read \App\Models\ProgramModuleSend $send
  * @property-read mixed $module_variables
+ * @property string|null $recipient_list_id
+ * @property-read \App\RecipientList|null $recipientList
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramModule whereRecipientListId($value)
  */
 class ProgramModule extends BasePivot
 {
@@ -79,8 +82,8 @@ class ProgramModule extends BasePivot
                     ->first()
                     ->toArray();
                 $programModule->order = $amount['m'] == null ? 0 : $amount['m'] + 1;
-                //$programModule->recipient_list_id = $programModule->program->default_recipient_list->id;
             }
+            $programModule->recipient_list_id = $programModule->program->default_recipient_list->id;
         });
     }
 

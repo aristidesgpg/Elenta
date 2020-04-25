@@ -66,6 +66,14 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Program whereDescription($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
  * @property-read int|null $tags_count
+ * @property string|null $company_name
+ * @property string|null $company_logo_url
+ * @property-read mixed $default_recipient_list
+ * @property-read mixed $progress
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\RecipientList[] $recipientLists
+ * @property-read int|null $recipient_lists_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Program whereCompanyLogoUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Program whereCompanyName($value)
  */
 class Program extends BaseModel {
     use SoftDeletes;
@@ -107,7 +115,8 @@ class Program extends BaseModel {
                 'id',
                 'folder',
                 'order',
-                'deleted_at'
+                'deleted_at',
+                'recipient_list_id'
             ])
             ->whereNull('program_modules.deleted_at')
             ->orderBy('program_modules.order', 'asc');

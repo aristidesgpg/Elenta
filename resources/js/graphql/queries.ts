@@ -23,6 +23,7 @@ export const GET_TEMPLATE = gql`
           id
           folder
           order
+          recipient_list_id
         }
         reminder {
           id
@@ -99,6 +100,7 @@ export const UPDATE_TEMPLATE_MODULES = gql`
           id
           folder
           order
+          recipient_list_id
         }
         reminder {
           id
@@ -133,6 +135,7 @@ export const DUPLICATE_TEMPLATE_MODULES = gql`
           id
           folder
           order
+          recipient_list_id
         }
         reminder {
           id
@@ -167,6 +170,7 @@ export const DUPLICATE_PROGRAM_MODULES = gql`
           id
           folder
           order
+          recipient_list_id
         }
         reminder {
           id
@@ -201,6 +205,7 @@ export const UPDATE_PROGRAM_MODULES = gql`
           id
           folder
           order
+          recipient_list_id
         }
         reminder {
           id
@@ -297,6 +302,7 @@ export const GET_PROGRAM = gql`
           id
           folder
           order
+          recipient_list_id
         }
 
         reminder {
@@ -428,6 +434,7 @@ export const UPSERT_MODULE = gql`
           id
           folder
           order
+          recipient_list_id
         }
       }
       reminder {

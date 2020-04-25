@@ -53,6 +53,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Template whereDynamicFields($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
  * @property-read int|null $tags_count
+ * @property-read mixed $default_recipient_list
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\RecipientList[] $recipientLists
+ * @property-read int|null $recipient_lists_count
  */
 class Template extends BaseModel
 {
@@ -79,7 +82,8 @@ class Template extends BaseModel
                 'id',
                 'folder',
                 'order',
-                'deleted_at'
+                'deleted_at',
+                'recipient_list_id'
             ])
             ->whereNull('template_modules.deleted_at')
             ->orderBy('template_modules.order', 'asc');
@@ -101,4 +105,8 @@ class Template extends BaseModel
         return $this->morphToMany(Tag::class, 'taggable');
     }
 
+    // TODO: Add default option for user
+    public function getDefaultRecipientListAttribute() {
+        return $this->recipientLists[0];
+    }
 }

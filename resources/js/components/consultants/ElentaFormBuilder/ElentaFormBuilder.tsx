@@ -85,7 +85,7 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
   }
 
   onSubmit = (e) => {
-    console.log("FormData", e);
+    //console.log("FormData", e);
   }
 
   //*********  Actions  ***********/
@@ -235,7 +235,6 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
   //********  Render *******/
   render() {
     const { enableCorAnswer, error, schema, newKey, uiSchema } = this.state;
-    console.log("State", this.state);
     const registry = {
       ...getDefaultRegistry(),
       settings:{

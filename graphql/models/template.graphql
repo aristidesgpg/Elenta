@@ -70,7 +70,7 @@ type Template {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    pivot: TemplateModulePivot
+    pivot: ModulePivot
 
     recipientLists: [RecipientList]
     templateModules: [TemplateModule] @softDeletes
@@ -78,12 +78,6 @@ type Template {
     requests: [TemplateRequest]
     programs: [Program]
     tags: [Tag]
-}
-
-type TemplateModulePivot {
-    id: ID!
-    folder: String
-    order: String
 }
 
 

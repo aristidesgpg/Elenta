@@ -42,6 +42,9 @@ use Illuminate\Support\Facades\Mail;
  * @property string $user_id
  * @property-read \App\Models\User $creator
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramInvite whereUserId($value)
+ * @property string $recipient_list_id
+ * @property-read \App\Models\ProgramModule $programModule
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramInvite whereRecipientListId($value)
  */
 class ProgramInvite extends BaseModel
 {

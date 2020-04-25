@@ -11,6 +11,8 @@ import {ToastContext} from "../../contexts/ToastContext";
 import {immutableMerge} from "../../utils/utils";
 import {mutateTagData, tagSchema, tagUiSchema} from "../../components/tags/Tags";
 import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
+import Container from "react-bootstrap/Container";
+import ArrayLayoutField from "../../components/shared/ElentaJsonForm/ArrayLayoutField";
 
 const schema = {
   type: "object",
@@ -85,8 +87,8 @@ const schema = {
 const uiSchema = {
   'ui:layout': [
     {
-      title: { md: 6 },
-      description: { md: 6 }
+      title: {md: 6},
+      description: {md: 6}
     },
     {
       recipient_lists: {md: 12}
@@ -96,6 +98,21 @@ const uiSchema = {
       is_public: {md: 2},
     }
   ],
+  recipient_lists: {
+    "ui:ArrayFieldTemplate": ArrayLayoutField({
+      id: {
+        "ui:widget": "hidden"
+      },
+      'ui:layout': [
+        {
+          id: {md: 0},
+          name: {md: 4},
+          channel: {md: 4},
+          max_recipients: {md: 3}
+        }
+      ]
+    })
+  },
   id: {
     "ui:widget": "hidden"
   },

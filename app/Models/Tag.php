@@ -34,6 +34,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Tag withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Tag withoutTrashed()
+ * @property string $label
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag whereLabel($value)
  */
 class Tag extends Model
 {

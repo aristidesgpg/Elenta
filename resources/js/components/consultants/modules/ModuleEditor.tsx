@@ -43,13 +43,14 @@ export const ModuleEditor =
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
 
-    const toastContext = useContext(ToastContext);
+    const toastContext = useContext(ToastContext)
 
     useEffect(() => {
       if (activeModule) {
         if (activeModule.reminder) setFormReminder(_.omit(activeModule.reminder, "__typename"));
         if (activeModule.trigger) setFormTrigger(_.omit(activeModule.trigger, "__typename"));
         if (activeModule.content) setFormContent(JSON.parse(activeModule.content));
+        if (activeModule.pivot) setRecipientList(recipientLists.filter(rl => rl.id == activeModule.pivot.recipient_list_id)[0]);
       }
     }, [activeModule]);
 
@@ -76,11 +77,7 @@ export const ModuleEditor =
             trigger: {
               upsert: formTrigger
             },
-            content: JSON.stringify(formContent) //,
-            // TODO: This needs to connect to programdmoule
-            /*recipientList: {
-              connect: recipientList.id
-            } */
+            content: JSON.stringify(formContent)
           }
         }
       }).then(r => {
@@ -119,7 +116,9 @@ export const ModuleEditor =
             />
             <Button onClick={addModule}>Add Module</Button>
           </Col>
+
           <Col>
+            {activeModule &&
             <Row>
               <Col md={9}>
                 <Form>
@@ -180,6 +179,10 @@ export const ModuleEditor =
                 </Tab.Pane>
               </Tab.Content>
             </Tab.Container>
+            }
+            {!activeModule &&
+              <p>Add Module</p>
+            }
           </Col>
         </Row>
       </LoadingContainer>

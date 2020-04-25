@@ -5,6 +5,7 @@ import ModuleTriggerEditor from "./ModuleTriggerEditor";
 import Row from "react-bootstrap/Row";
 import ModuleRecipientListEditor from "./ModuleRecipientListEditor";
 import Col from "react-bootstrap/Col";
+import _ from "lodash";
 
 export const ModuleSettingsEditor =
   ({
@@ -33,7 +34,7 @@ export const ModuleSettingsEditor =
             <ModuleRecipientListEditor
               recipientLists={recipientLists}
               recipientList={recipientList}
-              onChange={formData => setRecipientList(recipientLists.filter(rl => rl.id == formData.value)[0])}
+              onChange={formData => setRecipientList(_.cloneDeep(recipientLists.filter(rl => rl.id == formData.value)[0]))}
             />
           </Col>
           <Col md={8}>
