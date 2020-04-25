@@ -44,6 +44,7 @@ const schema = {
     },
     recipient_lists: {
       type: "array",
+      minItems: 1,
       title: "Recipient Lists",
       items: {
         type: "object",
@@ -68,7 +69,14 @@ const schema = {
             title: "Max Recipients"
           }
         }
-      }
+      },
+      default: [
+        {
+          name: "Learners",
+          channel: "EMAIL",
+          max_recipients: 50
+        }
+      ]
     },
     ...tagSchema
   }
@@ -79,6 +87,9 @@ const uiSchema = {
     {
       title: { md: 6 },
       description: { md: 6 }
+    },
+    {
+      recipient_lists: {md: 12}
     },
     {
       can_request: {md: 2},

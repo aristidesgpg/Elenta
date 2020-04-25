@@ -33,7 +33,7 @@ export const ModuleSettingsEditor =
             <ModuleRecipientListEditor
               recipientLists={recipientLists}
               recipientList={recipientList}
-              onChange={formData => setRecipientList(recipientLists.filter(rl => rl.id == formData)[0])}
+              onChange={formData => setRecipientList(recipientLists.filter(rl => rl.id == formData.value)[0])}
             />
           </Col>
           <Col md={8}>

@@ -76,10 +76,11 @@ export const ModuleEditor =
             trigger: {
               upsert: formTrigger
             },
-            content: JSON.stringify(formContent),
-            recipientList: {
+            content: JSON.stringify(formContent) //,
+            // TODO: This needs to connect to programdmoule
+            /*recipientList: {
               connect: recipientList.id
-            }
+            } */
           }
         }
       }).then(r => {

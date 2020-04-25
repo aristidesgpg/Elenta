@@ -39,6 +39,12 @@ export const GET_TEMPLATE = gql`
           max_sends
         }
       }
+      recipientLists {
+        id
+        name
+        channel
+        max_recipients
+      }
       requests {
         id
         email

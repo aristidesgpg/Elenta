@@ -120,8 +120,8 @@ export const TemplateEditorPage = () => {
 
   return (
     <LoadingContainer
-      loading={[updateMutationLoading, duplicateMutationLoading, loading]}
-      error={[updateMutationError, duplicateMutationMutationError, error]}
+      loading={[mutationLoading, updateMutationLoading, duplicateMutationLoading, loading]}
+      error={[mutationError, updateMutationError, duplicateMutationMutationError, error]}
     >
       <Tab.Container defaultActiveKey="modules" id="template-editor" transition={false}>
         <Nav variant="tabs" fill className="justify-content-center">
@@ -140,7 +140,7 @@ export const TemplateEditorPage = () => {
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}
               duplicateModules={duplicateModules}
-              recipientLists={template.recipientLists}
+              recipientLists={template ? template.recipientLists : []}
             />
           </Tab.Pane>
           <Tab.Pane eventKey="requests" title="Requests">

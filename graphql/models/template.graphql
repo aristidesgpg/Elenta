@@ -19,8 +19,13 @@ input UpsertTemplateInput {
     is_public: Boolean
     dynamic_fields: String
 
+    recipientLists: TemplateHasManyRecipientLists
     modules: TemplatesBelongsToManyModules
     tags: ItemMorphsToManyTags
+}
+
+input TemplateHasManyRecipientLists {
+    upsert: [UpsertRecipientListInput]
 }
 
 input UpdateTemplateModulesInput {
@@ -67,6 +72,7 @@ type Template {
 
     pivot: TemplateModulePivot
 
+    recipientLists: [RecipientList]
     templateModules: [TemplateModule] @softDeletes
     modules: [Module]
     requests: [TemplateRequest]
@@ -89,6 +95,7 @@ type TemplateModule {
     order: Int!
 
     module_variables: String
+    recipientList: RecipientList
 
     created_at: DateTime!
     updated_at: DateTime!

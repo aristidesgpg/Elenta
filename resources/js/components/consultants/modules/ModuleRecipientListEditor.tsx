@@ -1,7 +1,7 @@
 import * as React from "react";
 import Select from 'react-select'
-import Container from "react-bootstrap/Container";
 
+// TODO: This doesn't load in default
 export const ModuleRecipientListEditor =
   ({
      recipientList,

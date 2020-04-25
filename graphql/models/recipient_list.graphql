@@ -1,6 +1,7 @@
 type RecipientList {
     id: ID!
     program: Program
+    template: Template
 
     name: String!
     channel: String!
@@ -15,6 +16,7 @@ input UpsertRecipientListInput {
     id: ID
 
     program: RecipientListBelongsToProgram
+    template: RecipientListBelongsToTemplate
 
     name: String
     channel: String
@@ -22,5 +24,9 @@ input UpsertRecipientListInput {
 }
 
 input RecipientListBelongsToProgram {
+    connect: ID!
+}
+
+input RecipientListBelongsToTemplate {
     connect: ID!
 }

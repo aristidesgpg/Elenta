@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\RecipientList;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -92,9 +93,10 @@ class Template extends BaseModel
         return $this->hasMany(Program::class);
     }
 
-    /**
-     * Get all of the tags for the template.
-     */
+    public function recipientLists(): HasMany {
+        return $this->hasMany(RecipientList::class);
+    }
+
     public function tags(): MorphToMany {
         return $this->morphToMany(Tag::class, 'taggable');
     }
