@@ -18,7 +18,8 @@ class CreateProgramModuleSendsTable extends Migration
             $table->uuid('id')->primary();
             $table->bigInteger('program_module_id');
             $table->uuid('learner_profile_id');
-            $table->uuid('recipient_list_id');
+            // TODO: Not nullable
+            $table->uuid('recipient_list_id')->nullable();
 
             $table->enum('reason', ProgramModuleSend::REASONS);
             $table->enum('channel', ProgramModuleSend::CHANNELS);
