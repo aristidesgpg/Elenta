@@ -50,7 +50,7 @@ export const CompanyLogoField = (props) => {
   return (
     <div>
       <Row>
-        <Col md={5}>
+        <Col md={4}>
           <Form.Group controlId="company_name">
             <Form.Label>Company Name</Form.Label>
             <Form.Control
@@ -62,7 +62,17 @@ export const CompanyLogoField = (props) => {
               placeholder="Enter the company name"/>
           </Form.Group>
         </Col>
-        <Col md={5}>
+        <Col md={2}
+             style={{
+               display: "flex",
+               justifyContent: "center",
+               alignItems: "center"
+             }}
+        >
+          {props.formData.company_logo_url &&
+          <img src={props.formData.company_logo_url} height="30px"/>}
+        </Col>
+        <Col md={6}>
           <Form.Group controlId="company_logo_url">
             <Form.Label>Company Logo URL</Form.Label>
             <Form.Control
@@ -72,10 +82,6 @@ export const CompanyLogoField = (props) => {
               onChange={handleOnChange}
               placeholder="Enter the company logo URL"/>
           </Form.Group>
-        </Col>
-        <Col md={2}>
-          {props.formData.company_logo_url &&
-          <img src={props.formData.company_logo_url} height="30px"/>}
         </Col>
       </Row>
     </div>

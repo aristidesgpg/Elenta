@@ -152,7 +152,7 @@ const consistentUiSchema = {
   description: {
     "ui:widget": "textarea",
     "ui:options": {
-      rows: 3
+      rows: 1
     }
   },
   company_attributes: {
