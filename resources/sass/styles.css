@@ -36,7 +36,7 @@ body {
 .editable-field label:hover {
     cursor: move;
 }
-  
+
 .editable-field-actions {
     text-align: right;
     padding-left: 0;
@@ -46,83 +46,91 @@ body {
     margin-left: .5em;
 }
 
-.editable-field-actions .btn {    
+.editable-field-actions .btn {
     margin-left: 6px;
 }
 
-.editable-field-close{
+.editable-field-close {
     justify-content: center;
 }
 
-.rjsf>.form-group{
-    margin-bottom: 0px!important;
+.rjsf > .form-group {
+    margin-bottom: 0px !important;
 }
+
 /*.field-editor .btn{
     margin-left: 6px;
 }*/
 
-.editfield-title{
+.editfield-title {
     margin-top: 5px;
     margin-bottom: 5px;
-    padding-right: 0px!important;
-    padding-left: 0px!important;     
+    padding-right: 0px !important;
+    padding-left: 0px !important;
 }
 
-.editfield-title strong{
-    margin-left: 5px;    
+.editfield-title strong {
+    margin-left: 5px;
 }
 
-.editfield-body{
+.editfield-body {
     border: 1px dashed #ccc;
-    padding-top: 10px;    
+    padding-top: 10px;
 }
 
-.panel-heading
-{
+.panel-heading {
     margin-bottom: 10px;
 }
 
 .panel-heading .panel-title {
-    display: inline-block;      
+    display: inline-block;
 }
 
-.panel-body{
-      
+.panel-body {
+
 }
 
 .preview-title {
-    display: inline-block;  
-    margin-bottom: 10px;    
+    display: inline-block;
+    margin-bottom: 10px;
 }
 
 /***background-color: lightyellow;  **/
 .btn-toolbar {
-   float: right;
-   height: 100%;
-   align-items: center;
+    float: right;
+    height: 100%;
+    align-items: center;
 }
 
-.btn-toolbar .btn{
+.btn-toolbar .btn {
     margin-left: 6px;
 }
 
-.repeater-add-btn{
+.repeater-add-btn {
     margin-bottom: 10px;
     float: right;
 }
 
-.answer-modal{
+.answer-modal {
     display: flex;
     justify-content: center
 }
 
-.answer-modal .btn-submit{
-    margin-top:10px;
+.answer-modal .btn-submit {
+    margin-top: 10px;
 }
 
-.answer-modal p{
+.answer-modal p {
     text-align: center;
 }
 
+
+/***ProgramModuleSendView***/
+.avatar-learner {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.7rem;
+    padding: 0;
+}
 
 

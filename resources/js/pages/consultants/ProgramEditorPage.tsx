@@ -1,6 +1,5 @@
 import * as React from "react";
 import {useMutation, useQuery} from '@apollo/react-hooks';
-import {useParams} from "react-router-dom";
 import {
   CURRENT_USER_PROFILE, DUPLICATE_PROGRAM_MODULES,
   GET_PROGRAM,
@@ -17,13 +16,11 @@ import Nav from "react-bootstrap/Nav";
 import ProgramInviteTool from "../../components/consultants/programs/ProgramInvite/ProgramInviteTool";
 import ProgramInviteTable from "../../components/consultants/programs/ProgramInvite/ProgramInviteTable";
 
-export const ProgramEditorPage = () => {
-  let {id} = useParams();
+export const ProgramEditorPage = (props) => {
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
-  const [program, setProgram] = useState(null);
+  const [program, setProgram] = useState(props.program);
 
-  const {loading, error, data} = useQuery(GET_PROGRAM, {variables: {id}});
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
   const [updateProgramModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_PROGRAM_MODULES);
   const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError, data: duplicateMutationData}] = useMutation(DUPLICATE_PROGRAM_MODULES);
@@ -38,16 +35,12 @@ export const ProgramEditorPage = () => {
             connect: userProfile.id
           },
           programs: {
-            connect: [data.getProgram.id]
+            connect: [program.id]
           }
         }
       }
     });
   };
-
-  if (data && !program) {
-    setProgram(data.getProgram);
-  }
 
   const saveModulesOrder = (modules) => {
     updateProgramModulesMutation({
@@ -110,8 +103,8 @@ export const ProgramEditorPage = () => {
 
   return (
     <LoadingContainer
-      loading={[updateMutationLoading, duplicateMutationLoading, loading]}
-      error={[updateMutationError, duplicateMutationMutationError, error]}
+      loading={[updateMutationLoading, duplicateMutationLoading]}
+      error={[updateMutationError, duplicateMutationMutationError]}
     >
       <Tab.Container defaultActiveKey="modules" id="program-editor" transition={false}>
         <Nav variant="tabs" fill className="justify-content-center">
