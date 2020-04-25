@@ -42,7 +42,7 @@ const ArrayLayoutField = (uiSchema) => {
           </div>
         ))}
         {props.canAdd &&
-        <Button onClick={props.onAddClick} className="mr-2 float-right">
+        <Button onClick={props.onAddClick} className="mr-4 float-right">
           <i className="fas fa-plus"/>
         </Button>
         }

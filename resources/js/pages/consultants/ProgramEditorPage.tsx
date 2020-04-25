@@ -55,6 +55,24 @@ export const ProgramEditorPage = (props) => {
     });
   };
 
+  const updateRecipientList = (recipientList, module) => {
+    updateProgramModulesMutation({
+      variables: {
+        input: {
+          id: program.id,
+          programModules: {
+            upsert: [
+              {
+                id: module.pivot.id,
+                recipient_list_id: recipientList.id
+              }
+            ]
+          }
+        }
+      }
+    });
+  };
+
   const deleteModules = (modules) => {
     updateProgramModulesMutation({
       variables: {
@@ -121,14 +139,15 @@ export const ProgramEditorPage = (props) => {
         <Tab.Content>
           <Tab.Pane eventKey="modules" title="Content">
             {program &&
-              <ModuleEditor
-                modules={program ? program.modules : []}
-                addModule={addModule}
-                saveModulesOrder={saveModulesOrder}
-                deleteModules={deleteModules}
-                duplicateModules={duplicateModules}
-                recipientLists={program.recipientLists}
-              />
+            <ModuleEditor
+              modules={program ? program.modules : []}
+              addModule={addModule}
+              saveModulesOrder={saveModulesOrder}
+              deleteModules={deleteModules}
+              duplicateModules={duplicateModules}
+              recipientLists={program.recipientLists}
+              updateRecipientList={updateRecipientList}
+            />
             }
           </Tab.Pane>
           <Tab.Pane eventKey="learners" title="Learners">

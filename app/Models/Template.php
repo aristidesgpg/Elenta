@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\Template
@@ -66,6 +67,30 @@ class Template extends BaseModel
     public const FORMATS = ['SELF_DIRECTED', 'IN_PERSON', 'VIRTUAL_ATTENDANCE'];
 
     protected $guarded = [];
+
+    protected static function boot()
+    {
+        parent::boot();
+        // Create a Module for new Temmplate
+        static::created(function (Template $t) {
+            /** @var User $user */
+            $user = Auth::user();
+            $m = new Module();
+            $m->fill([
+                'title' => 'New Module',
+                'description' => 'Module Description',
+                'consultant_profile_id' => $user->consultantProfile->id
+            ]);
+            $m->save();
+
+            $tm = new TemplateModule();
+            $tm->fill([
+                'template_id' => $t->id,
+                'module_id' => $m->id,
+            ]);
+            $tm->save();
+        });
+    }
 
     public function owner(): BelongsTo {
         return $this->belongsTo(ConsultantProfile::class, 'consultant_profile_id');

@@ -15,6 +15,7 @@ import Container from "react-bootstrap/Container";
 import ArrayLayoutField from "../../components/shared/ElentaJsonForm/ArrayLayoutField";
 
 const schema = {
+  title: "Create Template",
   type: "object",
   required: ["title", "can_request", "is_public"],
   properties: {
@@ -91,11 +92,11 @@ const uiSchema = {
       description: {md: 6}
     },
     {
-      recipient_lists: {md: 12}
-    },
-    {
       can_request: {md: 2},
       is_public: {md: 2},
+    },
+    {
+      recipient_lists: {md: 12}
     }
   ],
   recipient_lists: {
@@ -117,7 +118,10 @@ const uiSchema = {
     "ui:widget": "hidden"
   },
   description: {
-    "ui:widget": "textarea"
+    "ui:widget": "textarea",
+    "ui:options": {
+      rows: 1
+    }
   },
   dynamic_fields: {
     "ui:widget": "hidden"
@@ -138,6 +142,9 @@ const defaultDynamicFields = {
 export const TemplateSettingsPage = () => {
   let history = useHistory();
   let {id} = useParams();
+  if (id !== "new") {
+    this.schema.title = "Update Template";
+  }
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
   const [formState, setFormState] = useState({
@@ -229,7 +236,7 @@ export const TemplateSettingsPage = () => {
         }}
         excludedFields={['richtext', 'rank', 'slider', 'multiple-checkbox', 'radiobuttonlist', 'repeater']}
       />
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={handleSubmit}>Save Template</Button>
     </LoadingContainer>
   );
 };

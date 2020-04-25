@@ -93,9 +93,11 @@ export default class LayoutField extends ObjectField {
                   }
                 })
               }
+              {this.props.removeButton &&
               <Col md={1} className="pt-4 mt-2">
                 {this.props.removeButton}
               </Col>
+              }
             </div>
           )
         })

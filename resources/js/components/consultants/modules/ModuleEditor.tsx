@@ -24,7 +24,8 @@ export const ModuleEditor =
      saveModulesOrder,
      deleteModules,
      duplicateModules,
-     recipientLists
+     recipientLists,
+     updateRecipientList
    }) => {
     const [formContent, setFormContent] = useState({
       schema: {
@@ -63,6 +64,12 @@ export const ModuleEditor =
     const updateModuleList = (d) => {
       setActiveModule(Object.assign(activeModule, d));
     };
+
+    useEffect(() => {
+      if (activeModule && recipientList && recipientList.id !== activeModule.pivot.recipient_list_id) {
+        updateRecipientList(recipientList, activeModule)
+      }
+    }, [recipientList]);
 
     const onSave = () => {
       runMutation({
@@ -119,69 +126,92 @@ export const ModuleEditor =
 
           <Col>
             {activeModule &&
-            <Row>
-              <Col md={9}>
-                <Form>
-                  <Form.Group>
-                    <h5>Title</h5>
-                    <RIEInput
-                      value={activeModule ? activeModule.title : ""}
-                      change={updateModuleList}
-                      propName='title'
+            <>
+              <Row>
+                <Col md={9}>
+                  <Form>
+                    <Form.Group>
+                      <h5>Title</h5>
+                      <RIEInput
+                        value={activeModule ? activeModule.title : "Module Title"}
+                        change={updateModuleList}
+                        propName='title'
+                        defaultProps={{
+                          style: {
+                            border: "1px dashed lightgrey",
+                            padding: "10px",
+                            width: "150px"
+                          }
+                        }}
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <h5>Description</h5>
+                      <RIETextArea
+                        value={activeModule ? activeModule.description || "Module Description" : "Module Description"}
+                        change={updateModuleList}
+                        propName='description'
+                        defaultProps={{
+                          style: {
+                            border: "1px dashed lightgrey",
+                            padding: "10px",
+                            width: "150px"
+                          }
+                        }}
+                      />
+                    </Form.Group>
+                  </Form>
+                </Col>
+                <Col>
+                  <Button onClick={onSave}>Save Module</Button>
+                </Col>
+              </Row>
+              <Tab.Container defaultActiveKey="content" id="module-editor" transition={false}>
+                <Nav variant="tabs">
+                  <Nav.Item>
+                    <Nav.Link eventKey="content">Content</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="settings">Settings</Nav.Link>
+                  </Nav.Item>
+                </Nav>
+                <Tab.Content>
+                  <Tab.Pane eventKey="content" title="Content">
+                    <ElentaFormBuilder
+                      schema={formContent.schema}
+                      uiSchema={formContent.uiSchema}
+                      onSave={(schema, uiSchema) => {
+                        setFormContent({
+                          schema: schema,
+                          uiSchema: uiSchema
+                        });
+                      }}
                     />
-                  </Form.Group>
-                  <Form.Group>
-                    <h5>Description</h5>
-                    <RIETextArea
-                      value={activeModule ? activeModule.description || "" : ""}
-                      change={updateModuleList}
-                      propName='description'
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="settings" title="Settings">
+                    <ModuleSettingsEditor
+                      reminder={formReminder}
+                      trigger={formTrigger}
+                      setFormReminder={setFormReminder}
+                      setFormTrigger={setFormTrigger}
+                      recipientLists={recipientLists}
+                      recipientList={recipientList}
+                      setRecipientList={setRecipientList}
                     />
-                  </Form.Group>
-                </Form>
-              </Col>
-              <Col>
-                <Button onClick={onSave}>Save Module</Button>
-              </Col>
-            </Row>
-            <Tab.Container defaultActiveKey="content" id="module-editor" transition={false}>
-              <Nav variant="tabs">
-                <Nav.Item>
-                  <Nav.Link eventKey="content">Content</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="settings">Settings</Nav.Link>
-                </Nav.Item>
-              </Nav>
-              <Tab.Content>
-                <Tab.Pane eventKey="content" title="Content">
-                  <ElentaFormBuilder
-                    schema={formContent.schema}
-                    uiSchema={formContent.uiSchema}
-                    onSave={(schema, uiSchema) => {
-                      setFormContent({
-                        schema: schema,
-                        uiSchema: uiSchema
-                      });
-                    }}
-                  />
-                </Tab.Pane>
-                <Tab.Pane eventKey="settings" title="Settings">
-                  <ModuleSettingsEditor
-                    reminder={formReminder}
-                    trigger={formTrigger}
-                    setFormReminder={setFormReminder}
-                    setFormTrigger={setFormTrigger}
-                    recipientLists={recipientLists}
-                    recipientList={recipientList}
-                    setRecipientList={setRecipientList}
-                  />
-                </Tab.Pane>
-              </Tab.Content>
-            </Tab.Container>
+                  </Tab.Pane>
+                </Tab.Content>
+              </Tab.Container>
+            </>
             }
             {!activeModule &&
-              <p>Add Module</p>
+            <h4 style={{
+              textAlign: "center",
+              width: "50%",
+              margin: "auto",
+              verticalAlign: "middle"
+            }}
+            >
+              It looks like you don't have any Modules yet. Get started by creating one on the left.</h4>
             }
           </Col>
         </Row>

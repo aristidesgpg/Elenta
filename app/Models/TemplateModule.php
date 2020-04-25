@@ -78,7 +78,9 @@ class TemplateModule extends BasePivot
                     ->toArray();
                 $templateModule->order = $amount['m'] == null ? 0 : $amount['m'] + 1;
             }
-            $templateModule->recipient_list_id = $templateModule->template->default_recipient_list->id;
+            if ($templateModule->template->recipientLists->count() > 0) {
+                $templateModule->recipient_list_id = $templateModule->template->default_recipient_list->id;
+            }
         });
     }
 

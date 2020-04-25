@@ -63,6 +63,24 @@ export const TemplateEditorPage = () => {
     });
   };
 
+  const updateRecipientList = (recipientList, module) => {
+    updateTemplateModulesMutation({
+      variables: {
+        input: {
+          id: template.id,
+          templateModules: {
+            upsert: [
+              {
+                id: module.pivot.id,
+                recipient_list_id: recipientList.id
+              }
+            ]
+          }
+        }
+      }
+    });
+  };
+
   const deleteModules = (modules) => {
     updateTemplateModulesMutation({
       variables: {
@@ -141,6 +159,7 @@ export const TemplateEditorPage = () => {
               deleteModules={deleteModules}
               duplicateModules={duplicateModules}
               recipientLists={template ? template.recipientLists : []}
+              updateRecipientList={updateRecipientList}
             />
           </Tab.Pane>
           <Tab.Pane eventKey="requests" title="Requests">

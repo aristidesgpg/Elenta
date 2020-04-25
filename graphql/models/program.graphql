@@ -101,9 +101,10 @@ input ModulesBelongsToManyPrograms {
 }
 
 input ConnectProgramModule {
-    id: ID!
+    id: ID
     folder: String
     order: Int
+    recipient_list_id: ID
 }
 
 type ProgramModule {

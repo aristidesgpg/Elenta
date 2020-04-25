@@ -54,6 +54,7 @@ input ConnectTemplateModule {
     id: ID!
     folder: String
     order: Int
+    recipient_list_id: ID
 }
 
 type Template {
