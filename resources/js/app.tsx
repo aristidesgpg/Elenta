@@ -11,8 +11,9 @@ import {setContext} from "apollo-link-context";
 import {CURRENT_USER_PROFILE, GET_ME} from "./graphql/queries";
 import LoadingContainer from "./components/hoc/LoadingContainer/LoadingContainer";
 import Routes from "./Routes";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
-import FormSample from "./components/consultants/ElentaFormBuilder/FormSample";
+import { onError } from 'apollo-link-error';
+import { from } from 'apollo-link';
+
 
 const httpLink = createHttpLink({
   uri: process.env.APP_URL + "/graphql"
@@ -25,6 +26,19 @@ const authLink = setContext((_, {headers}) => {
       ...headers,
       authorization: token ? `Bearer ${token}` : "",
     }
+  }
+});
+
+const middlewareLink = onError(({networkError, graphQLErrors, operation, forward}) => {
+  const { response } = operation.getContext();
+  if (response.status === 401) {
+    localStorage.removeItem('token');
+    (async () => {
+      ElentaClient.stop();
+      await ElentaClient.clearStore();
+      await ElentaCachePersistor.purge()
+    })();
+    window.location.replace('/');
   }
 });
 
@@ -49,7 +63,7 @@ export const ElentaCachePersistor = new CachePersistor({
 });
 
 export const ElentaClient = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: from([middlewareLink, authLink, httpLink]),
   cache,
   resolvers: {},
   defaultOptions: {
