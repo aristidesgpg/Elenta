@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
 const schema = {
+  title: "Reminder",
   type: "object",
   required: ["frequency", "max_reminders"],
   properties: {
@@ -44,17 +45,12 @@ export const ModuleReminderEditor: React.FunctionComponent<ModuleReminderEditorP
 
     return (
       <Container>
-        <Row>
-          <h5>Reminder</h5>
-        </Row>
-        <Row>
-          <ElentaJsonForm
-            schema={schema}
-            uiSchema={uiSchema}
-            formData={reminder}
-            onChange={onChange}
-          />
-        </Row>
+        <ElentaJsonForm
+          schema={schema}
+          uiSchema={uiSchema}
+          formData={reminder}
+          onChange={onChange}
+        />
       </Container>
     );
   };

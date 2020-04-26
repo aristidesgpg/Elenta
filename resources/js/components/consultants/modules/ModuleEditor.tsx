@@ -27,7 +27,8 @@ export const ModuleEditor =
      deleteModules,
      duplicateModules,
      recipientLists,
-     updateRecipientList
+     updateRecipientList,
+     updateModule
    }) => {
     const [formContent, setFormContent] = useState({
       schema: {
@@ -68,26 +69,18 @@ export const ModuleEditor =
     };
 
     const onSave = () => {
-      runMutation({
-        variables: {
-          input: {
-            id: activeModule.id,
-            title: activeModule.title,
-            description: activeModule.description,
-            reminder: {
-              upsert: formReminder
-            },
-            trigger: {
-              upsert: formTrigger
-            },
-            content: JSON.stringify(formContent)
-          }
-        }
-      }).then(r => {
-        if (activeModule && recipientList && recipientList.id !== activeModule.pivot.recipient_list_id) {
-          updateRecipientList(recipientList, activeModule)
-        }
+      let input = immutableMerge(activeModule, {
+        reminder: formReminder,
+        trigger: formTrigger,
+        content: JSON.stringify(formContent)
       });
+      delete input.reminder['__typename'];
+      delete input.trigger['__typename'];
+      delete input['__typename'];
+      updateModule(input);
+      if (activeModule && recipientList && recipientList.id !== activeModule.pivot.recipient_list_id) {
+        updateRecipientList(recipientList, activeModule)
+      }
     };
 
     const addFolder = () => {
@@ -107,11 +100,16 @@ export const ModuleEditor =
 
     return (
       <LoadingContainer loading={mutationLoading} error={mutationError} className="pl-0 pr-0 pt-4">
-        <Row>
-          <Col md={3}>
-            <Button type="submit" onClick={addFolder} className="w-100">
-              Add Folder
-            </Button>
+        <Row className="pt-4">
+          <Col md={3} className="border-right">
+            <Row className="pb-2">
+              <Button variant="outline-primary" className="w-50" onClick={addFolder}>
+                + Folder
+              </Button>
+              <Button variant="outline-primary" className="w-50" onClick={addModule}>
+                + Module
+              </Button>
+            </Row>
             <ModuleList modules={modules}
                         activeModule={activeModule}
                         setActiveModule={setActiveModule}
@@ -119,7 +117,6 @@ export const ModuleEditor =
                         deleteModules={deleteModules}
                         duplicateModules={duplicateModules}
             />
-            <Button onClick={addModule}>Add Module</Button>
           </Col>
 
           <Col>
@@ -161,11 +158,11 @@ export const ModuleEditor =
                   </Form>
                 </Col>
                 <Col>
-                  <Button onClick={onSave}>Save Module</Button>
+                  <Button className="float-right" onClick={onSave}>Save Module</Button>
                 </Col>
               </Row>
               <Tab.Container defaultActiveKey="content" id="module-editor" transition={false}>
-                <Nav variant="tabs">
+                <Nav variant="tabs" fill className="justify-content-center">
                   <Nav.Item>
                     <Nav.Link eventKey="content">Content</Nav.Link>
                   </Nav.Item>

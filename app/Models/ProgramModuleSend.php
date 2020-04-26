@@ -116,8 +116,6 @@ class ProgramModuleSend extends BaseModel
     }
 
     public function respondUrl() {
-        $generator = new LoginUrl($this->learner->user);
-        $generator->setRedirectUrl(config(env('APP_URL'))."/learner/module/{$this->programModule->module->id}");
-        return $generator->generate();
+        return config(env('APP_URL'))."/program/respond/{$this->programModule->program->id}";
     }
 }

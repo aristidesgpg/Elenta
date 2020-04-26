@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
 const schema = {
+  title: "Trigger",
   type: "object",
   required: ["frequency", "max_sends"],
   properties: {
@@ -18,8 +19,9 @@ const schema = {
     },
     start_timestamp_field: {
       type: "string",
-      title: "Relative Start Time",
+      title: "Start Time",
       enum: ["ENROL_TIME"],
+      default: "ENROL_TIME",
       enumNames: ["Enrol Time"]
     },
     frequency: {
@@ -38,9 +40,10 @@ const schema = {
 const uiSchema = {
   "ui:layout": [
     {
+      start_timestamp_field: {md: 3},
       start_timestamp: {md: 4},
-      frequency: {md: 4},
-      max_sends: {md: 4}
+      frequency: {md: 3},
+      max_sends: {md: 2}
     }
   ],
   id: {
@@ -58,17 +61,12 @@ export const ModuleTriggerEditor: React.FunctionComponent<ModuleTriggerEditorPro
    }) => {
     return (
       <Container>
-        <Row>
-          <h5>Trigger</h5>
-        </Row>
-        <Row>
           <ElentaJsonForm
             schema={schema}
             uiSchema={uiSchema}
             formData={trigger}
             onChange={onChange}
           />
-        </Row>
       </Container>
     );
   };

@@ -66,8 +66,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $consultant_profile_count
  * @property-read int|null $learner_profile_count
  */
-class User extends Authenticatable
-{
+class User extends Authenticatable {
     use HasApiTokens;
     use Notifiable;
     use SoftDeletes;
@@ -91,7 +90,23 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // TODO: Make sure users can't be requested by someone without policy approval - name/email especially
+    protected static function boot() {
+        parent::boot();
+        static::created(function (User $user) {
+            $invites = ProgramInvite::whereEmail($user->email);
+            if ($invites->count() > 0) {
+                $profile = new LearnerProfile();
+                $profile->fill([
+                    'user_id' => $user->id
+                ]);
+                $profile->save();
+                $invites->each(function(ProgramInvite $pi) use ($profile) {
+                    $pi->learner_profile_id = $profile->id;
+                    $pi->save();
+                });
+            }
+        });
+    }
 
     // DB supports multiple of each, but we make it HasOne for now
     public function learnerProfile(): HasOne {

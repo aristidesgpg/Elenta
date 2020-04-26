@@ -7,8 +7,9 @@ import {useContext, useState} from "react";
 import LoadingContainer from "../../../hoc/LoadingContainer/LoadingContainer";
 import {ToastContext} from "../../../../contexts/ToastContext";
 import Button from "react-bootstrap/Button";
+import _ from "lodash";
 
-export const ProgramInviteTool = ({program}) => {
+export const ProgramInviteTool = ({program, setProgram}) => {
   const [emails, setEmails] = useState("");
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(CREATE_PROGRAM_INVITES);
 
@@ -28,7 +29,10 @@ export const ProgramInviteTool = ({program}) => {
     runMutation({
       variables: {input: vars}
     }).then(r => {
-      toastContext.addToast({header: "Success!", body: "Saved"});
+      toastContext.addToast({header: "Success!", body: "Invited"});
+      let newState = _.cloneDeep(program);
+      newState.invites = [...newState.invites, ...r.data.createProgramInvites];
+      setProgram(newState);
     });
   };
 

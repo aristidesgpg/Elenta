@@ -428,6 +428,21 @@ export const UPSERT_MODULE = gql`
       description
       content
       conditions
+      pivot {
+        id
+        folder
+        order
+        recipient_list_id
+      }
+      programs {
+        id
+        pivot {
+          id
+          folder
+          order
+          recipient_list_id
+        }
+      }
       templates {
         id
         pivot {

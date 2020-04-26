@@ -56,6 +56,9 @@ class ProgramInvite extends BaseModel
     protected static function boot()
     {
         parent::boot();
+        static::creating(function (ProgramInvite $pi) {
+            $pi->recipient_list_id = $pi->program->default_recipient_list->id;
+        });
         static::saved(function (ProgramInvite $pi) {
             $pi->sendInvite();
         });
@@ -78,6 +81,6 @@ class ProgramInvite extends BaseModel
     }
 
     public function sendInvite() {
-        Mail::to($this->creator->email)->send(new ProgramInviteMail($this));
+        Mail::to($this->email)->send(new ProgramInviteMail($this));
     }
 }

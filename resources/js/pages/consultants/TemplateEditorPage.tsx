@@ -31,6 +31,32 @@ export const TemplateEditorPage = () => {
 
   const toastContext = useContext(ToastContext);
 
+  const updateModule = (module) => {
+    runMutation({
+      variables: {
+        input: {
+          id: module.id,
+          title: module.title,
+          description: module.description,
+          reminder: {
+            upsert: module.reminder
+          },
+          trigger: {
+            upsert: module.trigger
+          },
+          content: module.content
+        }
+      }
+    }).then(r => {
+      let newState = _.cloneDeep(template);
+      newState.modules = newState.modules.filter(m => m.id !== r.data.upsertModule.id);
+      const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.programs.0.pivot", {})};
+      delete module.programs;
+      newState.modules.push(module);
+      setTemplate(newState);
+    });
+  };
+
   const addModule = () => {
     runMutation({
       variables: {
@@ -160,6 +186,7 @@ export const TemplateEditorPage = () => {
               duplicateModules={duplicateModules}
               recipientLists={template ? template.recipientLists : []}
               updateRecipientList={updateRecipientList}
+              updateModule={updateModule}
             />
           </Tab.Pane>
           <Tab.Pane eventKey="requests" title="Requests">
