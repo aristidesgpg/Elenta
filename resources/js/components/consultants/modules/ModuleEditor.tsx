@@ -67,12 +67,6 @@ export const ModuleEditor =
       setActiveModule(immutableMerge(activeModule, d));
     };
 
-    useEffect(() => {
-      if (activeModule && recipientList && recipientList.id !== activeModule.pivot.recipient_list_id) {
-        updateRecipientList(recipientList, activeModule)
-      }
-    }, [recipientList]);
-
     const onSave = () => {
       runMutation({
         variables: {
@@ -90,7 +84,9 @@ export const ModuleEditor =
           }
         }
       }).then(r => {
-        toastContext.addToast({header: "Success!", body: "Saved"});
+        if (activeModule && recipientList && recipientList.id !== activeModule.pivot.recipient_list_id) {
+          updateRecipientList(recipientList, activeModule)
+        }
       });
     };
 

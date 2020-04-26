@@ -3,6 +3,7 @@ import {mutateTree, TreeData} from "@atlaskit/tree";
 import ModuleCard from "./ModuleCard";
 import RenameFolderModal from "./RenameFolderModal";
 import List from "./List";
+import {immutableMerge} from "../../../utils/utils";
 
 export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder, deleteModules, duplicateModules}) => {
     const [tree, setTree] = useState<TreeData>({
@@ -29,12 +30,11 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
                 hasChildren: true,
                 isExpanded: false,
                 isChildrenLoading: false,
-                data: {
+                data: immutableMerge(module, {
                   isFolder: true,
                   name: folder,
                   id: folder,
-                  pivot: module.pivot
-                },
+                }),
                 children: [moduleKey]
               }
             }
@@ -46,12 +46,10 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
             hasChildren: false,
             isExpanded: false,
             isChildrenLoading: false,
-            data: {
+            data: immutableMerge(module, {
               isFolder: !!module.isFolder,
               name: module.title,
-              id: module.id,
-              pivot: module.pivot
-            },
+            }),
             children: []
           };
           return acc;

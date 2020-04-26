@@ -9,12 +9,13 @@ import {
 import Tab from "react-bootstrap/Tab";
 import ModuleEditor from "../../components/consultants/modules/ModuleEditor";
 import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import _ from "lodash";
 import ProgramLearnerTable from "../../components/consultants/programs/ProgramLearnerTable";
 import Nav from "react-bootstrap/Nav";
 import ProgramInviteTool from "../../components/consultants/programs/ProgramInvite/ProgramInviteTool";
 import ProgramInviteTable from "../../components/consultants/programs/ProgramInvite/ProgramInviteTable";
+import {ToastContext} from "../../contexts/ToastContext";
 
 export const ProgramEditorPage = (props) => {
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
@@ -24,6 +25,8 @@ export const ProgramEditorPage = (props) => {
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
   const [updateProgramModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_PROGRAM_MODULES);
   const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError, data: duplicateMutationData}] = useMutation(DUPLICATE_PROGRAM_MODULES);
+
+  const toastContext = useContext(ToastContext)
 
   const addModule = () => {
     runMutation({
@@ -84,6 +87,7 @@ export const ProgramEditorPage = (props) => {
       let newState = _.cloneDeep(program);
       newState.modules = r.data.updateProgramModules.modules;
       setProgram(newState);
+      toastContext.addToast({header: "Success!", body: "Saved"});
     });
   };
 
