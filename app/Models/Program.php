@@ -140,6 +140,8 @@ class Program extends BaseModel {
 
     // TODO: Add default option for user
     public function getDefaultRecipientListAttribute() {
-        return $this->recipientLists[0];
+        if ($this->recipientLists->count() > 0) {
+            return $this->recipientLists[0];
+        }
     }
 }

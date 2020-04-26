@@ -16,7 +16,7 @@ enum ProgramFormat {
 
 input UpdateProgramModulesInput {
     id: ID!
-    templateModules: UpdateProgramModulesHasMany
+    programModules: UpdateProgramModulesHasMany
 }
 
 input DuplicateProgramModulesInput {

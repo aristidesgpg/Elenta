@@ -238,7 +238,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
             }}
             duplicateModules={duplicateModulesHandler}
             deleteModules={deleteModulesHandler}
-            isActive={activeModule ? item.id === activeModule.id : false}
+            isActive={activeModule ? item.id === `${activeModule.id}:::${activeModule.pivot.id}` : false}
             setActiveModule={item.data.isFolder ? () => null : setActiveModule}
           />
         </div>

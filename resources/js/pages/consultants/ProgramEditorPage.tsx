@@ -39,6 +39,12 @@ export const ProgramEditorPage = (props) => {
           }
         }
       }
+    }).then(r => {
+      let newState = _.cloneDeep(program);
+      const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.programs.0.pivot", {})};
+      delete module.programs;
+      newState.modules.push(module);
+      setProgram(newState);
     });
   };
 
@@ -52,6 +58,10 @@ export const ProgramEditorPage = (props) => {
           }
         }
       }
+    }).then(r => {
+      let newState = _.cloneDeep(program);
+      newState.modules = r.data.updateProgramModules.modules;
+      setProgram(newState);
     });
   };
 
@@ -70,6 +80,10 @@ export const ProgramEditorPage = (props) => {
           }
         }
       }
+    }).then(r => {
+      let newState = _.cloneDeep(program);
+      newState.modules = r.data.updateProgramModules.modules;
+      setProgram(newState);
     });
   };
 
@@ -83,6 +97,10 @@ export const ProgramEditorPage = (props) => {
           }
         }
       }
+    }).then(r => {
+      let newState = _.cloneDeep(program);
+      newState.modules = r.data.updateProgramModules.modules;
+      setProgram(newState);
     });
   };
 
@@ -95,34 +113,17 @@ export const ProgramEditorPage = (props) => {
           modules
         }
       }
+    }).then(r => {
+      let newState = _.cloneDeep(program);
+      newState.modules = r.data.duplicateProgramModules.modules;
+      setProgram(newState);
     });
   };
 
-  // TODO: Move these into promise functions above
-  useEffect(() => {
-    if (mutationData) {
-      let newState = _.cloneDeep(program);
-      const module = {...mutationData.upsertModule, pivot: _.get(mutationData, "upsertModule.programs.0.pivot", {})};
-      delete module.programs;
-      newState.modules.push(module);
-      setProgram(newState);
-    }
-    if (updateMutationData) {
-      let newState = _.cloneDeep(program);
-      newState.modules = updateMutationData.updateProgramModules.modules;
-      setProgram(newState);
-    }
-    if (duplicateMutationData) {
-      let newState = _.cloneDeep(program);
-      newState.modules = duplicateMutationData.duplicateProgramModules.modules;
-      setProgram(newState);
-    }
-  }, [mutationData, updateMutationData, duplicateMutationData]);
-
   return (
     <LoadingContainer
-      loading={[updateMutationLoading, duplicateMutationLoading]}
-      error={[updateMutationError, duplicateMutationMutationError]}
+      loading={[mutationLoading, updateMutationLoading, duplicateMutationLoading]}
+      error={[mutationError, updateMutationError, duplicateMutationMutationError]}
     >
       <Tab.Container defaultActiveKey="modules" id="program-editor" transition={false}>
         <Nav variant="tabs" fill className="justify-content-center">

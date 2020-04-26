@@ -10,7 +10,7 @@ export const ModuleCard = (props) => {
   return (
     <ListGroupItem as="li"
                    data-id={item.id}
-                   action active={isActive} onClick={() => setActiveModule(item)}>
+                   action active={isActive} onClick={() => setActiveModule(item.data)}>
       <div className="d-flex justify-content-between">
         <div>
           <div>

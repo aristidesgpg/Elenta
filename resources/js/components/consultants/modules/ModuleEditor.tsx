@@ -16,7 +16,9 @@ import {RIEInput, RIETextArea} from "riek";
 import {Button} from "react-bootstrap";
 import {ToastContext} from "../../../contexts/ToastContext";
 import LoadingContainer from "../../hoc/LoadingContainer/LoadingContainer";
+import {immutableMerge} from "../../../utils/utils";
 
+// TODO: Refactor to be PivotModuleEditor that lists Program/TemplateModules
 export const ModuleEditor =
   ({
      modules: templateModules,
@@ -62,7 +64,7 @@ export const ModuleEditor =
     }, [templateModules]);
 
     const updateModuleList = (d) => {
-      setActiveModule(Object.assign(activeModule, d));
+      setActiveModule(immutableMerge(activeModule, d));
     };
 
     useEffect(() => {
@@ -133,7 +135,7 @@ export const ModuleEditor =
                     <Form.Group>
                       <h5>Title</h5>
                       <RIEInput
-                        value={activeModule ? activeModule.title : "Module Title"}
+                        value={activeModule ? activeModule.title || "Module Title" : "Module Title"}
                         change={updateModuleList}
                         propName='title'
                         defaultProps={{

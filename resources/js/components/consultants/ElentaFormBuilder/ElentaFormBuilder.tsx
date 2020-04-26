@@ -1,5 +1,5 @@
 import * as React from "react";
-import { DragDropContext } from "react-beautiful-dnd";
+import {DragDropContext} from "react-beautiful-dnd";
 import SchemaField from "react-jsonschema-form-bs4/lib/components/fields/SchemaField";
 import {getDefaultRegistry} from "react-jsonschema-form/lib/utils";
 import {slugify, clone, unique} from "../../../utils/utils"
@@ -7,10 +7,11 @@ import FormActions from "./FormActions";
 import EditableField from "./fields/EditableField";
 import TitleField from "./fields/TitleField";
 import DescriptionField from "./fields/DescriptionField";
-import { TextField } from "./fields/TextField";
+import {TextField} from "./fields/TextField";
 import _ from "lodash";
 
 import "react-datetime/css/react-datetime.css";
+import Alert from "react-bootstrap/Alert";
 
 
 interface State {
@@ -106,8 +107,8 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
     const name = `Question ${currentIndex}`;
     const _slug = slugify(name);
     const jsonSchema = clone(field.jsonSchema);
-    const { title } = jsonSchema;
-    if(title != undefined)
+    const {title} = jsonSchema;
+    if (title != undefined)
       schema.properties[_slug] = {...jsonSchema, title: name};
     else
       schema.properties[_slug] = {...jsonSchema};
@@ -215,8 +216,8 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
   }
 
   getTagList = (): any[] => {
-    const { tagList } = this.props;
-    return  tagList == undefined ? [] : tagList;
+    const {tagList} = this.props;
+    return tagList == undefined ? [] : tagList;
   }
 
   saveSchema = () => {
@@ -228,16 +229,16 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
     if (!result.destination) {
       return;
     }
-    const { source, destination } = result;
+    const {source, destination} = result;
     this.swapFields(source.droppableId, destination.droppableId);
   }
 
   //********  Render *******/
   render() {
-    const { enableCorAnswer, error, schema, newKey, uiSchema } = this.state;
+    const {enableCorAnswer, error, schema, newKey, uiSchema} = this.state;
     const registry = {
       ...getDefaultRegistry(),
-      settings:{
+      settings: {
         enableCorAnswer
       },
       fields: {
@@ -251,22 +252,30 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
     return (
       <div className="container-fluid">
         {error ? <div className="alert alert-danger">{error}</div> : <div/>}
+
         <div className="rjsf builder-form">
+          {Object.keys(schema.properties).length > 0 &&
           <DragDropContext onDragEnd={this.handleDrop}>
             <SchemaField key={newKey} {...this.state}
-                          schema={schema}
-                          registry={registry}
-                          onChange={this.onChange}/>
+                         schema={schema}
+                         registry={registry}
+                         onChange={this.onChange}/>
           </DragDropContext>
+          }
+          {Object.keys(schema.properties).length == 0 &&
+            <Alert variant="info">
+              Get started by adding a field below
+            </Alert>
+          }
         </div>
         <FormActions
-            schema = {schema}
-            uiSchema = {uiSchema}
-            addField = {this.addField}
-            switchField = {this.switchField}
-            saveSchema = {this.saveSchema}
-            excludedFields={this.props.excludedFields}
-            />
+          schema={schema}
+          uiSchema={uiSchema}
+          addField={this.addField}
+          switchField={this.switchField}
+          saveSchema={this.saveSchema}
+          excludedFields={this.props.excludedFields}
+        />
       </div>
     );
   }
@@ -283,12 +292,12 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
       Image: ImageWidget,
       Video: VideoWidget
     };*/
-    /*{false && <h1>Preview</h1>}
-        {false && <JsonForm key={newKey+1} {...this.state}
-                    schema ={schema} uiSchema = {uiSchema}
-                    fields={{...fields}}
-                    widgets={{...widgets}} onChange={this.onChange}
-                    onSubmit={this.onSubmit}>
-          <button type="submit" className="">Submit</button>
-          </JsonForm>}
-    */
+/*{false && <h1>Preview</h1>}
+    {false && <JsonForm key={newKey+1} {...this.state}
+                schema ={schema} uiSchema = {uiSchema}
+                fields={{...fields}}
+                widgets={{...widgets}} onChange={this.onChange}
+                onSubmit={this.onSubmit}>
+      <button type="submit" className="">Submit</button>
+      </JsonForm>}
+*/

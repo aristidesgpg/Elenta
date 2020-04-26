@@ -13,15 +13,14 @@ const schema = {
     },
     start_timestamp: {
       type: "string",
-      title: "Start Time",
-      format: "date-time",
-      default: "2020-06-01 12:00:00"
+      title: "Latest Start Time",
+      format: "date-time"
     },
     start_timestamp_field: {
       type: "string",
-      title: "Start Timestamp Field",
-      enum: ["ENROL_TIME", "CHOOSE_TIME"],
-      enumNames: ["Enrol Time", "Choose a Time"]
+      title: "Relative Start Time",
+      enum: ["ENROL_TIME"],
+      enumNames: ["Enrol Time"]
     },
     frequency: {
       type: "integer",
@@ -45,10 +44,6 @@ const uiSchema = {
     }
   ],
   id: {
-    "ui:widget": "hidden"
-  },
-  // TODO: Allow reference to previous field
-  start_timestamp_field: {
     "ui:widget": "hidden"
   },
   start_timestamp: {
