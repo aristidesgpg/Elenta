@@ -22,14 +22,20 @@ export const ProgramEditorPage = (props) => {
 
   const [program, setProgram] = useState(props.program);
 
-  const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
-  const [runSendMutation, {loading: sendMutationLoading, error: sendMutationError, data: sendMutationData}] = useMutation(CREATE_PROGRAM_MODULE_SENDS);
-  const [updateProgramModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_PROGRAM_MODULES);
-  const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError, data: duplicateMutationData}] = useMutation(DUPLICATE_PROGRAM_MODULES);
+  const [runMutation, {loading: mutationLoading, error: mutationError}] = useMutation(UPSERT_MODULE);
+  const [runSendMutation, {loading: sendMutationLoading, error: sendMutationError}] = useMutation(CREATE_PROGRAM_MODULE_SENDS);
+  const [updateProgramModulesMutation, {loading: updateMutationLoading, error: updateMutationError}] = useMutation(UPDATE_PROGRAM_MODULES);
+  const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError}] = useMutation(DUPLICATE_PROGRAM_MODULES);
 
   const [activeModule, setActiveModule] = useState(props.program.modules.length ? props.program.modules[0] : null);
 
   const toastContext = useContext(ToastContext)
+
+  const updateProgramModules = (modules) => {
+    let newState = _.cloneDeep(program);
+    newState.modules = modules;
+    program(newState);
+  };
 
   const updateModule = (module) => {
     runMutation({
@@ -48,12 +54,13 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
-      newState.modules = newState.modules.filter(m => m.id !== r.data.upsertModule.id);
+      let modules = _.cloneDeep(program.modules);
+      modules = modules.filter(m => m.id !== r.data.upsertModule.id);
       const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.programs.0.pivot", {})};
       delete module.programs;
-      newState.modules.push(module);
-      setProgram(newState);
+      modules.push(module);
+      updateProgramModules(modules);
+
       setActiveModule(module);
     });
   };
@@ -85,11 +92,11 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
+      const modules = _.cloneDeep(program.modules);
       const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.programs.0.pivot", {})};
       delete module.programs;
-      newState.modules.push(module);
-      setProgram(newState);
+      modules.push(module);
+      updateProgramModules(modules);
     });
   };
 
@@ -104,9 +111,7 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
-      newState.modules = r.data.updateProgramModules.modules;
-      setProgram(newState);
+      updateProgramModules(r.data.updateProgramModules.modules);
     });
   };
 
@@ -126,9 +131,7 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
-      newState.modules = r.data.updateProgramModules.modules;
-      setProgram(newState);
+      updateProgramModules(r.data.updateProgramModules.modules);
       toastContext.addToast({header: "Success!", body: "Saved"});
     });
   };
@@ -144,9 +147,7 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
-      newState.modules = r.data.updateProgramModules.modules;
-      setProgram(newState);
+      updateProgramModules(r.data.updateProgramModules.modules);
     });
   };
 
@@ -160,9 +161,7 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
-      newState.modules = r.data.duplicateProgramModules.modules;
-      setProgram(newState);
+      updateProgramModules(r.data.duplicateProgramModules.modules);
     });
   };
 

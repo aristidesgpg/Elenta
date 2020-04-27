@@ -2,7 +2,6 @@ import * as React from "react";
 import {useMutation, useQuery} from '@apollo/react-hooks';
 import {useParams} from "react-router-dom";
 import {
-  CURRENT_USER,
   CURRENT_USER_PROFILE,
   GET_TEMPLATE,
   UPDATE_TEMPLATE_MODULES,
@@ -12,7 +11,7 @@ import {
 import Tab from "react-bootstrap/Tab";
 import ModuleEditor from "../../components/consultants/modules/ModuleEditor";
 import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useState} from "react";
 import _ from "lodash";
 import Nav from "react-bootstrap/Nav";
 import TemplateRequestTable from "../../components/consultants/templates/TemplateRequestTable";
@@ -25,13 +24,19 @@ export const TemplateEditorPage = () => {
 
   const [template, setTemplate] = useState(null);
   const {loading, error, data} = useQuery(GET_TEMPLATE, {variables: {id}});
-  const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
-  const [updateTemplateModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_TEMPLATE_MODULES);
-  const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError, data: duplicateMutationData}] = useMutation(DUPLICATE_TEMPLATE_MODULES);
+  const [runMutation, {loading: mutationLoading, error: mutationError}] = useMutation(UPSERT_MODULE);
+  const [updateTemplateModulesMutation, {loading: updateMutationLoading, error: updateMutationError}] = useMutation(UPDATE_TEMPLATE_MODULES);
+  const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError}] = useMutation(DUPLICATE_TEMPLATE_MODULES);
 
   const [activeModule, setActiveModule] = useState(null);
 
   const toastContext = useContext(ToastContext);
+
+  const updateTemplateModules = (modules) => {
+    let newState = _.cloneDeep(template);
+    newState.modules = modules;
+    setTemplate(newState);
+  };
 
   const updateModule = (module) => {
     runMutation({
@@ -50,12 +55,13 @@ export const TemplateEditorPage = () => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(template);
-      newState.modules = newState.modules.filter(m => m.id !== r.data.upsertModule.id);
-      const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.programs.0.pivot", {})};
+      let modules = _.cloneDeep(template.modules);
+      modules = modules.filter(m => m.id !== r.data.upsertModule.id);
+      const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.templates.0.pivot", {})};
       delete module.programs;
-      newState.modules.push(module);
-      setTemplate(newState);
+      modules.push(module);
+      updateTemplateModules(modules);
+
       setActiveModule(module);
     });
   };
@@ -75,11 +81,11 @@ export const TemplateEditorPage = () => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(template);
+      const modules = _.cloneDeep(template.modules);
       const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.templates.0.pivot", {})};
       delete module.templates;
-      newState.modules.push(module);
-      setTemplate(newState);
+      modules.push(module);
+      updateTemplateModules(modules);
     });
   };
 
@@ -94,9 +100,7 @@ export const TemplateEditorPage = () => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(template);
-      newState.modules = r.data.updateTemplateModules.modules;
-      setTemplate(newState);
+      updateTemplateModules(r.data.updateTemplateModules.modules);
     });
   };
 
@@ -116,9 +120,7 @@ export const TemplateEditorPage = () => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(template);
-      newState.modules = r.data.updateTemplateModules.modules;
-      setTemplate(newState);
+      updateTemplateModules(r.data.updateTemplateModules.modules);
       toastContext.addToast({header: "Success!", body: "Saved"});
     });
   };
@@ -134,9 +136,7 @@ export const TemplateEditorPage = () => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(template);
-      newState.modules = r.data.updateTemplateModules.modules;
-      setTemplate(newState);
+      updateTemplateModules(r.data.updateTemplateModules.modules);
     });
   };
 
@@ -150,9 +150,7 @@ export const TemplateEditorPage = () => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(template);
-      newState.modules = r.data.duplicateTemplateModules.modules;
-      setTemplate(newState);
+      updateTemplateModules(r.data.duplicateTemplateModules.modules);
     });
   };
 
@@ -160,28 +158,6 @@ export const TemplateEditorPage = () => {
     setTemplate(data.getTemplate);
     if (data.getTemplate.modules.length) setActiveModule(data.getTemplate.modules[0]);
   }
-  
-  // TODO: Move these into promises .then()
-  useEffect(() => {
-    if (mutationData) {
-      let newState = _.cloneDeep(template);
-      const module = {...mutationData.upsertModule, pivot: _.get(mutationData, "upsertModule.templates.0.pivot", {})};
-      delete module.templates;
-      newState.modules.push(module);
-      setTemplate(newState);
-    }
-    if (updateMutationData) {
-      let newState = _.cloneDeep(template);
-      newState.modules = updateMutationData.updateTemplateModules.modules;
-      setTemplate(newState);
-    }
-    if (duplicateMutationData) {
-      let newState = _.cloneDeep(template);
-      newState.modules = duplicateMutationData.duplicateTemplateModules.modules;
-      setTemplate(newState);
-    }
-  }, [mutationData, updateMutationData, duplicateMutationData]);
-
 
   return (
     <LoadingContainer
