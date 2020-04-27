@@ -39,7 +39,7 @@ export const ProgramCard = ({program}) => {
         </Container>
         <Container className="pl-0 pr-0 pb-3">
           <div className="text-muted">Progress</div>
-          <ProgressBar now={Math.round(program.progress*100)} label={`${Math.round(program.progress)}%`}/>
+          <ProgressBar now={Math.round(program.progress*100)} label={`${Math.round(program.progress*100)}%`}/>
         </Container>
       </Card.Body>
     </Card>

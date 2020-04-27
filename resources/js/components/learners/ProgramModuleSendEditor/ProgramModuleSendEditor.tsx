@@ -16,7 +16,7 @@ export const ProgramModuleSendEditor: React.FunctionComponent<Props> = ({formDat
     o[key] = val;
     onChange(o);
   };
-  let formRef = React.createRef();
+  let formRef;
 
   return (
     <Container>
@@ -36,6 +36,7 @@ export const ProgramModuleSendEditor: React.FunctionComponent<Props> = ({formDat
       >
         <hr/>
       </ElentaJsonForm>
+      <hr/>
       <Form>
         <Form.Group>
           <Form.Label className="pr-3">Was this module useful?</Form.Label>

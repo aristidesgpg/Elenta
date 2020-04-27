@@ -5,6 +5,8 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import * as moment from "moment";
 import {formatDate} from "../../../utils/utils";
 import Alert from "react-bootstrap/Alert";
+import ToggleButton from "react-bootstrap/ToggleButton";
+import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 
 export const ProgramLearnerTable = ({program}) => {
   if (program?.learners?.length > 0) {
@@ -22,7 +24,7 @@ export const ProgramLearnerTable = ({program}) => {
     program.programModules.forEach(pm => {
       pm.sends.forEach(send => {
         if (send.learner) {
-          sends[JSON.stringify([module.id, send.learner.id])] = {
+          sends[JSON.stringify([pm.module.id, send.learner.id])] = {
             send_timestamp: send.send_timestamp,
             open_timestamp: send.open_timestamp,
             click_timestamp: send.click_timestamp,
@@ -47,7 +49,16 @@ export const ProgramLearnerTable = ({program}) => {
             // TODO change to thumb up/down icon in red or green
             obj[m.id] = (<p>
               Completed on {formatDate(send.response_timestamp)}, with a rating
-              of {send.response_rating}
+              of {send.response_rating === 0 &&
+            <ToggleButton className="btn-danger" value={0}>
+              <i className="fas fa-thumbs-down"/>
+            </ToggleButton>
+            }
+              {send.response_rating === 1 &&
+              <ToggleButton className="btn-success" value={1}>
+                <i className="fas fa-thumbs-up"/>
+              </ToggleButton>
+              }
             </p>)
           } else if (send.click_timestamp) {
             obj[m.id] = <p>Clicked on {formatDate(send.click_timestamp)}</p>
@@ -68,8 +79,7 @@ export const ProgramLearnerTable = ({program}) => {
     });
 
     return <BootstrapTable keyField='id' data={tableData} columns={columns}/>
-  }
-  else {
+  } else {
     return <Alert variant="info">
       It looks like you don't have any learners yet
     </Alert>
