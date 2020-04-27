@@ -17,7 +17,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       const newItems = modules.sort((a, b) => parseInt(a.pivot.order) - parseInt(b.pivot.order))
         .reduce((acc, module) => {
           const folder = module.pivot.folder;
-          const moduleKey = `${module.id}:::${module.pivot.id}`
+          const moduleKey = getModuleKey(module);
           if (folder !== null) {
             const folderItem = acc[folder];
 
@@ -70,6 +70,10 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       const newTree = {...tree, items: newItems};
       setTree(newTree);
     }, [modules]);
+
+    const getModuleKey = (module) => {
+      return `${module.id}:::${module.pivot.id}`;
+    };
 
     const saveOrder = (newTree) => {
       let order = 1;
@@ -219,6 +223,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
     };
 
     const renderItem = ({item, provided}) => {
+      const moduleKey = getModuleKey(activeModule);
       return (
         <div
           className={"card"}
@@ -236,7 +241,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
             }}
             duplicateModules={duplicateModulesHandler}
             deleteModules={deleteModulesHandler}
-            isActive={activeModule ? item.id === `${activeModule.id}:::${activeModule.pivot.id}` : false}
+            isActive={activeModule ? item.id === moduleKey : false}
             setActiveModule={item.data.isFolder ? () => null : setActiveModule}
           />
         </div>
