@@ -56,6 +56,7 @@ export const TemplateEditorPage = () => {
       delete module.programs;
       newState.modules.push(module);
       setTemplate(newState);
+      setActiveModule(module);
     });
   };
 

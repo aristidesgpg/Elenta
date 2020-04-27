@@ -99,7 +99,7 @@ class ProgramModuleSend extends BaseModel
 
         // Only the learner should update this object, and the first time they do it is their response
         static::updating(function (ProgramModuleSend $pms) {
-            if (!$pms->response_timestamp) {
+            if (!$pms->response_timestamp && $pms->response_data) {
                 $pms->response_timestamp = Carbon::now();
             } else {
                 // Can't update response_data later
