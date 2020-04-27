@@ -89,7 +89,7 @@ type TemplateModule {
     order: Int!
 
     module_variables: String
-
+    
     created_at: DateTime!
     updated_at: DateTime!
     deleted_at: DateTime!
