@@ -27,7 +27,31 @@ export default class LayoutField extends ObjectField {
     const schema = retrieveSchema(this.props.schema, definitions)
     const title = (schema.title === undefined) ? '' : schema.title
 
-    const layout = uiSchema['ui:layout']
+    var layout = uiSchema['ui:layout'];
+    // Default unspecified elements to full width
+    if(schema.properties && Object.keys(schema.properties).length > 0) {
+      if (uiSchema['ui:layout']) {
+        layout = [
+          ...uiSchema['ui:layout'],
+          ...Object.keys(schema.properties).filter(
+            k => !uiSchema['ui:layout'].map(
+              l => Object.keys(l)
+            ).flat().includes(k)
+          ).map(k => {
+            let o = {};
+            o[k] = {md: 12};
+            return o;
+          })
+        ]
+      } else {
+        // When layout not passed at all, just use schema
+        layout = Object.keys(schema.properties).map(k => {
+            let o = {};
+            o[k] = {md: 12};
+            return o;
+          })
+      }
+    }
 
     return (
       <fieldset>

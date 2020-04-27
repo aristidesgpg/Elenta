@@ -1,10 +1,10 @@
 @component('mail::message')
 
-Hey {$programModule->learner->user->firstName()},
+Hey {{$programModule->learner->user->firstName()}},
 
 It's time to complete {{$programModuleSend->programModule->module->title}} from {{$programModuleSend->programModule->program->title}}. Click the button below:
 
-@component('mail::button', ['url' => $programModuleSend->respondUrl()])
+@component('mail::button', ['url' => env('APP_URL').$programModuleSend->respondUrl()])
 View
 @endcomponent
 
