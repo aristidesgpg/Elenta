@@ -15,6 +15,8 @@ const schema = {
     start_timestamp: {
       type: "string",
       title: "Latest Start Time",
+      dateFormat: true,
+      timeFormat: true,
       format: "date-time"
     },
     start_timestamp_field: {
