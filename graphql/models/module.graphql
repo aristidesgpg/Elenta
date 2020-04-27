@@ -71,4 +71,5 @@ type ModulePivot {
     id: ID!
     folder: String
     order: String
+    recipient_list_id : ID
 }

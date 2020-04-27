@@ -16,7 +16,9 @@ class CreateRecipientListsTable extends Migration
     {
         Schema::create('recipient_lists', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('program_id');
+            // TODO: Make polymorhpic so it works for templates too
+            $table->uuid('program_id')->nullable();
+            $table->uuid('template_id')->nullable();
 
             $table->string('name');
             $table->enum('channel', RecipientList::CHANNELS);
@@ -26,6 +28,7 @@ class CreateRecipientListsTable extends Migration
             $table->softDeletes();
 
             $table->foreign('program_id')->references('id')->on('programs');
+            $table->foreign('template_id')->references('id')->on('templates');
         });
     }
 

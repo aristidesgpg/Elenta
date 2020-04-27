@@ -64,6 +64,9 @@ use Illuminate\Support\Facades\Mail;
  * @property-read \App\Models\LearnerProfile $learner
  * @property string|null $last_reminded_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramModuleSend whereLastRemindedAt($value)
+ * @property string|null $recipient_list_id
+ * @property-read \App\RecipientList|null $recipientList
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramModuleSend whereRecipientListId($value)
  */
 class ProgramModuleSend extends BaseModel
 {
@@ -83,9 +86,20 @@ class ProgramModuleSend extends BaseModel
     protected static function boot()
     {
         parent::boot();
+
+        static::creating(function (ProgramModuleSend $pms) {
+            $pms->channel = self::CHANNEL_EMAIL;
+        });
+
+        static::created(function (ProgramModuleSend $pms) {
+            $pms->send();
+            // TODO: We need to check for the response_data containing recipient lists
+            // If it does, we need to create invites for them
+        });
+
         // Only the learner should update this object, and the first time they do it is their response
         static::updating(function (ProgramModuleSend $pms) {
-            if (!$pms->response_timestamp) {
+            if (!$pms->response_timestamp && $pms->response_data) {
                 $pms->response_timestamp = Carbon::now();
             } else {
                 // Can't update response_data later
@@ -104,7 +118,9 @@ class ProgramModuleSend extends BaseModel
 
     public function send() {
         if (!$this->send_timestamp) {
-            Mail::to($this->learner->user->email)->send(new ProgramModuleTriggerMail($this->programModule));
+            Mail::to($this->learner->user->email)->send(new ProgramModuleTriggerMail($this));
+            $this->send_timestamp = Carbon::now();
+            $this->save();
         }
     }
 
@@ -113,8 +129,6 @@ class ProgramModuleSend extends BaseModel
     }
 
     public function respondUrl() {
-        $generator = new LoginUrl($this->learner->user);
-        $generator->setRedirectUrl(config(env('APP_URL'))."/learner/module/{$this->programModule->module->id}");
-        return $generator->generate();
+        return config(env('APP_URL'))."/program/respond/{$this->programModule->program->id}";
     }
 }

@@ -11,8 +11,11 @@ import {ToastContext} from "../../contexts/ToastContext";
 import {immutableMerge} from "../../utils/utils";
 import {mutateTagData, tagSchema, tagUiSchema} from "../../components/tags/Tags";
 import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
+import Container from "react-bootstrap/Container";
+import ArrayLayoutField from "../../components/shared/ElentaJsonForm/ArrayLayoutField";
 
 const schema = {
+  title: "Create Template",
   type: "object",
   required: ["title", "can_request", "is_public"],
   properties: {
@@ -42,16 +45,83 @@ const schema = {
     dynamic_fields: {
       type: "string"
     },
+    recipient_lists: {
+      type: "array",
+      minItems: 1,
+      title: "Recipient Lists",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string"
+          },
+          name: {
+            type: "string",
+            title: "Name"
+          },
+          channel: {
+            type: "string",
+            title: "Channel",
+            default: "EMAIL",
+            enum: ["EMAIL"],
+            enumNames: ["Email"]
+          },
+          max_recipients: {
+            type: "integer",
+            default: 100,
+            title: "Max Recipients"
+          }
+        }
+      },
+      default: [
+        {
+          name: "Learners",
+          channel: "EMAIL",
+          max_recipients: 50
+        }
+      ]
+    },
     ...tagSchema
   }
 };
 
 const uiSchema = {
+  'ui:layout': [
+    {
+      title: {md: 6},
+      description: {md: 6}
+    },
+    {
+      can_request: {md: 2},
+      is_public: {md: 2},
+    },
+    {
+      recipient_lists: {md: 12}
+    }
+  ],
+  recipient_lists: {
+    "ui:ArrayFieldTemplate": ArrayLayoutField({
+      id: {
+        "ui:widget": "hidden"
+      },
+      'ui:layout': [
+        {
+          id: {md: 0},
+          name: {md: 4},
+          channel: {md: 4},
+          max_recipients: {md: 3}
+        }
+      ]
+    })
+  },
   id: {
     "ui:widget": "hidden"
   },
   description: {
-    "ui:widget": "textarea"
+    "ui:widget": "textarea",
+    "ui:options": {
+      rows: 1
+    }
   },
   dynamic_fields: {
     "ui:widget": "hidden"
@@ -69,10 +139,12 @@ const defaultDynamicFields = {
   }
 };
 
-// TODO: change tag name to tag label
 export const TemplateSettingsPage = () => {
   let history = useHistory();
   let {id} = useParams();
+  if (id !== "new") {
+    this.schema.title = "Update Template";
+  }
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
   const [formState, setFormState] = useState({
@@ -121,7 +193,14 @@ export const TemplateSettingsPage = () => {
               owner: {
                 connect: userProfile.id
               },
-              tags: mutateTagData(_.result(formState, 'tags'))
+              tags: mutateTagData(_.result(formState, 'tags')),
+              recipientLists: {
+                upsert: _.result(formState, 'recipient_lists').map(rl => {
+                  return {
+                    ..._.omit(rl, '__typename')
+                  }
+                })
+              }
             })
         }
       }
@@ -157,7 +236,7 @@ export const TemplateSettingsPage = () => {
         }}
         excludedFields={['richtext', 'rank', 'slider', 'multiple-checkbox', 'radiobuttonlist', 'repeater']}
       />
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={handleSubmit}>Save Template</Button>
     </LoadingContainer>
   );
 };

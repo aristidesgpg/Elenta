@@ -6,6 +6,7 @@ import {VideoWidget} from "../../consultants/ElentaFormBuilder/fields/VideoWidge
 import Tags from "../../tags/Tags";
 import LayoutField from "./LayoutField";
 import CompanyLogoField from "../../consultants/CompanyLogoField/CompanyLogoField";
+import {RichTextWidget} from "../../consultants/ElentaFormBuilder/fields/TextField";
 
 export const defaultFields = {
   tags: Tags,
@@ -17,6 +18,7 @@ const defaultWidgets = {
   RDP: DTPicker,
   Image: ImageWidget,
   Video: VideoWidget,
+  RichText: RichTextWidget
 };
 
 interface Props {
@@ -27,19 +29,36 @@ interface Props {
   children?: any,
   widgets?: any,
   fields?: any,
+  disabled?: any,
+}
+
+interface State {
 }
 
 // TODO: pass option for button
-export const ElentaJsonForm: React.FunctionComponent<Props> =
-  ({
-     schema,
-     uiSchema,
-     formData,
-     onChange,
-     widgets,
-     fields,
-     ...rest
-   }) => {
+class ElentaJsonForm extends React.Component<Props, State> {
+  formRef: any;
+
+  constructor(props) {
+    super(props);
+    this.formRef = React.createRef();
+  }
+
+  reportValidity() {
+    return this.formRef.formElement.reportValidity();
+  }
+
+  render() {
+    const {
+      schema,
+      uiSchema,
+      formData,
+      onChange,
+      widgets,
+      fields,
+      disabled,
+      ...rest
+    } = this.props;
     return (
       <JsonForm schema={schema}
                 uiSchema={{
@@ -60,11 +79,15 @@ export const ElentaJsonForm: React.FunctionComponent<Props> =
                   fields,
                   ...defaultFields
                 }}
+                disabled={disabled}
                 {...rest}
+                ref={r => this.formRef = r}
+
       >
         <br/>
       </JsonForm>
     );
-  };
+  }
+}
 
 export default ElentaJsonForm;

@@ -15,6 +15,7 @@ import {ToastContext} from "../../contexts/ToastContext";
 import {immutableMerge} from "../../utils/utils";
 import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
 import {mutateTagData, tagSchema, tagUiSchema} from "../../components/tags/Tags";
+import ArrayLayoutField from "../../components/shared/ElentaJsonForm/ArrayLayoutField";
 
 const schema = {
   type: "object",
@@ -82,6 +83,7 @@ const schema = {
     },
     recipient_lists: {
       type: "array",
+      minItems: 1,
       title: "Recipient Lists",
       items: {
         type: "object",
@@ -106,7 +108,14 @@ const schema = {
             title: "Max Recipients"
           }
         }
-      }
+      },
+      default: [
+        {
+          name: "Learners",
+          channel: "EMAIL",
+          max_recipients: 50
+        }
+      ]
     },
     ...tagSchema
   }
@@ -143,20 +152,26 @@ const consistentUiSchema = {
   description: {
     "ui:widget": "textarea",
     "ui:options": {
-      rows: 3
+      rows: 1
     }
   },
   company_attributes: {
     "ui:field": "companyLogoField"
   },
-  // TODO: We need a custom ArrayFieldTemplate to render this nicely,
-  // and hide the ID
   recipient_lists: {
-    "ui:options": {
-      addable: true,
-      orderable: false,
-      removable: true
-    }
+    "ui:ArrayFieldTemplate": ArrayLayoutField({
+      id: {
+        "ui:widget": "hidden"
+      },
+      'ui:layout': [
+        {
+          id: {md: 0},
+          name: {md: 4},
+          channel: {md: 4},
+          max_recipients: {md: 3}
+        }
+      ]
+    })
   },
   ...tagUiSchema
 }

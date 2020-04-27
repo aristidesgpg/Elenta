@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\ProgramModule;
 use App\Models\ProgramModuleSend;
 use App\Models\TemplateModule;
 use App\Models\User;
@@ -35,15 +36,10 @@ class ProgramModuleSendPolicy
             || $user->id == $programModuleSend->programModule->program->owner->user_id;
     }
 
-    /**
-     * Determine whether the user can create program module sends.
-     *
-     * @param  User  $user
-     * @return mixed
-     */
-    public function create(User $user)
+    public function create(User $user, array $args)
     {
-        return true;
+        $program_module_id = $args['program_module_id'];
+        return $user->id == ProgramModule::find($program_module_id)->program->owner->user->id;
     }
 
     /**

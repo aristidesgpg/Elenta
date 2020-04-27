@@ -23,6 +23,7 @@ export const GET_TEMPLATE = gql`
           id
           folder
           order
+          recipient_list_id
         }
         reminder {
           id
@@ -38,6 +39,12 @@ export const GET_TEMPLATE = gql`
           frequency
           max_sends
         }
+      }
+      recipientLists {
+        id
+        name
+        channel
+        max_recipients
       }
       requests {
         id
@@ -93,6 +100,7 @@ export const UPDATE_TEMPLATE_MODULES = gql`
           id
           folder
           order
+          recipient_list_id
         }
         reminder {
           id
@@ -127,6 +135,7 @@ export const DUPLICATE_TEMPLATE_MODULES = gql`
           id
           folder
           order
+          recipient_list_id
         }
         reminder {
           id
@@ -161,6 +170,7 @@ export const DUPLICATE_PROGRAM_MODULES = gql`
           id
           folder
           order
+          recipient_list_id
         }
         reminder {
           id
@@ -195,6 +205,7 @@ export const UPDATE_PROGRAM_MODULES = gql`
           id
           folder
           order
+          recipient_list_id
         }
         reminder {
           id
@@ -239,7 +250,8 @@ export const LEARNER_GET_PROGRAM = gql`
           description
           content
         }
-        send {
+        sends {
+          id
           learner {
             id
           }
@@ -291,6 +303,7 @@ export const GET_PROGRAM = gql`
           id
           folder
           order
+          recipient_list_id
         }
 
         reminder {
@@ -321,7 +334,12 @@ export const GET_PROGRAM = gql`
           id
           title
         }
-        send {
+        recipientList {
+          id
+          name
+        }
+        sends {
+          id
           learner {
             id
           }
@@ -404,6 +422,36 @@ export const CREATE_PROGRAM_INVITES = gql`
   }
 `;
 
+export const CREATE_PROGRAM_MODULE_SENDS = gql`
+  mutation createProgramModuleSends($input: CreateProgramModuleSendsInput!) {
+    createProgramModuleSends(input: $input) {
+      id
+      programModule {
+        id
+      }
+      learner {
+        id
+      }
+      recipientList {
+        id
+      }
+      reason
+      channel
+      subject
+      message
+
+      send_timestamp
+      open_timestamp
+      click_timestamp
+      response_timestamp
+
+      response_feedback
+      response_rating
+      response_data
+    }
+  }
+`;
+
 export const UPSERT_MODULE = gql`
   mutation upsertModule($input: UpsertModuleInput!) {
     upsertModule(input: $input) {
@@ -412,12 +460,28 @@ export const UPSERT_MODULE = gql`
       description
       content
       conditions
+      pivot {
+        id
+        folder
+        order
+        recipient_list_id
+      }
+      programs {
+        id
+        pivot {
+          id
+          folder
+          order
+          recipient_list_id
+        }
+      }
       templates {
         id
         pivot {
           id
           folder
           order
+          recipient_list_id
         }
       }
       reminder {
@@ -553,7 +617,7 @@ export const CREATE_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          send {
+          sends {
             id
             response_timestamp
           }
@@ -620,7 +684,7 @@ export const CREATE_LEARNER_PROFILE = gql`
             title
             content
           }
-          send {
+          sends {
             id
             response_timestamp
             response_data
@@ -675,7 +739,7 @@ export const GET_LEARNER_PROFILE = gql`
             title
             content
           }
-          send {
+          sends {
             id
             response_timestamp
             response_data
@@ -727,7 +791,7 @@ export const UPDATE_LEARNER_PROFILE = gql`
             title
             content
           }
-          send {
+          sends {
             id
             response_timestamp
             response_data
@@ -771,7 +835,7 @@ export const GET_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          send {
+          sends {
             id
             response_timestamp
           }
@@ -822,7 +886,7 @@ export const UPDATE_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          send {
+          sends {
             id
             response_timestamp
           }

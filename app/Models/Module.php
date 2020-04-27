@@ -55,6 +55,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Models\ModuleTrigger $trigger
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
  * @property-read int|null $tags_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProgramModule[] $programModules
+ * @property-read int|null $program_modules_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateModule[] $templateModules
+ * @property-read int|null $template_modules_count
  */
 class Module extends BaseModel
 {
@@ -63,8 +67,38 @@ class Module extends BaseModel
 
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Attach a Trigger and Reminder on create
+        static::created(function (Module $m) {
+            $trigger = new ModuleTrigger();
+            $trigger->fill([
+                'module_id' => $m->id,
+            ]);
+            $trigger->save();
+
+            $reminder = new ModuleReminder();
+            $reminder->fill([
+                'module_id' => $m->id,
+                'subject' => '[Reminder] Complete your module to stay up to date!',
+                'message' => "Looks like you missed a module in your Elenta course"
+            ]);
+            $reminder->save();
+        });
+    }
+
     public function owner(): BelongsTo {
         return $this->belongsTo(ConsultantProfile::class, 'consultant_profile_id');
+    }
+
+    public function templateModules(): HasMany {
+        return $this->hasMany(TemplateModule::class);
+    }
+
+    public function programModules(): HasMany {
+        return $this->hasMany(ProgramModule::class);
     }
 
     public function programs(): BelongsToMany {
@@ -74,7 +108,8 @@ class Module extends BaseModel
                 'id',
                 'folder',
                 'order',
-                'deleted_at'
+                'deleted_at',
+                'recipient_list_id'
             ])
             ->whereNull('program_modules.deleted_at')
             ->orderBy('program_modules.order', 'asc');
@@ -87,7 +122,8 @@ class Module extends BaseModel
                 'id',
                 'folder',
                 'order',
-                'deleted_at'
+                'deleted_at',
+                'recipient_list_id'
             ])
             ->whereNull('template_modules.deleted_at')
             ->orderBy('template_modules.order', 'asc');

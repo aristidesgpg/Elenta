@@ -68,6 +68,6 @@ class DuplicateTemplateModulesResolver
             }
         });
 
-        return $rootObject->load(["modules.reminders", "modules.triggers"]);
+        return $rootObject->load(["modules.reminder", "modules.trigger"]);
     }
 }

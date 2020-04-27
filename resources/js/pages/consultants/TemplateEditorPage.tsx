@@ -29,7 +29,36 @@ export const TemplateEditorPage = () => {
   const [updateTemplateModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_TEMPLATE_MODULES);
   const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError, data: duplicateMutationData}] = useMutation(DUPLICATE_TEMPLATE_MODULES);
 
+  const [activeModule, setActiveModule] = useState(null);
+
   const toastContext = useContext(ToastContext);
+
+  const updateModule = (module) => {
+    runMutation({
+      variables: {
+        input: {
+          id: module.id,
+          title: module.title,
+          description: module.description,
+          reminder: {
+            upsert: module.reminder
+          },
+          trigger: {
+            upsert: module.trigger
+          },
+          content: module.content
+        }
+      }
+    }).then(r => {
+      let newState = _.cloneDeep(template);
+      newState.modules = newState.modules.filter(m => m.id !== r.data.upsertModule.id);
+      const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.programs.0.pivot", {})};
+      delete module.programs;
+      newState.modules.push(module);
+      setTemplate(newState);
+      setActiveModule(module);
+    });
+  };
 
   const addModule = () => {
     runMutation({
@@ -41,12 +70,16 @@ export const TemplateEditorPage = () => {
             connect: userProfile.id
           },
           templates: {
-            connect: [data.getTemplate.id]
+            connect: [template.id]
           }
         }
       }
     }).then(r => {
-      toastContext.addToast({header: "Success!", body: "Saved"});
+      let newState = _.cloneDeep(template);
+      const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.templates.0.pivot", {})};
+      delete module.templates;
+      newState.modules.push(module);
+      setTemplate(newState);
     });
   };
 
@@ -60,6 +93,33 @@ export const TemplateEditorPage = () => {
           }
         }
       }
+    }).then(r => {
+      let newState = _.cloneDeep(template);
+      newState.modules = r.data.updateTemplateModules.modules;
+      setTemplate(newState);
+    });
+  };
+
+  const updateRecipientList = (recipientList, module) => {
+    updateTemplateModulesMutation({
+      variables: {
+        input: {
+          id: template.id,
+          templateModules: {
+            upsert: [
+              {
+                id: module.pivot.id,
+                recipient_list_id: recipientList.id
+              }
+            ]
+          }
+        }
+      }
+    }).then(r => {
+      let newState = _.cloneDeep(template);
+      newState.modules = r.data.updateTemplateModules.modules;
+      setTemplate(newState);
+      toastContext.addToast({header: "Success!", body: "Saved"});
     });
   };
 
@@ -74,7 +134,9 @@ export const TemplateEditorPage = () => {
         }
       }
     }).then(r => {
-      toastContext.addToast({header: "Success!", body: "Deleted"});
+      let newState = _.cloneDeep(template);
+      newState.modules = r.data.updateTemplateModules.modules;
+      setTemplate(newState);
     });
   };
 
@@ -88,14 +150,18 @@ export const TemplateEditorPage = () => {
         }
       }
     }).then(r => {
-      toastContext.addToast({header: "Success!", body: "Copied"});
+      let newState = _.cloneDeep(template);
+      newState.modules = r.data.duplicateTemplateModules.modules;
+      setTemplate(newState);
     });
   };
 
   if (data && !template) {
     setTemplate(data.getTemplate);
+    if (data.getTemplate.modules.length) setActiveModule(data.getTemplate.modules[0]);
   }
 
+  // TODO: Move these into promises .then()
   useEffect(() => {
     if (mutationData) {
       let newState = _.cloneDeep(template);
@@ -119,8 +185,8 @@ export const TemplateEditorPage = () => {
 
   return (
     <LoadingContainer
-      loading={[updateMutationLoading, duplicateMutationLoading, loading]}
-      error={[updateMutationError, duplicateMutationMutationError, error]}
+      loading={[mutationLoading, updateMutationLoading, duplicateMutationLoading, loading]}
+      error={[mutationError, updateMutationError, duplicateMutationMutationError, error]}
     >
       <Tab.Container defaultActiveKey="modules" id="template-editor" transition={false}>
         <Nav variant="tabs" fill className="justify-content-center">
@@ -139,6 +205,12 @@ export const TemplateEditorPage = () => {
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}
               duplicateModules={duplicateModules}
+              recipientLists={template ? template.recipientLists : []}
+              updateRecipientList={updateRecipientList}
+              updateModule={updateModule}
+              activeModule={activeModule}
+              setActiveModule={setActiveModule}
+              sendModule={null}
             />
           </Tab.Pane>
           <Tab.Pane eventKey="requests" title="Requests">

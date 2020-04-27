@@ -2,14 +2,22 @@ import React, {useEffect} from "react";
 import {useQuery} from '@apollo/react-hooks';
 import {useParams, Redirect} from "react-router-dom";
 import {Container, Spinner} from "react-bootstrap";
-import {CURRENT_USER} from "../../graphql/queries";
+import {CURRENT_USER, CURRENT_USER_PROFILE} from "../../graphql/queries";
+import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
+import {ElentaClient} from "../../app";
 
 export const LoginCallbackPage = () => {
   const {token} = useParams();
   const storageToken = localStorage.getItem('token');
   const {data: {user}} = useQuery(CURRENT_USER);
+  const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
-  if (user) return (<Redirect to="/preferences"/>);
+  if (user) {
+    if (!userProfile.picture_url) {
+      return (<Redirect to="/preferences"/>);
+    }
+    return (<Redirect to="/dashboard"/>);
+  }
 
   useEffect(() => {
     if (token && token !== storageToken) {
@@ -19,9 +27,7 @@ export const LoginCallbackPage = () => {
   }, [token, storageToken]);
 
   return (
-    <Container>
-      <Spinner animation="border"/>
-    </Container>
+    <LoadingContainer loading={true}/>
   );
 };
 

@@ -19,6 +19,9 @@ class CreateTemplateModulesTable extends Migration
             $table->uuid('template_id')->nullable();
             $table->uuid('module_id')->nullable();
 
+            // TODO not nullable
+            $table->uuid('recipient_list_id')->nullable();
+
             $table->string('folder')->nullable();
             $table->integer('order')->nullable();
 
@@ -27,6 +30,7 @@ class CreateTemplateModulesTable extends Migration
 
             $table->foreign('template_id')->references('id')->on('templates');
             $table->foreign('module_id')->references('id')->on('modules');
+            $table->foreign('recipient_list_id')->references('id')->on('recipient_lists');
         });
     }
 

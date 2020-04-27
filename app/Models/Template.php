@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\RecipientList;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\Template
@@ -52,6 +54,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Template whereDynamicFields($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
  * @property-read int|null $tags_count
+ * @property-read mixed $default_recipient_list
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\RecipientList[] $recipientLists
+ * @property-read int|null $recipient_lists_count
  */
 class Template extends BaseModel
 {
@@ -62,6 +67,30 @@ class Template extends BaseModel
     public const FORMATS = ['SELF_DIRECTED', 'IN_PERSON', 'VIRTUAL_ATTENDANCE'];
 
     protected $guarded = [];
+
+    protected static function boot()
+    {
+        parent::boot();
+        // Create a Module for new Template
+        static::created(function (Template $t) {
+            /** @var User $user */
+            $user = Auth::user();
+            $m = new Module();
+            $m->fill([
+                'title' => 'New Module',
+                'description' => 'Module Description',
+                'consultant_profile_id' => $user->consultantProfile->id
+            ]);
+            $m->save();
+
+            $tm = new TemplateModule();
+            $tm->fill([
+                'template_id' => $t->id,
+                'module_id' => $m->id,
+            ]);
+            $tm->save();
+        });
+    }
 
     public function owner(): BelongsTo {
         return $this->belongsTo(ConsultantProfile::class, 'consultant_profile_id');
@@ -78,7 +107,8 @@ class Template extends BaseModel
                 'id',
                 'folder',
                 'order',
-                'deleted_at'
+                'deleted_at',
+                'recipient_list_id'
             ])
             ->whereNull('template_modules.deleted_at')
             ->orderBy('template_modules.order', 'asc');
@@ -92,11 +122,16 @@ class Template extends BaseModel
         return $this->hasMany(Program::class);
     }
 
-    /**
-     * Get all of the tags for the template.
-     */
+    public function recipientLists(): HasMany {
+        return $this->hasMany(RecipientList::class);
+    }
+
     public function tags(): MorphToMany {
         return $this->morphToMany(Tag::class, 'taggable');
     }
 
+    // TODO: Add default option for user
+    public function getDefaultRecipientListAttribute() {
+        return $this->recipientLists[0];
+    }
 }

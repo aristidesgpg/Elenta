@@ -7,7 +7,8 @@ import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import "./ProgramModuleSendEditor.scss";
 import Button from "react-bootstrap/Button";
-import {formatDate} from "../../../utils/utils";
+import {formatDate, immutableMerge} from "../../../utils/utils";
+import ElentaJsonForm from "../../shared/ElentaJsonForm/ElentaJsonForm";
 
 export const ProgramModuleSendEditor: React.FunctionComponent<Props> = ({formData, module, onChange, onSubmit}) => {
   const handleChange = (key, val) => {
@@ -15,25 +16,27 @@ export const ProgramModuleSendEditor: React.FunctionComponent<Props> = ({formDat
     o[key] = val;
     onChange(o);
   };
+  let formRef;
 
-  // TODO: Think about anonymous replies
-  // TODO: Should we make everything readonly?
   return (
     <Container>
-      <h3>{module.title}</h3>
-      <h3>{module.description}</h3>
       {
         formData.response_timestamp &&
         <small>Responded on {formatDate(formData.response_timestamp)}</small>
       }
-      <JsonForm disabled={formData.response_timestamp}
-                schema={JSON.parse(module.content).schema}
-                uiSchema={JSON.parse(module.content).uiSchema}
-                formData={formData.response_data}
-                onChange={d => handleChange('response_data', d.formData)}
+      <ElentaJsonForm disabled={!!formData.response_timestamp}
+                      schema={immutableMerge(JSON.parse(module.content).schema, {
+                        title: module.title,
+                        description: module.description
+                      })}
+                      uiSchema={JSON.parse(module.content).uiSchema}
+                      formData={formData.response_data}
+                      onChange={d => handleChange('response_data', d.formData)}
+                      ref={r => formRef = r}
       >
         <hr/>
-      </JsonForm>
+      </ElentaJsonForm>
+      <hr/>
       <Form>
         <Form.Group>
           <Form.Label className="pr-3">Was this module useful?</Form.Label>
@@ -53,7 +56,7 @@ export const ProgramModuleSendEditor: React.FunctionComponent<Props> = ({formDat
                         onChange={e => handleChange('response_feedback', (e.target as HTMLInputElement).value)}/>
         </Form.Group>
       </Form>
-      <Button onClick={onSubmit}>Submit</Button>
+      <Button onClick={e => formRef.reportValidity() ? onSubmit() : null}>Submit</Button>
     </Container>
 
   );

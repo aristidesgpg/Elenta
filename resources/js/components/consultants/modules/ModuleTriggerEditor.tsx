@@ -1,9 +1,11 @@
 import * as React from "react";
 import {ModuleTrigger} from "../../../graphql/graphql-generated";
 import ElentaJsonForm from "../../shared/ElentaJsonForm/ElentaJsonForm";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
 
 const schema = {
-  title: "Module Triggers",
+  title: "Trigger",
   type: "object",
   required: ["frequency", "max_sends"],
   properties: {
@@ -12,15 +14,15 @@ const schema = {
     },
     start_timestamp: {
       type: "string",
-      title: "Start Time",
-      format: "date-time",
-      default: "2020-06-01 12:00:00"
+      title: "Latest Start Time",
+      format: "date-time"
     },
     start_timestamp_field: {
       type: "string",
-      title: "Start Timestamp Field",
-      enum: ["ENROL_TIME", "CHOOSE_TIME"],
-      enumNames: ["Enrol Time", "Choose a Time"]
+      title: "Start Time",
+      enum: ["ENROL_TIME"],
+      default: "ENROL_TIME",
+      enumNames: ["Enrol Time"]
     },
     frequency: {
       type: "integer",
@@ -38,16 +40,13 @@ const schema = {
 const uiSchema = {
   "ui:layout": [
     {
+      start_timestamp_field: {md: 3},
       start_timestamp: {md: 4},
-      frequency: {md: 4},
-      max_sends: {md: 4}
+      frequency: {md: 3},
+      max_sends: {md: 2}
     }
   ],
   id: {
-    "ui:widget": "hidden"
-  },
-  // TODO: Allow reference to previous field
-  start_timestamp_field: {
     "ui:widget": "hidden"
   },
   start_timestamp: {
@@ -61,14 +60,14 @@ export const ModuleTriggerEditor: React.FunctionComponent<ModuleTriggerEditorPro
      onChange
    }) => {
     return (
-      <ElentaJsonForm
-        schema={schema}
-        uiSchema={uiSchema}
-        formData={trigger}
-        onChange={onChange}
-      >
-        <br/>
-      </ElentaJsonForm>
+      <Container>
+          <ElentaJsonForm
+            schema={schema}
+            uiSchema={uiSchema}
+            formData={trigger}
+            onChange={onChange}
+          />
+      </Container>
     );
   };
 

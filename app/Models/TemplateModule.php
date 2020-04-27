@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\RecipientList;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,6 +42,10 @@ use Signifly\PivotEvents\HasPivotEvents;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\TemplateModule withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\TemplateModule withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $recipient_list_id
+ * @property-read mixed $module_variables
+ * @property-read \App\RecipientList|null $recipientList
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TemplateModule whereRecipientListId($value)
  */
 class TemplateModule extends BasePivot
 {
@@ -72,6 +77,9 @@ class TemplateModule extends BasePivot
                     ->first()
                     ->toArray();
                 $templateModule->order = $amount['m'] == null ? 0 : $amount['m'] + 1;
+            }
+            if ($templateModule->template->recipientLists->count() > 0) {
+                $templateModule->recipient_list_id = $templateModule->template->default_recipient_list->id;
             }
         });
     }
@@ -129,5 +137,7 @@ class TemplateModule extends BasePivot
         return $this->belongsTo(Template::class);
     }
 
-    
+    public function recipientList(): BelongsTo {
+        return $this->belongsTo(RecipientList::class);
+    }
 }

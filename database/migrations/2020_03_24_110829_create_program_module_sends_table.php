@@ -18,12 +18,13 @@ class CreateProgramModuleSendsTable extends Migration
             $table->uuid('id')->primary();
             $table->bigInteger('program_module_id');
             $table->uuid('learner_profile_id');
-            $table->uuid('recipient_list_id');
+            // TODO: Not nullable
+            $table->uuid('recipient_list_id')->nullable();
 
             $table->enum('reason', ProgramModuleSend::REASONS);
             $table->enum('channel', ProgramModuleSend::CHANNELS);
-            $table->string('subject');
-            $table->text('message');
+            $table->string('subject')->nullable();
+            $table->text('message')->nullable();
 
             $table->timestamp('send_timestamp')->nullable();
             $table->timestamp('open_timestamp')->nullable();
@@ -34,7 +35,7 @@ class CreateProgramModuleSendsTable extends Migration
 
             $table->text('response_feedback')->nullable();
             $table->unsignedSmallInteger('response_rating')->nullable();
-            $table->jsonb('response_data');
+            $table->jsonb('response_data')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

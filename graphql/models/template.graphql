@@ -19,8 +19,13 @@ input UpsertTemplateInput {
     is_public: Boolean
     dynamic_fields: String
 
+    recipientLists: TemplateHasManyRecipientLists
     modules: TemplatesBelongsToManyModules
     tags: ItemMorphsToManyTags
+}
+
+input TemplateHasManyRecipientLists {
+    upsert: [UpsertRecipientListInput]
 }
 
 input UpdateTemplateModulesInput {
@@ -49,6 +54,7 @@ input ConnectTemplateModule {
     id: ID!
     folder: String
     order: Int
+    recipient_list_id: ID
 }
 
 type Template {
@@ -65,19 +71,14 @@ type Template {
     updated_at: DateTime!
     deleted_at: DateTime!
 
-    pivot: TemplateModulePivot
+    pivot: ModulePivot
 
+    recipientLists: [RecipientList]
     templateModules: [TemplateModule] @softDeletes
     modules: [Module]
     requests: [TemplateRequest]
     programs: [Program]
     tags: [Tag]
-}
-
-type TemplateModulePivot {
-    id: ID!
-    folder: String
-    order: String
 }
 
 
@@ -89,7 +90,8 @@ type TemplateModule {
     order: Int!
 
     module_variables: String
-    
+    recipientList: RecipientList
+
     created_at: DateTime!
     updated_at: DateTime!
     deleted_at: DateTime!

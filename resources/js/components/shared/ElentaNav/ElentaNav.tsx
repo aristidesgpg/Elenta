@@ -154,13 +154,10 @@ export const ElentaNav = () => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     {
-                      consultantProfile
-                        ? <ProfileDropdownItem key={consultantProfile.id}
+                      consultantProfile &&
+                        <ProfileDropdownItem key={consultantProfile.id}
                                                onClick={() => selectProfile({...consultantProfile, type: "consultantProfile"})}
                                                profile={consultantProfile}/>
-                        : <Dropdown.Item onClick={() => createProfile("consultant")}>
-                          Create Consultant Profile
-                        </Dropdown.Item>
                     }
                     {
                       learnerProfile

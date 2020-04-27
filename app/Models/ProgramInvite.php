@@ -42,6 +42,9 @@ use Illuminate\Support\Facades\Mail;
  * @property string $user_id
  * @property-read \App\Models\User $creator
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramInvite whereUserId($value)
+ * @property string $recipient_list_id
+ * @property-read \App\Models\ProgramModule $programModule
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProgramInvite whereRecipientListId($value)
  */
 class ProgramInvite extends BaseModel
 {
@@ -53,6 +56,9 @@ class ProgramInvite extends BaseModel
     protected static function boot()
     {
         parent::boot();
+        static::creating(function (ProgramInvite $pi) {
+            $pi->recipient_list_id = $pi->program->default_recipient_list->id;
+        });
         static::saved(function (ProgramInvite $pi) {
             $pi->sendInvite();
         });
@@ -75,6 +81,6 @@ class ProgramInvite extends BaseModel
     }
 
     public function sendInvite() {
-        Mail::to($this->creator->email)->send(new ProgramInviteMail($this));
+        Mail::to($this->email)->send(new ProgramInviteMail($this));
     }
 }

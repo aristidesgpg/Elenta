@@ -16,7 +16,7 @@ enum ProgramFormat {
 
 input UpdateProgramModulesInput {
     id: ID!
-    templateModules: UpdateProgramModulesHasMany
+    programModules: UpdateProgramModulesHasMany
 }
 
 input DuplicateProgramModulesInput {
@@ -101,9 +101,10 @@ input ModulesBelongsToManyPrograms {
 }
 
 input ConnectProgramModule {
-    id: ID!
+    id: ID
     folder: String
     order: Int
+    recipient_list_id: ID
 }
 
 type ProgramModule {
@@ -122,6 +123,7 @@ type ProgramModule {
 
     reminders: [ModuleReminder]
     triggers: [ModuleTrigger]
-    send: ProgramModuleSend
+    sends: [ProgramModuleSend]
+    recipientList: RecipientList
 }
 

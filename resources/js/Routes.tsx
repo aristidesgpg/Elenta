@@ -3,7 +3,7 @@ import {useQuery} from "@apollo/react-hooks";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 import FormSample from "./components/consultants/ElentaFormBuilder/FormSample";
-import ProgramEditorPage from "./pages/consultants/ProgramEditorPage";
+import ProgramContentPage from "./pages/consultants/ProgramContentPage";
 import LoginPage from "./pages/shared/LoginPage";
 import PasswordResetPage from "./pages/shared/PasswordResetPage";
 import TemplateSettingsPage from "./pages/consultants/TemplateSettingsPage";
@@ -29,6 +29,7 @@ const Routes = () => {
       <PageContainer>
         <Switch>
           <Route exact={true} path="/" component={LoginPage}/>
+          <Route exact={true} path="/login" component={LoginPage}/>
           <Route exact={true} path="/login/callback/:token" component={LoginCallbackPage}/>
           <Route exact={true} path="/password/reset/:token" component={PasswordResetPage}/>
           <Route exact={true} path="/formsample" component={FormSample}/>
@@ -48,9 +49,10 @@ const Routes = () => {
               <PrivateRoute exact={true} path="/preferences" component={ConsultantProfileSettingsPage}/>
 
               <PrivateRoute exact={true} path="/program/settings/:id" component={ProgramSettingsPage}/>
+              <PrivateRoute exact={true} path="/program/content/:id" component={ProgramContentPage}/>
+
               <PrivateRoute exact={true} path="/template/settings/:id" component={TemplateSettingsPage}/>
               <PrivateRoute exact={true} path="/template/content/:id" component={TemplateEditorPage}/>
-              <PrivateRoute exact={true} path="/program/content/:id" component={ProgramEditorPage}/>
             </>
           }
           <Route component={NotFoundPage} />
