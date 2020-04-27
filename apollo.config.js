@@ -2,8 +2,7 @@ module.exports = {
   client: {
     service: {
       name: 'elenta',
-      //url: 'https://elenta.dev/graphql',
-      url: "http://localhost:8000/graphql",
+      url: 'https://elenta.dev/graphql',
       headers: {
         authorization: 'Bearer lkjfalkfjadkfjeopknavadf'
       },

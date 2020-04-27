@@ -102,10 +102,18 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
 
   addField = (field: any): any => {
 
-    const {currentIndex, schema, uiSchema} = this.state;
-    this.setState({currentIndex: currentIndex + 1});
-    const name = `Question ${currentIndex}`;
-    const _slug = slugify(name);
+    let {currentIndex, schema, uiSchema} = this.state;
+    let name, _slug;
+    console.log(schema);
+    console.log(uiSchema);
+    let schemaProperties = schema.properties;
+    do{
+        name = `Question ${currentIndex}`;
+        _slug = slugify(name);
+        currentIndex++;
+        if(schemaProperties === undefined || schemaProperties[_slug] == undefined)
+            break;
+    }while(true)        
     const jsonSchema = clone(field.jsonSchema);
     const {title} = jsonSchema;
     if (title != undefined)
@@ -116,7 +124,7 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
     uiSchema[_slug].label = field.label;
     uiSchema["ui:order"] = (uiSchema["ui:order"] || []).concat(_slug);
     let newKey = Math.random();
-    return this.setState({schema, uiSchema, newKey});
+    return this.setState({schema, uiSchema, currentIndex, newKey});
   }
 
   switchField = (propertyName: string, newField: any) => {
