@@ -76,12 +76,15 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
     };
 
     const saveOrder = (newTree) => {
+      let order = 1;
       const {items} = newTree;
 
       const modules = items["root-list"].children.reduce((acc, item) => {
         const itemModules = extractModules(items[item]);
 
-        return [...acc, ...itemModules];
+        return [...acc, ...itemModules.map(module => {
+          return {...module, pivot: {...module.pivot, order: order++}};
+        })];
       }, []);
 
       saveModulesOrder(modules);
@@ -101,11 +104,20 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
     };
 
     const extractModules = (item) => {
-      return item.data.isFolder
-        ? [...item.children.map(module => {
-          return tree.items[module].data;
-        })]
-        : [tree.items[item.id].data];
+      let items = [];
+      if (item.data.isFolder) {
+        if (item.children.length) {
+          items = [...item.children.map(module => {
+            return tree.items[module].data;
+          })];
+        } else {
+          items.push(tree.items[item.id].data)
+        }
+      } else {
+        items.push(tree.items[item.id].data);
+      }
+
+      return items;
     };
 
     const duplicateModulesHandler = (item) => {
@@ -144,19 +156,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       childItems.forEach(item => (newDestTree.items[item.id] = item));
 
       const destinationItem = newDestTree.items[destinationPosition.parentId];
-      newDestTree.items[removedItemId].data.pivot.folder = destinationItem.data.isFolder ? destinationPosition.parentId : "";
-
-      let order = 1;
-
-      newDestTree.items["root-list"].children.map((item) => {
-        if (newDestTree.items[item].data.isFolder) {
-          newDestTree.items[item].children.map(module => {
-            newDestTree.items[module].data.pivot = {...newDestTree.items[module].data.pivot, order: order++};
-          })
-        } else {
-          newDestTree.items[item].data.pivot = {...newDestTree.items[item].data.pivot, order: order++};
-        }
-      }, []);
+      newDestTree.items[removedItemId].data.pivot.folder = destinationItem.data.isFolder ? destinationItem.data.name : "";
 
       setTree(newDestTree);
       saveOrder(newDestTree);

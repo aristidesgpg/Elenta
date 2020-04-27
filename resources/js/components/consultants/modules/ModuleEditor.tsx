@@ -32,8 +32,9 @@ const defaultContent = {
 // TODO: Refactor to be PivotModuleEditor that lists Program/TemplateModules
 export const ModuleEditor =
   ({
-     modules: templateModules,
+     modules,
      addModule,
+     addFolder,
      saveModulesOrder,
      deleteModules,
      duplicateModules,
@@ -47,7 +48,6 @@ export const ModuleEditor =
     const [formContent, setFormContent] = useState(defaultContent);
     const [formReminder, setFormReminder] = useState(null);
     const [formTrigger, setFormTrigger] = useState(null);
-    const [modules, setModules] = useState(templateModules);
     const [recipientList, setRecipientList] = useState(null);
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
@@ -67,12 +67,6 @@ export const ModuleEditor =
       }
     }, [activeModule]);
 
-    useEffect(() => {
-      if (templateModules.length !== modules.length) {
-        setModules(templateModules);
-      }
-    }, [templateModules]);
-
     const updateModuleList = (d) => {
       setActiveModule(immutableMerge(activeModule, d));
     };
@@ -90,21 +84,6 @@ export const ModuleEditor =
       if (activeModule && recipientList && recipientList.id !== activeModule.pivot.recipient_list_id) {
         updateRecipientList(recipientList, activeModule)
       }
-    };
-
-    const addFolder = () => {
-      const title = `New Folder ${Math.round(Math.random() * 1e6)}`;
-      const newModules = [
-        {
-          id: title,
-          title: title,
-          isFolder: true,
-          pivot: {order: 0, folder: null},
-          modules: []
-        },
-        ...modules
-      ];
-      setModules(newModules);
     };
 
     return (
