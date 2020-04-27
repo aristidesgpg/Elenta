@@ -49,15 +49,12 @@ export const ProgramLearnerTable = ({program}) => {
             // TODO change to thumb up/down icon in red or green
             obj[m.id] = (<p>
               Completed on {formatDate(send.response_timestamp)}, with a rating
-              of {send.response_rating === 0 &&
-            <ToggleButton className="btn-danger" value={0}>
+              of
+              {send.response_rating === 0 &&
               <i className="fas fa-thumbs-down"/>
-            </ToggleButton>
-            }
+              }
               {send.response_rating === 1 &&
-              <ToggleButton className="btn-success" value={1}>
-                <i className="fas fa-thumbs-up"/>
-              </ToggleButton>
+              <i className="fas fa-thumbs-up"/>
               }
             </p>)
           } else if (send.click_timestamp) {

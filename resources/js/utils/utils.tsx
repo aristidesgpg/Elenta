@@ -19,10 +19,19 @@ export function clone(obj: object) {
 
 export function immutableMerge(a, b) {
   let n = _.cloneDeep(a);
-  return _.mergeWith(n, b, (a, b) => {
-    // If the key is defined in b, always use it - even if empty or undefined
+  return _.mergeWith(n, b, mergeCustomiser);
+}
+
+function mergeCustomiser(a, b) {
+  // If the key is in b, overwrite it even if empty or undefined
+  if (
+    (Array.isArray(b) && b.length == 0) ||
+    (b === undefined) ||
+    (b === null)
+  ) {
     return b;
-  });
+  }
+  return;
 }
 
 export function unique(array) {

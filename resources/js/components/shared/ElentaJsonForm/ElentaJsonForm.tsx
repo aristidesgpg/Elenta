@@ -80,8 +80,8 @@ class ElentaJsonForm extends React.Component<Props, State> {
                   ...defaultFields
                 }}
                 disabled={disabled}
-                {...rest}
                 ref={r => this.formRef = r}
+                {...rest}
 
       >
         <br/>
