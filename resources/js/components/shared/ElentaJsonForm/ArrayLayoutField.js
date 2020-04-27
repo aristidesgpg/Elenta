@@ -32,7 +32,7 @@ const ArrayLayoutField = (uiSchema) => {
               <LayoutField
                 {...element.children.props}
                 uiSchema={uiSchema}
-                removeButton={props.items.length > 1 &&
+                removeButton={props.items.length > props.schema.minItems &&
                   <Button className="btn-danger" onClick={element.onDropIndexClick(element.index)}>
                     <i className="fas fa-minus"/>
                   </Button>
