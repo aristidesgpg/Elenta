@@ -93,7 +93,7 @@ class Program extends BaseModel {
 
     public function getProgressAttribute() {
         $pms = $this->programModules()->count();
-        return $pms ? $this->programModules()->whereHas('send')->count()/$pms : 0;
+        return $pms ? $this->programModules()->whereHas('sends')->count()/$pms : 0;
     }
 
     public function owner(): BelongsTo {

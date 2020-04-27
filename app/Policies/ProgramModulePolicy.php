@@ -32,7 +32,10 @@ class ProgramModulePolicy
     public function view(User $user, ProgramModule $programModule)
     {
         return $user->id == $programModule->program->owner->user_id
-            || $programModule->send->learner->user_id == $user->id;
+            || (
+                isset($user->learnerProfile) &&
+                $programModule->sends()->pluck('learner_profile_id') == $user->learnerProfile->id
+            );
     }
 
     /**

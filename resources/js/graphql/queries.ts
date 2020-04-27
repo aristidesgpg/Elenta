@@ -833,7 +833,7 @@ export const GET_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          send {
+          sends {
             id
             response_timestamp
           }

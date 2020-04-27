@@ -71,7 +71,7 @@ class Template extends BaseModel
     protected static function boot()
     {
         parent::boot();
-        // Create a Module for new Temmplate
+        // Create a Module for new Template
         static::created(function (Template $t) {
             /** @var User $user */
             $user = Auth::user();
