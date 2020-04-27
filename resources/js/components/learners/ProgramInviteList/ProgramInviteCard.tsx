@@ -13,7 +13,7 @@ export const ProgramInviteCard = ({invite}) => {
       maxWidth: "23rem"
     }}>
       <Card.Header>
-        <Link to={`/program/enrol/${invite.program.id}`}>{invite.program.title}</Link>
+        <Link to={`/program/enrol/${invite.program.id}`}>Enrol in {invite.program.title}</Link>
       </Card.Header>
       <Card.Body>
         <Container className="pl-0 pr-0 pb-3">
