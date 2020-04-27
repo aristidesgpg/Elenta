@@ -22,6 +22,7 @@ const loginFormData = {
     autoComplete: "off",
     isRequired: true,
     required: [
+      "email",
       "password"
     ],
     properties: {

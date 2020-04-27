@@ -90,7 +90,8 @@ const signUpFormData = {
   uiSchema: {
     account_type: {
       accountType: {
-        "ui:widget": "radio",
+        // need to change this back to "ui:widget":"radio" to function
+        "ui:widget": "hidden",
         "ui:options": {
           inline: true,
         },
