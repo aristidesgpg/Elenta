@@ -155,18 +155,18 @@ export const ElentaNav = () => {
                   <Dropdown.Menu>
                     {
                       consultantProfile &&
-                        <ProfileDropdownItem key={consultantProfile.id}
-                                               onClick={() => selectProfile({...consultantProfile, type: "consultantProfile"})}
-                                               profile={consultantProfile}/>
+                      <ProfileDropdownItem key={consultantProfile.id}
+                                           onClick={() => selectProfile({
+                                             ...consultantProfile,
+                                             type: "consultantProfile"
+                                           })}
+                                           profile={consultantProfile}/>
                     }
                     {
-                      learnerProfile
-                        ? <ProfileDropdownItem key={learnerProfile.id}
-                                               onClick={() => selectProfile({...learnerProfile, type: "learnerProfile"})}
-                                               profile={learnerProfile}/>
-                        : <Dropdown.Item onClick={() => createProfile("learner")}>
-                          Create Learner Profile
-                        </Dropdown.Item>
+                      learnerProfile &&
+                      <ProfileDropdownItem key={learnerProfile.id}
+                                           onClick={() => selectProfile({...learnerProfile, type: "learnerProfile"})}
+                                           profile={learnerProfile}/>
                     }
                     <Dropdown.Item onClick={() => logout()}>
                       Logout
