@@ -251,6 +251,7 @@ export const LEARNER_GET_PROGRAM = gql`
           content
         }
         sends {
+          id
           learner {
             id
           }
@@ -338,6 +339,7 @@ export const GET_PROGRAM = gql`
           name
         }
         sends {
+          id
           learner {
             id
           }

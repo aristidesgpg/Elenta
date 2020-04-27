@@ -32,18 +32,33 @@ interface Props {
   disabled?: any,
 }
 
+interface State {
+}
+
 // TODO: pass option for button
-export const ElentaJsonForm: React.FunctionComponent<Props> =
-  ({
-     schema,
-     uiSchema,
-     formData,
-     onChange,
-     widgets,
-     fields,
-     disabled,
-     ...rest
-   }) => {
+class ElentaJsonForm extends React.Component<Props, State> {
+  formRef: any;
+
+  constructor(props) {
+    super(props);
+    this.formRef = React.createRef();
+  }
+
+  reportValidity() {
+    return this.formRef.formElement.reportValidity();
+  }
+
+  render() {
+    const {
+      schema,
+      uiSchema,
+      formData,
+      onChange,
+      widgets,
+      fields,
+      disabled,
+      ...rest
+    } = this.props;
     return (
       <JsonForm schema={schema}
                 uiSchema={{
@@ -66,10 +81,13 @@ export const ElentaJsonForm: React.FunctionComponent<Props> =
                 }}
                 disabled={disabled}
                 {...rest}
+                ref={r => this.formRef = r}
+
       >
         <br/>
       </JsonForm>
     );
-  };
+  }
+}
 
 export default ElentaJsonForm;

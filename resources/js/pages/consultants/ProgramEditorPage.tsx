@@ -54,6 +54,7 @@ export const ProgramEditorPage = (props) => {
       delete module.programs;
       newState.modules.push(module);
       setProgram(newState);
+      setActiveModule(module);
     });
   };
 

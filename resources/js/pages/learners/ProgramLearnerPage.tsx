@@ -5,13 +5,14 @@ import {useParams} from "react-router-dom";
 import {GET_LEARNER_PROFILE, LEARNER_GET_PROGRAM, UPDATE_PROGRAM_MODULE_SEND} from "../../graphql/queries";
 import ProgramModuleSendEditor from "../../components/learners/ProgramModuleSendEditor/ProgramModuleSendEditor";
 import ProgramModuleList from "../../components/learners/ProgramModuleList/ProgramModuleList";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import _ from "lodash";
 import {ProgramModule, Module, Maybe} from "../../graphql/graphql-generated";
 import {immutableMerge} from "../../utils/utils";
 import Alert from "react-bootstrap/Alert";
+import {ToastContext} from "../../contexts/ToastContext";
 
 export const ProgramLearnerPage = () => {
   let {id} = useParams();
@@ -21,6 +22,8 @@ export const ProgramLearnerPage = () => {
 
   const {loading: queryLoading, error: queryError, data: queryData} = useQuery(LEARNER_GET_PROGRAM, {variables: {id: id}});
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPDATE_PROGRAM_MODULE_SEND);
+
+  const toastContext = useContext(ToastContext);
 
   const update = () => {
     let submitData = _.cloneDeep(formData);
@@ -32,6 +35,8 @@ export const ProgramLearnerPage = () => {
       variables: {
         input: submitData
       }
+    }).then(r => {
+      toastContext.addToast({header: "Success!", body: "Saved"});
     });
   };
 
