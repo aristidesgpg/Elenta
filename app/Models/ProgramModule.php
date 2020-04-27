@@ -99,28 +99,43 @@ class ProgramModule extends BasePivot
      * from other modules in the same program, which have been sent before this one.
      */
     public function getModuleVariablesAttribute() {
-        return "{}";
+        //return "{}";
         $result = [];
         /** @var ProgramModule $this_pm */
         $this_pm = $this;
         // TODO: add filter for programs that are running after
-        $this->program->programModules->filter(function(ProgramModule $pm) use ($this_pm) {
+        $filtered_pms = $this->program->programModules->filter(function(ProgramModule $pm) use ($this_pm) {
             return Carbon::parse($pm->module->trigger->start_timestamp)->lte($this_pm->start_timestamp);
-        })->each(function (ProgramModule $pm) use ($result) {
-                $content = json_decode($pm->module->content);
-                // TODO: make sure input fields, get type of input field, get possible values for input field
-                if ($schema = $content['schema']) {
-                    foreach ($schema['properties'] as $field => $props) {
-                        $result[] = [
-                            'program_module_id' => $pm->id,
-                            'field_name' => $field,
-                            'type' => $props['type'],
-                            'available_values' => ['a', 'b']
-                        ];
+        });//Robert shoudl remove this comment.*/
+        foreach($filtered_pms as $pm){       
+            try{
+                $content = json_decode($pm->module->content, true);            
+                // TODO: make sure input fields, get type of input field, get possible values for input field                                                         
+                if ($schema = $content['schema']) {  
+                    $uiSchema = $content['uiSchema'];
+                    $items = array();                                  
+                    foreach ($schema['properties'] as $field => $props) {                                                
+                        $items[] = [   
+                            'parentId' => $pm->id,   
+                            'id' => $field,                      
+                            'label' => $field,
+                            'fieldType' => $uiSchema[$field]['uiType']                            
+                        ];//'availableValues' => ['a', 'b']
                     }
+                    if(count($items) > 0){
+                        $result[] = [
+                            'id' => $pm->id,
+                            'label' => $pm->module->title,
+                            'items' => $items
+                        ];
+                    }                    
                 }
-            });
-        return $result;
+            }
+            catch(Exception $error){
+                Log::error($error);
+            }            
+        }
+        return json_encode($result);     
     }
 
     public function program(): BelongsTo

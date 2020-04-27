@@ -160,7 +160,7 @@ export const TemplateEditorPage = () => {
     setTemplate(data.getTemplate);
     if (data.getTemplate.modules.length) setActiveModule(data.getTemplate.modules[0]);
   }
-
+  
   // TODO: Move these into promises .then()
   useEffect(() => {
     if (mutationData) {
@@ -201,6 +201,7 @@ export const TemplateEditorPage = () => {
           <Tab.Pane eventKey="modules" title="Content">
             <ModuleEditor
               modules={template ? template.modules : []}
+              pivotModules={template? template.templateModules : []}
               addModule={addModule}
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}

@@ -33,6 +33,7 @@ const defaultContent = {
 export const ModuleEditor =
   ({
      modules: templateModules,
+     pivotModules,
      addModule,
      saveModulesOrder,
      deleteModules,
@@ -49,6 +50,7 @@ export const ModuleEditor =
     const [formTrigger, setFormTrigger] = useState(null);
     const [modules, setModules] = useState(templateModules);
     const [recipientList, setRecipientList] = useState(null);
+    const [tagList, setTagList] = useState(null);
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
 
@@ -64,6 +66,15 @@ export const ModuleEditor =
           setFormContent(defaultContent);
         }
         if (activeModule.pivot) setRecipientList(recipientLists.filter(rl => rl.id == activeModule.pivot.recipient_list_id)[0]);
+        if(pivotModules.length > 0){
+          const pivotModule = pivotModules.filter((pmItem) =>{
+            return (pmItem.id == activeModule.pivot.id)
+          });          
+          if(pivotModule.length > 0){
+            const parsedTagList = JSON.parse(pivotModule[0].module_variables);
+            setTagList(parsedTagList);
+          }
+        }
       }
     }, [activeModule]);
 
@@ -196,6 +207,7 @@ export const ModuleEditor =
                     <ElentaFormBuilder
                       schema={formContent.schema}
                       uiSchema={formContent.uiSchema}
+                      tagList = {tagList}
                       onSave={(schema, uiSchema) => {
                         setFormContent({
                           schema: schema,

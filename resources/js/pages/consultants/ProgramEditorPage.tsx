@@ -188,6 +188,7 @@ export const ProgramEditorPage = (props) => {
             {program &&
             <ModuleEditor
               modules={program ? program.modules : []}
+              pivotModules={program? program.programModules : []}
               addModule={addModule}
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}

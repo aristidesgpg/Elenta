@@ -94,15 +94,13 @@ class TemplateModule extends BasePivot
         /** @var TemplateModule $this_tm */
         $this_tm = $this;
         // TODO: add filter for templates that are running after        
-        $filtered_tms = $this->template->templateModules;
-        /*->filter(function(TemplateModule $tm) use ($this_tm) {
+        $filtered_tms = $this->template->templateModules->filter(function(TemplateModule $tm) use ($this_tm) {
             return Carbon::parse($tm->module->trigger->start_timestamp)->lte($this_tm->start_timestamp);
-        });*/        
+        });//* Robert Should remove this comment*/        
         foreach($filtered_tms as $tm){       
             try{
                 $content = json_decode($tm->module->content, true);            
-                // TODO: make sure input fields, get type of input field, get possible values for input field                                         
-                //Log::info("Info", $content);
+                // TODO: make sure input fields, get type of input field, get possible values for input field                                                         
                 if ($schema = $content['schema']) {  
                     $uiSchema = $content['uiSchema'];
                     $items = array();                                  
