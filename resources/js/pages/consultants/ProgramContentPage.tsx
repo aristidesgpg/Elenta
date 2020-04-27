@@ -21,7 +21,7 @@ export const ProgramContentPage = () => {
       const program = data.getProgram;
       setProgram(program);
 
-      const isEditable = !program.programModules.find(module => module.send !== null);
+      const isEditable = true; //!program.programModules.find(module => module.sends !== null);
       setIsEditable(isEditable);
     }
   }, [data]);

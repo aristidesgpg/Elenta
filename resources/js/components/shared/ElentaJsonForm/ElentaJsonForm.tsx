@@ -6,6 +6,7 @@ import {VideoWidget} from "../../consultants/ElentaFormBuilder/fields/VideoWidge
 import Tags from "../../tags/Tags";
 import LayoutField from "./LayoutField";
 import CompanyLogoField from "../../consultants/CompanyLogoField/CompanyLogoField";
+import {RichTextWidget} from "../../consultants/ElentaFormBuilder/fields/TextField";
 
 export const defaultFields = {
   tags: Tags,
@@ -17,6 +18,7 @@ const defaultWidgets = {
   RDP: DTPicker,
   Image: ImageWidget,
   Video: VideoWidget,
+  RichText: RichTextWidget
 };
 
 interface Props {
@@ -27,6 +29,7 @@ interface Props {
   children?: any,
   widgets?: any,
   fields?: any,
+  disabled?: any,
 }
 
 // TODO: pass option for button
@@ -38,6 +41,7 @@ export const ElentaJsonForm: React.FunctionComponent<Props> =
      onChange,
      widgets,
      fields,
+     disabled,
      ...rest
    }) => {
     return (
@@ -60,6 +64,7 @@ export const ElentaJsonForm: React.FunctionComponent<Props> =
                   fields,
                   ...defaultFields
                 }}
+                disabled={disabled}
                 {...rest}
       >
         <br/>

@@ -2,9 +2,9 @@ import * as React from "react";
 import {useMutation, useQuery} from '@apollo/react-hooks';
 import {
   CURRENT_USER_PROFILE, DUPLICATE_PROGRAM_MODULES,
-  GET_PROGRAM,
   UPDATE_PROGRAM_MODULES,
-  UPSERT_MODULE
+  UPSERT_MODULE,
+  CREATE_PROGRAM_MODULE_SENDS
 } from "../../graphql/queries";
 import Tab from "react-bootstrap/Tab";
 import ModuleEditor from "../../components/consultants/modules/ModuleEditor";
@@ -23,8 +23,11 @@ export const ProgramEditorPage = (props) => {
   const [program, setProgram] = useState(props.program);
 
   const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
+  const [runSendMutation, {loading: sendMutationLoading, error: sendMutationError, data: sendMutationData}] = useMutation(CREATE_PROGRAM_MODULE_SENDS);
   const [updateProgramModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_PROGRAM_MODULES);
   const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError, data: duplicateMutationData}] = useMutation(DUPLICATE_PROGRAM_MODULES);
+
+  const [activeModule, setActiveModule] = useState(props.program.modules.length ? props.program.modules[0] : null);
 
   const toastContext = useContext(ToastContext)
 
@@ -51,6 +54,18 @@ export const ProgramEditorPage = (props) => {
       delete module.programs;
       newState.modules.push(module);
       setProgram(newState);
+    });
+  };
+
+  const sendModule = (module) => {
+    runSendMutation({
+      variables: {
+        input: {
+          program_module_id: module.pivot.id
+        }
+      }
+    }).then(r => {
+      toastContext.addToast({header: "Success!", body: "Sent"});
     });
   };
 
@@ -179,6 +194,9 @@ export const ProgramEditorPage = (props) => {
               recipientLists={program.recipientLists}
               updateRecipientList={updateRecipientList}
               updateModule={updateModule}
+              activeModule={activeModule}
+              setActiveModule={setActiveModule}
+              sendModule={sendModule}
             />
             }
           </Tab.Pane>

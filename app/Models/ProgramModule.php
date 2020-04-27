@@ -83,8 +83,12 @@ class ProgramModule extends BasePivot
                     ->toArray();
                 $programModule->order = $amount['m'] == null ? 0 : $amount['m'] + 1;
             }
+        });
+
+        static::created(function (ProgramModule $programModule) {
             if ($programModule->program->default_recipient_list) {
                 $programModule->recipient_list_id = $programModule->program->default_recipient_list->id;
+                $programModule->save();
             }
         });
     }
@@ -129,9 +133,9 @@ class ProgramModule extends BasePivot
         return $this->belongsTo(Module::class);
     }
 
-    public function send(): HasOne
+    public function sends(): HasMany
     {
-        return $this->hasOne(ProgramModuleSend::class, 'program_module_id');
+        return $this->hasMany(ProgramModuleSend::class, 'program_module_id');
     }
 
     public function recipientList(): BelongsTo {
@@ -140,16 +144,23 @@ class ProgramModule extends BasePivot
 
     public function sendModule(LearnerProfile $l, string $reason, string $channel, string $subject = "", string $message = "")
     {
-        $pms = new ProgramModuleSend();
-        $pms->fill([
-            'program_module_id' => $this->id,
-            'learner_profile_id' => $l->id,
-            'reason' => $reason,
-            'channel' => $channel,
-            'subject' => $subject,
-            'message' => $message
-        ]);
-        $pms->save();
-        $pms->send();
+        if (!$this->sends()->where('learner_profile_id', $l->id)->exists()) {
+            $pms = new ProgramModuleSend();
+            $pms->fill([
+                'program_module_id' => $this->id,
+                'learner_profile_id' => $l->id,
+                'reason' => $reason,
+                'channel' => $channel,
+                'subject' => $subject,
+                'message' => $message
+            ]);
+            $pms->save();
+            $pms->send();
+        } else {
+            /** @var ProgramModuleSend $existing */
+            $existing = $this->sends()->where('learner_profile_id', $l->id)->first();
+            $existing->last_reminded_at = Carbon::now();
+            $existing->save();
+        }
     }
 }

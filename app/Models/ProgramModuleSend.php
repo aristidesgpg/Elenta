@@ -86,6 +86,17 @@ class ProgramModuleSend extends BaseModel
     protected static function boot()
     {
         parent::boot();
+
+        static::creating(function (ProgramModuleSend $pms) {
+            $pms->channel = self::CHANNEL_EMAIL;
+        });
+
+        static::created(function (ProgramModuleSend $pms) {
+            $pms->send();
+            // TODO: We need to check for the response_data containing recipient lists
+            // If it does, we need to create invites for them
+        });
+
         // Only the learner should update this object, and the first time they do it is their response
         static::updating(function (ProgramModuleSend $pms) {
             if (!$pms->response_timestamp) {
@@ -107,7 +118,9 @@ class ProgramModuleSend extends BaseModel
 
     public function send() {
         if (!$this->send_timestamp) {
-            Mail::to($this->learner->user->email)->send(new ProgramModuleTriggerMail($this->programModule));
+            Mail::to($this->learner->user->email)->send(new ProgramModuleTriggerMail($this));
+            $this->send_timestamp = Carbon::now();
+            $this->save();
         }
     }
 

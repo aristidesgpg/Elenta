@@ -8,6 +8,7 @@ import ToggleButton from "react-bootstrap/ToggleButton";
 import "./ProgramModuleSendEditor.scss";
 import Button from "react-bootstrap/Button";
 import {formatDate} from "../../../utils/utils";
+import ElentaJsonForm from "../../shared/ElentaJsonForm/ElentaJsonForm";
 
 export const ProgramModuleSendEditor: React.FunctionComponent<Props> = ({formData, module, onChange, onSubmit}) => {
   const handleChange = (key, val) => {
@@ -26,14 +27,14 @@ export const ProgramModuleSendEditor: React.FunctionComponent<Props> = ({formDat
         formData.response_timestamp &&
         <small>Responded on {formatDate(formData.response_timestamp)}</small>
       }
-      <JsonForm disabled={formData.response_timestamp}
+      <ElentaJsonForm disabled={!!formData.response_timestamp}
                 schema={JSON.parse(module.content).schema}
                 uiSchema={JSON.parse(module.content).uiSchema}
                 formData={formData.response_data}
                 onChange={d => handleChange('response_data', d.formData)}
       >
         <hr/>
-      </JsonForm>
+      </ElentaJsonForm>
       <Form>
         <Form.Group>
           <Form.Label className="pr-3">Was this module useful?</Form.Label>

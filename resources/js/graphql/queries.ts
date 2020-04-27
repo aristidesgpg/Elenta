@@ -250,7 +250,7 @@ export const LEARNER_GET_PROGRAM = gql`
           description
           content
         }
-        send {
+        sends {
           learner {
             id
           }
@@ -337,7 +337,7 @@ export const GET_PROGRAM = gql`
           id
           name
         }
-        send {
+        sends {
           learner {
             id
           }
@@ -416,6 +416,36 @@ export const CREATE_PROGRAM_INVITES = gql`
       id
       email
       created_at
+    }
+  }
+`;
+
+export const CREATE_PROGRAM_MODULE_SENDS = gql`
+  mutation createProgramModuleSends($input: CreateProgramModuleSendsInput!) {
+    createProgramModuleSends(input: $input) {
+      id
+      programModule {
+        id
+      }
+      learner {
+        id
+      }
+      recipientList {
+        id
+      }
+      reason
+      channel
+      subject
+      message
+
+      send_timestamp
+      open_timestamp
+      click_timestamp
+      response_timestamp
+
+      response_feedback
+      response_rating
+      response_data
     }
   }
 `;

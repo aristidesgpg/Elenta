@@ -17,6 +17,17 @@ import {Button} from "react-bootstrap";
 import {ToastContext} from "../../../contexts/ToastContext";
 import LoadingContainer from "../../hoc/LoadingContainer/LoadingContainer";
 import {immutableMerge} from "../../../utils/utils";
+import {Link} from "react-router-dom";
+
+const defaultContent = {
+  schema: {
+    type: "object",
+    properties: {}
+  },
+  uiSchema: {
+    "ui:order": []
+  }
+};
 
 // TODO: Refactor to be PivotModuleEditor that lists Program/TemplateModules
 export const ModuleEditor =
@@ -28,21 +39,15 @@ export const ModuleEditor =
      duplicateModules,
      recipientLists,
      updateRecipientList,
-     updateModule
+     updateModule,
+     activeModule,
+     setActiveModule,
+     sendModule
    }) => {
-    const [formContent, setFormContent] = useState({
-      schema: {
-        type: "object",
-        properties: {}
-      },
-      uiSchema: {
-        "ui:order": []
-      }
-    });
+    const [formContent, setFormContent] = useState(defaultContent);
     const [formReminder, setFormReminder] = useState(null);
     const [formTrigger, setFormTrigger] = useState(null);
     const [modules, setModules] = useState(templateModules);
-    const [activeModule, setActiveModule] = useState(modules[0]);
     const [recipientList, setRecipientList] = useState(null);
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
@@ -53,7 +58,11 @@ export const ModuleEditor =
       if (activeModule) {
         if (activeModule.reminder) setFormReminder(_.omit(activeModule.reminder, "__typename"));
         if (activeModule.trigger) setFormTrigger(_.omit(activeModule.trigger, "__typename"));
-        if (activeModule.content) setFormContent(JSON.parse(activeModule.content));
+        if (activeModule.content) {
+          setFormContent(JSON.parse(activeModule.content));
+        } else {
+          setFormContent(defaultContent);
+        }
         if (activeModule.pivot) setRecipientList(recipientLists.filter(rl => rl.id == activeModule.pivot.recipient_list_id)[0]);
       }
     }, [activeModule]);
@@ -100,15 +109,10 @@ export const ModuleEditor =
 
     return (
       <LoadingContainer loading={mutationLoading} error={mutationError} className="pl-0 pr-0 pt-4">
-        <Row className="pt-4">
-          <Col md={3} className="border-right">
+        <Row>
+          <Col md={3} className="p-0 pr-3 border-right">
             <Row className="pb-2">
-              <Button variant="outline-primary" className="w-50" onClick={addFolder}>
-                + Folder
-              </Button>
-              <Button variant="outline-primary" className="w-50" onClick={addModule}>
-                + Module
-              </Button>
+              <Link to={window.location.pathname.replace('content', 'settings')}>Settings</Link>
             </Row>
             <ModuleList modules={modules}
                         activeModule={activeModule}
@@ -117,6 +121,16 @@ export const ModuleEditor =
                         deleteModules={deleteModules}
                         duplicateModules={duplicateModules}
             />
+            <Row className="pt-2">
+              <div className="m-auto">
+                <Button variant="outline-primary" onClick={addFolder}>
+                  + Folder
+                </Button>
+                <Button variant="outline-primary" onClick={addModule}>
+                  + Module
+                </Button>
+              </div>
+            </Row>
           </Col>
 
           <Col>
@@ -158,7 +172,14 @@ export const ModuleEditor =
                   </Form>
                 </Col>
                 <Col>
-                  <Button className="float-right" onClick={onSave}>Save Module</Button>
+                  <Col>
+                    {sendModule &&
+                    <Button className='float-right' onClick={() => sendModule(activeModule)}>Send Module</Button>
+                    }
+                  </Col>
+                  <Col>
+                    <Button className="float-right" onClick={onSave}>Save Module</Button>
+                  </Col>
                 </Col>
               </Row>
               <Tab.Container defaultActiveKey="content" id="module-editor" transition={false}>

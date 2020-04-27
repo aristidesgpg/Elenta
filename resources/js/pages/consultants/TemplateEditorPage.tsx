@@ -29,6 +29,8 @@ export const TemplateEditorPage = () => {
   const [updateTemplateModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_TEMPLATE_MODULES);
   const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError, data: duplicateMutationData}] = useMutation(DUPLICATE_TEMPLATE_MODULES);
 
+  const [activeModule, setActiveModule] = useState(null);
+
   const toastContext = useContext(ToastContext);
 
   const updateModule = (module) => {
@@ -67,12 +69,16 @@ export const TemplateEditorPage = () => {
             connect: userProfile.id
           },
           templates: {
-            connect: [data.getTemplate.id]
+            connect: [template.id]
           }
         }
       }
     }).then(r => {
-      toastContext.addToast({header: "Success!", body: "Saved"});
+      let newState = _.cloneDeep(template);
+      const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.templates.0.pivot", {})};
+      delete module.templates;
+      newState.modules.push(module);
+      setTemplate(newState);
     });
   };
 
@@ -86,6 +92,10 @@ export const TemplateEditorPage = () => {
           }
         }
       }
+    }).then(r => {
+      let newState = _.cloneDeep(template);
+      newState.modules = r.data.updateTemplateModules.modules;
+      setTemplate(newState);
     });
   };
 
@@ -104,6 +114,11 @@ export const TemplateEditorPage = () => {
           }
         }
       }
+    }).then(r => {
+      let newState = _.cloneDeep(template);
+      newState.modules = r.data.updateTemplateModules.modules;
+      setTemplate(newState);
+      toastContext.addToast({header: "Success!", body: "Saved"});
     });
   };
 
@@ -118,7 +133,9 @@ export const TemplateEditorPage = () => {
         }
       }
     }).then(r => {
-      toastContext.addToast({header: "Success!", body: "Deleted"});
+      let newState = _.cloneDeep(template);
+      newState.modules = r.data.updateTemplateModules.modules;
+      setTemplate(newState);
     });
   };
 
@@ -132,12 +149,15 @@ export const TemplateEditorPage = () => {
         }
       }
     }).then(r => {
-      toastContext.addToast({header: "Success!", body: "Copied"});
+      let newState = _.cloneDeep(template);
+      newState.modules = r.data.duplicateTemplateModules.modules;
+      setTemplate(newState);
     });
   };
 
   if (data && !template) {
     setTemplate(data.getTemplate);
+    if (data.getTemplate.modules.length) setActiveModule(data.getTemplate.modules[0]);
   }
 
   // TODO: Move these into promises .then()
@@ -187,6 +207,9 @@ export const TemplateEditorPage = () => {
               recipientLists={template ? template.recipientLists : []}
               updateRecipientList={updateRecipientList}
               updateModule={updateModule}
+              activeModule={activeModule}
+              setActiveModule={setActiveModule}
+              sendModule={null}
             />
           </Tab.Pane>
           <Tab.Pane eventKey="requests" title="Requests">

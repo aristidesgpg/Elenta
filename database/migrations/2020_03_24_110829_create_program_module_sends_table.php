@@ -23,8 +23,8 @@ class CreateProgramModuleSendsTable extends Migration
 
             $table->enum('reason', ProgramModuleSend::REASONS);
             $table->enum('channel', ProgramModuleSend::CHANNELS);
-            $table->string('subject');
-            $table->text('message');
+            $table->string('subject')->nullable();
+            $table->text('message')->nullable();
 
             $table->timestamp('send_timestamp')->nullable();
             $table->timestamp('open_timestamp')->nullable();
@@ -35,7 +35,7 @@ class CreateProgramModuleSendsTable extends Migration
 
             $table->text('response_feedback')->nullable();
             $table->unsignedSmallInteger('response_rating')->nullable();
-            $table->jsonb('response_data');
+            $table->jsonb('response_data')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

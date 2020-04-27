@@ -20,16 +20,18 @@ export const ProgramLearnerTable = ({program}) => {
 
     const sends = {};
     program.programModules.forEach(pm => {
-      if (pm.send && pm.send.learner) {
-        sends[JSON.stringify([pm.module.id, pm.send.learner.id])] = {
-          send_timestamp: pm.send.send_timestamp,
-          open_timestamp: pm.send.open_timestamp,
-          click_timestamp: pm.send.click_timestamp,
-          response_timestamp: pm.send.response_timestamp,
-          response_feedback: pm.send.response_feedback,
-          response_rating: pm.send.response_rating
+      pm.sends.forEach(send => {
+        if (send.learner) {
+          sends[JSON.stringify([module.id, send.learner.id])] = {
+            send_timestamp: send.send_timestamp,
+            open_timestamp: send.open_timestamp,
+            click_timestamp: send.click_timestamp,
+            response_timestamp: send.response_timestamp,
+            response_feedback: send.response_feedback,
+            response_rating: send.response_rating
+          }
         }
-      }
+      });
     });
 
     const tableData = program.learners.map(l => {

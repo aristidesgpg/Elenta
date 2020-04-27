@@ -9,10 +9,9 @@ export const ModuleRecipientListEditor =
      onChange
    }) => {
 
-    // TODO: Fix this style
     return (
       <div>
-        <h5 style={{paddingBottom: "33px"}}>Recipient List</h5>
+        <h5>Recipient List</h5>
         <Select
           value={recipientList && {
             value: recipientList.id,

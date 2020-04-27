@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProgramInvite;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -76,7 +77,12 @@ class RegisterController extends Controller
 
         /** @var User $user */
         $user = $this->create($request->all());
-        $user->consultantProfile()->create();
+
+        if (ProgramInvite::whereEmail($user->email)->count() > 0) {
+            $user->learnerProfile()->create();
+        } else {
+            $user->consultantProfile()->create();
+        }
 
         $token = $user->createToken('default')->plainTextToken;
         return compact("token");

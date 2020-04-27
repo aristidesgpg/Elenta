@@ -109,7 +109,7 @@ export class TextField extends React.Component<any,any>{
             toolbarCustomButtons={[<TagOption tagList={this.props.getTagList()} />]}
           />
           <button className="rich-editor-btn-save btn btn-info" onClick={this.onSave}>
-            Save
+            Preview
           </button>
         </div>
       );
