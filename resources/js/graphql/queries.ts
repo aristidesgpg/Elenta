@@ -615,7 +615,7 @@ export const CREATE_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          send {
+          sends {
             id
             response_timestamp
           }
@@ -682,7 +682,7 @@ export const CREATE_LEARNER_PROFILE = gql`
             title
             content
           }
-          send {
+          sends {
             id
             response_timestamp
             response_data
@@ -737,7 +737,7 @@ export const GET_LEARNER_PROFILE = gql`
             title
             content
           }
-          send {
+          sends {
             id
             response_timestamp
             response_data
@@ -789,7 +789,7 @@ export const UPDATE_LEARNER_PROFILE = gql`
             title
             content
           }
-          send {
+          sends {
             id
             response_timestamp
             response_data
@@ -884,7 +884,7 @@ export const UPDATE_CONSULTANT_PROFILE = gql`
             id
             title
           }
-          send {
+          sends {
             id
             response_timestamp
           }
