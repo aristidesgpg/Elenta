@@ -55,8 +55,7 @@ const loginFormData = {
     email: '',
     password: '',
   },
-  extraErrors: {},
-  liveValidate: false
+  extraErrors: {}
 };
 
 const LoginForm = () => {
@@ -111,13 +110,12 @@ const LoginForm = () => {
         <Form
           idPrefix={'log-in-form'}
           className={"auth-form"}
-          liveValidate={form.liveValidate}
           schema={form.schema}
           uiSchema={form.uiSchema}
           formData={form.formData}
           extraErrors={form.extraErrors}
           onChange={(formData) => {
-            setForm({...form, ...formData, liveValidate: true});
+            setForm({...form, ...formData});
           }}
           onSubmit={({formData}) => {
             login(formData);

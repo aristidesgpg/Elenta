@@ -11,7 +11,7 @@ const validate = ({name_email: {email, name}, passwords: {password, password_con
   }
 
   if (!name) {
-    errors.name_email.name.addError(`Name is required.`);
+    errors.name_email.name.addError(`name is required.`);
   }
 
   if (password !== password_confirmation) {
@@ -133,8 +133,7 @@ const signUpFormData = {
       password_confirmation: '',
     },
   },
-  extraErrors: {},
-  liveValidate: false
+  extraErrors: {}
 };
 
 const SignUpForm = () => {
@@ -189,13 +188,12 @@ const SignUpForm = () => {
       <Form
         idPrefix={'sign-up-form'}
         className={"auth-form"}
-        liveValidate={form.liveValidate}
         schema={form.schema}
         uiSchema={form.uiSchema}
         formData={form.formData}
         extraErrors={form.extraErrors}
         onChange={(formData) => {
-          setForm({...form, ...formData, liveValidate: true});
+          setForm({...form, ...formData});
         }}
         onSubmit={({formData}) => {
           signUp(formData);

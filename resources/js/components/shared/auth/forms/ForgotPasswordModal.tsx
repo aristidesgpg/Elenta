@@ -41,8 +41,7 @@ const loginFormData = {
   formData: {
     email: '',
   },
-  extraErrors: {},
-  liveValidate: false
+  extraErrors: {}
 };
 
 const ForgotPasswordModal = (props) => {
@@ -102,13 +101,12 @@ const ForgotPasswordModal = (props) => {
             idPrefix={'log-in-form'}
             className={"auth-form"}
             showErrorList={false}
-            liveValidate={form.liveValidate}
             schema={form.schema}
             uiSchema={form.uiSchema}
             formData={form.formData}
             extraErrors={form.extraErrors}
             onChange={(formData) => {
-              setForm({...form, ...formData, liveValidate: true});
+              setForm({...form, ...formData});
             }}
             onSubmit={({formData}) => {
               submitForm(formData);
