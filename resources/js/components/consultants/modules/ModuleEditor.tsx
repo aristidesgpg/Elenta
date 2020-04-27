@@ -68,7 +68,7 @@ export const ModuleEditor =
     }, [activeModule]);
 
     useEffect(() => {
-      if (!_.isEqual(templateModules, modules)) {
+      if (templateModules.length !== modules.length) {
         setModules(templateModules);
       }
     }, [templateModules]);

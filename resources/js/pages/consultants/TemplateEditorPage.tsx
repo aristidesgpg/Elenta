@@ -89,13 +89,21 @@ export const TemplateEditorPage = () => {
     });
   };
 
-  const saveModulesOrder = (modules) => {
+  const saveModulesOrder = (newModules) => {
+    const templateModules = newModules.map(
+      module => {
+        const {id, folder, order} = module.pivot;
+        return {id, folder, order};
+      }
+    );
+
+    updateTemplateModules(newModules);
     updateTemplateModulesMutation({
       variables: {
         input: {
           id: template.id,
           templateModules: {
-            upsert: modules
+            upsert: templateModules
           }
         }
       }
