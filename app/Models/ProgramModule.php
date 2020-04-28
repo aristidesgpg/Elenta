@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Mail;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Module|null $module
+ * @property-read \App\Models\ProgramModuleSend|null $sends
  * @property-read \App\Models\Program|null $program
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ModuleReminder[] $reminders
  * @property-read int|null $reminders_count

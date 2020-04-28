@@ -24,6 +24,7 @@ class CreateProgramModuleSendsResolver {
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo) {
         $program_module_id = $args['program_module_id'];
 
+        /** @var ProgramModule $pm */
         $pm = ProgramModule::find($program_module_id);
         $pm->recipientList->recipients->each(function (LearnerProfile $l) use ($pm) {
             $pm->sendModule($l, ProgramModuleSend::REASON_MANUAL, ProgramModuleSend::CHANNEL_EMAIL);
