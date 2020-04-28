@@ -245,6 +245,8 @@ export const ProgramSettingsPage = () => {
 
   const toastContext = useContext(ToastContext);
 
+  let formRef;
+
   useEffect(() => {
     if (!templatesQueryData && id == "new") {
       runTemplatesQuery({variables: {consultant_profile_id: userProfile.id}});
@@ -340,38 +342,40 @@ export const ProgramSettingsPage = () => {
   }
 
   const handleSubmit = () => {
-    runMutation({
-        variables: {
-          input: immutableMerge(
-            _.pick(formState, ['title', 'description', 'format', 'is_public', 'can_invite', 'max_learners']),
-            {
-              id: id == "new" ? null : id,
-              template: {
-                connect: formState.template
-              },
-              dynamic_fields: JSON.stringify(dynamicFields),
-              owner: {
-                connect: userProfile.id
-              },
-              company_name: _.result(formState, 'company_attributes.company_name'),
-              company_logo_url: _.result(formState, 'company_attributes.company_logo_url'),
-              tags: mutateTagData(_.result(formState, 'tags')),
-              recipientLists: {
-                upsert: _.result(formState, 'recipient_lists').map(rl => {
-                  return {
-                    ..._.omit(rl, '__typename')
-                  }
-                })
-              }
-            })
+    if (formRef.reportValidity()) {
+      runMutation({
+          variables: {
+            input: immutableMerge(
+              _.pick(formState, ['title', 'description', 'format', 'is_public', 'can_invite', 'max_learners']),
+              {
+                id: id == "new" ? null : id,
+                template: {
+                  connect: formState.template
+                },
+                dynamic_fields: JSON.stringify(dynamicFields),
+                owner: {
+                  connect: userProfile.id
+                },
+                company_name: _.result(formState, 'company_attributes.company_name'),
+                company_logo_url: _.result(formState, 'company_attributes.company_logo_url'),
+                tags: mutateTagData(_.result(formState, 'tags')),
+                recipientLists: {
+                  upsert: _.result(formState, 'recipient_lists').map(rl => {
+                    return {
+                      ..._.omit(rl, '__typename')
+                    }
+                  })
+                }
+              })
+          }
         }
-      }
-    ).then(r => {
-      toastContext.addToast({header: "Success!", body: "Saved"});
-      if (id == "new") {
-        history.push(`/program/content/${r.data.upsertProgram.id}`);
-      }
-    });
+      ).then(r => {
+        toastContext.addToast({header: "Success!", body: "Saved"});
+        if (id == "new") {
+          history.push(`/program/content/${r.data.upsertProgram.id}`);
+        }
+      });
+    }
   };
 
   return (
@@ -383,12 +387,16 @@ export const ProgramSettingsPage = () => {
                       uiSchema={uiSchemaState}
                       formData={_.pick(formState, Object.keys(schemaState.properties))}
                       onChange={handleChange}
+                      ref={r => formRef = r}
       />
-      <ElentaJsonForm schema={dynamicFields.schema}
-                      uiSchema={dynamicFields.uiSchema}
-                      formData={dynamicFields.formData}
-                      onChange={handleDynamicChange}
-      />
+      {/*remove false to unhide*/}
+      {false &&
+        <ElentaJsonForm schema={dynamicFields.schema}
+                        uiSchema={dynamicFields.uiSchema}
+                        formData={dynamicFields.formData}
+                        onChange={handleDynamicChange}
+        />
+      }
       <Button onClick={handleSubmit}>Submit</Button>
     </LoadingContainer>
   );

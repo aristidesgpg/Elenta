@@ -203,8 +203,16 @@ const SignUpForm = () => {
         validate={validate}
         ErrorList={ErrorListTemplate}
       >
+        <Button variant="info" type="submit" className="submit-button">Sign up</Button>
+      </Form>
+      {/*to unhide remove false*/}
+      {false &&
         <div className="form-actions">
-          <div className="title">Sign up with</div>
+          <div className="title">
+            <span>
+              or sign up with
+            </span>
+          </div>
           <div className="social-buttons">
             <a href="/login/google" className="btn btn-outline-info">
               <i className="fab fa-google"/> Google
@@ -213,10 +221,8 @@ const SignUpForm = () => {
               <i className="fab fa-linkedin-in"/> Linkedin
             </a>
           </div>
-          <Button variant="info" type="submit" className="submit-button">Sign up</Button>
         </div>
-
-      </Form>
+      }
     </Col>
   )
 };
