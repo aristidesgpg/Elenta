@@ -262,12 +262,12 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
         {error ? <div className="alert alert-danger">{error}</div> : <div/>}
 
         <div className="rjsf builder-form">
-          <div className="row">
-            <h5 className="col-md-6 text-center">Preview</h5>
-            <h5 className="col-md-6 text-center">Settings</h5>
-          </div>
           {Object.keys(schema.properties).length > 0 &&
           <DragDropContext onDragEnd={this.handleDrop}>
+            <div className="row">
+              <h5 className="col-md-6 text-center">Preview</h5>
+              <h5 className="col-md-6 text-center">Settings</h5>
+            </div>
             <SchemaField key={newKey} {...this.state}
                          schema={schema}
                          registry={registry}

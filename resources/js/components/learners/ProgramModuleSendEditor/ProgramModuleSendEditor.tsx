@@ -39,7 +39,7 @@ export const ProgramModuleSendEditor: React.FunctionComponent<Props> = ({formDat
       <hr/>
       <Form>
         <Form.Group>
-          <Form.Label className="pr-3">Was this module useful?</Form.Label>
+          <Form.Label className="pr-3">Was this useful?</Form.Label>
           <ToggleButtonGroup name='response_rating' value={formData.response_rating}
                              onChange={e => handleChange('response_rating', e)}>
             <ToggleButton className="btn-danger" value={0}>

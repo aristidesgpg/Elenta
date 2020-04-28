@@ -71,6 +71,7 @@
   "graphql-tag": "^2.10.3",
   "graphql.macro": "^1.4.2",
   "html-to-draftjs": "^1.5.0",
+  "intro.js": "^2.9.3",
   "moment": "^2.24.0",
   "react": "latest",
   "react-beautiful-dnd": "^13.0.0",

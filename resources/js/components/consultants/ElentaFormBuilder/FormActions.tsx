@@ -27,7 +27,7 @@ export default class FormActions extends React.Component<Props, State> {
 
     return (
       <div>
-        <ButtonToolbar className="builder-inner-actions">
+        <ButtonToolbar className="builder-inner-actions w-100 d-block">
           {false && <Button className="float-right" variant="info">
             <a className="float-right" download={filename} href={schemaFileContent}>
               <i className="glyphicon glyphicon-download"/>&nbsp;

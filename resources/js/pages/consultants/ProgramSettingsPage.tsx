@@ -186,7 +186,7 @@ const consistentUiSchema = {
         {
           id: {md: 0},
           name: {md: 6},
-          channel: {md: 6},
+          channel: {md: 5},
           max_recipients: {md: 0}
         }
       ]

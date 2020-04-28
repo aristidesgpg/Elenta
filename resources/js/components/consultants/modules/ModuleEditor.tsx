@@ -18,6 +18,8 @@ import {ToastContext} from "../../../contexts/ToastContext";
 import LoadingContainer from "../../hoc/LoadingContainer/LoadingContainer";
 import {immutableMerge} from "../../../utils/utils";
 import {Link} from "react-router-dom";
+import introJs from 'intro.js';
+import 'intro.js/introjs.css';
 
 const defaultContent = {
   schema: {
@@ -75,6 +77,7 @@ export const ModuleEditor =
             setTagList(parsedTagList);
           }
         }
+        introJs().start();
       }
     }, [activeModule]);
 
@@ -116,7 +119,10 @@ export const ModuleEditor =
                 <Button variant="outline-primary" onClick={addFolder}>
                   + Folder
                 </Button>
-                <Button variant="outline-primary" onClick={addModule}>
+                <Button
+                  variant="outline-primary"
+                  onClick={addModule}
+                >
                   + Module
                 </Button>
               </div>
@@ -126,7 +132,11 @@ export const ModuleEditor =
           <Col>
             {activeModule &&
             <>
-              <Row className="pb-1 mr-0" style={{justifyContent: "flex-end"}}>
+              <Row className="pb-1 mr-0"
+                   style={{
+                     justifyContent: "flex-end",
+                   }}
+              >
                 {sendModule &&
                 <Button variant="outline-primary" onClick={() => sendModule(activeModule)}>Send Module</Button>
                 }
@@ -135,7 +145,11 @@ export const ModuleEditor =
               <Tab.Container defaultActiveKey="content" id="module-editor" transition={false}>
                 <Nav variant="tabs" fill className="justify-content-center">
                   <Nav.Item>
-                    <Nav.Link eventKey="content">Content</Nav.Link>
+                    <Nav.Link
+                      eventKey="content"
+                    >
+                      Content
+                    </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="settings">Settings</Nav.Link>
@@ -143,12 +157,12 @@ export const ModuleEditor =
                 </Nav>
                 <Tab.Content>
                   <Tab.Pane eventKey="content" title="Content">
-                    <div className="ml-3">
+                    <div>
                       <Form.Group>
                         <h5>Title</h5>
                         <Form.Control
                           value={activeModule ? activeModule.title || "" : ""}
-                          placeholder='Module Title'
+                          placeholder='Post-Workshop Survey'
                           onChange={e => updateModuleList({title: e.target.value})}
                         />
                       </Form.Group>
@@ -157,7 +171,7 @@ export const ModuleEditor =
                         <Form.Control
                           as='textarea'
                           value={activeModule ? activeModule.description || "" : ""}
-                          placeholder='Module Description'
+                          placeholder='Your feedback helps us improve...'
                           onChange={e => updateModuleList({description: (e.target as HTMLInputElement).value})}
                         />
                       </Form.Group>
@@ -168,6 +182,7 @@ export const ModuleEditor =
                         schema={formContent.schema}
                         uiSchema={formContent.uiSchema}
                         tagList={tagList}
+                        enableCorAnswer={true}
                         onSave={(schema, uiSchema) => {
                           setFormContent({
                             schema: schema,
@@ -175,6 +190,9 @@ export const ModuleEditor =
                           });
                         }}
                       />
+                      <div>
+                        <Button className="mr-3 float-right" onClick={onSave}>Save Module</Button>
+                      </div>
                     </Form.Group>
                   </Tab.Pane>
                   <Tab.Pane eventKey="settings" title="Settings">

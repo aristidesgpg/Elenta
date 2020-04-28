@@ -23,7 +23,7 @@ export const ProgramInviteTable = ({invites}) => {
   }
   else {
     return <Alert variant="info">
-      It looks like you don't have any invites yet, start by inviting one above
+      It looks like you don't have any invites yet, start by using the tool above
     </Alert>
   }
 

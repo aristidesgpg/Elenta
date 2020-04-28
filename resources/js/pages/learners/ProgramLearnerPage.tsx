@@ -72,7 +72,7 @@ export const ProgramLearnerPage = () => {
     <LoadingContainer
       loading={[mutationLoading, queryLoading]}
       error={[mutationError, queryError]}>
-      {activeProgramModule && !activeProgramModule.sends.length &&
+      {(!activeProgramModule || (activeProgramModule && !activeProgramModule.sends.length)) &&
         <Alert variant="info">
           This program hasn't started yet! You'll recieve an email when the first module is published.
         </Alert>
