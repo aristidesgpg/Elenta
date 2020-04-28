@@ -125,17 +125,25 @@ const LoginForm = () => {
           validate={validate}
           ErrorList={ErrorListTemplate}
         >
-
-          <a className="active" href="#"
-             onClick={(e) => {
-               e.preventDefault();
-               setShowModal(true);
-             }}>
-            Forgot the password?
-          </a>
-
+          <div className="login-actions">
+            <a className="active" href="#"
+               onClick={(e) => {
+                 e.preventDefault();
+                 setShowModal(true);
+               }}>
+              Forgot the password?
+            </a>
+            <Button variant="info" type="submit" className="submit-button">Log In</Button>
+          </div>
+        </Form>
+        {/*to unhide remove false*/}
+        {false &&
           <div className="form-actions">
-            <div className="title">Log in with</div>
+            <div className="title">
+              <span>
+                or log in with
+              </span>
+            </div>
             <div className="social-buttons">
               <a href="/login/google" className="btn btn-outline-info">
                 <i className="fab fa-google"/> Google
@@ -144,10 +152,8 @@ const LoginForm = () => {
                 <i className="fab fa-linkedin-in"/> Linkedin
               </a>
             </div>
-            <Button variant="info" type="submit" className="submit-button">Log In</Button>
           </div>
-
-        </Form>
+        }
       </Col>
       <ForgotPasswordModal show={showModal} onClose={setShowModal}/>
     </>

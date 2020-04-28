@@ -16,33 +16,47 @@
   }
 
   .auth-form {
-    .errors-list {
-      padding-left: 15px;
-      color: #dc3545;
-    }
-    .form-group {
-      &.field-object {
-        margin-bottom: 0;
+      .errors-list {
+          padding-left: 15px;
+          color: #dc3545;
       }
 
-      &.has-error {
-        & > .form-control {
-          border-color: #dc3545;
-        }
+      .form-group {
+          &.field-object {
+              margin-bottom: 0;
+          }
 
-        .error-detail {
-          display: none;
-        }
+          &.has-error {
+              & > .form-control {
+                  border-color: #dc3545;
+              }
+
+              .error-detail {
+                  display: none;
+              }
+          }
       }
-    }
+      .login-actions {
+          display: flex;
+          justify-content: space-between;
+      }
+  }
     .form-actions {
       display: flex;
       flex-wrap: wrap;
 
       .title {
-        margin: 20px 0 10px;
+        border-bottom: 1px solid #c4c4c4;
+        line-height: 0.1em;
+        margin: 20px 0 20px;
         font-size: smaller;
         font-weight: bold;
+        text-align: center;
+        width: 100%;
+        span {
+            background: #fff;
+            padding: 0 10px;
+        }
       }
 
       .social-buttons {
@@ -59,6 +73,6 @@
         width: 48%;
         margin: 20px auto;
       }
+
     }
-  }
 }
