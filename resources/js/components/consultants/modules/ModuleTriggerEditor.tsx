@@ -6,6 +6,7 @@ import Row from "react-bootstrap/Row";
 
 const schema = {
   title: "Trigger",
+  description: "Set when your module will be sent.",
   type: "object",
   required: ["frequency", "max_sends"],
   properties: {
@@ -21,19 +22,19 @@ const schema = {
     },
     start_timestamp_field: {
       type: "string",
-      title: "Start Time",
+      title: "Launch Date",
       enum: ["ENROL_TIME"],
       default: "ENROL_TIME",
       enumNames: ["Enrol Time"]
     },
     frequency: {
       type: "integer",
-      title: "Frequency (days)",
+      title: "Number of days between sends",
       default: 1
     },
     max_sends: {
       type: "integer",
-      title: "Max Sends",
+      title: "Total number of sends",
       default: 3
     }
   }
@@ -42,10 +43,12 @@ const schema = {
 const uiSchema = {
   "ui:layout": [
     {
-      start_timestamp_field: {md: 3},
-      start_timestamp: {md: 4},
-      frequency: {md: 3},
-      max_sends: {md: 2}
+      start_timestamp_field: {md: 6},
+      start_timestamp: {md: 6},
+    },
+    {
+      frequency: {md: 6},
+      max_sends: {md: 6}
     }
   ],
   id: {
@@ -53,6 +56,15 @@ const uiSchema = {
   },
   start_timestamp: {
     "ui:widget": "RDP"
+  },
+  start_timestamp_field: {
+    "ui:help": "Choose when you would like this module sent."
+  },
+  frequency: {
+    "ui:help": "Set how many days you would like between sends."
+  },
+  max_sends: {
+    "ui:help": "The module will stop being sent after this number."
   }
 };
 

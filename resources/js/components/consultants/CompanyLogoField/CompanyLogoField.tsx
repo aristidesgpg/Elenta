@@ -71,7 +71,7 @@ export const CompanyLogoField = (props) => {
              }}
         >
           {props.formData.company_logo_url &&
-          <img src={props.formData.company_logo_url} height="30px"/>}
+          <img src={props.formData.company_logo_url} width="100px"/>}
         </Col>
         <Col md={6}>
           <Form.Group controlId="company_logo_url">
