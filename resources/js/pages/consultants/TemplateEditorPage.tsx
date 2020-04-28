@@ -17,6 +17,8 @@ import Nav from "react-bootstrap/Nav";
 import TemplateRequestTable from "../../components/consultants/templates/TemplateRequestTable";
 import {ToastContext} from "../../contexts/ToastContext";
 
+export const TemplateContext = React.createContext(null);
+
 export const TemplateEditorPage = () => {
   let {id} = useParams();
 
@@ -205,33 +207,28 @@ export const TemplateEditorPage = () => {
             <Nav.Link eventKey="requests">Requests</Nav.Link>
           </Nav.Item>
         </Nav>
-        <Tab.Content>
-          <Tab.Pane eventKey="modules" title="Content">
-            <Modules
-              modules={template ? template.modules : []}
-              pivotModules={template? template.templateModules : []}
-              addModule={addModule}
-              addFolder={addFolder}
-              saveModulesOrder={saveModulesOrder}
-              deleteModules={deleteModules}
-              duplicateModules={duplicateModules}
-              recipientLists={template ? template.recipientLists : []}
-              updateRecipientList={updateRecipientList}
-              updateModule={updateModule}
-              activeModule={activeModule}
-              setActiveModule={setActiveModule}
-              sendModule={null}
-              isModuleEditable={true}
-              setModuleEditable={null}
-              programModules={null}
-              learners={null}
-              maxLearners={null}
-            />
-          </Tab.Pane>
-          <Tab.Pane eventKey="requests" title="Requests">
-            <TemplateRequestTable requests={template ? template.requests : []}/>
-          </Tab.Pane>
-        </Tab.Content>
+        {template &&
+        <TemplateContext.Provider
+          value={{programModules: template.templateModules, ...template, activeModule, setActiveModule}}>
+          <Tab.Content>
+            <Tab.Pane eventKey="modules" title="Content">
+              <Modules
+                addModule={addModule}
+                addFolder={addFolder}
+                saveModulesOrder={saveModulesOrder}
+                deleteModules={deleteModules}
+                duplicateModules={duplicateModules}
+                updateRecipientList={updateRecipientList}
+                updateModule={updateModule}
+                sendModule={null}
+              />
+            </Tab.Pane>
+            <Tab.Pane eventKey="requests" title="Requests">
+              <TemplateRequestTable requests={template ? template.requests : []}/>
+            </Tab.Pane>
+          </Tab.Content>
+        </TemplateContext.Provider>
+        }
       </Tab.Container>
     </LoadingContainer>
   )

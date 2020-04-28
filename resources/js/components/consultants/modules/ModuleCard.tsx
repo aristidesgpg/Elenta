@@ -4,11 +4,10 @@ import ListGroupItem from "react-bootstrap/ListGroupItem";
 
 export const ModuleCard = (props) => {
   const {
-    item, onCollapse, onExpand, module, isActive,
+    item, onCollapse, onExpand, isActive,
     setActiveModule, duplicateModules, deleteModules, renameFolder = null
   } = props;
 
-  //console.log('ITEM', item);
   return (
     <ListGroupItem as="li"
                    data-id={item.id}

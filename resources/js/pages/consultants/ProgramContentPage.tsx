@@ -18,6 +18,8 @@ import ProgramInviteTable from "../../components/consultants/programs/ProgramInv
 import {ToastContext} from "../../contexts/ToastContext";
 import {useParams} from "react-router-dom";
 
+export const ProgramContext = React.createContext(null);
+
 export const ProgramContentPage = () => {
   let {id} = useParams();
 
@@ -31,7 +33,6 @@ export const ProgramContentPage = () => {
 
   const [program, setProgram] = useState(null);
   const [activeModule, setActiveModule] = useState(null);
-  const [isModuleEditable, setModuleEditable] = useState(false);
 
   const toastContext = useContext(ToastContext);
 
@@ -40,8 +41,6 @@ export const ProgramContentPage = () => {
       const program = data.getProgram;
       setProgram(program);
       setActiveModule(program.modules.length ? program.modules[0] : null);
-      setModuleEditable(program.programModules.some(programModule =>
-        programModule.module.id === program.modules[0].id ? programModule.sends !== null && programModule.sends?.length > 0 : false));
     }
   }, [data]);
 
@@ -51,7 +50,6 @@ export const ProgramContentPage = () => {
       ...updatedModules,
       ...withFolders
     ];
-
     setProgram(newState);
   };
 
@@ -228,43 +226,33 @@ export const ProgramContentPage = () => {
             <Nav.Link eventKey="invites">Invites</Nav.Link>
           </Nav.Item>
         </Nav>
-        <Tab.Content>
-          <Tab.Pane eventKey="modules" title="Content">
-            {program &&
-            <Modules
-              modules={program ? program.modules : []}
-              pivotModules={program? program.programModules : []}
-              addModule={addModule}
-              addFolder={addFolder}
-              saveModulesOrder={saveModulesOrder}
-              deleteModules={deleteModules}
-              duplicateModules={duplicateModules}
-              recipientLists={program.recipientLists}
-              updateRecipientList={updateRecipientList}
-              updateModule={updateModule}
-              activeModule={activeModule}
-              setActiveModule={setActiveModule}
-              sendModule={sendModule}
-              isModuleEditable={isModuleEditable}
-              setModuleEditable={setModuleEditable}
-              programModules={program.programModules}
-              learners={program.learners}
-              maxLearners={program.max_learners}
-            />
-            }
-          </Tab.Pane>
-          <Tab.Pane eventKey="learners" title="Learners">
-            {program &&
-            <ProgramLearnerTable program={program}/>
-            }
-          </Tab.Pane>
-          <Tab.Pane eventKey="invites" title="Invites">
-            <h3>Invite by Email</h3>
-            <ProgramInviteTool setProgram={setProgram} program={program}/>
-            <h3>Invites</h3>
-            <ProgramInviteTable invites={program ? program.invites : []}/>
-          </Tab.Pane>
-        </Tab.Content>
+        {program &&
+        <ProgramContext.Provider value={{...program, activeModule, setActiveModule}}>
+          <Tab.Content>
+            <Tab.Pane eventKey="modules" title="Content">
+              <Modules
+                addModule={addModule}
+                addFolder={addFolder}
+                saveModulesOrder={saveModulesOrder}
+                deleteModules={deleteModules}
+                duplicateModules={duplicateModules}
+                updateRecipientList={updateRecipientList}
+                updateModule={updateModule}
+                sendModule={sendModule}
+              />
+            </Tab.Pane>
+            <Tab.Pane eventKey="learners" title="Learners">
+              <ProgramLearnerTable program={program}/>
+            </Tab.Pane>
+            <Tab.Pane eventKey="invites" title="Invites">
+              <h3>Invite by Email</h3>
+              <ProgramInviteTool setProgram={setProgram} program={program}/>
+              <h3>Invites</h3>
+              <ProgramInviteTable invites={program ? program.invites : []}/>
+            </Tab.Pane>
+          </Tab.Content>
+        </ProgramContext.Provider>
+        }
       </Tab.Container>
     </LoadingContainer>
   )

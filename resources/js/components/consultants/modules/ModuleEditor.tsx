@@ -1,8 +1,7 @@
 import React from 'react';
 import ElentaFormBuilder from "../ElentaFormBuilder/ElentaFormBuilder";
 import ModuleSettingsEditor from "./ModuleSettingsEditor";
-import {Row, Col, Form, Tab, Nav, Button} from 'react-bootstrap';
-import {RIEInput, RIETextArea} from "riek";
+import {Row, Form, Tab, Nav, Button} from 'react-bootstrap';
 
 
 const ModuleEditor = ({

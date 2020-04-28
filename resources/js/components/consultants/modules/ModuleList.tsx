@@ -8,7 +8,7 @@ import {immutableMerge} from "../../../utils/utils";
 export const ModuleList = ({
                              modules, activeModule, setActiveModule,
                              saveModulesOrder, deleteModules, duplicateModules,
-                             programModules, setUserAction
+                             checkIsReadOnlyModuleItem, setUserAction
                            }) => {
     const [tree, setTree] = useState<TreeData>({
       rootId: "root-list",
@@ -19,6 +19,7 @@ export const ModuleList = ({
       const newItems = modules.sort((a, b) => parseInt(a.pivot.order) - parseInt(b.pivot.order))
         .reduce((acc, module) => {
           const folder = module.pivot.folder;
+          const isReadOnly = checkIsReadOnlyModuleItem(module);
           const moduleKey = getModuleKey(module);
           if (folder) {
             const folderItem = acc[folder];
@@ -36,6 +37,7 @@ export const ModuleList = ({
                   isFolder: true,
                   name: folder,
                   id: folder,
+                  isReadOnly
                 }),
                 children: [moduleKey]
               }
@@ -51,6 +53,7 @@ export const ModuleList = ({
             data: immutableMerge(module, {
               isFolder: !!module.isFolder,
               name: module.title,
+              isReadOnly
             }),
             children: []
           };

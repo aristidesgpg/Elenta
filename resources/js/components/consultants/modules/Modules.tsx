@@ -17,6 +17,8 @@ import introJs from 'intro.js';
 import 'intro.js/introjs.css';
 import ModalList from "./popups/ModalList";
 import UserAction from "./popups/actions";
+import {TemplateContext} from "../../../pages/consultants/TemplateEditorPage";
+import {ProgramContext} from "../../../pages/consultants/ProgramContentPage";
 
 const defaultContent = {
   schema: {
@@ -31,24 +33,14 @@ const defaultContent = {
 // TODO: Refactor to be PivotModuleEditor that lists Program/TemplateModules
 export const Modules =
   ({
-     modules: templateModules,
-     pivotModules,
      addModule,
      addFolder,
      saveModulesOrder,
      deleteModules,
      duplicateModules,
-     recipientLists,
      updateRecipientList,
      updateModule,
-     activeModule,
-     setActiveModule,
      sendModule,
-     isModuleEditable,
-     setModuleEditable,
-     programModules,
-     learners,
-     maxLearners
    }) => {
     const [formContent, setFormContent] = useState(defaultContent);
     const [formReminder, setFormReminder] = useState(null);
@@ -57,10 +49,20 @@ export const Modules =
     const [tagList, setTagList] = useState(null);
     const [userAction, setUserAction] = useState(null);
     const [userActionData, setUserActionData] = useState(null);
+    const [isModuleReadOnly, setModuleReadOnly] = useState(false);
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
 
     const toastContext = useContext(ToastContext);
+    const programContext = useContext(ProgramContext);
+    const templateContext = useContext(TemplateContext);
+    const {
+      modules: templateModules,
+      programModules: pivotModules,
+      recipientLists,
+      activeModule,
+      setActiveModule,
+    } = programContext || templateContext;
 
     useEffect(() => {
       if (activeModule) {
@@ -81,16 +83,15 @@ export const Modules =
             setTagList(parsedTagList);
           }
         }
+        if (pivotModules[0].module) {
+          setModuleReadOnly(pivotModules.some(pivotModule => {
+            if (pivotModule.module.id === activeModule.id) {
+              return pivotModule.sends !== null && pivotModule.sends.length > 0
+            }
+          }));
+        }
       }
       introJs().start();
-    }, [activeModule]);
-
-    useEffect(() => {
-      if (activeModule && programModules) {
-        setModuleEditable(programModules.some(programModule => programModule.module.id === activeModule.id
-          ? programModule.sends !== null && programModule.sends.length > 0
-          : false))
-      }
     }, [activeModule]);
 
     const updateModuleList = (d) => {
@@ -122,6 +123,17 @@ export const Modules =
       }
     };
 
+    const checkIsReadOnlyModuleItem = (module) => {
+      if (pivotModules[0].module) {
+        for (let i = 0; i < pivotModules.length; i++) {
+          if (module.id === pivotModules[i].module.id) {
+            return pivotModules[i].sends !== null && pivotModules[i].sends.length > 0;
+          }
+        }
+      }
+      return false;
+    }
+
     return (
       <LoadingContainer loading={mutationLoading} error={mutationError} className="pl-0 pr-0 pt-4">
         <Row>
@@ -135,7 +147,7 @@ export const Modules =
                         saveModulesOrder={saveModulesOrder}
                         deleteModules={deleteModules}
                         duplicateModules={duplicateModules}
-                        programModules={programModules}
+                        checkIsReadOnlyModuleItem={checkIsReadOnlyModuleItem}
                         setUserAction={setUserActionHandler}
             />
             <Row className="pt-2">
@@ -154,8 +166,8 @@ export const Modules =
             </Row>
           </Col>
           <Col>
-            {activeModule && (
-              isModuleEditable
+            {activeModule &&
+            (!isModuleReadOnly
                 ? <ModuleEditor
                   activeModule={activeModule}
                   updateModuleList={updateModuleList}
@@ -175,8 +187,6 @@ export const Modules =
                 : <ModuleViewer
                   activeModule={activeModule}
                   formContent={formContent}
-                  learners={learners}
-                  maxLearners={maxLearners}
                 />
             )}
             {!activeModule &&

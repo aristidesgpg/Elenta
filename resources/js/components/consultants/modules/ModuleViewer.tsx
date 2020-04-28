@@ -1,14 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Row, Col} from 'react-bootstrap';
 import ElentaJsonForm from "../../shared/ElentaJsonForm/ElentaJsonForm";
 import ProgramLearnersListDropDown from '../programs/ProgramModuleView/ProgramLearnersListDropDown';
+import {ProgramContext} from '../../../pages/consultants/ProgramContentPage';
 
 const ModuleViewer = ({
                         activeModule,
-                        formContent,
-                        learners,
-                        maxLearners
+                        formContent
                       }) => {
+  const {learners, max_learners: maxLearners} = useContext(ProgramContext);
   return (
     <>
       <Row>
