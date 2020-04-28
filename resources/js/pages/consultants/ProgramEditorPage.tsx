@@ -22,14 +22,24 @@ export const ProgramEditorPage = (props) => {
 
   const [program, setProgram] = useState(props.program);
 
-  const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
-  const [runSendMutation, {loading: sendMutationLoading, error: sendMutationError, data: sendMutationData}] = useMutation(CREATE_PROGRAM_MODULE_SENDS);
-  const [updateProgramModulesMutation, {loading: updateMutationLoading, error: updateMutationError, data: updateMutationData}] = useMutation(UPDATE_PROGRAM_MODULES);
-  const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError, data: duplicateMutationData}] = useMutation(DUPLICATE_PROGRAM_MODULES);
+  const [runMutation, {loading: mutationLoading, error: mutationError}] = useMutation(UPSERT_MODULE);
+  const [runSendMutation, {loading: sendMutationLoading, error: sendMutationError}] = useMutation(CREATE_PROGRAM_MODULE_SENDS);
+  const [updateProgramModulesMutation, {loading: updateMutationLoading, error: updateMutationError}] = useMutation(UPDATE_PROGRAM_MODULES);
+  const [duplicateModulesMutation, {loading: duplicateMutationLoading, error: duplicateMutationMutationError}] = useMutation(DUPLICATE_PROGRAM_MODULES);
 
   const [activeModule, setActiveModule] = useState(props.program.modules.length ? props.program.modules[0] : null);
 
   const toastContext = useContext(ToastContext)
+
+  const updateProgramModules = (updatedModules, withFolders = true) => {
+    let newState = _.cloneDeep(program);
+    newState.modules = [
+      ...updatedModules,
+      ...(withFolders ? newState.modules : []).filter(m => m.isFolder)
+    ];
+
+    program(newState);
+  };
 
   const updateModule = (module) => {
     runMutation({
@@ -48,12 +58,13 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
-      newState.modules = newState.modules.filter(m => m.id !== r.data.upsertModule.id);
+      let modules = _.cloneDeep(program.modules);
+      modules = modules.filter(m => m.id !== r.data.upsertModule.id);
       const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.programs.0.pivot", {})};
       delete module.programs;
-      newState.modules.push(module);
-      setProgram(newState);
+      modules.push(module);
+      updateProgramModules(modules);
+
       setActiveModule(module);
     });
   };
@@ -85,28 +96,36 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
+      const modules = _.cloneDeep(program.modules);
       const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.programs.0.pivot", {})};
       delete module.programs;
-      newState.modules.push(module);
-      setProgram(newState);
+      modules.push(module);
+      updateProgramModules(modules);
     });
   };
 
-  const saveModulesOrder = (modules) => {
+  const saveModulesOrder = (newModules) => {
+    const programModules = newModules.reduce(
+      (acc, module) => {
+        const {id, folder, order} = module.pivot;
+        !module.isFolder && acc.push({id, folder, order});
+        return acc;
+      }, []
+    );
+
+    const withFolders = !!newModules.find(module => module.isFolder);
+    updateProgramModules(newModules, false);
     updateProgramModulesMutation({
       variables: {
         input: {
           id: program.id,
           programModules: {
-            upsert: modules
+            upsert: programModules
           }
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
-      newState.modules = r.data.updateProgramModules.modules;
-      setProgram(newState);
+      updateProgramModules(r.data.updateProgramModules.modules, withFolders);
     });
   };
 
@@ -126,9 +145,7 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
-      newState.modules = r.data.updateProgramModules.modules;
-      setProgram(newState);
+      updateProgramModules(r.data.updateProgramModules.modules);
       toastContext.addToast({header: "Success!", body: "Saved"});
     });
   };
@@ -144,9 +161,7 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
-      newState.modules = r.data.updateProgramModules.modules;
-      setProgram(newState);
+      updateProgramModules(r.data.updateProgramModules.modules);
     });
   };
 
@@ -160,10 +175,26 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
-      let newState = _.cloneDeep(program);
-      newState.modules = r.data.duplicateProgramModules.modules;
-      setProgram(newState);
+      updateProgramModules(r.data.duplicateProgramModules.modules);
     });
+  };
+
+  const addFolder = () => {
+    let newProgram = _.cloneDeep(program);
+    const id = Math.round(Math.random() * 1e6);
+    const title = `New Folder ${id}`;
+    newProgram.modules = [
+      {
+        id: title,
+        title: title,
+        isFolder: true,
+        pivot: {id, order: 0, folder: null},
+        modules: []
+      },
+      ...newProgram.modules
+    ];
+
+    setProgram(newProgram);
   };
 
   return (
@@ -189,6 +220,7 @@ export const ProgramEditorPage = (props) => {
             <ModuleEditor
               modules={program ? program.modules : []}
               addModule={addModule}
+              addFolder={addFolder}
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}
               duplicateModules={duplicateModules}

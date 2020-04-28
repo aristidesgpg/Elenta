@@ -32,8 +32,9 @@ const defaultContent = {
 // TODO: Refactor to be PivotModuleEditor that lists Program/TemplateModules
 export const ModuleEditor =
   ({
-     modules: templateModules,
+     modules,
      addModule,
+     addFolder,
      saveModulesOrder,
      deleteModules,
      duplicateModules,
@@ -47,7 +48,6 @@ export const ModuleEditor =
     const [formContent, setFormContent] = useState(defaultContent);
     const [formReminder, setFormReminder] = useState(null);
     const [formTrigger, setFormTrigger] = useState(null);
-    const [modules, setModules] = useState(templateModules);
     const [recipientList, setRecipientList] = useState(null);
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
@@ -66,12 +66,6 @@ export const ModuleEditor =
         if (activeModule.pivot) setRecipientList(recipientLists.filter(rl => rl.id == activeModule.pivot.recipient_list_id)[0]);
       }
     }, [activeModule]);
-
-    useEffect(() => {
-      if (!_.isEqual(templateModules, modules)) {
-        setModules(templateModules);
-      }
-    }, [templateModules]);
 
     const updateModuleList = (d) => {
       setActiveModule(immutableMerge(activeModule, d));
@@ -92,27 +86,12 @@ export const ModuleEditor =
       }
     };
 
-    const addFolder = () => {
-      const title = `New Folder ${Math.round(Math.random() * 1e6)}`;
-      const newModules = [
-        {
-          id: title,
-          title: title,
-          isFolder: true,
-          pivot: {order: 0, folder: null},
-          modules: []
-        },
-        ...modules
-      ];
-      setModules(newModules);
-    };
-
     return (
       <LoadingContainer loading={mutationLoading} error={mutationError} className="pl-0 pr-0 pt-4">
         <Row>
           <Col md={3} className="p-0 pr-3 border-right">
-            <Row className="pb-2">
-              <Link to={window.location.pathname.replace('content', 'settings')}>Settings</Link>
+            <Row className="pb-2 ml-2 mr-2">
+              <Link to={window.location.pathname.replace('content', 'settings')}>Edit Settings</Link>
             </Row>
             <ModuleList modules={modules}
                         activeModule={activeModule}
@@ -136,51 +115,11 @@ export const ModuleEditor =
           <Col>
             {activeModule &&
             <>
-              <Row>
-                <Col md={9}>
-                  <Form>
-                    <Form.Group>
-                      <h5>Title</h5>
-                      <RIEInput
-                        value={activeModule ? activeModule.title || "Module Title" : "Module Title"}
-                        change={updateModuleList}
-                        propName='title'
-                        defaultProps={{
-                          style: {
-                            border: "1px dashed lightgrey",
-                            padding: "10px",
-                            width: "150px"
-                          }
-                        }}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <h5>Description</h5>
-                      <RIETextArea
-                        value={activeModule ? activeModule.description || "Module Description" : "Module Description"}
-                        change={updateModuleList}
-                        propName='description'
-                        defaultProps={{
-                          style: {
-                            border: "1px dashed lightgrey",
-                            padding: "10px",
-                            width: "150px"
-                          }
-                        }}
-                      />
-                    </Form.Group>
-                  </Form>
-                </Col>
-                <Col>
-                  <Col>
-                    {sendModule &&
-                    <Button className='float-right' onClick={() => sendModule(activeModule)}>Send Module</Button>
-                    }
-                  </Col>
-                  <Col>
-                    <Button className="float-right" onClick={onSave}>Save Module</Button>
-                  </Col>
-                </Col>
+              <Row className="pb-1 mr-0" style={{justifyContent: "flex-end"}}>
+                  {sendModule &&
+                  <Button variant="outline-primary" onClick={() => sendModule(activeModule)}>Send Module</Button>
+                  }
+                  <Button className="ml-1" onClick={onSave}>Save Module</Button>
               </Row>
               <Tab.Container defaultActiveKey="content" id="module-editor" transition={false}>
                 <Nav variant="tabs" fill className="justify-content-center">
@@ -193,6 +132,38 @@ export const ModuleEditor =
                 </Nav>
                 <Tab.Content>
                   <Tab.Pane eventKey="content" title="Content">
+                    <div className="ml-3">
+                      <Form.Group>
+                        <h5>Title</h5>
+                        <RIEInput
+                          value={activeModule ? activeModule.title || "Module Title" : "Module Title"}
+                          change={updateModuleList}
+                          propName='title'
+                          defaultProps={{
+                            style: {
+                              border: "1px dashed lightgrey",
+                              padding: "10px",
+                              width: "150px"
+                            }
+                          }}
+                        />
+                      </Form.Group>
+                      <Form.Group>
+                        <h5>Description</h5>
+                        <RIETextArea
+                          value={activeModule ? activeModule.description || "Module Description" : "Module Description"}
+                          change={updateModuleList}
+                          propName='description'
+                          defaultProps={{
+                            style: {
+                              border: "1px dashed lightgrey",
+                              padding: "10px",
+                              width: "150px"
+                            }
+                          }}
+                        />
+                      </Form.Group>
+                    </div>
                     <ElentaFormBuilder
                       schema={formContent.schema}
                       uiSchema={formContent.uiSchema}

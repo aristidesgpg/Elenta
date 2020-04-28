@@ -51,10 +51,10 @@ export const ProgramLearnerTable = ({program}) => {
               Completed on {formatDate(send.response_timestamp)}, with a rating
               of
               {send.response_rating === 0 &&
-              <i className="fas fa-thumbs-down"/>
+              <i className="fas fa-thumbs-down btn-danger ml-2"/>
               }
               {send.response_rating === 1 &&
-              <i className="fas fa-thumbs-up"/>
+              <i className="fas fa-thumbs-up btn-success ml-2"/>
               }
             </p>)
           } else if (send.click_timestamp) {
