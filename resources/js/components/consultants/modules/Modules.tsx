@@ -15,6 +15,8 @@ import ModuleEditor from "./ModuleEditor";
 import ModuleViewer from "./ModuleViewer";
 import introJs from 'intro.js';
 import 'intro.js/introjs.css';
+import ModalList from "./popups/ModalList";
+import UserAction from "./popups/actions";
 
 const defaultContent = {
   schema: {
@@ -53,6 +55,8 @@ export const Modules =
     const [formTrigger, setFormTrigger] = useState(null);
     const [recipientList, setRecipientList] = useState(null);
     const [tagList, setTagList] = useState(null);
+    const [userAction, setUserAction] = useState(null);
+    const [userActionData, setUserActionData] = useState(null);
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
 
@@ -108,6 +112,16 @@ export const Modules =
       }
     };
 
+    const setUserActionHandler = (action, actionData) => {
+      const actionChanged = action !== userAction ||
+        (actionData != null && !_.isEqual(actionData, userActionData));
+
+      if (actionChanged) {
+        setUserAction(action);
+        setUserActionData(actionData || null);
+      }
+    };
+
     return (
       <LoadingContainer loading={mutationLoading} error={mutationError} className="pl-0 pr-0 pt-4">
         <Row>
@@ -122,10 +136,15 @@ export const Modules =
                         deleteModules={deleteModules}
                         duplicateModules={duplicateModules}
                         programModules={programModules}
+                        setUserAction={setUserActionHandler}
             />
             <Row className="pt-2">
               <div className="m-auto">
-                <Button variant="outline-primary" onClick={addFolder}>
+                <Button variant="outline-primary" onClick={() => {
+                  setUserActionHandler(UserAction.EDIT_FOLDER, {
+                    callback: addFolder
+                  });
+                }}>
                   + Folder
                 </Button>
                 <Button variant="outline-primary" onClick={addModule}>
@@ -135,31 +154,31 @@ export const Modules =
             </Row>
           </Col>
           <Col>
-            {activeModule && (isModuleEditable
-              ? <ModuleEditor
-                activeModule={activeModule}
-                updateModuleList={updateModuleList}
-                sendModule={sendModule}
-                onSave={onSave}
-                tagList={tagList}
-                formContent={formContent}
-                setFormContent={setFormContent}
-                formReminder={formReminder}
-                formTrigger={formTrigger}
-                setFormReminder={setFormReminder}
-                setFormTrigger={setFormTrigger}
-                recipientLists={recipientLists}
-                recipientList={recipientList}
-                setRecipientList={setRecipientList}
-              />
-              : <ModuleViewer
-                activeModule={activeModule}
-                formContent={formContent}
-                learners={learners}
-                maxLearners={maxLearners}
-              />
-)
-            }
+            {activeModule && (
+              isModuleEditable
+                ? <ModuleEditor
+                  activeModule={activeModule}
+                  updateModuleList={updateModuleList}
+                  sendModule={sendModule}
+                  onSave={onSave}
+                  tagList={tagList}
+                  formContent={formContent}
+                  setFormContent={setFormContent}
+                  formReminder={formReminder}
+                  formTrigger={formTrigger}
+                  setFormReminder={setFormReminder}
+                  setFormTrigger={setFormTrigger}
+                  recipientLists={recipientLists}
+                  recipientList={recipientList}
+                  setRecipientList={setRecipientList}
+                />
+                : <ModuleViewer
+                  activeModule={activeModule}
+                  formContent={formContent}
+                  learners={learners}
+                  maxLearners={maxLearners}
+                />
+            )}
             {!activeModule &&
             <h4 style={{
               textAlign: "center",
@@ -172,6 +191,13 @@ export const Modules =
             }
           </Col>
         </Row>
+        <ModalList
+          {...{
+            userAction,
+            userActionData,
+            setUserAction: setUserActionHandler
+          }}
+        />
       </LoadingContainer>
     )
   };

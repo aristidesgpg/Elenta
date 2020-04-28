@@ -45,11 +45,11 @@ export const ProgramContentPage = () => {
     }
   }, [data]);
 
-  const updateProgramModules = (updatedModules, withFolders = true) => {
+  const updateProgramModules = (updatedModules, withFolders = []) => {
     let newState = _.cloneDeep(program);
     newState.modules = [
       ...updatedModules,
-      ...(withFolders ? newState.modules : []).filter(m => m.isFolder)
+      ...withFolders
     ];
 
     setProgram(newState);
@@ -128,8 +128,8 @@ export const ProgramContentPage = () => {
       }, []
     );
 
-    const withFolders = !!newModules.find(module => module.isFolder);
-    updateProgramModules(newModules, false);
+    const withFolders = newModules.filter(module => module.isFolder);
+    updateProgramModules(newModules);
     updateProgramModulesMutation({
       variables: {
         input: {
@@ -194,14 +194,13 @@ export const ProgramContentPage = () => {
     });
   };
 
-  const addFolder = () => {
+  const addFolder = (data) => {
     let newProgram = _.cloneDeep(program);
     const id = Math.round(Math.random() * 1e6);
-    const title = `New Folder ${id}`;
     newProgram.modules = [
       {
-        id: title,
-        title: title,
+        id: id,
+        title: data.folder,
         isFolder: true,
         pivot: {id, order: 0, folder: null},
         modules: []

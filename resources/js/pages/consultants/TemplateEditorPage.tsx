@@ -32,11 +32,11 @@ export const TemplateEditorPage = () => {
 
   const toastContext = useContext(ToastContext);
 
-  const updateTemplateModules = (updatedModules, withFolders = true) => {
+  const updateTemplateModules = (updatedModules, withFolders = []) => {
     const newState = _.cloneDeep(template);
     newState.modules = [
       ...updatedModules,
-      ...(withFolders ? newState.modules : []).filter(m => m.isFolder)
+      ...withFolders
     ];
 
     setTemplate(newState);
@@ -103,8 +103,8 @@ export const TemplateEditorPage = () => {
       }, []
     );
 
-    const withFolders = !!newModules.find(module => module.isFolder);
-    updateTemplateModules(newModules, false);
+    const withFolders = newModules.filter(module => module.isFolder);
+    updateTemplateModules(newModules);
     updateTemplateModulesMutation({
       variables: {
         input: {
@@ -169,14 +169,13 @@ export const TemplateEditorPage = () => {
     });
   };
 
-  const addFolder = () => {
+  const addFolder = (data) => {
     let newTemplate = _.cloneDeep(template);
     const id = Math.round(Math.random() * 1e6);
-    const title = `New Folder ${id}`;
     newTemplate.modules = [
       {
-        id: title,
-        title: title,
+        id: id,
+        title: data.folder,
         isFolder: true,
         pivot: {id, order: 0, folder: null},
         modules: []
