@@ -59,6 +59,7 @@ export const TemplateEditorPage = () => {
         }
       }
     }).then(r => {
+      toastContext.addToast({header: "Success!", body: "Saved"});
       let modules = _.cloneDeep(template.modules);
       modules = modules.filter(m => m.id !== r.data.upsertModule.id);
       const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.templates.0.pivot", {})};

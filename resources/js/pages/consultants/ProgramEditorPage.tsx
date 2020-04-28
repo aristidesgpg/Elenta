@@ -58,6 +58,7 @@ export const ProgramEditorPage = (props) => {
         }
       }
     }).then(r => {
+      toastContext.addToast({header: "Success!", body: "Saved"});
       let modules = _.cloneDeep(program.modules);
       modules = modules.filter(m => m.id !== r.data.upsertModule.id);
       const module = {...r.data.upsertModule, pivot: _.get(r.data, "upsertModule.programs.0.pivot", {})};

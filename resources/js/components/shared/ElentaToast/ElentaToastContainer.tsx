@@ -9,11 +9,11 @@ export const ElentaToastContainer = () => {
       aria-live="polite"
       aria-atomic="true"
       style={{
-        position: 'absolute',
+        position: 'fixed',
         marginRight: "20px",
         width: "250px",
         right: 0,
-        zIndex: 999
+        zIndex: 999,
       }}
     >
       {

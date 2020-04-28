@@ -113,7 +113,7 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
         currentIndex++;
         if(schemaProperties === undefined || schemaProperties[_slug] == undefined)
             break;
-    }while(true)        
+    }while(true)
     const jsonSchema = clone(field.jsonSchema);
     const {title} = jsonSchema;
     if (title != undefined)
@@ -262,6 +262,10 @@ export default class ElentaFormBuilder extends React.Component<Props, State> {
         {error ? <div className="alert alert-danger">{error}</div> : <div/>}
 
         <div className="rjsf builder-form">
+          <div className="row">
+            <h5 className="col-md-6 text-center">Preview</h5>
+            <h5 className="col-md-6 text-center">Settings</h5>
+          </div>
           {Object.keys(schema.properties).length > 0 &&
           <DragDropContext onDragEnd={this.handleDrop}>
             <SchemaField key={newKey} {...this.state}

@@ -29,7 +29,6 @@ body {
 }
 
 .editable-field:hover {
-    background: #fafafa;
     cursor: move;
 }
 
@@ -58,24 +57,37 @@ body {
     margin-bottom: 0px !important;
 }
 
-/*.field-editor .btn{
-    margin-left: 6px;
-}*/
-
-.editfield-title {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    padding-right: 0px!important;
-    padding-left: 0px!important;
+.rjsf.builder-form #root:first-child .actions-container {
+    border-top: 1px dashed gainsboro;
 }
 
-.editfield-title strong{
-    margin-left: 5px;
+.editfield-title {
+    padding-right: 0px!important;
+    padding-left: 0px!important;
+
+    .drag-container {
+        padding: 0;
+        background: #f9f9f9;
+        border-top: 1px dashed gainsboro;
+        border-bottom: 1px dashed gainsboro;
+    }
+    .actions-container {
+        border: 1px dashed #ccc;
+        border-top: none;
+        border-bottom: none;
+        padding: 0;
+    }
 }
 
 .editfield-body {
-    border: 1px dashed #ccc;
-    padding-top: 10px;
+    .editfield-preview {
+        background: #f9f9f9;
+    }
+
+    .editfield-settings {
+        border: 1px dashed #ccc;
+        border-top: none;
+    }
 }
 
 .panel-heading {
