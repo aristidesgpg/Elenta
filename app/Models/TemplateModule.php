@@ -115,7 +115,7 @@ class TemplateModule extends BasePivot
                         $items[] = [
                             'parentId' => $tm->id,
                             'id' => $field,
-                            'label' => $field,
+                            'label' => $props['title'],
                             'fieldType' => $uiSchema[$field]['uiType']
                         ];//'availableValues' => ['a', 'b']
                     }
