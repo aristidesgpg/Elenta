@@ -185,8 +185,8 @@ const consistentUiSchema = {
       'ui:layout': [
         {
           id: {md: 0},
-          name: {md: 4},
-          channel: {md: 4},
+          name: {md: 6},
+          channel: {md: 6},
           max_recipients: {md: 0}
         }
       ]
