@@ -9,7 +9,7 @@ const SubMenu = (props) => {
       data.items.map((item) => {        
         const {parent} = data;
         const itemProps = {item, handleClick, parent};
-        return (<SubMenuListItem key={item.val} {...itemProps}/>)
+        return (<SubMenuListItem key={item.id} {...itemProps}/>)
     })
     }
           </ul>);

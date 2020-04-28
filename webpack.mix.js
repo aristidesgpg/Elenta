@@ -6,17 +6,21 @@ var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require('webpack');
 
 const env = dotenv.config().parsed;
-//TODO: Make sure we only add safe keys to bundle
-const envKeys = Object.keys(env).reduce((prev, next) => {
+const envKeys = Object.keys(env).filter(k => {
+  return [
+    'APP_URL',
+    'APP_ENV',
+    'ASSET_URL',
+    'CLEARBIT_API_KEY'
+  ].includes(k);
+}).reduce((prev, next) => {
   prev[`process.env.${next}`] = JSON.stringify(env[next]);
   return prev;
 }, {});
 
-let ASSET_URL = ""
-if (process.env.ASSET_URL && process.env.ASSET_URL.length > 0) {
-    ASSET_URL = process.env.ASSET_URL + "/";
-}
-
+console.log("---------------PUBLISHING ENV------------------")
+console.log(envKeys)
+console.log("-----------------------------------------------")
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -29,9 +33,6 @@ if (process.env.ASSET_URL && process.env.ASSET_URL.length > 0) {
  */
 
 mix.webpackConfig({
-  output: {
-    publicPath: ASSET_URL,
-  },
   resolve: {
     extensions: [".js", ".ts", ".tsx", ".scss", ".gql", ".graphql"]
   },
@@ -82,10 +83,7 @@ mix.webpackConfig({
       filename: "[name].css",
       chunkFilename: "[id].css"
     }),
-    new webpack.DefinePlugin(envKeys),
-    new webpack.DefinePlugin({
-        "process.env.ASSET_PATH": JSON.stringify(ASSET_URL)
-    })
+    new webpack.DefinePlugin(envKeys)
   ]
 });
 

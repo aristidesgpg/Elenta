@@ -38,7 +38,7 @@ export const ProgramEditorPage = (props) => {
       ...(withFolders ? newState.modules : []).filter(m => m.isFolder)
     ];
 
-    program(newState);
+    setProgram(newState);
   };
 
   const updateModule = (module) => {
@@ -219,6 +219,7 @@ export const ProgramEditorPage = (props) => {
             {program &&
             <ModuleEditor
               modules={program ? program.modules : []}
+              pivotModules={program? program.programModules : []}
               addModule={addModule}
               addFolder={addFolder}
               saveModulesOrder={saveModulesOrder}

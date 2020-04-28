@@ -32,7 +32,8 @@ const defaultContent = {
 // TODO: Refactor to be PivotModuleEditor that lists Program/TemplateModules
 export const ModuleEditor =
   ({
-     modules,
+     modules: templateModules,
+     pivotModules,
      addModule,
      addFolder,
      saveModulesOrder,
@@ -49,6 +50,7 @@ export const ModuleEditor =
     const [formReminder, setFormReminder] = useState(null);
     const [formTrigger, setFormTrigger] = useState(null);
     const [recipientList, setRecipientList] = useState(null);
+    const [tagList, setTagList] = useState(null);
 
     const [runMutation, {loading: mutationLoading, error: mutationError, data: mutationData}] = useMutation(UPSERT_MODULE);
 
@@ -64,6 +66,15 @@ export const ModuleEditor =
           setFormContent(defaultContent);
         }
         if (activeModule.pivot) setRecipientList(recipientLists.filter(rl => rl.id == activeModule.pivot.recipient_list_id)[0]);
+        if (pivotModules.length > 0) {
+          const pivotModule = pivotModules.filter((pmItem) => {
+            return (pmItem.id == activeModule.pivot.id)
+          });
+          if (pivotModule.length > 0) {
+            const parsedTagList = JSON.parse(pivotModule[0].module_variables);
+            setTagList(parsedTagList);
+          }
+        }
       }
     }, [activeModule]);
 
@@ -93,7 +104,7 @@ export const ModuleEditor =
             <Row className="pb-2 ml-2 mr-2">
               <Link to={window.location.pathname.replace('content', 'settings')}>Edit Settings</Link>
             </Row>
-            <ModuleList modules={modules}
+            <ModuleList modules={templateModules}
                         activeModule={activeModule}
                         setActiveModule={setActiveModule}
                         saveModulesOrder={saveModulesOrder}
@@ -116,10 +127,10 @@ export const ModuleEditor =
             {activeModule &&
             <>
               <Row className="pb-1 mr-0" style={{justifyContent: "flex-end"}}>
-                  {sendModule &&
-                  <Button variant="outline-primary" onClick={() => sendModule(activeModule)}>Send Module</Button>
-                  }
-                  <Button className="ml-1" onClick={onSave}>Save Module</Button>
+                {sendModule &&
+                <Button variant="outline-primary" onClick={() => sendModule(activeModule)}>Send Module</Button>
+                }
+                <Button className="ml-1" onClick={onSave}>Save Module</Button>
               </Row>
               <Tab.Container defaultActiveKey="content" id="module-editor" transition={false}>
                 <Nav variant="tabs" fill className="justify-content-center">
@@ -167,6 +178,7 @@ export const ModuleEditor =
                     <ElentaFormBuilder
                       schema={formContent.schema}
                       uiSchema={formContent.uiSchema}
+                      tagList={tagList}
                       onSave={(schema, uiSchema) => {
                         setFormContent({
                           schema: schema,

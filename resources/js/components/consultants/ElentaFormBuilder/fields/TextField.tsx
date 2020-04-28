@@ -127,9 +127,9 @@ class TagOption extends React.Component<any, any> {
   onSelectChange = (item)=>{
     const { editorState, onChange, tagList } = this.props;
     const arrFiltered = tagList.filter((listItem)=>{
-      return listItem.val == item.parentVal
+      return listItem.id == item.parentId
     });
-    let parentLabel = `${item.parentVal}`
+    let parentLabel = `${item.parentId}`
     if(arrFiltered.length > 0){
       parentLabel = arrFiltered[0].label;
     }

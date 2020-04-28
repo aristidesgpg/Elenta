@@ -111,7 +111,7 @@ class SxSelect extends React.Component<Props, any> {
 
                 <li
                   className={"sxListItem"}
-                  key={item.val}
+                  key={item.id}
                   onMouseEnter={() => {
                     this.handleMouseEnter(item)
                   }}

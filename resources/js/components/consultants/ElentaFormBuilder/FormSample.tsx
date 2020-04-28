@@ -25,20 +25,20 @@ export default class SampleFormEditor extends React.Component<any, any>{
 
     tagList = () => {
         return [{
-            val: "1",
+            id: "1",
             label: "Form1",
             items: [
-              {parentVal: 1, val: "question1", label: "Active Lisenting"},
-              {parentVal: 1, val: "question2", label: "Firday"},
-              {parentVal: 1, val: "question3", label: "Saturday"}]
+              {parentId: 1, id: "question1", label: "Active Lisenting"},
+              {parentId: 1, id: "question2", label: "Firday"},
+              {parentId: 1, id: "question3", label: "Saturday"}]
           },
             {
-              val: "2",
+              id: "2",
               label: "Form2",
               items: [
-                {parentVal: 1, val: "question4", label: "Monday"},
-                {parentVal: 1, val: "question5", label: "Tuesday"},
-                {parentVal: 1, val: "question6", label: "Thursday"}]
+                {parentId: 1, id: "question4", label: "Monday"},
+                {parentId: 1, id: "question5", label: "Tuesday"},
+                {parentId: 1, id: "question6", label: "Thursday"}]
             }
           ];
     }

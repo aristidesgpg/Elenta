@@ -209,6 +209,7 @@ export const TemplateEditorPage = () => {
           <Tab.Pane eventKey="modules" title="Content">
             <ModuleEditor
               modules={template ? template.modules : []}
+              pivotModules={template? template.templateModules : []}
               addModule={addModule}
               addFolder={addFolder}
               saveModulesOrder={saveModulesOrder}
