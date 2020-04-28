@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Mail\ProgramModuleMailer;
 use App\RecipientList;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -99,27 +101,31 @@ class ProgramModule extends BasePivot
      * from other modules in the same program, which have been sent before this one.
      */
     public function getModuleVariablesAttribute() {
-        //return "{}";
+        if (!$this->program) {
+            return "{}";
+        }
         $result = [];
         /** @var ProgramModule $this_pm */
         $this_pm = $this;
-        // TODO: add filter for programs that are running after
+        /*
         $filtered_pms = $this->program->programModules->filter(function(ProgramModule $pm) use ($this_pm) {
             return Carbon::parse($pm->module->trigger->start_timestamp)->lte($this_pm->start_timestamp);
-        });//Robert shoudl remove this comment.*/
-        foreach($filtered_pms as $pm){       
+        });
+         */
+        $filtered_pms = $this->program->programModules;
+        foreach($filtered_pms as $pm){
             try{
-                $content = json_decode($pm->module->content, true);            
-                // TODO: make sure input fields, get type of input field, get possible values for input field                                                         
-                if ($schema = $content['schema']) {  
+                $content = json_decode($pm->module->content, true);
+                // TODO: make sure input fields, get type of input field, get possible values for input field
+                if ($schema = $content['schema']) {
                     $uiSchema = $content['uiSchema'];
-                    $items = array();                                  
-                    foreach ($schema['properties'] as $field => $props) {                                                
-                        $items[] = [   
-                            'parentId' => $pm->id,   
-                            'id' => $field,                      
+                    $items = array();
+                    foreach ($schema['properties'] as $field => $props) {
+                        $items[] = [
+                            'parentId' => $pm->id,
+                            'id' => $field,
                             'label' => $field,
-                            'fieldType' => $uiSchema[$field]['uiType']                            
+                            'fieldType' => $uiSchema[$field]['uiType']
                         ];//'availableValues' => ['a', 'b']
                     }
                     if(count($items) > 0){
@@ -128,14 +134,14 @@ class ProgramModule extends BasePivot
                             'label' => $pm->module->title,
                             'items' => $items
                         ];
-                    }                    
+                    }
                 }
             }
             catch(Exception $error){
                 Log::error($error);
-            }            
+            }
         }
-        return json_encode($result);     
+        return json_encode($result);
     }
 
     public function program(): BelongsTo

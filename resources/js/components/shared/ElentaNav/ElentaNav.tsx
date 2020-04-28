@@ -134,7 +134,7 @@ export const ElentaNav = () => {
         <Navbar bg="light" fixed="top">
           <NavbarBrand>
             <Link to={user ? "/dashboard" : "/"}>
-              <Image src="/images/logo.png" alt="logo" style={{height: '30px'}}/>
+              <Image src={process.env.ASSET_URL + "/images/logo.png"} alt="logo" style={{height: '30px'}}/>
             </Link>
           </NavbarBrand>
           <NavbarToggle/>
@@ -147,7 +147,10 @@ export const ElentaNav = () => {
                                    className="account-dropdown rounded-circle">
                     {
                       userProfile &&
-                      <Image src={userProfile.picture_url ? userProfile.picture_url : '/images/avatar.svg'}
+                      <Image src={userProfile.picture_url ?
+                        userProfile.picture_url
+                        : `${process.env.APP_URL}/images/avatar.svg`
+                      }
                              className="profile-image"
                              alt="Profile Picture" roundedCircle/>
                     }

@@ -56,6 +56,8 @@ const schema = {
     start_timestamp: {
       type: "string",
       title: "Start Date",
+      dateFormat: true,
+      timeFormat: true,
       format: "date-time"
     },
     can_invite: {

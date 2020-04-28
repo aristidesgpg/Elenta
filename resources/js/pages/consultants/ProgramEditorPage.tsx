@@ -31,10 +31,14 @@ export const ProgramEditorPage = (props) => {
 
   const toastContext = useContext(ToastContext)
 
-  const updateProgramModules = (modules) => {
+  const updateProgramModules = (updatedModules, withFolders = true) => {
     let newState = _.cloneDeep(program);
-    newState.modules = modules;
-    program(newState);
+    newState.modules = [
+      ...updatedModules,
+      ...(withFolders ? newState.modules : []).filter(m => m.isFolder)
+    ];
+
+    setProgram(newState);
   };
 
   const updateModule = (module) => {
@@ -100,18 +104,28 @@ export const ProgramEditorPage = (props) => {
     });
   };
 
-  const saveModulesOrder = (modules) => {
+  const saveModulesOrder = (newModules) => {
+    const programModules = newModules.reduce(
+      (acc, module) => {
+        const {id, folder, order} = module.pivot;
+        !module.isFolder && acc.push({id, folder, order});
+        return acc;
+      }, []
+    );
+
+    const withFolders = !!newModules.find(module => module.isFolder);
+    updateProgramModules(newModules, false);
     updateProgramModulesMutation({
       variables: {
         input: {
           id: program.id,
           programModules: {
-            upsert: modules
+            upsert: programModules
           }
         }
       }
     }).then(r => {
-      updateProgramModules(r.data.updateProgramModules.modules);
+      updateProgramModules(r.data.updateProgramModules.modules, withFolders);
     });
   };
 
@@ -165,6 +179,24 @@ export const ProgramEditorPage = (props) => {
     });
   };
 
+  const addFolder = () => {
+    let newProgram = _.cloneDeep(program);
+    const id = Math.round(Math.random() * 1e6);
+    const title = `New Folder ${id}`;
+    newProgram.modules = [
+      {
+        id: title,
+        title: title,
+        isFolder: true,
+        pivot: {id, order: 0, folder: null},
+        modules: []
+      },
+      ...newProgram.modules
+    ];
+
+    setProgram(newProgram);
+  };
+
   return (
     <LoadingContainer
       loading={[mutationLoading, updateMutationLoading, duplicateMutationLoading]}
@@ -189,6 +221,7 @@ export const ProgramEditorPage = (props) => {
               modules={program ? program.modules : []}
               pivotModules={program? program.programModules : []}
               addModule={addModule}
+              addFolder={addFolder}
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}
               duplicateModules={duplicateModules}

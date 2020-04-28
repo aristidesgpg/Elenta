@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\RecipientList;
 use DB;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -89,26 +90,33 @@ class TemplateModule extends BasePivot
      * or text fields of the associated module. These are the input fields
      * from other modules in the same template, which have been sent before this one.
      */
-    public function getModuleVariablesAttribute() {        
+    public function getModuleVariablesAttribute() {
+        if (!$this->template) {
+            return "{}";
+        }
         $result = array();
         /** @var TemplateModule $this_tm */
         $this_tm = $this;
-        // TODO: add filter for templates that are running after        
+        // TODO: add filter for templates that are running after
+        /*
         $filtered_tms = $this->template->templateModules->filter(function(TemplateModule $tm) use ($this_tm) {
             return Carbon::parse($tm->module->trigger->start_timestamp)->lte($this_tm->start_timestamp);
-        });//* Robert Should remove this comment*/        
-        foreach($filtered_tms as $tm){       
+        });
+         */
+        $filtered_tms = $this->template->templateModules;
+        foreach($filtered_tms as $tm){
             try{
-                $content = json_decode($tm->module->content, true);            
-                // TODO: make sure input fields, get type of input field, get possible values for input field                                                         
-                if ($schema = $content['schema']) {  
+                $content = json_decode($tm->module->content, true);
+                // TODO: make sure input fields, get type of input field, get possible values for input field
+                if ($schema = $content['schema']) {
                     $uiSchema = $content['uiSchema'];
-                    $items = array();                                  
-                    foreach ($schema['properties'] as $field => $props) {                                                
-                        $items[] = [   
-                            'parentId' => $tm->id,                         
+                    $items = array();
+                    foreach ($schema['properties'] as $field => $props) {
+                        $items[] = [
+                            'parentId' => $tm->id,
+                            'id' => $field,
                             'label' => $field,
-                            'fieldType' => $uiSchema[$field]['uiType']                            
+                            'fieldType' => $uiSchema[$field]['uiType']
                         ];//'availableValues' => ['a', 'b']
                     }
                     if(count($items) > 0){
@@ -117,14 +125,14 @@ class TemplateModule extends BasePivot
                             'label' => $tm->module->title,
                             'items' => $items
                         ];
-                    }                    
+                    }
                 }
             }
             catch(Exception $error){
                 Log::error($error);
-            }            
+            }
         }
-        return json_encode($result);        
+        return json_encode($result);
     }
 
     public function module(): BelongsTo {

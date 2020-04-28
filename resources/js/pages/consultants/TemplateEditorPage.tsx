@@ -32,9 +32,13 @@ export const TemplateEditorPage = () => {
 
   const toastContext = useContext(ToastContext);
 
-  const updateTemplateModules = (modules) => {
-    let newState = _.cloneDeep(template);
-    newState.modules = modules;
+  const updateTemplateModules = (updatedModules, withFolders = true) => {
+    const newState = _.cloneDeep(template);
+    newState.modules = [
+      ...updatedModules,
+      ...(withFolders ? newState.modules : []).filter(m => m.isFolder)
+    ];
+
     setTemplate(newState);
   };
 
@@ -89,18 +93,28 @@ export const TemplateEditorPage = () => {
     });
   };
 
-  const saveModulesOrder = (modules) => {
+  const saveModulesOrder = (newModules) => {
+    const templateModules = newModules.reduce(
+      (acc, module) => {
+        const {id, folder, order} = module.pivot;
+        !module.isFolder && acc.push({id, folder, order});
+        return acc;
+      }, []
+    );
+
+    const withFolders = !!newModules.find(module => module.isFolder);
+    updateTemplateModules(newModules, false);
     updateTemplateModulesMutation({
       variables: {
         input: {
           id: template.id,
           templateModules: {
-            upsert: modules
+            upsert: templateModules
           }
         }
       }
     }).then(r => {
-      updateTemplateModules(r.data.updateTemplateModules.modules);
+      updateTemplateModules(r.data.updateTemplateModules.modules, withFolders);
     });
   };
 
@@ -154,6 +168,24 @@ export const TemplateEditorPage = () => {
     });
   };
 
+  const addFolder = () => {
+    let newTemplate = _.cloneDeep(template);
+    const id = Math.round(Math.random() * 1e6);
+    const title = `New Folder ${id}`;
+    newTemplate.modules = [
+      {
+        id: title,
+        title: title,
+        isFolder: true,
+        pivot: {id, order: 0, folder: null},
+        modules: []
+      },
+      ...newTemplate.modules
+    ];
+
+    setTemplate(newTemplate);
+  };
+
   if (data && !template) {
     setTemplate(data.getTemplate);
     if (data.getTemplate.modules.length) setActiveModule(data.getTemplate.modules[0]);
@@ -179,6 +211,7 @@ export const TemplateEditorPage = () => {
               modules={template ? template.modules : []}
               pivotModules={template? template.templateModules : []}
               addModule={addModule}
+              addFolder={addFolder}
               saveModulesOrder={saveModulesOrder}
               deleteModules={deleteModules}
               duplicateModules={duplicateModules}
