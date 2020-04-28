@@ -9,13 +9,15 @@ import {
   UPSERT_MODULE
 } from "../../graphql/queries";
 import Tab from "react-bootstrap/Tab";
-import ModuleEditor from "../../components/consultants/modules/ModuleEditor";
+import Modules from "../../components/consultants/modules/Modules";
 import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
 import {useContext, useState} from "react";
 import _ from "lodash";
 import Nav from "react-bootstrap/Nav";
 import TemplateRequestTable from "../../components/consultants/templates/TemplateRequestTable";
 import {ToastContext} from "../../contexts/ToastContext";
+
+export const TemplateContext = React.createContext(null);
 
 export const TemplateEditorPage = () => {
   let {id} = useParams();
@@ -32,11 +34,11 @@ export const TemplateEditorPage = () => {
 
   const toastContext = useContext(ToastContext);
 
-  const updateTemplateModules = (updatedModules, withFolders = true) => {
+  const updateTemplateModules = (updatedModules, withFolders = []) => {
     const newState = _.cloneDeep(template);
     newState.modules = [
       ...updatedModules,
-      ...(withFolders ? newState.modules : []).filter(m => m.isFolder)
+      ...withFolders
     ];
 
     setTemplate(newState);
@@ -103,8 +105,8 @@ export const TemplateEditorPage = () => {
       }, []
     );
 
-    const withFolders = !!newModules.find(module => module.isFolder);
-    updateTemplateModules(newModules, false);
+    const withFolders = newModules.filter(module => module.isFolder);
+    updateTemplateModules(newModules);
     updateTemplateModulesMutation({
       variables: {
         input: {
@@ -169,14 +171,13 @@ export const TemplateEditorPage = () => {
     });
   };
 
-  const addFolder = () => {
+  const addFolder = (data) => {
     let newTemplate = _.cloneDeep(template);
     const id = Math.round(Math.random() * 1e6);
-    const title = `New Folder ${id}`;
     newTemplate.modules = [
       {
-        id: title,
-        title: title,
+        id: id,
+        title: data.folder,
         isFolder: true,
         pivot: {id, order: 0, folder: null},
         modules: []
@@ -206,28 +207,28 @@ export const TemplateEditorPage = () => {
             <Nav.Link eventKey="requests">Requests</Nav.Link>
           </Nav.Item>
         </Nav>
-        <Tab.Content>
-          <Tab.Pane eventKey="modules" title="Content">
-            <ModuleEditor
-              modules={template ? template.modules : []}
-              pivotModules={template? template.templateModules : []}
-              addModule={addModule}
-              addFolder={addFolder}
-              saveModulesOrder={saveModulesOrder}
-              deleteModules={deleteModules}
-              duplicateModules={duplicateModules}
-              recipientLists={template ? template.recipientLists : []}
-              updateRecipientList={updateRecipientList}
-              updateModule={updateModule}
-              activeModule={activeModule}
-              setActiveModule={setActiveModule}
-              sendModule={null}
-            />
-          </Tab.Pane>
-          <Tab.Pane eventKey="requests" title="Requests">
-            <TemplateRequestTable requests={template ? template.requests : []}/>
-          </Tab.Pane>
-        </Tab.Content>
+        {template &&
+        <TemplateContext.Provider
+          value={{programModules: template.templateModules, ...template, activeModule, setActiveModule}}>
+          <Tab.Content>
+            <Tab.Pane eventKey="modules" title="Content">
+              <Modules
+                addModule={addModule}
+                addFolder={addFolder}
+                saveModulesOrder={saveModulesOrder}
+                deleteModules={deleteModules}
+                duplicateModules={duplicateModules}
+                updateRecipientList={updateRecipientList}
+                updateModule={updateModule}
+                sendModule={null}
+              />
+            </Tab.Pane>
+            <Tab.Pane eventKey="requests" title="Requests">
+              <TemplateRequestTable requests={template ? template.requests : []}/>
+            </Tab.Pane>
+          </Tab.Content>
+        </TemplateContext.Provider>
+        }
       </Tab.Container>
     </LoadingContainer>
   )

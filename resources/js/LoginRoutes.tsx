@@ -3,7 +3,7 @@ import {useQuery} from "@apollo/react-hooks";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 import FormSample from "./components/consultants/ElentaFormBuilder/FormSample";
-import ProgramEditorPage from "./pages/consultants/ProgramEditorPage";
+import ProgramContentPage from "./pages/consultants/ProgramContentPage";
 import LoginPage from "./pages/shared/LoginPage";
 import PasswordResetPage from "./pages/shared/PasswordResetPage";
 import TemplateSettingsPage from "./pages/consultants/TemplateSettingsPage";

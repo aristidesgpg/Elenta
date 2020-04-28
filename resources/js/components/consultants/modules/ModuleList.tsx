@@ -1,22 +1,25 @@
 import React, {useState, useEffect} from "react";
 import {mutateTree, TreeData} from "@atlaskit/tree";
 import ModuleCard from "./ModuleCard";
-import RenameFolderModal from "./RenameFolderModal";
 import List from "./List";
+import UserAction from './popups/actions';
 import {immutableMerge} from "../../../utils/utils";
 
-export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder, deleteModules, duplicateModules}) => {
+export const ModuleList = ({
+                             modules, activeModule, setActiveModule,
+                             saveModulesOrder, deleteModules, duplicateModules,
+                             checkIsReadOnlyModuleItem, setUserAction
+                           }) => {
     const [tree, setTree] = useState<TreeData>({
       rootId: "root-list",
       items: {}
     });
-    const [showModal, setShowModal] = useState(false);
-    const [editableFolder, setEditableFolder] = useState(null);
 
     useEffect(() => {
       const newItems = modules.sort((a, b) => parseInt(a.pivot.order) - parseInt(b.pivot.order))
         .reduce((acc, module) => {
           const folder = module.pivot.folder;
+          const isReadOnly = checkIsReadOnlyModuleItem(module);
           const moduleKey = getModuleKey(module);
           if (folder) {
             const folderItem = acc[folder];
@@ -34,6 +37,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
                   isFolder: true,
                   name: folder,
                   id: folder,
+                  isReadOnly
                 }),
                 children: [moduleKey]
               }
@@ -49,6 +53,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
             data: immutableMerge(module, {
               isFolder: !!module.isFolder,
               name: module.title,
+              isReadOnly
             }),
             children: []
           };
@@ -98,6 +103,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
         child.data.pivot.folder = folder;
       });
       newTree.items[id].data.name = folder;
+      newTree.items[id].data.title = folder;
 
       setTree(newTree);
       saveOrder(newTree);
@@ -232,8 +238,10 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
             onExpand={() => setExpanded(item.id, true)}
             onCollapse={() => setExpanded(item.id, false)}
             renameFolder={() => {
-              setShowModal(true);
-              setEditableFolder(item)
+              setUserAction(UserAction.EDIT_FOLDER, {
+                editableFolder: item,
+                callback: renameFolder
+              });
             }}
             duplicateModules={duplicateModulesHandler}
             deleteModules={deleteModulesHandler}
@@ -256,10 +264,6 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
           isDragEnabled
           isNestingEnabled={true}
         />
-        <RenameFolderModal show={showModal}
-                           onClose={setShowModal}
-                           editableFolder={editableFolder}
-                           onOk={renameFolder}/>
       </>
     );
   }

@@ -3,7 +3,7 @@ import Form from "react-jsonschema-form";
 import PropTypes from 'prop-types';
 import {Button, Modal} from "react-bootstrap";
 import {get} from "lodash";
-import ErrorListTemplate from "../../shared/auth/forms/ErrorListTemplate";
+import ErrorListTemplate from "../../../shared/auth/forms/ErrorListTemplate";
 
 const schema = {
   type: "object",
@@ -45,9 +45,8 @@ const RenameFolderModal = (props) => {
     }
   }, [editableFolder]);
 
-
   return (
-    <Modal show={props.show} onHide={() => props.onClose()}>
+    <Modal show={true} onHide={() => props.onClose()}>
       <Modal.Header closeButton>
         <Modal.Title>Enter folder name</Modal.Title>
       </Modal.Header>
@@ -64,8 +63,8 @@ const RenameFolderModal = (props) => {
             setFormState({...formState, ...data.formData});
           }}
           onSubmit={({formData}) => {
-            props.onOk({...formData});
-            props.onClose(false);
+            props.callback({...formData});
+            props.onClose();
           }}
           onError={(errors, val) => console.log('errors', {errors, val})}
           ErrorList={ErrorListTemplate}
@@ -81,9 +80,8 @@ const RenameFolderModal = (props) => {
 };
 
 RenameFolderModal.propTypes = {
-  show: PropTypes.bool.isRequired,
   editableFolder: PropTypes.object,
-  onOk: PropTypes.func.isRequired,
+  callback: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

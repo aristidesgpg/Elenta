@@ -4,9 +4,10 @@ import ListGroupItem from "react-bootstrap/ListGroupItem";
 
 export const ModuleCard = (props) => {
   const {
-    item, onCollapse, onExpand, module, isActive,
+    item, onCollapse, onExpand, isActive,
     setActiveModule, duplicateModules, deleteModules, renameFolder = null
   } = props;
+
   return (
     <ListGroupItem as="li"
                    data-id={item.id}
@@ -33,10 +34,12 @@ export const ModuleCard = (props) => {
                     onClick={() => duplicateModules(item)}>
               <i className="fas fa-copy"/>
             </Button>
+            {(!item.data.isReadOnly || item.data.isFolder) &&
             <Button variant="outline-dark" size="sm"
                     onClick={() => deleteModules(item)}>
               <i className="fas fa-trash"/>
             </Button>
+            }
           </div>
           {item.hasChildren && (
             <span
