@@ -160,3 +160,15 @@ body {
         color: #3e3e3e;
     }
 }
+
+// for all the rows in the bootstrap tables, make sure the word wraps around
+// maybe clean this up there's too many nested classes
+.react-bootstrap-table {
+    table {
+        tbody {
+            tr {
+                word-wrap: break-word;
+            }
+        }
+    }
+}

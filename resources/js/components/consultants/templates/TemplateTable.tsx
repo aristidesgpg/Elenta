@@ -24,7 +24,7 @@ export const TemplateTable = ({templates}) => {
       };
     });
 
-    return <BootstrapTable keyField='id' data={tableData} columns={columns}/>
+    return <BootstrapTable keyField='id' data={tableData} columns={columns} />//rowStyle={{wordWrap: 'break-word'}}/>
   } else {
     return (
       <Alert variant="info">

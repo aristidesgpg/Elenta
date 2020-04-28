@@ -19,7 +19,7 @@ import ArrayLayoutField from "../../components/shared/ElentaJsonForm/ArrayLayout
 
 const schema = {
   type: "object",
-  required: ["title"],
+  required: ["title", "description", "template", "format"],
   properties: {
     id: {
       type: "string"

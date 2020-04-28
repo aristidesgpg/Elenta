@@ -17,7 +17,7 @@ import ArrayLayoutField from "../../components/shared/ElentaJsonForm/ArrayLayout
 const schema = {
   title: "Create Template",
   type: "object",
-  required: ["title", "can_request", "is_public"],
+  required: ["title", "description", "recipient_lists", "can_request", "is_public"],
   properties: {
     id: {
       type: "string"
@@ -25,12 +25,14 @@ const schema = {
     title: {
       type: "string",
       title: "Title",
-      default: "New Template"
+      default: "New ",
+      minLength: 10
     },
     description: {
       type: "string",
       title: "Description",
-      default: "Template Description"
+      default: "Template Description",
+      minLength: 10
     },
     can_request: {
       type: "boolean",
@@ -156,6 +158,8 @@ export const TemplateSettingsPage = () => {
 
   const toastContext = useContext(ToastContext);
 
+  let formRef;
+
   useEffect(() => {
     if (!queryData && id != "new") {
       runQuery({variables: {id: id}});
@@ -183,33 +187,35 @@ export const TemplateSettingsPage = () => {
   };
 
   const handleSubmit = () => {
-    runMutation({
-        variables: {
-          input: immutableMerge(
-            _.pick(formState, ['id', 'title', 'description', 'can_request', 'is_public', 'dynamic_fields']),
-            {
-              id: id == "new" ? null : id,
-              dynamic_fields: JSON.stringify(formState.dynamic_fields),
-              owner: {
-                connect: userProfile.id
-              },
-              tags: mutateTagData(_.result(formState, 'tags')),
-              recipientLists: {
-                upsert: _.result(formState, 'recipient_lists').map(rl => {
-                  return {
-                    ..._.omit(rl, '__typename')
-                  }
-                })
-              }
-            })
+    if (formRef.reportValidity()) {
+      runMutation({
+          variables: {
+            input: immutableMerge(
+              _.pick(formState, ['id', 'title', 'description', 'can_request', 'is_public', 'dynamic_fields']),
+              {
+                id: id == "new" ? null : id,
+                dynamic_fields: JSON.stringify(formState.dynamic_fields),
+                owner: {
+                  connect: userProfile.id
+                },
+                tags: mutateTagData(_.result(formState, 'tags')),
+                recipientLists: {
+                  upsert: _.result(formState, 'recipient_lists').map(rl => {
+                    return {
+                      ..._.omit(rl, '__typename')
+                    }
+                  })
+                }
+              })
+          }
         }
-      }
-    ).then(r => {
-      toastContext.addToast({header: "Success!", body: "Saved"});
-      if (id == "new") {
-        history.push(`/template/content/${r.data.upsertTemplate.id}`);
-      }
-    });
+      ).then(r => {
+        toastContext.addToast({header: "Success!", body: "Saved"});
+        if (id == "new") {
+          history.push(`/template/content/${r.data.upsertTemplate.id}`);
+        }
+      });
+    }
   };
 
   return (
@@ -221,6 +227,7 @@ export const TemplateSettingsPage = () => {
                       uiSchema={uiSchema}
                       formData={formState}
                       onChange={handleChange}
+                      ref={r => formRef = r}
       />
       <h3>Dynamic Fields</h3>
       <ElentaFormBuilder

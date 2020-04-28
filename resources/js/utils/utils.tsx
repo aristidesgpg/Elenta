@@ -27,7 +27,8 @@ function mergeCustomiser(a, b) {
   if (
     (Array.isArray(b) && b.length == 0) ||
     (b === undefined) ||
-    (b === null)
+    (b === null) ||
+    (Array.isArray(a) && Array.isArray(b))
   ) {
     return b;
   }
