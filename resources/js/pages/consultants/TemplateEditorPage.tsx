@@ -9,7 +9,7 @@ import {
   UPSERT_MODULE
 } from "../../graphql/queries";
 import Tab from "react-bootstrap/Tab";
-import ModuleEditor from "../../components/consultants/modules/ModuleEditor";
+import Modules from "../../components/consultants/modules/Modules";
 import LoadingContainer from "../../components/hoc/LoadingContainer/LoadingContainer";
 import {useContext, useState} from "react";
 import _ from "lodash";
@@ -208,7 +208,7 @@ export const TemplateEditorPage = () => {
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="modules" title="Content">
-            <ModuleEditor
+            <Modules
               modules={template ? template.modules : []}
               pivotModules={template? template.templateModules : []}
               addModule={addModule}
@@ -222,6 +222,11 @@ export const TemplateEditorPage = () => {
               activeModule={activeModule}
               setActiveModule={setActiveModule}
               sendModule={null}
+              isModuleEditable={true}
+              setModuleEditable={null}
+              programModules={null}
+              learners={null}
+              maxLearners={null}
             />
           </Tab.Pane>
           <Tab.Pane eventKey="requests" title="Requests">

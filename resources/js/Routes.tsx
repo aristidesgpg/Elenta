@@ -3,7 +3,6 @@ import {useQuery} from "@apollo/react-hooks";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 import FormSample from "./components/consultants/ElentaFormBuilder/FormSample";
-import ProgramContentPage from "./pages/consultants/ProgramContentPage";
 import LoginPage from "./pages/shared/LoginPage";
 import PasswordResetPage from "./pages/shared/PasswordResetPage";
 import TemplateSettingsPage from "./pages/consultants/TemplateSettingsPage";
@@ -20,6 +19,7 @@ import LearnerProfileSettingsPage from "./pages/learners/LearnerProfileSettingsP
 import LearnerDashboard from "./pages/learners/LearnerDashboard";
 import NotFoundPage from "./pages/shared/NotFoundPage";
 import ProgramEnrolPage from "./components/learners/ProgramEnrolPage";
+import ProgramContentPage from "./pages/consultants/ProgramContentPage";
 
 const Routes = () => {
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);

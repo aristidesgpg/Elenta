@@ -2,34 +2,40 @@ import React from 'react';
 import {Dropdown, DropdownButton, Image, Row, Col} from "react-bootstrap";
 
 
-const ProgramLearnersListDropDown = (props) => {
+const ProgramLearnersListDropDown = ({
+                                       learnersList,
+                                       className,
+                                       maxLearners,
+                                       variant,
+                                       title,
+                                       selectedLearner
+                                     }) => {
 
   const handleFieldListAction = (learnerIndex) => {
-    const learnersList = props.learnersList;
     learnerIndex = parseInt(learnerIndex, 10);
     if (learnersList[learnerIndex]) {
       const learner = learnersList[learnerIndex];
-      props.openElentaJsonForm(learner);
+      selectedLearner();
     }
-  }
+  };
 
   return (
-    <Dropdown drop="down" id="learners-button-dropup" className={props.className}>
+    <Dropdown drop="down" id="learners-button-dropup" className={className}>
       <Row className="align-items-center">
         <Col className="p-0">
           <i className="fas fa-users"/>
         </Col>
         <Col className="pr-0">
-          ({`${props.learnersList.length}/${props.maxLearners || props.learnersList.length}`})
+          ({`${learnersList.length}/${maxLearners || learnersList.length}`})
         </Col>
         <Col>
           <DropdownButton
             alignRight
             id="dropdown-toggle"
-            variant={props.variant || "info"}
-            title={props.title}
+            variant={variant || "info"}
+            title={title}
           >
-            {props.learnersList.map((learner, index) =>
+            {learnersList.map((learner, index) =>
               <Dropdown.Item
                 key={index}
                 onSelect={() => handleFieldListAction(index)}

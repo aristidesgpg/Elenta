@@ -4,8 +4,9 @@ import ModuleCard from "./ModuleCard";
 import RenameFolderModal from "./RenameFolderModal";
 import List from "./List";
 import {immutableMerge} from "../../../utils/utils";
+import compile = WebAssembly.compile;
 
-export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder, deleteModules, duplicateModules}) => {
+export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesOrder, deleteModules, duplicateModules, programModules}) => {
     const [tree, setTree] = useState<TreeData>({
       rootId: "root-list",
       items: {}

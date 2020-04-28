@@ -7,6 +7,8 @@ export const ModuleCard = (props) => {
     item, onCollapse, onExpand, module, isActive,
     setActiveModule, duplicateModules, deleteModules, renameFolder = null
   } = props;
+
+  //console.log('ITEM', item);
   return (
     <ListGroupItem as="li"
                    data-id={item.id}
@@ -33,10 +35,12 @@ export const ModuleCard = (props) => {
                     onClick={() => duplicateModules(item)}>
               <i className="fas fa-copy"/>
             </Button>
+            {(!item.data.isReadOnly || item.data.isFolder) &&
             <Button variant="outline-dark" size="sm"
                     onClick={() => deleteModules(item)}>
               <i className="fas fa-trash"/>
             </Button>
+            }
           </div>
           {item.hasChildren && (
             <span

@@ -67,9 +67,9 @@ export const ProgramLearnerTable = ({program}) => {
             obj[m.id] = <p>Not sent yet</p>
           }
 
-          if (!send.response_timestamp && moment().diff(moment(send.send_timestamp), 'days') >= 2) {
-            obj[m.id].style = "{'color': 'red'}";
-          }
+          // if (!send.response_timestamp && moment().diff(moment(send.send_timestamp), 'days') >= 2) {
+          //   obj[m.id].style = "{'color': 'red'}";
+          // }
         }
       });
       return obj;
