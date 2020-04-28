@@ -31,12 +31,7 @@ export const Tags = (props) => {
 
   return (
     <div>
-      <Form.Group>
-        <Form.Label>Add Tags</Form.Label>
-        <Form.Text>
-          Tag your {props.schema.taggable} to help you find and manage your content.
-        </Form.Text>
-      </Form.Group>
+      <Form.Label>Add Tags</Form.Label>
       <Typeahead
         id="tagsForm"
         multiple={true}
@@ -45,6 +40,9 @@ export const Tags = (props) => {
         options={tagOptions}
         placeholder="e.g. Sales Training"
       />
+      <Form.Text>
+        Tag your {props.schema.taggable} to help you find and manage your content.
+      </Form.Text>
     </div>
   )
 };

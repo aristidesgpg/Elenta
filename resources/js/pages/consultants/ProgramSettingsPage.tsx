@@ -18,6 +18,7 @@ import {mutateTagData, tagUiSchema} from "../../components/tags/Tags";
 import ArrayLayoutField from "../../components/shared/ElentaJsonForm/ArrayLayoutField";
 
 const schema = {
+  title: "Set up your program",
   type: "object",
   required: ["title", "description", "template", "format"],
   properties: {
@@ -72,7 +73,7 @@ const schema = {
       type: "object",
       properties: {
         company_name: {
-          title: "Company Name",
+          title: "Client Name",
           type: "string",
         },
         company_logo_url: {
@@ -84,7 +85,7 @@ const schema = {
     recipient_lists: {
       type: "array",
       minItems: 1,
-      title: "Recipient Lists",
+      title: "Select your participants",
       items: {
         type: "object",
         properties: {
@@ -156,7 +157,7 @@ const consistentUiSchema = {
     "ui:widget": "hidden"
   },
   title: {
-    "ui:placeholder": "New Program"
+    "ui:placeholder": "e.g. Executive Training Course for Company X"
   },
   description: {
     "ui:placeholder": "New Description",
@@ -164,6 +165,13 @@ const consistentUiSchema = {
     "ui:options": {
       rows: 1
     }
+  },
+  // TODO: maybe clean this up somehow, this one has a link so had to return jsx
+  template: {
+    "ui:help": (<p className="help-block">Select one of the templates you created, or <a href={"/template/settings/new"}>create a new template</a>.</p>)
+  },
+  format: {
+    "ui:help": "Select the type of program."
   },
   company_attributes: {
     "ui:field": "companyLogoField"

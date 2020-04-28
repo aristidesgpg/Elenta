@@ -9,7 +9,7 @@ export const ProgramInviteTable = ({invites}) => {
     const columns = [
       {dataField: "email", text: "Email"},
       {dataField: "invited_at", text: "Sent"},
-      {dataField: "enrolled", text: "Enrolled"}
+      {dataField: "enrolled", text: "Invitation Accepted?"}
     ];
 
     let tableData = invites.map(i => {

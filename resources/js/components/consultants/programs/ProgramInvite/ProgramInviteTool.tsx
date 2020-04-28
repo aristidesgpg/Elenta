@@ -46,8 +46,14 @@ export const ProgramInviteTool = ({program, setProgram}) => {
       error={mutationError}
     >
       <Form.Group>
-        <Form.Label>Emails (comma separated)</Form.Label>
-        <Form.Control as="textarea" rows="4" value={emails} onChange={handleChange}/>
+        <Form.Label>Invite your learners to join by email. Add their addresses separated with a comma.</Form.Label>
+        <Form.Control
+          as="textarea"
+          rows="4"
+          value={emails}
+          onChange={handleChange}
+          placeholder="e.g. justin@elenta.io, anshul@elenta.io, michael@elenta.io"
+        />
       </Form.Group>
       <Button onClick={invite}>Invite</Button>
     </LoadingContainer>

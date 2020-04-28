@@ -243,7 +243,7 @@ export const ProgramEditorPage = (props) => {
           <Tab.Pane eventKey="invites" title="Invites">
             <h3>Invite by Email</h3>
             <ProgramInviteTool setProgram={setProgram} program={program}/>
-            <h3>Invites</h3>
+            <h3>Pending Invitations</h3>
             <ProgramInviteTable invites={program ? program.invites : []}/>
           </Tab.Pane>
         </Tab.Content>
