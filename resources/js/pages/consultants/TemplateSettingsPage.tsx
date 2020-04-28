@@ -162,7 +162,7 @@ export const TemplateSettingsPage = () => {
   let history = useHistory();
   let {id} = useParams();
   if (id !== "new") {
-    this.schema.title = "Update Template";
+    schema.title = "Update Template";
   }
   const {data: {userProfile}} = useQuery(CURRENT_USER_PROFILE);
 
