@@ -26,13 +26,11 @@ const schema = {
     },
     title: {
       type: "string",
-      title: "Title",
-      default: "New Program"
+      title: "Title"
     },
     description: {
       type: "string",
       title: "Description",
-      default: "Program Description"
     },
     template: {
       type: "string",
@@ -104,7 +102,7 @@ const schema = {
           },
           max_recipients: {
             type: "integer",
-            default: 100,
+            default: 1000,
             title: "Max Recipients"
           }
         }
@@ -113,7 +111,7 @@ const schema = {
         {
           name: "Learners",
           channel: "EMAIL",
-          max_recipients: 50
+          max_recipients: 1000
         }
       ]
     },
@@ -155,8 +153,11 @@ const consistentUiSchema = {
   id: {
     "ui:widget": "hidden"
   },
-  title: {},
+  title: {
+    "ui:placeholder": "New Program"
+  },
   description: {
+    "ui:placeholder": "New Description",
     "ui:widget": "textarea",
     "ui:options": {
       rows: 1
@@ -170,12 +171,15 @@ const consistentUiSchema = {
       id: {
         "ui:widget": "hidden"
       },
+      max_recipients: {
+        "ui:widget": "hidden"
+      },
       'ui:layout': [
         {
           id: {md: 0},
           name: {md: 4},
           channel: {md: 4},
-          max_recipients: {md: 3}
+          max_recipients: {md: 0}
         }
       ]
     })

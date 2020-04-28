@@ -28,7 +28,7 @@ export const TemplateTable = ({templates}) => {
   } else {
     return (
       <Alert variant="info">
-        It looks like you don't have any Templates yet, start by creating one
+        Create your first template
         <Link to="/template/settings/new"> here</Link>
       </Alert>
     );

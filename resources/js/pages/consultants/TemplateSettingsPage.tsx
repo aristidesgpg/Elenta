@@ -69,7 +69,7 @@ const schema = {
           },
           max_recipients: {
             type: "integer",
-            default: 100,
+            default: 1000,
             title: "Max Recipients"
           }
         }
@@ -78,7 +78,7 @@ const schema = {
         {
           name: "Learners",
           channel: "EMAIL",
-          max_recipients: 50
+          max_recipients: 1000
         }
       ]
     },
@@ -112,12 +112,15 @@ const uiSchema = {
       id: {
         "ui:widget": "hidden"
       },
+      max_recipients: {
+        "ui:widget": "hidden"
+      },
       'ui:layout': [
         {
           id: {md: 0},
           name: {md: 4},
           channel: {md: 4},
-          max_recipients: {md: 3}
+          max_recipients: {md: 0}
         }
       ]
     })
@@ -238,20 +241,25 @@ export const TemplateSettingsPage = () => {
                       onChange={handleChange}
                       ref={r => formRef = r}
       />
-      <h3>Dynamic Fields</h3>
-      <ElentaFormBuilder
-        schema={formState.dynamic_fields.schema}
-        uiSchema={formState.dynamic_fields.uiSchema}
-        onSave={(schema: any, uiSchema: any) => {
-          setFormState(immutableMerge(formState, {
-            dynamic_fields: {
-              schema: schema,
-              uiSchema: uiSchema
-            }
-          }));
-        }}
-        excludedFields={['richtext', 'rank', 'slider', 'multiple-checkbox', 'radiobuttonlist', 'repeater']}
-      />
+      {/*remove false and outer div when showing */}
+      {false &&
+       <div>
+        <h3>Dynamic Fields</h3>
+        <ElentaFormBuilder
+          schema={formState.dynamic_fields.schema}
+          uiSchema={formState.dynamic_fields.uiSchema}
+          onSave={(schema: any, uiSchema: any) => {
+            setFormState(immutableMerge(formState, {
+              dynamic_fields: {
+                schema: schema,
+                uiSchema: uiSchema
+              }
+            }));
+          }}
+          excludedFields={['richtext', 'rank', 'slider', 'multiple-checkbox', 'radiobuttonlist', 'repeater']}
+        />
+       </div>
+      }
       <Button onClick={handleSubmit}>Save Template</Button>
     </LoadingContainer>
   );
