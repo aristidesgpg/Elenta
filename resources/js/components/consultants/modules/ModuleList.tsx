@@ -17,8 +17,8 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       const newItems = modules.sort((a, b) => parseInt(a.pivot.order) - parseInt(b.pivot.order))
         .reduce((acc, module) => {
           const folder = module.pivot.folder;
-          const moduleKey = `${module.id}:::${module.pivot.id}`
-          if (folder !== null) {
+          const moduleKey = getModuleKey(module);
+          if (folder) {
             const folderItem = acc[folder];
 
             if (folderItem) {
@@ -71,6 +71,10 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       setTree(newTree);
     }, [modules]);
 
+    const getModuleKey = (module) => {
+      return `${module.id}:::${module.pivot.id}`;
+    };
+
     const saveOrder = (newTree) => {
       let order = 1;
       const {items} = newTree;
@@ -79,7 +83,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
         const itemModules = extractModules(items[item]);
 
         return [...acc, ...itemModules.map(module => {
-          return {...module.pivot, order: order++};
+          return {...module, pivot: {...module.pivot, order: order++}};
         })];
       }, []);
 
@@ -100,24 +104,20 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
     };
 
     const extractModules = (item) => {
-      return item.data.isFolder
-        ? [...item.children.map(module => {
-          const child = tree.items[module];
-          return {
-            id: child.data.id,
-            pivot: {
-              id: child.data.pivot.id,
-              folder: item.data.name
-            }
-          };
-        })]
-        : [{
-          id: item.data.id,
-          pivot: {
-            id: item.data.pivot.id,
-            folder: ''
-          }
-        }];
+      let items = [];
+      if (item.data.isFolder) {
+        if (item.children.length) {
+          items = [...item.children.map(module => {
+            return tree.items[module].data;
+          })];
+        } else {
+          items.push(tree.items[item.id].data)
+        }
+      } else {
+        items.push(tree.items[item.id].data);
+      }
+
+      return items;
     };
 
     const duplicateModulesHandler = (item) => {
@@ -156,7 +156,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
       childItems.forEach(item => (newDestTree.items[item.id] = item));
 
       const destinationItem = newDestTree.items[destinationPosition.parentId];
-      newDestTree.items[removedItemId].data.pivot.folder = destinationItem.data.isFolder ? destinationPosition.parentId : "";
+      newDestTree.items[removedItemId].data.pivot.folder = destinationItem.data.isFolder ? destinationItem.data.name : "";
 
       setTree(newDestTree);
       saveOrder(newDestTree);
@@ -219,6 +219,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
     };
 
     const renderItem = ({item, provided}) => {
+      const moduleKey = getModuleKey(activeModule);
       return (
         <div
           className={"card"}
@@ -236,7 +237,7 @@ export const ModuleList = ({modules, activeModule, setActiveModule, saveModulesO
             }}
             duplicateModules={duplicateModulesHandler}
             deleteModules={deleteModulesHandler}
-            isActive={activeModule ? item.id === `${activeModule.id}:::${activeModule.pivot.id}` : false}
+            isActive={activeModule ? item.id === moduleKey : false}
             setActiveModule={item.data.isFolder ? () => null : setActiveModule}
           />
         </div>

@@ -75,20 +75,22 @@ class Template extends BaseModel
         static::created(function (Template $t) {
             /** @var User $user */
             $user = Auth::user();
-            $m = new Module();
-            $m->fill([
-                'title' => 'New Module',
-                'description' => 'Module Description',
-                'consultant_profile_id' => $user->consultantProfile->id
-            ]);
-            $m->save();
+            if ($user && $user->consultantProfile) {
+                $m = new Module();
+                $m->fill([
+                    'title' => 'New Module',
+                    'description' => 'Module Description',
+                    'consultant_profile_id' => $user->consultantProfile->id
+                ]);
+                $m->save();
 
-            $tm = new TemplateModule();
-            $tm->fill([
-                'template_id' => $t->id,
-                'module_id' => $m->id,
-            ]);
-            $tm->save();
+                $tm = new TemplateModule();
+                $tm->fill([
+                    'template_id' => $t->id,
+                    'module_id' => $m->id,
+                ]);
+                $tm->save();
+            }
         });
     }
 
