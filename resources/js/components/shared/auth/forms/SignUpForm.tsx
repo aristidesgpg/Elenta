@@ -213,7 +213,6 @@ const SignUpForm = () => {
               or sign up with
             </span>
           </div>
-          {/*<div className="title">Sign up with</div>*/}
           <div className="social-buttons">
             <a href="/login/google" className="btn btn-outline-info">
               <i className="fab fa-google"/> Google

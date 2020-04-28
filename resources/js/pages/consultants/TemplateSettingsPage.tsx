@@ -26,12 +26,10 @@ const schema = {
     title: {
       type: "string",
       title: "Title",
-      minLength: 10
     },
     description: {
       type: "string",
       title: "Description",
-      minLength: 10
     },
     can_request: {
       type: "boolean",

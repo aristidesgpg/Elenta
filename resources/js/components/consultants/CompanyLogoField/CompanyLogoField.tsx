@@ -52,8 +52,9 @@ export const CompanyLogoField = (props) => {
       <Row>
         <Col md={4}>
           <Form.Group controlId="company_name">
-            <Form.Label>Company Name</Form.Label>
+            <Form.Label>Company Name*</Form.Label>
             <Form.Control
+              required
               type="text"
               value={props.formData.company_name}
               name="company_name"
