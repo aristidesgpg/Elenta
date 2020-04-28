@@ -9,13 +9,14 @@ import Button from "react-bootstrap/Button";
 import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
 import {immutableMerge} from "../../utils/utils";
-import {mutateTagData, tagSchema, tagUiSchema} from "../../components/tags/Tags";
+import {mutateTagData, tagUiSchema} from "../../components/tags/Tags";
 import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
 import Container from "react-bootstrap/Container";
 import ArrayLayoutField from "../../components/shared/ElentaJsonForm/ArrayLayoutField";
 
 const schema = {
   title: "Create Template",
+  description: "A template is base for your programs, a collection of content, quizzes and follow ups that you can send to learners.",
   type: "object",
   required: ["title", "description", "recipient_lists", "can_request", "is_public"],
   properties: {
@@ -25,13 +26,11 @@ const schema = {
     title: {
       type: "string",
       title: "Title",
-      default: "New ",
       minLength: 10
     },
     description: {
       type: "string",
       title: "Description",
-      default: "Template Description",
       minLength: 10
     },
     can_request: {
@@ -83,7 +82,14 @@ const schema = {
         }
       ]
     },
-    ...tagSchema
+    tags: {
+      type: "array",
+      title: "Tags",
+      taggable: "template",
+      items: {
+        type: "string"
+      }
+    }
   }
 };
 
@@ -119,8 +125,12 @@ const uiSchema = {
   id: {
     "ui:widget": "hidden"
   },
+  title: {
+    "ui:placeholder": "e.g. Sales Training Course"
+  },
   description: {
     "ui:widget": "textarea",
+    "ui:placeholder": "e.g. Sales training program for corporate clients",
     "ui:options": {
       rows: 1
     }
@@ -217,7 +227,6 @@ export const TemplateSettingsPage = () => {
       });
     }
   };
-
   return (
     <LoadingContainer
       loading={[mutationLoading, queryLoading]}

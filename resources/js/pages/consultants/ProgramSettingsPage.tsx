@@ -14,7 +14,7 @@ import _ from "lodash";
 import {ToastContext} from "../../contexts/ToastContext";
 import {immutableMerge} from "../../utils/utils";
 import ElentaJsonForm from "../../components/shared/ElentaJsonForm/ElentaJsonForm";
-import {mutateTagData, tagSchema, tagUiSchema} from "../../components/tags/Tags";
+import {mutateTagData, tagUiSchema} from "../../components/tags/Tags";
 import ArrayLayoutField from "../../components/shared/ElentaJsonForm/ArrayLayoutField";
 
 const schema = {
@@ -117,7 +117,14 @@ const schema = {
         }
       ]
     },
-    ...tagSchema
+    tags: {
+      type: "array",
+      title: "Tags",
+      taggable: "program",
+      items: {
+        type: "string"
+      }
+    }
   }
 };
 

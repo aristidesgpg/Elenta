@@ -31,28 +31,24 @@ export const Tags = (props) => {
 
   return (
     <div>
-      <Form.Label>Tags</Form.Label>
+      <Form.Group>
+        <Form.Label>Add Tags</Form.Label>
+        <Form.Text>
+          Tag your {props.schema.taggable} to help you find and manage your content.
+        </Form.Text>
+      </Form.Group>
       <Typeahead
         id="tagsForm"
         multiple={true}
         onChange={handleOnChange}
         selected={props.formData}
         options={tagOptions}
-        placeholder="Choose some tags"
+        placeholder="e.g. Sales Training"
       />
     </div>
   )
 };
 
-export const tagSchema = {
-  tags: {
-    type: "array",
-    title: "Tags",
-    items: {
-      type: "string"
-    }
-  }
-};
 
 export const tagUiSchema = {
   tags: {

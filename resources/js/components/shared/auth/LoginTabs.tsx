@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Col, Nav, Row, Tab} from "react-bootstrap";
+import {Col, Image, Nav, Row, Tab} from "react-bootstrap";
 import LoginForm from "./forms/LoginForm";
 import SignUpForm from "./forms/SignUpForm";
 import './LoginTabs.scss';
@@ -9,7 +9,9 @@ export const Login = () => {
     <Col className="login-container">
       <Row className="justify-content-sm-center">
         <Col sm={8}>
-          <div className="page-title text-center">Elenta.io</div>
+          <div className="page-title text-center">
+            <Image src="/images/logo.png" alt="logo" style={{height: '70px'}}/>
+          </div>
           <Tab.Container id="tabs-example" defaultActiveKey="log-in">
             <Row>
               <Col sm={12}>
