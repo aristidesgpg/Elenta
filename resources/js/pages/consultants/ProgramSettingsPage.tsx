@@ -168,6 +168,12 @@ const consistentUiSchema = {
   company_attributes: {
     "ui:field": "companyLogoField"
   },
+  can_invite: {
+    "ui:widget": "hidden"
+  },
+  is_public: {
+    "ui:widget": "hidden"
+  },
   recipient_lists: {
     "ui:ArrayFieldTemplate": ArrayLayoutField({
       id: {

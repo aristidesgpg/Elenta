@@ -139,6 +139,12 @@ const uiSchema = {
   dynamic_fields: {
     "ui:widget": "hidden"
   },
+  can_request: {
+    "ui:widget": "hidden"
+  },
+  is_public: {
+    "ui:widget": "hidden"
+  },
   ...tagUiSchema
 };
 

@@ -146,46 +146,36 @@ export const ModuleEditor =
                     <div className="ml-3">
                       <Form.Group>
                         <h5>Title</h5>
-                        <RIEInput
-                          value={activeModule ? activeModule.title || "Module Title" : "Module Title"}
-                          change={updateModuleList}
-                          propName='title'
-                          defaultProps={{
-                            style: {
-                              border: "1px dashed lightgrey",
-                              padding: "10px",
-                              width: "150px"
-                            }
-                          }}
+                        <Form.Control
+                          value={activeModule ? activeModule.title || "" : ""}
+                          placeholder='Module Title'
+                          onChange={e => updateModuleList({title: e.target.value})}
                         />
                       </Form.Group>
                       <Form.Group>
                         <h5>Description</h5>
-                        <RIETextArea
-                          value={activeModule ? activeModule.description || "Module Description" : "Module Description"}
-                          change={updateModuleList}
-                          propName='description'
-                          defaultProps={{
-                            style: {
-                              border: "1px dashed lightgrey",
-                              padding: "10px",
-                              width: "150px"
-                            }
-                          }}
+                        <Form.Control
+                          as='textarea'
+                          value={activeModule ? activeModule.description || "" : ""}
+                          placeholder='Module Description'
+                          onChange={e => updateModuleList({description: (e.target as HTMLInputElement).value})}
                         />
                       </Form.Group>
                     </div>
-                    <ElentaFormBuilder
-                      schema={formContent.schema}
-                      uiSchema={formContent.uiSchema}
-                      tagList={tagList}
-                      onSave={(schema, uiSchema) => {
-                        setFormContent({
-                          schema: schema,
-                          uiSchema: uiSchema
-                        });
-                      }}
-                    />
+                    <Form.Group>
+                      <h5>Content</h5>
+                      <ElentaFormBuilder
+                        schema={formContent.schema}
+                        uiSchema={formContent.uiSchema}
+                        tagList={tagList}
+                        onSave={(schema, uiSchema) => {
+                          setFormContent({
+                            schema: schema,
+                            uiSchema: uiSchema
+                          });
+                        }}
+                      />
+                    </Form.Group>
                   </Tab.Pane>
                   <Tab.Pane eventKey="settings" title="Settings">
                     <ModuleSettingsEditor
