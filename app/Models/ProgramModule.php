@@ -124,7 +124,7 @@ class ProgramModule extends BasePivot
                         $items[] = [
                             'parentId' => $pm->id,
                             'id' => $field,
-                            'label' => $field,
+                            'label' => $props['title'],
                             'fieldType' => $uiSchema[$field]['uiType']
                         ];//'availableValues' => ['a', 'b']
                     }
