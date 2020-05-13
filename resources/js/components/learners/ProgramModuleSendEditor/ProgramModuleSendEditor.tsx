@@ -52,7 +52,7 @@ export const ProgramModuleSendEditor: React.FunctionComponent<Props> = ({formDat
         </Form.Group>
         <Form.Group>
           <Form.Label>What would you do to improve this module?</Form.Label>
-          <Form.Control as="textarea" rows="2" value={formData.response_feedback}
+          <Form.Control as="textarea" rows={2} value={formData.response_feedback}
                         onChange={e => handleChange('response_feedback', (e.target as HTMLInputElement).value)}/>
         </Form.Group>
       </Form>

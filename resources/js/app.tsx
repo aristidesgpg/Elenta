@@ -16,7 +16,7 @@ import { from } from 'apollo-link';
 
 
 const httpLink = createHttpLink({
-  uri: process.env.APP_URL + "/graphql"
+  uri:  "/graphql"
 });
 
 const token = localStorage.getItem('token');
