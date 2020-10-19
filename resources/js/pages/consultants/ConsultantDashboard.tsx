@@ -30,7 +30,7 @@ export const ConsultantDashboard = () => {
         <Container className="pb-4">
           <Row>
             <Col md={6}>
-              <h3>Programs</h3>
+              <h3>Program List</h3>
             </Col>
             <Col>
               <Link to='/program/settings/new' className='float-right'><Button>Create Program</Button></Link>
