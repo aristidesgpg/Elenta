@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
  * @mixin \Eloquent
  */
 class BaseModel extends Model {
-    /*
+    
     protected static function booted() {
         static::retrieved(function (BaseModel $model) {
             if (!Auth::user()->can('view', $model)) {
@@ -27,5 +27,5 @@ class BaseModel extends Model {
         return collect($models)->filter(function (Model $m) {
             return Auth::user()->can('view', $m);
         });
-    }*/
+    }
 }
