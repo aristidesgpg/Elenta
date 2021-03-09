@@ -16,11 +16,7 @@ use Illuminate\Support\Facades\Auth;
 class BaseModel extends Model {
     
     protected static function booted() {
-        static::retrieved(function (BaseModel $model) {
-            if (!Auth::user()->can('view', $model)) {
-                // TODO: Something secure
-            }
-        });
+        
     }
 
     final public function newCollection(array $models = []) {
